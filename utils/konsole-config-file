@@ -1,0 +1,8 @@
+title: vlnk ;; command: ;; profile: user ;; workdir: /home/swang/vlnk
+title: work ;; command: ;; profile: user ;; workdir: /home/swang
+title: check ;; command: ;; profile: user ;; workdir: /home/swang
+title: make ;; command: ;; profile: user ;; workdir: /home/swang
+title: git ;; command: ;; profile: user ;; workdir: /sites/projects
+title: python ;; command: python ;; profile: user ;; workdir: /home/swang
+title: root ;; command: sudo -i ;; profile: root
+title: tailx ;; command: ;; profile: user ;; workdir: /home/swang

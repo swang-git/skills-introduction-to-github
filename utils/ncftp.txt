@@ -1,0 +1,5 @@
+ncftpput -options ftp-host-name /path/to/remote/dir /path/to/local/dir
+
+
+ncftpput -R -v -u "shengli_wang" -p "Pcg1234" 02a1674.netsolhost.com golf /home/share/golf-5.7
+

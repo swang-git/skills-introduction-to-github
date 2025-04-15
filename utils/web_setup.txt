@@ -1,0 +1,59 @@
+chcon -R -t httpd_sys_rw_content_t sites/devx/storage/
+-- chcon -R -t httpd_sys_r_content_t sites/devx/public
+sudo chown apache.swang -R sites/devx/storage/*
+
+dnf install python3-mysql
+pip3 install beautifulsoup4
+pip3 instal lxml
+pip3 install html5lib
+
+
+# systemctl enable httpd && systemctl start httpd
+# firewall-cmd --permanent --add-service={http,https}
+# firewall-cmd --reload
+
+dnf install php-common php-json php-pdo php-mysqlnd
+
+setsebool -P httpd_can_network_connect 1 ### do this in /etc/httpd/conf.d
+
+setsebool -P httpd_enable_homedirs 1 ### do this in sites/devx/router
+
+gsettings set org.gnome.desktop.interface cursor-size 48
+
+mysql_secure_installation
+
+### swang/VVkk20!90508
+### mythtv/Mythtv!1
+SHOW VARIABLES LIKE 'validate_password%';
+SET GLOBAL validate_password_policy=LOW;
+
+# innodb_buffer_pool_size, at 20G is fine for 32GB of RAM.
+show global variables like 'innodb_buffer_pool_size';
+set global innodb_buffer_pool_size=1610612736; 1.5GB 1024*1024*1024*4 = 4294967296 (4.GB)
+this global variable can be dyanmically set -- check it online how
+
+##### loading dev.sql - 1.9 GB
+09:51:37 PM Restoring /homx/swang/dumps/dev.sql
+Running: mysql --defaults-file="/tmp/tmp8DBUil/extraparams.cnf"  --protocol=tcp --host=127.0.0.1 --user=swang --port=3306 --default-character-set=utf8 --comments  < "/homx/swang/dumps/dev.sql"
+ERROR 1418 (HY000) at line 4704: This function has none of DETERMINISTIC, NO SQL, or READS SQL DATA in its declaration and binary logging is enabled (you *might* want to use the less safe log_bin_trust_function_creators variable)
+##### loading 2.x GB
+Operation failed with exitcode 1
+11:18:53 PM Import of /homx/swang/dumps/dev.sql has finished with 1 errors
+
+## dump all tables in a datatbase -- one file per table per datatbase
+#!/bin/bash
+GIT_MYSQL=/[BACKUP_LOCATION]
+for T in `mysql -u [USER] -p[PASSWORD] -N -B -e 'show tables from [DATABASE]'`;
+do
+    echo "Backing up $T"
+    mysqldump --skip-comments --compact -u [USER] -p[PASSWORD] [DATABASE] $T > $GIT_MYSQL/$T.sql
+done;
+
+sudo dnf install python3-mysql to resolve problem "ModuleNotFoundError: No module named 'MySQLdb'"
+
+
+
+
+
+
+

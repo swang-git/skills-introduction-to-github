@@ -1,0 +1,6 @@
+# starting CoreOS (fcos)
+sudo virsh --connect qemu:///system start fcos
+# login to fcos as user core
+ssh -i .ssh/id_rsa core@192.168.122.27
+
+

@@ -1,0 +1,5 @@
+title: working ;; command: ;; profile: user ;; workdir: /home/swang/working
+title: quasar dev ;; command: ;; profile: user ;; workdir: /sites/projects/apps
+title: work ;; command: ;; profile: user ;; workdir: /home/swang
+title: check ;; command: ;; profile: user ;; workdir: /home/swang
+title: quasar upgrade ;; command: ;; profile: user ;; workdir: /sites/projects/apps

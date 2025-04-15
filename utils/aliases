@@ -1,0 +1,2 @@
+alias dir='ls -ltr'
+alias swak='function _swak(){ rtcwake -m mem -s "$1"; };_swak'

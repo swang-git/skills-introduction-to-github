@@ -1,0 +1,7 @@
+alias 'dio=ls -go'
+alias 'rm=trash'
+##alias 'term1=konsole --tabs-from-file /sites/projects/utils/konsole-config-file-term1'
+##alias 'term2=konsole --tabs-from-file /sites/projects/utils/konsole-config-file-term2 -e ls'
+alias dir='ls -ltr'
+alias art='php artisan'
+alias dfm="df -h|grep 'tv\|te\|home'"
