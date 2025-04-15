@@ -1,0 +1,1 @@
+../../arts/src/pages/ArtsText.vue

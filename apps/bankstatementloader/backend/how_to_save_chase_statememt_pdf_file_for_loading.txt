@@ -1,0 +1,11 @@
+the following is the trick to get around 
+"ERROR: Secured pdf file are currently not supported"
+DO:
+// 1. save the pdf file from chase website as regularly
+1. DOWNLOAD the accessiable pdf file from chase website
+2. load the saved pdf file to Librwriter
+3. ignore password asked, just click OK, the file will be loaded
+4. print it to file (.pdf)
+this is going to work!!!!
+
+

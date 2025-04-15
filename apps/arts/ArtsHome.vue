@@ -1,0 +1,1 @@
+../../arts/src/layouts/ArtsHome.vue
