@@ -1,0 +1,34 @@
+https://fedoramagazine.org/boot-earlier-kernel/
+
+
+Fedora regularly offers an updated stable kernel for its users. This is just one of many reasons Fedora is a way to get the newest technology now. On rare occasions, though, a new kernel can bring an issue with it. You might need to revert to an older one to keep things working until the bug is fixed. This article shows you how.
+
+The GRUB menu
+
+Your system has a boot loader called GRUB that manages the start of the boot process. Among other things, it points to the kernels available on your system. However, your configuration might not allow you to see it for long. Often computer manufacturers include their own boot screens during the BIOS (basic input/output system) load process. The GRUB screen is different. It appears after the BIOS has loaded and the computer is ready to start up an operating system.
+
+To make sure you see the GRUB screen, hold down a key like Ctrl after your computer manufacturer screen loads. The GRUB screen appears and shows a menu that includes several kernels.
+
+Typically the top entry is the latest kernel. You can tell by the higher version number displayed in the entry. To select a different entry, use your arrow keys to select the previous version. Then hit Enter to boot that version.
+Locking the kernel version
+
+Typically a Fedora system will keep up to three kernel versions installed on the system. When a newer kernel is updated, up to two previous versions are kept on the system. An older kernel beyond those two will be removed by default. That means the boot partition doesn’t fill up to the point it affects the system boot.
+
+Perhaps you want to lock down a specific version and have it always available always. In that case, you can use the versionlock plugin for DNF to keep it installed on the system regardless of updates.
+
+To get the plugin, install the plugin package using sudo:
+
+sudo dnf install python3-dnf-plugins-extras-versionlock
+
+Then add a version lock for the version desired. For example:
+
+sudo dnf versionlock add kernel-4.9.13-200.fc25
+
+If you want to remove the locked version, use the delete option:
+
+sudo dnf versionlock delete kernel-4.9.13-200.fc25
+
+Keep in mind that versionlock works for packages of all kinds.
+A note on Atomic Host
+
+These instructions apply to the standard editions, like Fedora Server and Workstation, and most labs and spins. By default, the Atomic Host edition keeps the previous rollback kernel.

@@ -1,0 +1,28 @@
+// replace Pattern
+// for following functions prepend 'function
+// ^(\w+)\s*\(
+// function $1 (
+
+abcXYZ () {
+  XXXC
+  cancelIdleCallback
+  CCCX
+}
+zyxAnc (xdn) {
+  fdsajfsda
+  fsdafdsaf
+  fsdafdsaf
+  xfggg
+}
+mndBX() {
+  ddddd
+  dddddx
+  xxxx
+  ccccc
+}
+mndBX(xc) {
+  ddddd
+  dddddx
+  xxxx
+  ccccc
+}

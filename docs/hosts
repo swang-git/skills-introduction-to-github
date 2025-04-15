@@ -1,0 +1,4 @@
+71.59.72.103 prod prod
+192.168.1.136 devx devx
+127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
+::1         localhost localhost.localdomain localhost6 localhost6.localdomain6

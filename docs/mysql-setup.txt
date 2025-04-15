@@ -1,0 +1,11 @@
+mysql-community-server 8.0.20
+root/Lib-100-0011@@
+swang/VVKKll11@@
+
+Step 4: Configure Firewall
+To allow for remote connections, allow port 3306 on the firewall
+
+sudo firewall-cmd --add-service=mysql --permanent
+sudo firewall-cmd --reload
+
+sudo firewall-cmd --permanent --add-rich-rule 'rule family="ipv4" service name="mysql" source address="10.1.1.0/24" accept'

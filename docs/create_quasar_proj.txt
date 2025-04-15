@@ -1,0 +1,31 @@
+// procedures to create a quasar project
+
+1. cd ~/sites/dev/my-apps/
+2. quasar init <proj-name> like golf
+3. cd golf
+4. quasar dev  == you new project golf will be in devx:8080 -- to start the developing
+5. add the following to golf/quasar.conf.js
+    devServer: {
+      // https: true,
+      // port: 8080,
+      host: 'devx',
+      proxy: {
+        // proxy all requests starting with /api to jsonplaceholder
+        '/api': {
+          target: 'http://localhost',
+          changeOrigin: true,
+          pathRewrite: {
+            '^/api': ''
+          }
+        }
+      },
+      open: true // opens browser window automatically
+    },
+
+    build: {
+      publicPath: '/golf',
+      productName: 'Princeton SU Golf Club',
+      env: ctx.dev ? { API: JSON.stringify('/api') } : { API: JSON.stringify('') },
+
+
+

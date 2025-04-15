@@ -1,0 +1,8 @@
+You are right, downgrading mutter works. I couldn't find the version you mention, but dnf downgrade mutter installs mutter-43.0-4.fc37.x86_64 and it works just fine.
+
+You could use koji to download whatever build you want and then install downloaded rpms.
+
+koji download-build --arch=x86_64 mutter-43.2-2.fc37.x86_64
+
+koji download-build --arch=x86_64 gnome-shell-43.2-2.fc37.x86_64
+

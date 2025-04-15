@@ -1,0 +1,48 @@
+PATH=/home/swang/.yarn/bin:/home/swang/.config/yarn/global/node_modules/.bin:/home/swang/.yarn/bin:/home/swang/.config/yarn/global/node_modules/.bin:/home/swang/.local/bin:/home/swang/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/home/swang/.composer/vendor/bin
+
+DISPLAY=:0
+##XDG_RUNTIME_DIR="/run/user/1000"
+##WAYLAND_DISPLAY="wayland-0"
+##XAUTHORITY=`ls /run/user/1000/.mutter-Xwaylandauth.*`
+##XAUTHORITY=/run/user/1000/.mutter-Xwaylandauth.IJTK61
+##XAUTHORITY=`echo $XAUTHORITY`
+XAUTHORITY=/home/swang/.Xauthority
+
+31 10 * * * today-reminder > /home/swang/tmp/logs/cn/today-reminder_log_`wkdayname` 2>&1
+51 07 * * * reminder > /home/swang/tmp/logs/cn/reminder.log_`wkdayname` 2>&1
+00 09 * * * reminder > /home/swang/tmp/logs/cn/reminder.log_`wkdayname` 2>&1
+00 10 * * * reminder > /home/swang/tmp/logs/cn/reminder.log_`wkdayname` 2>&1
+00 11 * * * reminder > /home/swang/tmp/logs/cn/reminder.log_`wkdayname` 2>&1
+00 15 * * * reminder > /home/swang/tmp/logs/cn/reminder.log_`wkdayname` 2>&1
+30 20 * * * /home/swang/bin/reminder > /home/swang/tmp/logs/cn/reminder.log_`wkdayname` 2>&1
+47 19 * * * reminder > /home/swang/tmp/logs/cn/reminder.log_`wkdayname` 2>&1
+06 21 * * * xdg-open "http://prod/apps/reminder" > /home/swang/tmp/logs/cn/reminder.log_`wkdayname` 2>&1
+
+00 * * * * timeout -s 9 600 loadPXHY  0 1
+02 * * * * timeout -s 9 600 loadPXHY -1 1
+04 * * * * timeout -s 9 600 loadPXHY -2 2
+05 * * * * loadPXWW  0 2
+30 * * * * timeout -s 9 600 loadPXWW -1 2
+40 * * * * loadPXWX  0 2
+45 * * * * timeout -s 9 600 loadPXWX -1 2
+15 * * * * loopLoadPX PXJL  0 3.5m 1 > tmp/logs/cn/loopLoadPXJL_1.log_`wkdayname` 2>&1
+20 * * * * loopLoadPX PXJL -1 3.5m 1 > tmp/logs/cn/loopLoadPXJL_1.log_`wkdayname` 2>&1
+25 * * * * loopLoadPX PXQG  0 3.5m 1 > tmp/logs/cn/loopLoadPXQG_0.log_`wkdayname` 2>&1
+35 * * * * loopLoadPX PXQG -1 3.5m 1 > tmp/logs/cn/loopLoadPXQG_1.log_`wkdayname` 2>&1
+
+00 23 * * * dumpzDB mythconverg > tmp/logs/cn/dumpz_mythconverg.log_`wkdayname` 2>&1
+05 23 * * * dumpzDB golf  > tmp/logs/cn/dumpz_golf.log_`wkdayname` 2>&1
+10 23 * * * dumpzDB prod  > tmp/logs/cn/dumpz_prod.log_`wkdayname` 2>&1
+20 23 * * * dumpzDB MyWeb > tmp/logs/cn/dumpz_MyWeb.log_`wkdayname` 2>&1
+40 23 * * * mirrorDbBak	  > tmp/logs/cn/mirrorDbBak.log_`wkdayname` 2>&1
+
+00 04 * * * tarImgDaily PXHY > tmp/logs/cn/tarImgDaily_HY.log_`wkdayname` 2>&1
+10 04 * * * tarImgDaily PXWX > tmp/logs/cn/tarImgDaily_WX.log_`wkdayname` 2>&1
+20 04 * * * tarImgDaily PXWW > tmp/logs/cn/tarImgDaily_WW.log_`wkdayname` 2>&1
+30 04 * * * tarImgDaily PXQG > tmp/logs/cn/tarImgDaily_QG.log_`wkdayname` 2>&1
+40 04 * * * tarImgDaily PXJL > tmp/logs/cn/tarImgDaily_JL.log_`wkdayname` 2>&1
+50 04 * * * tarDocDaily	     > tmp/logs/cn/tarDocDaily.log_`wkdayname` 2>&1
+55 04 * * * mirrorPxBak	     > tmp/logs/cn/mirrorPxBak.log_`wkdayname` 2>&1
+
+55 23 * * 6 loadLatestkjdata > tmp/logs/cn/loadLatestkjdata.log_`wkdayname` 2>&1
+55 23 * * 0 loadLatestkjdata > tmp/logs/cn/loadLatestkjdata.log_`wkdayname` 2>&1

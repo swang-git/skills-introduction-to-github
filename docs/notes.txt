@@ -1,0 +1,30 @@
+UPDATE `tplayers` t 
+JOIN tournaments tt ON tt.id = t.tournament_id  
+JOIN course_tees ct ON ct.id = tt.mens_tee_id
+set idx_diff = (t.gross_score - ct.rating) * 113 / ct.slope 
+WHERE t.status = 'A' AND ct.status = 'A' AND tt.status = 'A'
+
+UPDATE `tplayers` t 
+JOIN tournaments tt ON tt.id = t.tournament_id 
+JOIN course_tees ct ON ct.id = tt.mens_tee_id 
+set idx_diff = (t.gross_score - ct.rating) * 113 / ct.slope 
+WHERE t.status = 'A' AND ct.status = 'A' AND tt.status = 'A'; 
+
+
+private function getRatingSlope($tmntId) {
+    $x = DB::table('course_tees')
+        ->join('tournaments', 'tournaments.mens_tee_id', 'course_tees.id')
+        ->where('tournaments.id', $tmntId)
+        ->select('rating', 'slope')
+        ->first();
+    // Log::info("rating, slope", [$x->rating, $x->slope]);
+    return $x; // this is a collection
+
+private function getRatingSlope($tmntId) {
+    $x = DB::table('course_tees')
+        ->join('tournaments', 'tournaments.mens_tee_id', 'course_tees.id')
+        ->where('tournaments.id', $tmntId)
+        ->get(['rating', 'slope']); // return collections
+    Log::info("rating, slope", [$x[0]->rating, $x[0]->slope]);
+	}
+}

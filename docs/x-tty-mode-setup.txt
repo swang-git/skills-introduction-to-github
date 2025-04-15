@@ -1,0 +1,52 @@
+NOTE : --force at the end of the third line is necessary.
+
+First line and second line ensures Nouveau driver is screwed, third line updates initramfs. Running all three lines are necessary.
+
+Second command didn't worked with "sudo" with admin account but it did with after logging in as SuperUser i.e. sudo su . So, just run all the commands as superuser and not with "sudo". Probably a bug.
+
+6) Download binary drivers ending with *.run from NVIDIA site (396.24) and put it in path which you will remember.
+
+Only 396.24 drivers work with linux kernel 4.16.x without any patch. I don't recommend using patched drivers.
+
+Right click on the downloaded file and go to its properties, in permissions tab, set everything to "Read and Write" and check the box to allow running this file as an executable.
+
+Now reboot your system.
+
+7) Hold down "shift" key as soon as BIOS logo/screen is about to disappear.
+
+8) In the menu press 'e' after highlighting the latest kernel for which you installed "devel" and "header" packages.
+
+In the GRUB commands screen....scroll down till the line which has
+
+....vmlinuz...........................
+
+At the end of the line add this :
+
+nomodeset grub_gfxmode=vesa
+
+VMLINUZ is your compressed linux kernel by the way.
+
+If you don't do this step, then you would be greeted by black terminal screen with cursor blinking on it and no login screen, absolutely nothing.
+
+9) After editing press "ctrl+x" to boot with the changes you have just made temporarily for one boot only.
+
+10) Once the login screen appears, press ctrl+alt+F3 (Yes, F3 and Not F1). (This is ctrl+alt+F2 for Ubuntu 18.04 LTS)
+
+This will bring you on a terminal with "tty3" written on top. If tty3 is not written on top, then you are in wrong console/terminal.
+
+IF you press ctrl+alt+f2 which you are NOT supposed to, that will also bring you to another terminal where the commands in the next steps will NOT work. Instead either your terminal will hang or you will go back to the login screen. Also, this terminal doesn't have "tty3" written on top.
+
+ctrl+alt+F1 does nothing in Fedora 28.
+
+11) In the tty3 terminal that just opened, login to your admin account.
+
+Now run these commands :
+
+    sudo service lightdm stop
+    sudo init 3
+
+
+
+
+Now, go to the directory where you have kept your NVIDIA...*.run file.
+

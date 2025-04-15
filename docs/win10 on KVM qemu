@@ -1,0 +1,40 @@
+my dell Dell XPS 8930 Tower - Intel Core i7 - Windows 10 Pro
+OEM key: RBKFH-N6T4D-M3KWH-HWV48-QDBP2
+========================================
+Extracting your Windows license key
+Prior to Windows 8, the Windows license key could be found on a sticker on the back or bottom of a computer. 
+Now, the license key is rather unhelpfully embedded inside the computer. Perhaps more unhelpfully, 
+there is no option to view the key in the BIOS on most computers, 
+including the Lenovo ThinkPad W550s used for this article. As such, 
+the key must be manually extracted from the ACPI table in which it is stored. 
+Fortunately, there is an open source tool to do so.
+
+In order to do this, the acpica-tools package must be installed via the command line. 
+On Fedora, Red Hat Enterprise Linux, CentOS, and SUSE, this is:
+
+sudo dnf install acpica-tools
+Alternatively, for Debian and Ubuntu users:
+
+sudo apt-get install acpica-tools
+With this installed, the acpidump command can be used to view the entire table. D
+umping the contents of all ACPI tables would produce a lot of extraneous data, so to select only the license key, 
+use the following command:
+
+sudo acpidump -n MSDM
+This will return data that looks like this:
+
+MSDM @ 0x0000000000000000
+  0000: 4D 53 44 4D 55 00 00 00 03 B1 4C 45 4E 4F 56 4F  MSDMU.....LENOVO
+  0010: 54 50 2D 4E 31 31 20 20 40 11 00 00 50 54 45 43  TP-N11  @...PTEC
+  0020: 02 00 00 00 01 00 00 00 00 00 00 00 01 00 00 00  ................
+  0030: 00 00 00 00 1D 00 00 00 46 43 4B 47 57 2D 52 48  ........FCKGW-RH
+  0040: 51 51 32 2D 59 58 52 4B 54 2D 38 54 47 36 57 2D  QQ2-YXRKT-8TG6W-
+  0050: 32 42 37 51 38                                   2B7Q8
+The five sets of five characters separated by dashes at the end is the license key. In this example, this is FCKGW-RHQQ2-YXRKT-8TG6W-2B7Q8.
+
+Selecting a virtual machine and installing Windows
+In Linux, using KVM/QEMU is the most pain-free virtualization option, as it is built into the kernel and there are no kernel extensions to configure. 
+The Boxes app provides a very easy to use GUI for this (and is installed by default on Fedora), though if you need extensive configuration options, 
+virt-manager is intended for power users. For cases like this, where Windows 10 is a guest on a Linux machine, the VirtIO package is needed 
+for networking and disk device drivers. They can be downloaded from here. 
+Likewise, SPICE is used for 3D acceleration, clipboard sharing, USB device sharing, and other functions. The SPICE guest tools package can be downloaded here.

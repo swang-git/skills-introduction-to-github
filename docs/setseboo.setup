@@ -1,0 +1,20 @@
+setsebool -P httpd_can_network_connect_db 1
+setsebool -P exim_can_connect_db 1
+setsebool -P httpd_can_network_connect 1
+ausearch -m avc -ts today | audit2why|grep setsebool
+setsebool -P httpd_read_user_content 1
+setsebool -P domain_can_mmap_files 1
+setsebool -P httpd_dbus_sssd 1
+In Laravel project root directory do
+sudo find -type f -exec chmod 644 {};
+sudo find -type d -exec chmod 755 {};
+chcon -Rt httpd_sys_content_rw_t storage
+to check use ls -Z, you should see
+unconfined_u:object_r:httpd_sys_content_t:s0 app
+unconfined_u:object_r httpd_log_t:s0 logs
+unconfined_u:object_r:httpd_sys_content_t:s0 framework
+setenforce 1
+setsebool -P httpd_read_user_content 1
+setsebool -P httpd_can_network_connect_db 1
+If you want to allow httpd to read home directories, you must turn on the httpd_enable_homedirs boolean. Disabled by default. 
+setsebool -P httpd_enable_homedirs 1

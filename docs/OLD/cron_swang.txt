@@ -1,0 +1,34 @@
+SHELL=/bin/bash
+PATH=/home/swang/bin:/sbin:/bin:/usr/sbin:/usr/bin
+MAILTO=swang
+
+*/10 09-19 * * 1-5 loadsec
+00 20 * * 1-5 loadsec
+
+00 11 * * * today-reminder > tmp/logs/cn/today-reminder_log_`wkdayname` 2>&1
+30 07 * * * export DISPLAY=:1 && reminder > tmp/logs/cn/reminder.log 2>&1
+
+00 * * * * timeout -s 9 600 loadPXHY  0 1
+02 * * * * timeout -s 9 600 loadPXHY -1 1
+04 * * * * timeout -s 9 600 loadPXHY -2 2
+05 * * * * timeout -s 9 600 loadPXWW  0 2
+30 * * * * timeout -s 9 600 loadPXWW -1 2
+15 * * * * loopLoadPX PXJL  0 3.5m > tmp/logs/cn/loopLoadPXJL_1.log_`wkdayname` 2>&1
+20 * * * * loopLoadPX PXJL -1 3.5m > tmp/logs/cn/loopLoadPXJL_1.log_`wkdayname` 2>&1
+25 * * * * loopLoadPX PXQG  0 3.5m > tmp/logs/cn/loopLoadPXQG_0.log_`wkdayname` 2>&1
+35 * * * * loopLoadPX PXQG -1 3.5m > tmp/logs/cn/loopLoadPXQG_1.log_`wkdayname` 2>&1
+40 * * * * timeout -s 9 600 loadPXWX  0 2
+45 * * * * timeout -s 9 600 loadPXWX -1 2
+
+00 23 * * * dumpDB princeton_golf > tmp/logs/cn/dump_princeton_golf.log_`wkdayname` 2>&1
+10 23 * * * dumpDB Fin	          > tmp/logs/cn/dump_Fin.log_`wkdayname` 2>&1
+20 23 * * * dumpDB dev	          > tmp/logs/cn/dump_dev.log_`wkdayname` 2>&1
+30 23 * * * dumpDB MyWeb	  > tmp/logs/cn/dump_MyWeb.log_`wkdayname` 2>&1
+
+00 04 * * * tarImgDaily PXHY > tmp/logs/cn/tarImgDaily_HY.log_`wkdayname` 2>&1
+10 04 * * * tarImgDaily PXWX > tmp/logs/cn/tarImgDaily_WX.log_`wkdayname` 2>&1
+20 04 * * * tarImgDaily PXWW > tmp/logs/cn/tarImgDaily_WW.log_`wkdayname` 2>&1
+30 04 * * * tarImgDaily PXQG > tmp/logs/cn/tarImgDaily_QG.log_`wkdayname` 2>&1
+40 04 * * * tarImgDaily PXJL > tmp/logs/cn/tarImgDaily_JL.log_`wkdayname` 2>&1
+50 04 * * * tarDocDaily	     > tmp/logs/cn/tarDocDaily.log_`wkdayname` 2>&1
+

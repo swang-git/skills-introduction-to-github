@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=XAUTHORITY
+GenericName=create .Xauthority file in user home 
+Comment=create .Xauthority file in user home every time a session started
+Exec=/usr/bin/bash -c 'ln -s -f "$XAUTHORITY" ~/.Xauthority'
+Terminal=false
+Type=Application

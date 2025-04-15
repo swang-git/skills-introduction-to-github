@@ -1,0 +1,9 @@
+[root@devx ~]# efibootmgr
+BootCurrent: 0000
+Timeout: 1 seconds
+BootOrder: 0000,0001,0008,0009
+Boot0000* Fedora	HD(1,GPT,3435244b-337f-4f30-81f0-262bea4316b9,0x800,0x12c000)/File(\EFI\fedora\shimx64.efi)
+Boot0001* Fedora	HD(1,GPT,99e42baa-bcca-467f-ad7b-f81e44e14d14,0x800,0x12c000)/File(\EFI\fedora\shimx64.efi)
+Boot0008  Onboard NIC (IPV4)	PciRoot(0x0)/Pci(0x1c,0x3)/Pci(0x0,0x0)/MAC(d89ef38e6c67,0)/IPv4(0.0.0.00.0.0.0,0,0)0000424f
+Boot0009  Onboard NIC (IPV6)	PciRoot(0x0)/Pci(0x1c,0x3)/Pci(0x0,0x0)/MAC(d89ef38e6c67,0)/IPv6([::]:<->[::]:,0,0)0000424f
+

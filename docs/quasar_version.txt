@@ -1,0 +1,8 @@
+# yarn upgrade quasar@latest
+# yarn upgrade @quasar/app@latest
+# yarn upgrade @quasar/extras@latest
+# yarn upgrade @quasar/cli@latest
+quasar --version
+use
+npm install -g @quasar/cli 
+to get latest version and properly working for quasar info/dev/upgrade

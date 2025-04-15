@@ -1,0 +1,9 @@
+mount -t smbfs //swang@192.168.1.116/mbak /Users/swang/linmbak
+mount -t smbfs //swang@192.168.1.116/docs /Users/swang/lindocs
+
+mount_smbfs //swang@192.168.1.116/docs /Users/swang/lindocs
+
+mount_smbfs //swang@192.168.1.116/proj /Users/swang/linproj
+
+sudo chcon -Rt samba_share_t /sites/projects
+

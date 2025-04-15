@@ -1,0 +1,43 @@
+MSDM @ 0x0000000000000000
+   0000: 4D 53 44 4D 55 00 00 00 03 C9 44 45 4C 4C 20 20  MSDMU.....DELL   
+   0010: 41 53 30 39 20 20 20 00 09 20 07 01 41 4D 49 20  AS09   .. ..AMI  
+   0020: 13 00 01 00 01 00 00 00 00 00 00 00 01 00 00 00  ................
+   0030: 00 00 00 00 1D 00 00 00 52 42 4B 46 48 2D 4E 36  ........RBKFH-N6
+   0040: 54 34 44 2D 4D 33 4B 57 48 2D 48 57 56 34 38 2D  T4D-M3KWH-HWV48-
+   0050: 51 44 42 50 32                                   QDBP2
+   
+
+df -h
+df: /run/user/1000/doc: Operation not permitted
+Filesystem                                 Size  Used Avail Use% Mounted on
+devtmpfs                                    16G     0   16G   0% /dev
+tmpfs                                       16G  977M   15G   7% /dev/shm
+tmpfs                                       16G  2.3M   16G   1% /run
+/dev/mapper/fedora_localhost--live-root00   69G   48G   18G  74% /
+tmpfs                                       16G  6.4M   16G   1% /tmp
+/dev/nvme0n1p1                              14G   41M   13G   1% /ntv
+/dev/sda2                                  976M  293M  617M  33% /boot
+/dev/mapper/fedora_localhost--live-home00  831G  760G   29G  97% /atv
+/dev/sda1                                  599M   21M  579M   4% /boot/efi
+/dev/mapper/my-site                        366G  227G  139G  63% /sites
+/dev/mapper/my-home                        100G   69G   32G  69% /home
+/dev/sde1                                  3.7T  3.7T   14G 100% /etv
+/dev/sdc2                                  1.9T  1.8T   22G  99% /itv
+tmpfs                                      3.2G   24K  3.2G   1% /run/user/42
+tmpfs                                      3.2G  112K  3.2G   1% /run/user/1000
+
+Importing GPG key 0x94843C65:
+ Userid     : "RPM Fusion nonfree repository for Fedora (2020) <rpmfusion-buildsys@lists.rpmfusion.org>"
+ Fingerprint: 79BD B88F 9BBF 7391 0FD4 095B 6A2A F961 9484 3C65
+ From       : /usr/share/distribution-gpg-keys/rpmfusion/RPM-GPG-KEY-rpmfusion-nonfree-fedora-33
+Is this ok [y/N]: y
+Key imported successfully
+Running transaction check
+Transaction check succeeded.
+Running transaction test
+Transaction test succeeded.
+Complete!
+Download complete! Use 'dnf system-upgrade reboot' to start the upgrade.
+To remove cached metadata and transaction use 'dnf system-upgrade clean'
+The downloaded packages were saved in cache until the next successful transaction.
+You can remove cached packages by executing 'dnf clean packages'.
