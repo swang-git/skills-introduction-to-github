@@ -1,0 +1,27 @@
+DELIMITER $$
+-- DROP FUNCTION `avg8_score`; 
+CREATE DEFINER=`swang`@`%localhost` FUNCTION `avg8_score`(`playerId` INT) 
+RETURNS FLOAT(3,1) 
+DETERMINISTIC 
+CONTAINS SQL SQL 
+SECURITY DEFINER 
+
+BEGIN 
+DECLARE handicapIdx FLOAT; 
+SELECT AVG(gross_score) INTO handicapIdx 
+FROM (SELECT gross_score 
+        FROM (SELECT start_at, gross_score 
+                FROM tplayers t JOIN tournaments o ON o.id = t.tournament_id WHERE player_id = playerId and gross_score > 66 ORDER BY start_at DESC LIMIT 20
+            ) g20 ORDER BY gross_score ASC LIMIT 8
+    ) b8; 
+    
+RETURN handicapIdx;
+END$$
+
+DELIMITER ;
+
+-- UPDATE course_tees ct JOIN course_pars cp on ct.course_id = cp.courseId set par= (h1+h2+h3+h4+h5+h6+h7+h8+h9+h10+h11+h12+h13+h14+h15+h16+h17+h18) where ct.status = 'A' AND cp.status = 'A'; 
+
+-- checking
+set @pid=226;SELECT start_at, gross_score FROM tplayers t JOIN tournaments o ON o.id=t.tournament_id WHERE player_id=@pid and gross_score>66 ORDER BY start_at DESC LIMIT 20;
+select avg8_score(226);

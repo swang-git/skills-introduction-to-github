@@ -1,0 +1,61 @@
+1) FTP info -- use WinSCP from Windows 10
+To push the PHP code, html web pages, use this FTP site and login
+
+ftp 02a1674.netsolhost.com
+Login: shengli_wang
+password: Pcg1234
+
+2) IIS Manager from Windows 10 to set php version using the following info:
+Server name: 02a1674.netsolhost.com
+Site Name: 1551069.site
+User Name: ntsl911041%02a1674
+Password: Pcg1234
+
+www.gallant.com will point to the root /
+golf.gallant.com will point to /golf
+
+4) accessing database
+database server: mysqlcluster18.registeredsite.com
+Database: princeton_golf
+user/pwd: pccadmin/Golf1234
+mysql -upccadmin -pGolf1234 -hmysqlcluster18.registeredsite.com -D princeton_golf
+or using using PhpMyAdmin:
+https://mysqlcluster18.registeredsite.com/sso/signon.php
+
+public/web.config file
+=======================================
+<configuration>
+    <system.webServer>
+        <defaultDocument>
+            <files>
+                <clear />
+                <add value="index.php" />
+                <add value="default.aspx" />
+                <add value="Default.htm" />
+                <add value="Default.asp" />
+                <add value="index.htm" />
+                <add value="index.html" />
+            </files>
+        </defaultDocument>
+        <rewrite>
+            <rules>
+                <rule name="Imported Rule 1" stopProcessing="true">
+                    <match url="^(.*)/$" ignoreCase="false" />
+                    <conditions>
+                        <add input="{REQUEST_FILENAME}" matchType="IsDirectory" ignoreCase="false" negate="true" />
+                    </conditions>
+                    <action type="Redirect" redirectType="Permanent" url="/{R:1}" />
+                </rule>
+                <rule name="Imported Rule 2" stopProcessing="true">
+                    <match url="^" ignoreCase="false" />
+                    <conditions>
+                        <add input="{REQUEST_FILENAME}" matchType="IsDirectory" ignoreCase="false" negate="true" />
+                        <add input="{REQUEST_FILENAME}" matchType="IsFile" ignoreCase="false" negate="true" />
+                    </conditions>
+                    <action type="Rewrite" url="index.php" />
+                </rule>
+            </rules>
+        </rewrite>
+        <httpErrors errorMode="Detailed" />
+    </system.webServer>
+</configuration>

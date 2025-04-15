@@ -1,0 +1,12 @@
+<?php
+namespace App\Models\Golf;
+
+use Illuminate\Database\Eloquent\Model;
+
+class CourseHandicap extends Model
+{
+    protected $connection = "princeton_golf";
+    protected $table = "princeton_golf.course_handicaps";
+    //protected $connection = "Golf_dev";
+    // protected $fillable = ['usr_id', 'recursive', 'due date', 'type', 'message', 'status', 'details'];
+}

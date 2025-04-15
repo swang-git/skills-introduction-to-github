@@ -1,0 +1,45 @@
+DROP FUNCTION `course_handicap`;
+CREATE DEFINER=`swang`@`%localhost` FUNCTION `course_handicap`(`playerId` INT, `course_id` INT, `teeboxId` INT) RETURNS FLOAT(3,1) DETERMINISTIC CONTAINS SQL SQL SECURITY DEFINER BEGIN
+DECLARE handicapIdx FLOAT;
+DECLARE courseHandicap FLOAT;
+DECLARE par INT;
+
+-- SELECT h1+h2+h3+h4+h5+h6+h7+h8+h9+h10+h11+h12+h13+h14+h15+h16+h17+h18 INTO par FROM course_pars WHERE courseId = course_id AND status = 'A';
+
+select avg(gross_score) INTO handicapIdx
+from (select gross_score from 
+(SELECT start_at, gross_score FROM tplayers t join tournaments o on o.id = t.tournament_id WHERE player_id = playerId and gross_score > 0 ORDER BY start_at DESC LIMIT 20) g20 
+order by gross_score asc limit 8) b8;
+
+SELECT handicapIdx * slope / 113 + (rating - par) INTO courseHandicap
+FROM course_tees where id = teeboxId AND status = 'A';
+
+RETURN courseHandicap;
+END
+==========================
+DELIMITER $$
+DROP FUNCTION `handicap`;
+CREATE DEFINER=`swang`@`%localhost` FUNCTION `handicap`(`playerId` INT, `course_id` INT) RETURNS INT 
+DETERMINISTIC 
+
+BEGIN
+DECLARE handicapIdx FLOAT;
+DECLARE par INT;
+
+SELECT  (h1+h2+h3+h4+h5+h6+h7+h8+h9+h10+h11+h12+h13+h14+h15+h16+h17+h18) INTO par FROM course_pars WHERE courseId = course_id AND status = 'A';
+
+/*
+select avg(gross_score) INTO handicapIdx
+from (select gross_score from 
+(SELECT start_at, gross_score FROM tplayers t join tournaments o on o.id = t.tournament_id WHERE player_id = playerId and gross_score > 0 ORDER BY start_at DESC LIMIT 20) g20 
+order by gross_score asc limit 8) b8;
+*/
+
+RETURN par;
+-- RETURN handicapIdx;
+END$$
+DELIMITER ;
+
+UPDATE `course_tees` ct JOIN course_pars cp ON ct.course_id = cp.courseId set ct.par = (h1+h2+h3+h4+h5+h6+h7+h8+h9+h10+h11+h12+h13+h14+h15+h16+h17+h18) WHERE ct.status = 'A' AND cp.status = 'A'; 
+
+select handicap(1, 4) as x;

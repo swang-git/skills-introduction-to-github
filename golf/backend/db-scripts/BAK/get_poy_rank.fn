@@ -1,0 +1,29 @@
+CREATE DEFINER=`swang`@`localhost` FUNCTION `get_poy_rank`(playerId INT, tmntId INT) RETURNS decimal(3,1)
+    DETERMINISTIC
+BEGIN
+declare poy_rank decimal(3,1);
+declare last_tournament_time datetime;
+declare bound INT;
+declare tmnt_year INT;
+
+set bound = 17;
+select year from tournaments where id = tmntId into tmnt_year;
+-- set tmnt_year = 2017;
+select start_at from tournaments where id = tmntId and status = 'A' into last_tournament_time;
+
+select sum(prank) from 
+(select  bound - gross_rank as prank
+
+from tplayers tp
+join tournaments tt on tp.tournament_id = tt.id 
+join players p on tp.player_id = p.id
+where tt.game_id in (1, 2, 3, 4) 
+and tt.year = tmnt_year and p.id = playerId
+-- and tt.start_at <= last_tournament_time
+and tt.start_at <= '2017-09-24 12:30:00'
+and tp.status = 'A' and tt.status = 'A'
+order by prank desc limit 3) p into poy_rank;
+
+return (poy_rank);
+
+END

@@ -1,0 +1,60 @@
+.re_truncate-dsk {
+  width: 3840px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.re_truncate-fon {
+  width: 250px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  /* font-weight: 800; */
+}
+
+@keyframes bline
+  from
+    background-color: rgb(154, 163, 163)
+    color: black
+    background-color: teal
+    0%
+      color: teal
+      left: 0px
+      top: 0px
+    25%
+      color: yellow
+      left: 200px
+      top: 0px
+    50%
+      color: orange
+      left: 200px
+      top: 200px
+    75%
+      color: pink
+      left: 0px
+      top: 200px
+    100%
+      color: cyan
+      left: 0px
+      top: 0px
+/* The element to apply the animation to */
+.blink-line
+  /* width: 600px; */
+  /* position: relative; */
+  animation-direction: alternate
+  /* color: yellow; */
+  animation-name: bline
+  /* animation-delay: 4s; */
+  animation-duration: 1s
+  animation-iteration-count: infinite
+
+.sh_btnsz
+  text-align: center
+  width: 70px
+  height: 70px
+  background: RGB(28, 78, 88)
+  font-size: 24px
+  font-weight: 500
+  color: white
+  cursor: pointer

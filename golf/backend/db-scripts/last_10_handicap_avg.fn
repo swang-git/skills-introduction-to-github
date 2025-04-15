@@ -1,0 +1,10 @@
+DECLARE handiavg FLOAT
+--SET handi_avg = 33.3
+SELECT avg(idx_diff) * 0.96
+FROM tplayers TP
+JOIN tournaments Tu on TU.id = TP.tournament_id
+WHERE TP.status = 'A' AND TU.status = 'A'
+ORDER BY TU.start_at DESC
+LIMIT 10
+INTO handi_avg
+RETURN IFNULL(handi_avg, 33.3)

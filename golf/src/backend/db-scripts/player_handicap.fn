@@ -1,0 +1,31 @@
+DELIMITER $$
+CREATE DEFINER=`swang`@`localhost` FUNCTION `player_handicap`(`gameId` INT, `playerId` INT) RETURNS float(3,1)
+    DETERMINISTIC
+BEGIN
+DECLARE handicapIdx FLOAT;
+     IF gameId = 14
+     THEN
+          SELECT avg_idx into handicapIdx 
+               FROM kj_game_data k 
+               JOIN match_players m ON m.id = k.mp_id 
+                         AND m.player_id = playerId 
+               WHERE k.game_date <= now() 
+               ORDER BY k.game_date DESC
+               LIMIT 1;
+          RETURN IFNULL(handicapIdx, 28.3);
+     ELSE
+          SELECT AVG(idx_diff) INTO handicapIdx
+               FROM (SELECT idx_diff
+                    FROM (SELECT start_at, idx_diff 
+                         FROM tplayers t 
+                         JOIN tournaments o ON o.id = t.tournament_id 
+                         WHERE player_id = playerId and idx_diff > 0  
+                         ORDER BY start_at DESC LIMIT 20
+                    ) derived_table_limit_20
+               ORDER BY idx_diff ASC LIMIT 10
+          ) derived_table_limit_10;
+
+          RETURN IFNULL(handicapIdx * 0.96, 28.3);
+          END IF;
+END$$
+DELIMITER ;

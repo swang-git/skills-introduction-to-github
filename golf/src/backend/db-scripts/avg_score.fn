@@ -1,0 +1,57 @@
+DELIMITER $$
+CREATE DEFINER=`swang`@`localhost` FUNCTION `avg_score`(playerId INT, gameId INT) RETURNS decimal(4,1)
+    DETERMINISTIC
+BEGIN
+declare avg_score decimal(4,1);
+declare back_n_days INT;
+select double_value from constant where id = 'back_n_days' into back_n_days;
+-- select avg(gross_score) from tplayers p
+select if (avg(gross_score) >= 100, 99.9, avg(gross_score)) 
+from tplayers p
+join tournaments t on t.id = p.tournament_id
+-- where player_id = playerId and p.game_id = gameId and p.status = 'A' and t.status = 'A' 
+where player_id = playerId and p.status = 'A' and t.status = 'A' and p.gross_score > 65 
+	and start_at > date_add(now(), interval back_n_days day) and gross_score > 0 into avg_score;
+RETURN avg_score;
+END$$
+DELIMITER ;
+
+/*
+CREATE DEFINER=`swang`@`localhost` FUNCTION `avg_score`(playerId INT, gameId INT) RETURNS decimal(4, 1)
+    DETERMINISTIC
+BEGIN
+declare avg_score decimal(4, 1), backNdays INT;
+select double_value from constant where id = 'back_n_days' into backNdays
+select if (avg(gross_score) >= 100, 99.9, avg(gross_score)) from tplayers p
+join tournaments t on t.id = p.tournament_id
+where player_id = playerId and p.game_id = gameId and p.status = 'A' and t.status = 'A' 
+	and start_at > date_add(now(), interval backNdays day) and gross_score > 0 into avg_score
+RETURN avg_score
+END
+
+===================================
+CREATE DEFINER=`swang`@`localhost` FUNCTION `avg_score`(playerId INT, gameId INT) RETURNS decimal(4,1)
+    DETERMINISTIC
+BEGIN
+declare avg_score decimal(4,1);
+declare backdays INT;
+set backdays = -60;
+-- select avg(gross_score) from tplayers p
+select if (avg(gross_score) >= 100, 99.9, avg(gross_score)) from tplayers p
+join tournaments t on t.id = p.tournament_id
+where player_id = playerId and p.game_id = gameId and p.status = 'A' and t.status = 'A' 
+	and start_at > date_add(now(), interval backdays day) and gross_score > 0 into avg_score;
+RETURN avg_score;
+END
+===================================
+CREATE DEFINER=`swang`@`localhost` FUNCTION `avg_score`(playerId INT, gameId INT, nday INT) RETURNS decimal(4,1)
+    DETERMINISTIC
+BEGIN
+declare avg_score decimal(4,1);
+-- select avg(gross_score) from tplayers p
+select if (avg(gross_score) >= 100, 99.9, avg(gross_score)) from tplayers p
+join tournaments t on t.id = p.tournament_id
+where player_id = playerId and p.game_id = gameId and p.status = 'A' and t.status = 'A' and start_at > date_add(now(), interval nday day) and gross_score > 0 into avg_score;
+RETURN avg_score;
+END
+*/

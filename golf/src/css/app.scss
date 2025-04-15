@@ -1,0 +1,262 @@
+// app global css in SCSS form
+@use '_common';
+@use '_pagination';
+// @use '_mixins';
+.wa-sticky-header-table {
+  @import '_table.sass';
+  /* height or max-height is important */
+  // background-color: GRB(18, 58, 78)
+  height: 920px;
+  width: 775px;
+  border: 1px solid pink;
+}
+
+.sh-sticky-header-table {
+  @import '_table.sass';
+  /* height or max-height is important */
+  // background-color: GRB(19, 58, 78)
+  // height: 878px;
+  height: 972px;
+  border: 1px solid pink
+}
+
+.sh-sticky-header-column-table {
+  @import '_table_sticky_col.sass';
+  /* height or max-height is important */
+  // background-color: GRB(38, 58, 78)
+  height: 480px
+}
+@mixin shadow-box-66 {
+  width: 66px;
+  height: 66px;
+  margin: 2px;
+  border-radius: 50%;
+  font-size: 24px;
+  color: yellow;
+}
+.shadow-box-lg {
+  @include shadow-box-66;
+}
+@mixin shadow-box-60 {
+  width: 60px;
+  height: 60px;
+  padding: 5px 0 0 2px;
+  margin: 2px;
+  border-radius: 50%;
+  font-size: 36px;
+  color: white;
+  background: grey;
+}
+@mixin shadow-box-55 {
+  width: 55px;
+  height: 55px;
+  margin: 2px;
+  border-radius: 50%;
+  font-size: 30px;
+  color: yellow;
+  background: green;
+}
+@mixin shadow-box-55-reg {
+  width: 110px;
+  height: 55px;
+  margin: 2px;
+  border-radius: 50%;
+  font-size: 30px;
+  color: yellow;
+  background: green;
+}
+.shadow-box-60-grey {
+  @include shadow-box-60;
+  background: grey;
+}
+.shadow-box-60-red {
+  @include shadow-box-60;
+  background: red;
+}
+.shadow-box-green {
+  @include shadow-box-55;
+  background: green;
+}
+.shadow-box-grey {
+  @include shadow-box-55;
+  color: black;
+  background: grey;
+}
+@mixin shadow-box-45 {
+  width: 45px;
+  height: 45px;
+  margin: 2px;
+  border-radius: 50%;
+  font-size: 30px;
+  color: yellow;
+  background:grey;
+  border: 3px solid white;
+  // padding: 0px 0 0px 0px;
+}
+.shadow-box-hcap {
+  @include shadow-box-45;
+}
+.shadow-box-par {
+  @include shadow-box-45;
+  color: cyan;
+  padding-top: -2px;
+  background:green;
+}
+.shadow-box-reg {
+  @include shadow-box-55-reg;
+  color: white;
+  background: green;
+  border: 3px solid white;
+}
+.shadow-box-hole {
+  @include shadow-box-55;
+  color: white;
+  background: purple;
+  border: 3px solid white;
+}
+.shadow-box-60-hole {
+  @include shadow-box-60;
+  color: white;
+  background: purple;
+  border: 3px solid white;
+}
+.shadow-box-cyan {
+  @include shadow-box-55;
+  color: navy;
+  background: cyan;
+}
+.shadow-box-ggrey {
+  @include shadow-box-55;
+  color: grey;
+  background: grey;
+}
+.shadow-box-blue {
+  @include shadow-box-55;
+  color: white;
+  background: blue;
+}
+.shadow-box-green {
+  @include shadow-box-55;
+  color: white;
+  background: green;
+}
+.shadow-box-red {
+  @include shadow-box-55;
+  color: white;
+  background: red;
+}
+.shadow-box-lime {
+  @include shadow-box-55;
+  color: blue;
+  background: lime;
+}
+.shadow-box-pink {
+  @include shadow-box-55;
+  color: blue;
+  background: pink;
+}
+.shadow-box-init {
+  @include shadow-box-55;
+  color: black;
+  background: cyan;
+}
+.shadow-box-fbscore {
+  width: 57px;
+  height: 57px;
+  margin: 2px;
+  border-radius: 50%;
+  font-size: 30px;
+  color: white;
+  background: gray;
+}
+@mixin shadow-box-56 {
+  width: 57px;
+  height: 57px;
+  margin: 2px;
+  border-radius: 50%;
+  font-size: 30px;
+  color: white;
+  background: red;
+}
+.shadow-box-56-red {
+  @include shadow-box-56;
+}
+.shadow-box-56-grey {
+  @include shadow-box-56;
+  color: white;
+  background: grey;
+}
+@mixin shadow-box-68 {
+  width: 68px;
+  height: 68px;
+  margin: 2px;
+  border-radius: 50%;
+  font-size: 30px;
+}
+.round-66x {
+  @include shadow-box-68;
+  color: navy;
+  background: lightgrey;
+  border: 3px solid white;
+  font-family: mono;
+  padding: 9px 0 0 12px;
+  cursor: pointer;
+}
+.round-66 {
+  @extend .round-66x;
+  @extend .inset-shadow-down!optional;
+}
+@mixin box-16 {
+  height: 48px;
+  width: 48px;
+  border-radius: 50%;
+  font-size: 16px;
+  color: white;
+  border: 2px solid white;
+  text-align: center;
+}
+.redx-box-16 {
+  @include box-16;
+  background: darkred;
+}
+.navy-box-16 {
+  @include box-16;
+  background: navy;
+}
+.yell-box-16 {
+  @extend .inset-shadow-down !optional;
+  @include box-16;
+  color:navy;
+  background: yellow;
+}
+@mixin box-20 {
+  height: 60px;
+  width: 60px;
+  border-radius: 50%;
+  font-size: 22px;
+  color: white;
+  border: 2px solid white;
+  text-align: center;
+  padding: 12px 0 0 0;
+  @extend .inset-shadow-down !optional;
+}
+.redx-box-20 {
+  @include box-20;
+  background: darkred;
+}
+.navy-box-20 {
+  @include box-20;
+  @extend .inset-shadow-down !optional;
+  background: navy;
+}
+.yell-box-20 {
+  @include box-20;
+  color: navy;
+  background: yellow;
+}
+.sup-60-24 {
+  color: white;
+  margin: -60px 0 0 24px;
+}
+@import "hole_score_button.scss";
+@import "hole_score_buttonG.scss";

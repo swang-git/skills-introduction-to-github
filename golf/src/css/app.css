@@ -1,0 +1,208 @@
+@use '_common';
+@use '_pagination';
+.wa-sticky-header-table {
+  /* height or max-height is important */
+  height: 920px;
+  width: 775px;
+  border: 1px solid pink;
+}
+
+.wa-sticky-header-table div.q-field__native.row.items-center span {
+  font-size: 20px;
+  color: yellow;
+  font-weight: 820px;
+}
+
+.wa-sticky-header-table div.q-field__append.q-field__marginal.row.no-wrap.items-center.q-anchor--skip i {
+  font-size: 40px;
+  color: yellow;
+}
+
+.wa-sticky-header-table .q-table__top,
+.wa-sticky-header-table .q-table__bottom,
+.wa-sticky-header-table thead tr:first-child th {
+  /* bg color is important for th; just specify one */
+  background-color: indigo;
+  color: white;
+  font-size: 21px;
+  font-weight: 500;
+}
+
+.wa-sticky-header-table thead tr th {
+  position: -webkit-sticky;
+  position: sticky;
+  z-index: 1;
+}
+
+.wa-sticky-header-table thead tr:first-child th {
+  top: 0;
+}
+
+.wa-sticky-header-table tbody td:first-child {
+  background-color: RGB(48, 80, 80);
+  color: lightgreen;
+  font-size: 21px;
+  font-weight: 600;
+  font-family: stfangsong;
+}
+
+.wa-sticky-header-table tbody tr td {
+  font-size: 19px;
+  background: RGB(48, 78, 90);
+  color: white;
+  /* this is when the loading indicator appears */
+}
+
+.wa-sticky-header-table .q-table--loading thead tr:last-child th {
+  /* height of all previous header rows */
+  top: 48px;
+}
+
+.wa-sticky-header-table .edt {
+  background-color: RGB(28, 58, 78);
+  color: yellow;
+  cursor: pointer;
+}
+
+.sh-sticky-header-table {
+  /* height or max-height is important */
+  height: 878px;
+  border: 1px solid pink;
+}
+
+.sh-sticky-header-table div.q-field__native.row.items-center span {
+  font-size: 20px;
+  color: yellow;
+  font-weight: 820px;
+}
+
+.sh-sticky-header-table div.q-field__append.q-field__marginal.row.no-wrap.items-center.q-anchor--skip i {
+  font-size: 40px;
+  color: yellow;
+}
+
+.sh-sticky-header-table .q-table__top,
+.sh-sticky-header-table .q-table__bottom,
+.sh-sticky-header-table thead tr:first-child th {
+  /* bg color is important for th; just specify one */
+  background-color: indigo;
+  color: white;
+  font-size: 21px;
+  font-weight: 500;
+}
+
+.sh-sticky-header-table thead tr th {
+  position: -webkit-sticky;
+  position: sticky;
+  z-index: 1;
+}
+
+.sh-sticky-header-table thead tr:first-child th {
+  top: 0;
+}
+
+.sh-sticky-header-table tbody td:first-child {
+  background-color: RGB(48, 80, 80);
+  color: lightgreen;
+  font-size: 21px;
+  font-weight: 600;
+  font-family: stfangsong;
+}
+
+.sh-sticky-header-table tbody tr td {
+  font-size: 19px;
+  background: RGB(48, 78, 90);
+  color: white;
+  /* this is when the loading indicator appears */
+}
+
+.sh-sticky-header-table .q-table--loading thead tr:last-child th {
+  /* height of all previous header rows */
+  top: 48px;
+}
+
+.sh-sticky-header-table .edt {
+  background-color: RGB(28, 58, 78);
+  color: yellow;
+  cursor: pointer;
+}
+
+.sh-sticky-header-column-table {
+  /* specifying max-width so the example can
+  highlight the sticky column on any browser window */
+  /* this will be the loading indicator */
+  /* height or max-height is important */
+  height: 480px;
+}
+
+.sh-sticky-header-column-table thead tr:first-child th {
+  /* bg color is important for th; just specify one */
+  background-color: indigo;
+  color: white;
+  font-size: 22px;
+}
+
+.sh-sticky-header-column-table div.q-field__native.row.items-center span {
+  font-size: 18px;
+  color: white;
+}
+
+.sh-sticky-header-column-table div.q-field__append.q-field__marginal.row.no-wrap.items-center.q-anchor--skip i {
+  font-size: 40px;
+  color: white;
+}
+
+.sh-sticky-header-column-table div.q-field__append.q-field__marginal.row.no-wrap.items-center.q-anchor--skip i {
+  font-size: 40px;
+  color: red;
+}
+
+.sh-sticky-header-column-table tbody tr td {
+  /* bg color is important for th; just specify one */
+  background-color: teal;
+  color: white;
+  font-size: 22px;
+}
+
+.sh-sticky-header-column-table td:first-child {
+  /* bg color is important for td; just specify one */
+  background-color: #c1f4cd !important;
+  color: black;
+}
+
+.sh-sticky-header-column-table tr th {
+  position: -webkit-sticky;
+  position: sticky;
+  /* higher than z-index for td below */
+  z-index: 2;
+  /* bg color is important; just specify one */
+  background: #fff;
+}
+
+.sh-sticky-header-column-table thead tr:last-child th {
+  /* height of all previous header rows */
+  top: 48px;
+  /* highest z-index */
+  z-index: 3;
+}
+
+.sh-sticky-header-column-table thead tr:first-child th {
+  top: 0;
+  z-index: 1;
+}
+
+.sh-sticky-header-column-table tr:first-child th:first-child {
+  /* highest z-index */
+  z-index: 3;
+}
+
+.sh-sticky-header-column-table td:first-child {
+  z-index: 1;
+}
+
+.sh-sticky-header-column-table td:first-child, .sh-sticky-header-column-table th:first-child {
+  position: -webkit-sticky;
+  position: sticky;
+  left: 0;
+}
+/*# sourceMappingURL=app.css.map */

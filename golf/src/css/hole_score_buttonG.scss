@@ -1,0 +1,135 @@
+@mixin stroke-base {
+  width: 59px;
+  height: 59px;
+  // margin: 2px 0 0 1px;
+  // padding-top: -10px;
+  // padding-left: 13px;
+  padding:0 0 0 13px;
+  border-radius: 50%;
+  // font-size: 40px;
+  border: 2px solid;
+  // margin: 0 0 0 -2px;
+}
+@mixin hole-base {
+  width: 39px;
+  height: 39px;
+  border-radius: 50%;
+  font-size: 20px;
+  border: 3px cyan solid;
+  color: lightcyan;
+  background:grey;
+  // margin: 0 0 0 -1.5px;
+}
+._pars {
+  @include hole-base;
+  padding: 2px 0 0 11px;
+  background: lightgreen;
+  border-color: pink;
+  color: navy;
+}
+._holeF {
+  @include hole-base;
+  padding: 2px 0 0 11px;
+}
+._holeB {
+  @include hole-base;
+  padding: 2px 0 0 4px;
+}
+._hcap1 {
+  @include hole-base;
+  padding: 2px 0 0 11px;
+  color: white;
+  background:grey;
+}
+._hcap2 {
+  @include hole-base;
+  padding: 2px 0 0 4px;
+  color: white;
+  background:grey;
+}
+._Xenter {
+  @include stroke-base;
+  // font-size: 30px;
+  color: yellow;
+  background: yellow;
+  border-color: yellow;
+}
+._Xzero {
+  @include stroke-base;
+  color: white;
+  background:white;
+  border-color: white;
+}
+._Xpar {
+  @include stroke_base;
+  color:white;
+  background:green;
+  border-color: cyan;
+  // padding: -3px 0 0 4px;
+}
+._Xbird {
+  @include stroke_base;
+  color: yellow;
+  background:red;
+  border-color: yellow;
+  // padding-left: 17px;
+}
+._Xbogy {
+  @include stroke_base;
+  color: lime;
+  background: blue;
+  border-color: yellow;
+  // padding-left: 17px;
+}
+._Xpar {
+  @include stroke_base;
+  color:white;
+  background:green;
+  border-color: cyan;
+}
+._Xbird {
+  @include stroke_base;
+  color: yellow;
+  background:red;
+  border-color: yellow;
+}
+._Xbogy {
+  @include stroke_base;
+  color: lime;
+  background: blue;
+  border-color: yellow;
+}
+._Xeagl {
+  @include stroke_base;
+  color: navy;
+  background:lime;
+  border-color: red;
+}
+._Xdobl {
+  @include stroke_base;
+  border-radius: 37%;
+  color: white;
+  background: navy;
+  border-color: gold;
+}
+._Xtrpl {
+  @include stroke_base;
+  border-radius: 20%;
+  color: white;
+  background: purple;
+  border-color: white;
+}
+._Xquad {
+  @include stroke_base;
+  border-radius: 15%;
+  color: yellow;
+  background: rgb(31, 6, 6);
+  border-color: yellow;
+}
+._Xdpar {
+  @include stroke_base;
+  border-radius: 15%;
+  color: red;
+  background: rgb(22, 2, 36);
+  border-color: red
+}

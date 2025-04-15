@@ -1,0 +1,25 @@
+CREATE DEFINER=`swang`@`localhost` FUNCTION `game_cnt`(playerId INT, gameId INT) RETURNS int
+    DETERMINISTIC
+BEGIN
+declare cnt INT;
+declare back_n_days INT;
+select double_value from constant where id = 'back_n_days' into back_n_days;
+select count(*) from tplayers p
+join tournaments t on t.id = p.tournament_id
+where player_id = playerId and p.game_id = gameId and gross_score > 0 and t.status = 'A' and p.status = 'A'
+	and start_at > date_add(now(), interval back_n_days day) into cnt;
+RETURN cnt;
+END
+=====================================
+CREATE DEFINER=`swang`@`localhost` FUNCTION `game_cnt`(playerId INT, gameId INT) RETURNS int
+    DETERMINISTIC
+BEGIN
+declare cnt INT;
+declare backdays INT;
+set backdays = -60;
+select count(*) from tplayers p
+join tournaments t on t.id = p.tournament_id
+where player_id = playerId and p.game_id = gameId and gross_score > 0 and t.status = 'A' and p.status = 'A'
+	and start_at > date_add(now(), interval backdays day) into cnt;
+RETURN cnt;
+END

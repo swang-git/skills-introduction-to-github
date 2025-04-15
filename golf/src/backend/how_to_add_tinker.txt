@@ -1,0 +1,6 @@
+0. check laravel docs for "Artisan Console"
+1. Commands are typically stored in the app/Console/Commands directory
+2. php artisan make:command LoadExcelData -- see file app/Console/Commands/LoadExcelData.php
+3. at this php there will artisan command LoadExcelData -- check php artsian list|grep LoadExcelData
+4. you change signature from LoadExcelData to load-excel-data
+

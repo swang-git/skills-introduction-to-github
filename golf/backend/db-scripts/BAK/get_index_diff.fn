@@ -1,0 +1,17 @@
+CREATE DEFINER=`swang`@`localhost` FUNCTION `get_index_diff`(playerId INT, tournamentId INT) RETURNS decimal(3,1)
+    DETERMINISTIC
+BEGIN
+	DECLARE retval DECIMAL(3,1); 
+    DECLARE MF CHAR(1);
+	SELECT gender FROM players WHERE id = playerId INTO MF; 
+    
+    SELECT (tp.gross_score - te.rating) * 113 / te.slope * 0.96  AS index_diff  -- tp.player_id, gross_score, tt.year, te.rating, te.slope, yardage
+    FROM tplayers tp
+    JOIN tournaments tt ON tp.tournament_id = tt.id
+    JOIN courses co ON tt.course_id = co.id 
+	JOIN course_tees te ON te.course_id = co.id
+	WHERE CASE WHEN MF = 'M' THEN tt.mens_tee_id = te.id ELSE tt.lady_tee_id = te.id END
+		AND tp.player_id = playerId AND tp.tournament_id = tournamentId
+		AND tp.status = 'A' AND tt.status = 'A' AND te.status = 'A' INTO retval;
+ 	RETURN (retval);
+END

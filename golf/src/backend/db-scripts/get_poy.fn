@@ -1,0 +1,10 @@
+DELIMITER $$
+CREATE DEFINER=`swang`@`localhost` FUNCTION `get_poy`(`playerId` INT, `year` INT, `gameId` INT) RETURNS float(4,2)
+    DETERMINISTIC
+    COMMENT 'testing function'
+BEGIN
+declare poy float(4,2);
+select sum(poyg) from tplayers where player_id = playerId and year=year and game_id <= gameId into poy;
+RETURN poy;
+END$$
+DELIMITER ;

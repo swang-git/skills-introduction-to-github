@@ -1,0 +1,295 @@
+// app global css in SCSS form
+@use '_common';
+@use '_pagination';
+// @use '_mixins';
+.wa-sticky-header-table {
+  @import '_table.sass';
+  /* height or max-height is important */
+  // background-color: GRB(18, 58, 78)
+  height: 920px;
+  width: 775px;
+  border: 1px solid pink;
+}
+
+.sh-sticky-header-table {
+  @import '_table.sass';
+  /* height or max-height is important */
+  // background-color: GRB(19, 58, 78)
+  // height: 878px;
+  height: 972px;
+  border: 1px solid pink
+}
+
+.sh-sticky-header-column-table {
+  @import '_table_sticky_col.sass';
+  /* height or max-height is important */
+  // background-color: GRB(38, 58, 78)
+  height: 480px
+}
+@mixin shadow-box-66 {
+  width: 66px;
+  height: 66px;
+  margin: 2px;
+  border-radius: 50%;
+  font-size: 24px;
+  color: yellow;
+}
+.shadow-box-lg {
+  @include shadow-box-66;
+}
+@mixin shadow-box-60 {
+  width: 60px;
+  height: 60px;
+  padding: 5px 0 0 2px;
+  margin: 2px;
+  border-radius: 50%;
+  font-size: 36px;
+  color: white;
+  background: grey;
+}
+.shadow-box-60-grey {
+  @include shadow-box-60;
+  background: grey;
+}
+.shadow-box-60-red {
+  @include shadow-box-60;
+  background: red;
+}
+@mixin shadow-box-55 {
+  width: 55px;
+  height: 55px;
+  margin: 2px;
+  border-radius: 50%;
+  font-size: 30px;
+  color: yellow;
+  background: green;
+}
+.shadow-box-green {
+  @include shadow-box-55;
+  background: green;
+}
+.shadow-box-grey {
+  @include shadow-box-55;
+  color: black;
+  background: grey;
+}
+@mixin shadow-box-45 {
+  width: 45px;
+  height: 45px;
+  margin: 2px;
+  border-radius: 40%;
+  font-size: 30px;
+  color: yellow;
+  background:darkblue;
+  border: 3px solid white;
+}
+.shadow-box-hcap {
+  @include shadow-box-45;
+}
+.shadow-box-par {
+  @include shadow-box-45;
+  color: white;
+  background:green;
+}
+.shadow-box-hole {
+  @include shadow-box-55;
+  color: white;
+  background: purple;
+  border: 3px solid white;
+}
+.shadow-box-60-hole {
+  @include shadow-box-60;
+  color: white;
+  background: purple;
+  border: 3px solid white;
+}
+.shadow-box-ggrey {
+  @include shadow-box-55;
+  color: grey;
+  background: grey;
+}
+.shadow-box-blue {
+  @include shadow-box-55;
+  color: white;
+  background: blue;
+}
+.shadow-box-red {
+  @include shadow-box-55;
+  color: white;
+  background: red;
+}
+.shadow-box-init {
+  @include shadow-box-55;
+  color: black;
+  background: cyan;
+}
+.shadow-box-fbscore {
+  width: 57px;
+  height: 57px;
+  margin: 2px;
+  border-radius: 50%;
+  font-size: 30px;
+  color: white;
+  background: gray;
+}
+@mixin shadow-box-56 {
+  width: 57px;
+  height: 57px;
+  margin: 2px;
+  border-radius: 50%;
+  font-size: 30px;
+  color: white;
+  background: red;
+}
+.shadow-box-56-red {
+  @include shadow-box-56;
+}
+.shadow-box-56-grey {
+  @include shadow-box-56;
+  color: white;
+  background: grey;
+}
+@mixin mark {
+  width: 40px;
+  height: 40px;
+  padding: 1px 0 0 11px;
+  margin:-6px 0 0 -1px;
+  font-size: 24px;
+  color: white;
+  border: 2px solid cyan;
+  border-radius: 50%;
+}
+.hole-smark1 {
+  @include mark;
+  margin:-6px 0 0 -1px;
+}
+.hole-smark2 {
+  @include mark;
+  padding: 1px 0 0 4px;
+}
+.hole-mark1 {
+  @include mark;
+  margin:-96px 0 0 -1px;
+}
+.hole-mark2 {
+  @include mark;
+  padding: 1px 0 0 4px;
+  margin:-96px 0 0 -1px;
+}
+@mixin pars {
+  width: 23px;
+  height: 23px;
+  padding: 4px 0 0 7px;
+  margin:-110px 0 0 16px;
+  font-size: 16px;
+  background-color: blue;
+  color: lime;
+}
+.hole-par1 {
+  @include pars;
+  margin-left: 16px;
+}
+.hole-par2 {
+  @include pars;
+  margin-left: 18px;
+}
+@mixin stroke-base {
+  width: 59px;
+  height: 59px;
+  margin: 2px 0 0 1px;
+  border-radius: 50%;
+  font-size: 30px;
+  border: 3px solid;
+}
+._X {
+  @include stroke-base;
+  color: yellow;
+  background: pink;
+  border-color: green;
+}
+._enter {
+  @include stroke-base;
+  font-size: 30px;
+  color: yellow;
+  background: yellow;
+  border-color: yellow;
+}
+._zero {
+  @include stroke-base;
+  color: white;
+  background:white;
+  border-color: white;
+}
+._par {
+  @include stroke_base;
+  color:white;
+  background:green;
+  border-color: cyan;
+  padding-left: 17px;
+}
+._bird {
+  @include stroke_base;
+  color: yellow;
+  background:red;
+  border-color: yellow;
+  padding-left: 17px;
+}
+._bogy {
+  @include stroke_base;
+  color: lime;
+  background: blue;
+  border-color: yellow;
+  padding-left: 17px;
+}
+.__par {
+  @include stroke_base;
+  color:white;
+  background:green;
+  border-color: cyan;
+}
+.__bird {
+  @include stroke_base;
+  color: yellow;
+  background:red;
+  border-color: yellow;
+}
+.__bogy {
+  @include stroke_base;
+  color: lime;
+  background: blue;
+  border-color: yellow;
+}
+._eagl {
+  @include stroke_base;
+  color: navy;
+  background:lime;
+  border-color: red;
+}
+._dobl {
+  @include stroke_base;
+  border-radius: 37%;
+  color: white;
+  background: navy;
+  border-color: gold;
+}
+._trpl {
+  @include stroke_base;
+  border-radius: 20%;
+  color: white;
+  background: purple;
+  border-color: white;
+}
+._quad {
+  @include stroke_base;
+  border-radius: 15%;
+  color: yellow;
+  background: red;
+  border-color: yellow;
+}
+._dpar {
+  @include stroke_base;
+  border-radius: 15%;
+  color: red;
+  background: lime;
+  border-color: red
+}

@@ -1,0 +1,59 @@
+/* specifying max-width so the example can
+  highlight the sticky column on any browser window */
+// max-width: 600px
+thead tr:first-child th
+  /* bg color is important for th; just specify one */
+  background-color: indigo
+  color: white
+  font-size: 22px
+
+// .q-select__dropdown-icon.material-icons.q-icon.notranslate
+div.q-field__native.row.items-center span
+  font-size: 18px
+  color: white
+
+div.q-field__append.q-field__marginal.row.no-wrap.items-center.q-anchor--skip i
+  font-size: 40px
+  color: white
+
+div.q-field__append.q-field__marginal.row.no-wrap.items-center.q-anchor--skip i
+  font-size: 40px
+  color: red
+
+tbody tr td
+  /* bg color is important for th; just specify one */
+  background-color: teal
+  color: white
+  font-size: 22px
+
+td:first-child
+  /* bg color is important for td; just specify one */
+  background-color: #c1f4cd !important
+  color: black
+
+tr th
+  position: sticky
+  /* higher than z-index for td below */
+  z-index: 2
+  /* bg color is important; just specify one */
+  background: #fff
+
+/* this will be the loading indicator */
+thead tr:last-child th
+  /* height of all previous header rows */
+  top: 48px
+  /* highest z-index */
+  z-index: 3
+thead tr:first-child th
+  top: 0
+  z-index: 1
+tr:first-child th:first-child
+  /* highest z-index */
+  z-index: 3
+
+td:first-child
+  z-index: 1
+
+td:first-child, th:first-child
+  position: sticky
+  left: 0
