@@ -15,7 +15,7 @@ dist/
 .DS_store
 
 # python files
-__pycache__/
+**/__pycache__
 *.py[cod]
 *.so
 .Python
