@@ -1,7 +1,6 @@
 #!/Users/swang/myenv/bin/python
 from Models import StockQuote
-from datetime import datetime
-import argparse
+import argparse, sys
 
 def my_argparse():
     parser = argparse.ArgumentParser(description='load stocks/funds quotes from website')
@@ -17,6 +16,14 @@ database = my_argparse().database
 for symbol in symbols:
     # load_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     stock = StockQuote(symbol)
-    stock.getQuote(database)
-    stock.saveToDB(database)
+    # stock.getFakeQuote()
+    # stock.getQuote(database)
+    # print(stock.gotData())
+    if stock.getQuote(database) == 'exist this hour': sys.exit(0)
+    elif stock.gotData():
+        stock.showData()
+        stock.saveToDB(database)
+    else:
+        print(f"It seems scratching stock quote from web for [{stock.symbol}] FAILED, exiting ...")
+        sys.exit(1)
 

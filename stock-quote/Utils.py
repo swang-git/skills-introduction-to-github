@@ -87,14 +87,14 @@ fg = lambda text, color: "\33[38;5;" + str(color) + "m" + text + "\33[0m"
 def boldit(str):
     return ef.bold + str + rs.bold_dim
 
-def colorit(str, wid):
-    color = 42
-    if '-' in str:
-        color = 160 
-        str = str.replace('-', '')
-        str = pedsp(str, wid)
-        colored_str = fg(str, color)
-    return pedsp(colored_str, wid)
+# def colorit(str, wid):
+#     color = 42
+#     if '-' in str:
+#         color = 160 
+#         str = str.replace('-', '')
+#         str = pedsp(str, wid)
+#         colored_str = fg(str, color)
+#     return pedsp(colored_str, wid)
 
 def padsp(s, width): return f"{s:>{width}}"
 def pedsp(s, width): return f"{s:<{width}}"

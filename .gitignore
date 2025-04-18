@@ -11,6 +11,7 @@
 node_modules/
 build/
 dist/
+http/
 # Ignore Mac system files
 .DS_store
 

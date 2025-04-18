@@ -1,17 +1,14 @@
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, DateTime, CHAR, DECIMAL, and_, func
-# from sqlalchemy.dialects.mysql import VARCHAR
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 import requests
-from bs4 import BeautifulSoup, Comment
-import sys, time
+from bs4 import BeautifulSoup
 from datetime import datetime
-import json
 from tabulate import tabulate
 import platform
+import sys
 
-# print(f'platform={platform.system()}')
 def dbsession (database):
     if platform.system() == 'Darwin': dbconf="mysql+pymysql://swang:VVKKll11##@localhost/" + database + "?charset=utf8mb4" ## on Mac
     elif platform.system() == 'Linux': dbconf="mysql://swang:VVKKll11##@localhost/" + database + "?charset=utf8mb4"
@@ -69,7 +66,7 @@ class StockQuote(Base):
     def isQuoteAlreadyInDBforToday(self, database):
         session = dbsession(database)
         load_hour=datetime.now().strftime('%Y-%m-%d %H')
-        print('load_date=[%s][%s]'%(load_hour, self.symbol))
+        # print('load_date=[%s][%s]'%(load_hour, self.symbol))
         u = session.query(StockQuote).filter(
             StockQuote.symbol==self.symbol,
             func.date_format(StockQuote.load_time, '%Y-%m-%d %H').label('formated_date')==load_hour
@@ -78,17 +75,17 @@ class StockQuote(Base):
         if u is None: ## no data in DB
             return False
         else:
-            print('quote for %s already exists in table stock_quotes, exiting ...'%self.symbol)
+            print(f'quote for [{self.symbol}] already exists[THIS HOUR do it next hour] in table {database}.stock_quotes, see below:')
             print(tabulate(
-                [(u.symbol, u.price, u.price_change, u.day_low,u.day_high,u.low_52_week,u.high_52_week)],
-                headers=['Stock', 'Price', 'Change', 'Day Low', 'Day High', '52WK Low', '52WK High'],
+                [(u.load_time, u.symbol, u.price, u.price_change, u.day_low,u.day_high,u.low_52_week,u.high_52_week)],
+                headers=['Load Time', 'Stock', 'Price', 'Change', 'Day Low', 'Day High', '52WK Low', '52WK High'],
                 tablefmt='grid'))
 
             return True
 
     def getQuote(self, database, flag=None):
-        if self.isQuoteAlreadyInDBforToday(database): return
-        else: print('Loading data via scraping...')
+        if self.isQuoteAlreadyInDBforToday(database): return 'exist this hour'
+        # else: print('Loading data via scraping...')
 
         if flag == 'testing':
             self.load_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
@@ -102,7 +99,8 @@ class StockQuote(Base):
             return
         
         url = "https://finance.yahoo.com/quote/" + self.symbol
-        print(url)
+        # print(f"url={url}")
+        # print(url)
         headers = {'User-Agent': 'Mozilla/5.0'}
         response = requests.get(url, headers=headers)
         soup = BeautifulSoup(response.text, 'html.parser')
@@ -111,31 +109,30 @@ class StockQuote(Base):
         # # streamers=soup.find_all('fin-streamer', {'data-field':'regularMarketChange'})
         # # x = streamers.split('</fin-streamer>')
         # for x in streamers: print(x)
-        # # sys.exit(0)
+        # sys.exit(0)
         curr_price=soup.find('span', {'data-testid':"qsp-price"}).text
-        print(curr_price)
+        # print(curr_price)
         price_change=soup.find('span', {'data-testid':"qsp-price-change"}).text
-        print(price_change)
+        # print(price_change)
         price_change_percent=soup.find('span', {'data-testid':"qsp-price-change-percent"}).text
-        print(price_change_percent)
+        # print(price_change_percent)
         open_price=soup.find('fin-streamer', {'data-symbol': self.symbol, 'data-field':'regularMarketOpen'}).text
         # curr_price=soup.find('fin-streamer', {'data-symbol': self.symbol, 'data-field':'regularMarketPrice'}).text
         # print('curr_price = [%s] open_price[%s]'%(curr_price,open_price))
-        print('open_price = [%s]'%open_price)
+        # print('open_price = [%s]'%open_price)
         # prchange=soup.find('fin-streamer', {'data-symbol': self.symbol, 'data-field':'regularMarketChange'}).text
         # price_change=soup.find('fin-streamer', {'data-field':'regularMarketChange'}).text
         price=curr_price
         price_change=price_change
-        print('price_change = %s'%price_change)
+        # print('price_change = %s'%price_change)
         prchangepct=soup.find('fin-streamer', {'data-field':'regularMarketChangePercent'}).text
-        print('prchangepct = %s'%prchangepct)
+        # print('prchangepct = %s'%prchangepct)
         dayRange=soup.find('fin-streamer', {'data-symbol': self.symbol, 'data-field':'regularMarketDayRange'}).text
         day_low, day_high = dayRange.split(' - ')
-        print('dayRange = %s'%dayRange)
+        # print('dayRange = %s'%dayRange)
         range52WK=soup.find('fin-streamer', {'data-symbol': self.symbol, 'data-field':'fiftyTwoWeekRange'}).text
         low_52_week, high_52_week = range52WK.split(' - ')
-        print('range52WK = %s'%range52WK)
-
+        # print('range52WK = %s'%range52WK)
         self.load_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         # self.price=open_price
         self.price=curr_price
@@ -145,6 +142,12 @@ class StockQuote(Base):
         self.low_52_week=low_52_week
         self.high_52_week=high_52_week
         self.status='A'
+
+    def showData(self):
+        print(f"{' ':>24} price = {self.price:>7} change = {self.price_change:>6} [{self.symbol:>4}]")
+
+    def gotData(self):
+        return self.price != None
 
     def getFakeQuote(self): # for testing
         self.load_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
@@ -157,7 +160,7 @@ class StockQuote(Base):
         self.status='A'
     
     def saveToDB(self, database):
-        print(f'\nSAVING STOCK QUOTES TO {database}.stock_quotes')
+        # print(f'\nSAVING STOCK QUOTES TO {database}.stock_quotes')
         session = dbsession(database)
         session.add(self)
         session.commit()
