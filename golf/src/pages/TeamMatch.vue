@@ -1,5 +1,5 @@
 <template>
-<div class="bg-teal-10 q-pa-xs" style="min-width:800px">
+<div class="bg-teal-10 q-pa-xs">
   <div v-if="(gameId==14 || gameId==13 || gameId==16) && matchDate">
     <TeamMatchGrouping :gameId="gameId" :games="games" :matchDate="matchDate" :courseInfo="courseInfo" :aliases="aliases"
       :handicaps="handicaps" :handicapFlag="handicapFlag"
