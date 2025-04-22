@@ -18,7 +18,7 @@ export function libFunctions() {
   function desk() {
     return (
       Platform.is.desktop &&
-      (Platform.is.platform === 'linux' || Platform.is.platform === 'win') &&
+      (Platform.is.platform === 'linux' || Platform.is.platform === 'win' || Platform.is.platform === 'mac') &&
       !Platform.has.touch
     )
   }

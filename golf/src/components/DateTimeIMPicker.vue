@@ -52,7 +52,7 @@ const showDate = ref(false)
 const showTime = ref(false)
 // const datetime = ref(props.dateTime)
 
-console.log(`-ST-DateTimePicker datetime=${datetime.value}`)
+console.log(`-ST-DateTimeIMPicker datetime=${datetime.value}`)
 // emitter.on('upd-dt', (dt) => { datetime = dt; console.log(`-CK-dt=${dt}`) })
 // emitter.on('show-updtm', () => showManualInput.value = true)
 function setDateTime (dt) {

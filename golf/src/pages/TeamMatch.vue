@@ -1,5 +1,5 @@
 <template>
-<div class="bg-teal-10 q-pa-xs">
+<div class="bg-teal-10 q-pa-xs" style="min-width:800px">
   <div v-if="(gameId==14 || gameId==13 || gameId==16) && matchDate">
     <TeamMatchGrouping :gameId="gameId" :games="games" :matchDate="matchDate" :courseInfo="courseInfo" :aliases="aliases"
       :handicaps="handicaps" :handicapFlag="handicapFlag"
@@ -82,7 +82,7 @@ const kjNewPlayer = ref([])
 const kjAliases = ref([])
 // const lastHandicapDate = ref(null)
 // const screen_height = $q.screen.height
-// const screen_width = $q.screen.width
+// const screen_minWidth = $q.screen.minWidth
 const exNeshanic = /^(Neshanic)\s+(Valley)\s+(.*)/
 const refSelOptionsWithSearch = ref(null)
 const handicaps = ref(null)
@@ -125,7 +125,7 @@ emitter.on('golf-getHandicaps', (x) => setHandicaps(x))
 // functions section
 // function checkDeviceType () {
 //   console.log('%c-CHECKING DEVICE TYPE', "font-size:10px;font-weight:600;color:red")
-//   console.log(`%cHeight=${screen_height} Width=${screen_width}`, "font-size:10px;font-weight:600;color:red")
+//   console.log(`%cHeight=${screen_height} minWidth=${screen_minWidth}`, "font-size:10px;font-weight:600;color:red")
 // }
 function setPlayerHandicap (p) {
   if (handicapFlag.value == 13) {

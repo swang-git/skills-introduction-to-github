@@ -8,10 +8,10 @@
     </layoutHeader>
     <q-page-container class="q-pa-xs">
       <div v-if="isDesk" class="row">
-        <dtm class="q-pa-xs" label="Match Starting Date Time" :obj="tmnt" txsz="text-h6" :dateTime="teeTime" @upd-dt="setDateTime" />
+        <DateTimePicker class="q-pa-xs" label="Match Starting Date Time" :obj="tmnt" txsz="text-h6" :dateTime="teeTime" @upd-dt="setDateTime" />
       </div>
       <div v-else>
-        <dtmIM class="q-pa-xs" label="Match Starting Date Time" :obj="tmnt" txsz="text-h6" :dateTime="teeTime" @upd-dt="setDateTime" />
+        <DateTimeIMPicker class="q-pa-xs" label="Match Starting Date Time" :obj="tmnt" txsz="text-h6" :dateTime="teeTime" @upd-dt="setDateTime" />
       </div>
       <sel :obj="tmnt" iColor="green" icon="golf_course" label="Select Course"   :optList="courseList" @get-TeeboxList="getTeeboxList" />
       <sel :obj="tmnt" iColor="cyan-2" icon="person_pin" label="Select Mens Tee" :optList="teeboxList" :disable="!tmnt.courseName" @do-action="mat" />
@@ -30,8 +30,8 @@
 </template>
 <script setup>
 import emitter from 'tiny-emitter/instance'
-import dtm from '../components/DateTimePicker'
-import dtmIM from '../components/DateTimeIMPicker'
+import DateTimePicker from '../components/DateTimePicker'
+import DateTimeIMPicker from '../components/DateTimeIMPicker'
 import sel from '../components/MySelection'
 import layoutFooter from '../components/LayoutFooter'
 import layoutHeader from '../components/LayoutHeader'
@@ -48,7 +48,7 @@ import { axiosFunctions } from 'src/composables/axiosFunctions'
 
 const $q = useQuasar()
 const {yyyymmddHHMM, getDay2 } = dayFunctions()
-const {isDesk, isIM } = libFunctions()
+const { isDesk, isIM } = libFunctions()
 const {gaxios, paxios} = axiosFunctions()
 const gameName = ref(null)
 const courseName = ref(null)
@@ -281,7 +281,7 @@ function setTeetimeGap (i) {
   add()
 }
 // === main ===
-console.log('-ST-TeamMathCreator')
+console.log(`-ST-TeamMathCreator isDesk=${isDesk}`)
 emitter.on('golf-checkReminder', (x) => { isScheduled(x) })
 emitter.on('golf-CourseList', (x) => { courseList.value = x.lst })
 emitter.on('golf-TeeboxList', (x) => { teeboxList.value = x.lst })
