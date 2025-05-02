@@ -168,6 +168,7 @@ const month = ref(0)
 const monthDiff = ref(0)
 const monthTotal = ref(0)
 const intraday = ref(null)
+const last_bkg_pdf = ref(null)
 const chaseCash = ref(0)
 const fidelCash = ref(0)
 
@@ -429,8 +430,9 @@ function showDetails (e, i) {
 emitter.on('bankstatement-getList', (da) => setList(da))
 
 function setList(da) {
-  console.log('-CK-setList', da.dats[0])
+  console.log('-CK-setList', da.last_bkg_pdf)
   intraday.value = da.intraday
+  last_bkg_pdf.value = da.last_bkg_pdf
   dats.value = da.dats
   let chartda = JSON.stringify(da.dats)   // clone dats
   chartda = JSON.parse(chartda).reverse()
@@ -471,7 +473,8 @@ function getStatementLink (e) {
   let lnk2 = ''
   const yrmo = e.bank == 'NAC' ? String(e.year) + '07' : String(e.year) + e.month
   if (e.bank === 'BKG') {
-    lnk += 'Chase/' + intraday.value.substring(0, 7).replace('-', '') + '_bkg.pdf'
+    // lnk += 'Chase/' + intraday.value.substring(0, 7).replace('-', '') + '_bkg.pdf'
+    lnk += 'Chase/' + last_bkg_pdf.value
     lnk = '<a href="/docs/' + lnk + '" target="_blank">Monthly Statement</a>&nbsp;&nbsp;&nbsp;'
   } else if (e.bank === 'NAC') {
     lnk += 'NAC/' + yrmo + '.pdf'

@@ -97,12 +97,45 @@ class BankStatementController extends Controller
       // $nacd[0]->month = date('m') + 1;
       $dats = $nacd->merge($dats);
     }
-		[$bkgd, $cash, $intraday] = $this->getChaseBkgAssets();
+		[$bkgd, $cash, $intraday, $last_bkg_pdf] = $this->getChaseBkgAssets();
 		$dats = $bkgd->merge($dats); Log::info("-CK-XXX cash=$cash", $bkgd->toArray());
 		$stock_val = $bkgd[0]->end_balance - $cash;
-		return ['stocks_val' => $stock_val, 'fidel_cash' => $fidel_cash, 'dats' => $dats, 'chase_cash' => $cash, 'intraday' => $intraday, 'status' => "OK" ];
+		return ['stocks_val' => $stock_val, 'fidel_cash' => $fidel_cash, 'dats' => $dats, 'chase_cash' => $cash, 
+        'intraday' => $intraday, 'last_bkg_pdf' => $last_bkg_pdf, 'status' => "OK" ];
 	}
+
+  private function getLastMatchingFile($directory, $pattern) {
+      if (!is_dir($directory)) {
+          return null;
+      }
+
+      $allFiles = scandir($directory);
+      $matchingFiles = array();
+
+      foreach ($allFiles as $file) {
+          if ($file !== '.' && $file !== '..' && fnmatch($pattern, $file)) {
+              $matchingFiles[] = $file;
+          }
+      }
+
+      if (empty($matchingFiles)) {
+          return null;
+      }
+
+      // Sort naturally (handles numbers in filenames better)
+      natsort($matchingFiles);
+
+      return end($matchingFiles);
+  }
+
+  // // Example usage:
+  // $lastFile = getLastMatchingFile('/path/to/directory', 'prefix_*.txt');
+  // echo $lastFile ? "Last file: $lastFile" : "No matching files found";
+
 	private function getChaseBkgAssets() { Log::info("getChaseBkgAssets");
+    $last_bkg_pdf = $this->getLastMatchingFile(config('constants.DOC_DIR') . '/Chase/', '202*_bkg.pdf');
+    Log::info("last_bkg_pdf=$last_bkg_pdf");
+
 		$loadTime = substr(StockQuote::where('status', 'A')->max('load_time'), 0, 10);
 		$da = DB::table('stock_quotes as s')
 			->where('load_time', 'like', "%$loadTime%")
@@ -121,7 +154,8 @@ class BankStatementController extends Controller
 			$begin_balance += ($d->price - $d->price_change) * $d->quantity;
 			$end_balance += $d->price * $d->quantity;
 		}
-		$cash = 40465.51;
+		// $cash = 40465.51;
+		$cash = 41745.24;
 		$bkgd = StockQuote::select(DB::raw("1 as user_id") , DB::raw("'BKG' as bank"),
 				DB::raw("DATE_FORMAT(load_time, '%Y') as year"),
 				DB::raw("DATE_FORMAT(load_time, '%m') as month"),
@@ -136,7 +170,7 @@ class BankStatementController extends Controller
 				DB::raw("$end_balance + $cash as end_balance"))
 			->orderByDesc('load_time')->limit(1)->get();
 		Log::info("bkgd=", $bkgd->toArray());
-		return [$bkgd, $cash, str($loadTime, 0, 10)];
+		return [$bkgd, $cash, str($loadTime, 0, 10), $last_bkg_pdf];
 	}
 	public function getDetails($bank, $year, $month) { Log::info('BankStatement - getDetails', [$bank, $year, $month]);
 		$userId = Auth::user()->id;
