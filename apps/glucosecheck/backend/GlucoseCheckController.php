@@ -23,14 +23,12 @@ class GlucoseCheckController extends Controller {
 	 */
 	public function getList() { Log::info('-fn-GlucoseCheck->getList()');
 		$user = Auth::user();
-		// $dats = GlucoseCheck::select('id', 'user_id',  DATE_FORMAT(now(), '%Y-%d-%m %H:%i'), 'fasting', 'twoh_after', 'food', 'fruit', 'drink', 'note')
-		// $dats = GlucoseCheck::select('id', 'user_id',  'datetime', 'fasting', 'af2hour', 'food', 'fruit', 'drink', 'note')
-		// $dats = GlucoseCheck::select('id', 'user_id',  'datetime', 'fasting', 'food', 'fruit', 'drink', 'note')
-		$dats = GlucoseCheck::select('datetime', 'fasting', 'weight', 'blood_pressure as bloodPressure', 'food', 'fruit', 'drink', 'note', 'id')
-		->where([ ['status', 'A'], ['user_id', $user->id] ])->orderBy('datetime', 'desc')->get();
-
+		$dats = GlucoseCheck::where([ ['status', 'A'], ['user_id', $user->id] ])->orderBy('datetime', 'desc')
+      ->select('datetime', 'fasting', 'weight', 'blood_pressure as bloodPressure', 'food', 'fruit', 'drink', 'note', 'id')
+      ->get();
 		foreach($dats as $d) {
 			$d->datetime = substr($d->datetime, 0, 16);
+      $d->BMI = $d->weight * 0.4536 / 1.73 / 1.73;
 			if (is_null($d->food)) $d->fastingSearch = 'fasting';
 		}
 

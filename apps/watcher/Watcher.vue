@@ -5,15 +5,15 @@
     <div :style="getLineBackground(i)" :class="{ 'bg-purple-10':!e.hideIt }" class="q-px-xs">
       <div class="row cursor-pointer;q-qx-sm" style="font-size:20px">
         <div v-if="isDesk" class="q-pl-sm" @click="e.hideIt=true"><a :href="getDocLinkStr(e.date)" target="_blank" class="alnkclass">{{ e.date }}</a></div>
-        <div v-if="isDesk" class="q-pl-md" @click="e.hideIt=true;getPositions(e)">({{ e.date.chwk3() }})</div>
+        <div v-if="isDesk" class="q-pl-md" @click="e.hideIt=true;getPositions(e)">({{ e.date.chwk2() }})</div>
         <div v-if="e.dowjones>0 && isDesk" class="q-px-md text-right" @click="showIt(i)"> {{ formatCurrency(e.dowjones) }}
           <q-tooltip class="text-h6 bg-accent">Dow Jones on {{ e.date }}</q-tooltip>
         </div>
         <div v-else class="q-pl-md text-right" @click="showIt(i)">{{ formatCurrency(e.portfolio - invested(e)) }}</div>
-        <div class="q-pl-md text-right"  @click="showIt(i)">{{ ((e.portfolio/invested(e) - 1) * 100).toFixed(2) }}%</div>
-        <div class="q-pl-md text-center" @click="showIt(i)">{{ getWeight(e) }}</div>
-        <div class="q-pl-md text-right" :class="{ 'text-green-3':e.dif>0, 'text-pink-2':e.dif<0 }" style="width:120px" @click="showIt(i)"> {{ e.difs }} </div>
-        <div class="q-pl-md text-right cursor-pointer" style="width:160px" @click="showDar(e, 'add')">{{ formatCurrency(e.portfolio) }}</div>
+        <div class="q-pl-xs text-right"  @click="showIt(i)">{{ ((e.portfolio/invested(e) - 1) * 100).toFixed(2) }}%</div>
+        <div class="q-pl-md text-center" @click="showIt(i)">{{ getWeight(e) }} / {{ getBMI(e) }}</div>
+        <div class="q-px-xs text-right" :class="{ 'text-green-3':e.dif>0, 'text-pink-2':e.dif<0 }" style="width:113px" @click="showIt(i)"> {{ e.difs }} </div>
+        <div class="q-plx-xs text-right cursor-pointer" style="width:133px" @click="showDar(e, 'add')">{{ formatCurrency(e.portfolio) }}</div>
         <div class="q-pl-md text-right"><q-icon :name="getIcon(i)" @click="showDar(e, 'add')" /></div>
       </div>
     </div>
@@ -211,6 +211,10 @@ function getWeight (e) {
   else if (type.value === 'jing') wt = (kilo * 2.0).toFixed(1)
   e.weight = wt
   return wt
+}
+function getBMI (e) {
+  if (e.kilo == null) return null
+  return (e.kilo / 1.73 / 1.73).toFixed(1)
 }
 function getColoredDiff (i) {
   const chg = palist.value[i].dif

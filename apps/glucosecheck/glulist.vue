@@ -152,7 +152,7 @@ const itemsPerPageIM = 14
 const dats = ref([])
 const separator = ref('cell')
 const faVal = ref(null)
-const visibleColumnsDesk = ref(['datetime', 'week', 'fasting', 'weight', 'food', 'a1cp'])
+const visibleColumnsDesk = ref(['datetime', 'week', 'fasting', 'weight', 'BMI', 'food', 'a1cp'])
 const visibleColumnsFone = ref(['datetime', 'fasting', 'weight', 'a1cp'])
 const columns = ref([
   { required: true, label: '测 试 时 间', align: 'center', name: 'datetime', field: 'datetime', sortable: true, headerStyle:'font-weight:800;font-size:22px' },
@@ -160,6 +160,7 @@ const columns = ref([
   { required: false, label: '周', align: 'center', name: 'week', field: 'week', sortable: true, headerStyle:'max-width:50px;font-weight:800;font-size:22px;white-space:nowrap' },
   { required: true, label: '血 糖 值', align: 'center', name: 'fasting', field: 'fasting', sortable: true, headerStyle:'max-width:30px;font-weight:800;font-size:22px;white-space:nowrap' },
   { required: false, label: '体 重', align: 'center', name: 'weight', field: 'weight', sortable: false, format:(val, row) => `${parseFloat(val).toFixed(1)}` },
+  { required: false, label: 'BMI', align: 'center', name: 'BMI', field: 'BMI', sortable: false, format:(val, row) => `${parseFloat(val).toFixed(1)}` },
   { required: false, label: '食入 或 空腹', align: 'center', name: 'food', field: 'food', sortable: false, headerStyle:'font-weight:800;font-size:22px' },
   { required: false, label: '饮 入', align: 'center', name: 'drink', field: 'drink', sortable: true, headerStyle:'font-weight:800;font-size:22px'},
   { required: false, label: '水 果', align: 'left', name: 'fruit', field: 'fruit', sortable: true, class: 'text-no-wrap ellipsis' },

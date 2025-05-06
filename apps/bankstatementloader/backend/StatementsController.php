@@ -133,6 +133,8 @@ class StatementsController extends Controller {
       } else if (preg_match('/^Beginning Portfolio Value/', $line)) {
         $data['bpval'] = $this->cleanMoney($lines[$i + 1]);
         $data['ypval'] = $this->cleanMoney($lines[$i + 2]);
+        // $ypval = $data['ypval'];
+        // Log::debug("-CK-getRothStatementHeaders ypval=$ypval", [__line__, __file__]);
       } else if ($i < 22 and $line == 'Additions') {
         $data['cadd'] = $lines[$i + 1];
         $data['yadd'] = $lines[$i + 2];
@@ -144,10 +146,10 @@ class StatementsController extends Controller {
       } else if ($i < 28 and $line == 'Change in Investment Value *') {
         $data['cchg'] = $lines[$i + 1];
         $data['ychg'] = $lines[$i + 2];
-      } else if ($i < 30 and preg_match('/Ending\s+Portfolio\s+Value\*\*(.*)/', $line)) {
+      } else if ($i < 36 and preg_match('/Ending\s+Portfolio\s+Value\*\*(.*)/', $line)) {
         $data['cend'] = $this->cleanMoney($lines[$i + 1]);
         $data['yend'] = $this->cleanMoney($lines[$i + 2]);
-      } else if ($i <= 70 and $line == 'X85-275143') {
+      } else if ($i <= 76 and $line == 'X85-275143') {
         $data['indAcct'] = $line;
         $data['indSval'] = $this->cleanMoney($lines[$i + 1]);
         $data['indEval'] = $this->cleanMoney($lines[$i + 2]);
