@@ -97,10 +97,10 @@ class BankStatementController extends Controller
       // $nacd[0]->month = date('m') + 1;
       $dats = $nacd->merge($dats);
     }
-		[$bkgd, $cash, $intraday, $last_bkg_pdf] = $this->getChaseBkgAssets();
-		$dats = $bkgd->merge($dats); Log::info("-CK-XXX cash=$cash", $bkgd->toArray());
+		[$bkgd, $stocks, $cash, $intraday, $last_bkg_pdf] = $this->getChaseBkgAssets();
+		$dats = $bkgd->merge($dats); Log::info("-CK-XXX stocks=$stocks cash=$cash", $bkgd->toArray());
 		$stock_val = $bkgd[0]->end_balance - $cash;
-		return ['stocks_val' => $stock_val, 'fidel_cash' => $fidel_cash, 'dats' => $dats, 'chase_cash' => $cash, 
+		return ['stocks_val' => $stock_val, 'fidel_cash' => $fidel_cash, 'dats' => $dats, 'bkg_stocks' => $stocks, 'bkg_cash' => $cash, 
         'intraday' => $intraday, 'last_bkg_pdf' => $last_bkg_pdf, 'status' => "OK" ];
 	}
 
@@ -147,15 +147,16 @@ class BankStatementController extends Controller
 			->get();
 		$cnt = count($da);
 		Log::info("stocks: loadTime=$loadTime cnt=$cnt");
-		$begin_balance = 0;
-		$end_balance = 0;
+		$begin_balance_stocks = 0;
+		$end_balance_stocks = 0;
 		foreach($da as $d) {
 			Log::info("$d->symbol $d->price $d->price_change $d->quantity");
-			$begin_balance += ($d->price - $d->price_change) * $d->quantity;
-			$end_balance += $d->price * $d->quantity;
+			$begin_balance_stocks += ($d->price - $d->price_change) * $d->quantity;
+			$end_balance_stocks += $d->price * $d->quantity;
 		}
 		// $cash = 40465.51;
-		$cash = 41745.24;
+		// $cash = 41745.24;
+		$cash = 41482.49;
 		$bkgd = StockQuote::select(DB::raw("1 as user_id") , DB::raw("'BKG' as bank"),
 				DB::raw("DATE_FORMAT(load_time, '%Y') as year"),
 				DB::raw("DATE_FORMAT(load_time, '%m') as month"),
@@ -165,12 +166,12 @@ class BankStatementController extends Controller
 				DB::raw("'$loadTime' as end_date"),
 				// DB::raw("DATE_FORMAT(load_time, '%Y-%m-%d') as end_date"),
 				DB::raw("true as hideIt"),
-				DB::raw("$end_balance - $begin_balance as diff"),
-				DB::raw("$begin_balance + $cash as begin_balance"),
-				DB::raw("$end_balance + $cash as end_balance"))
+				DB::raw("$end_balance_stocks - $begin_balance_stocks as diff"),
+				DB::raw("$begin_balance_stocks + $cash as begin_balance"),
+				DB::raw("$end_balance_stocks + $cash as end_balance"))
 			->orderByDesc('load_time')->limit(1)->get();
 		Log::info("bkgd=", $bkgd->toArray());
-		return [$bkgd, $cash, str($loadTime, 0, 10), $last_bkg_pdf];
+		return [$bkgd, $end_balance_stocks, $cash, str($loadTime, 0, 10), $last_bkg_pdf];
 	}
 	public function getDetails($bank, $year, $month) { Log::info('BankStatement - getDetails', [$bank, $year, $month]);
 		$userId = Auth::user()->id;

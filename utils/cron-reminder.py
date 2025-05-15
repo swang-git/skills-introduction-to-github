@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/Users/swang/myenv/bin/python3
 import os, sys
 import sqlalchemy
 from sqlalchemy import create_engine, func, desc, text
@@ -8,7 +8,8 @@ import datetime
 
 # print('==== cron-reminder.py -- using sqlchemy version', sqlalchemy.__version__)
 
-dbconf="mysql://swang:VVKKll11##@localhost/prod?charset=utf8mb4"
+dbconf="mysql+pymysql://swang:VVKKll11##@localhost/prod?charset=utf8mb4"
+##dbconf="mysql://swang:VVKKll11##@localhost/prod?charset=utf8mb4"
 ##engine = create_engine(dbconf, encoding='utf8', echo=False)
 engine = create_engine(dbconf, echo=False)
 Session = sessionmaker(bind=engine)
@@ -22,6 +23,11 @@ result2 = session.execute(text("SELECT * FROM spends WHERE status = 'A' and cat_
 
 for rec in result1: print('due_date:', rec.due_date, result1.rowcount)
 for rec in result2: print('teetime:', rec.purchasedon, result2.rowcount)
+
+result1.close()
+result2.close()
+sys.exit(0)
+
 
 def openIt():
 #     exit_code = os.WEXITSTATUS(os.system('xdg-open "http://71.59.72.103/QV1/reminder/list"'))

@@ -17,6 +17,7 @@ http/
 
 # python files
 **/__pycache__
+*.pyc
 *.py[cod]
 *.so
 .Python

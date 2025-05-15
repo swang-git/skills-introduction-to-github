@@ -41,10 +41,13 @@
             <q-tr>
               <td>主要账户</td>
               <td v-if="e.bank=='NAC'" class="text-cyan-2" colspan="4"> {{ e.primary_account }} - (Annuity in North American Company)</td>
-              <td v-else-if="e.bank=='BKG'" class="text-cyan-2" colspan="4"> {{ e.primary_account }} - (Stocks)</td>
+              <td v-else-if="e.bank=='BKG'" class="text-cyan-2" colspan="4"> {{ e.primary_account }} - (Stocks + Cach)</td>
               <td v-else class="text-cyan-2" colspan="4"> {{ e.primary_account }} - 支付账户 (CHECKING)</td>
             </q-tr>
-            <q-tr><td>银行总额</td><td class="text-cyan-2" colspan="4"> $ {{ fmtcy(e.end_balance) }}</td></q-tr>
+            <q-tr><td>银行总额</td>
+              <td v-if="e.bank=='BKG'" class="text-cyan-2" colspan="4"> $ {{ parseFloat(e.end_balance).toFixed(2) }} == {{ bkgStocks.toFixed(2) }} + {{ bkgCash }}</td>
+              <td v-else class="text-cyan-2" colspan="4"> $ {{ fmtcy(e.end_balance) }}</td>
+            </q-tr>
             <q-tr><td class="text-no-wrap">银行增减</td>
               <!-- <td class="text-bold" colspan="4" :class="{ 'text-green': e.diff>0,'text-red':e.diff<0 }">${{ fmtcy(e.diff>0 ? e.diff:-e.diff) }}</td> -->
               <td class="text-bold" :colspan="e.bank=='NAC' ? 3 : 4" :class="{ 'text-green': e.diff>0,'text-red':e.diff<0 }">${{ fmtcy(e.diff>0 ? e.diff:-e.diff) }}</td>
@@ -169,7 +172,8 @@ const monthDiff = ref(0)
 const monthTotal = ref(0)
 const intraday = ref(null)
 const last_bkg_pdf = ref(null)
-const chaseCash = ref(0)
+const bkgCash = ref(0)
+const bkgStocks = ref(0)
 const fidelCash = ref(0)
 
 buildApp('银行月报', 'Bankstatement')
@@ -183,8 +187,8 @@ getList()
 
 //== computed sections
 const compCash = computed(() => {
-  // const val = holdings.value.filter(p => /INDIVIDUAL/.test(p.account_name)).reduce((a, b) => a + b.end_balance, chaseCash.value)
-  const val = fidelCash.value + chaseCash.value
+  // const val = holdings.value.filter(p => /INDIVIDUAL/.test(p.account_name)).reduce((a, b) => a + b.end_balance, bkgCash.value)
+  const val = fidelCash.value + bkgCash.value
   return fmtcy(val)
 })
 
@@ -207,8 +211,8 @@ const compDiff = computed(() => {
 // const compStocks = computed(() => {
 //   // return holdings.value.length === 0 ? fmtcy(stocks.value) : fmtcy(getStockVal())
 //   // return fmtcy(stocks.value)
-//   return parseFloat(palist.value[0].end_balance) - chaseCash.value
-//   // return chaseCash.value
+//   return parseFloat(palist.value[0].end_balance) - bkgCash.value
+//   // return bkgCash.value
 // })
 const savInfo = computed(() => {
   const actvs = savactvs.value
@@ -430,7 +434,7 @@ function showDetails (e, i) {
 emitter.on('bankstatement-getList', (da) => setList(da))
 
 function setList(da) {
-  console.log('-CK-setList', da.last_bkg_pdf)
+  console.log('-CK-setList', da.last_bkg_pdf, da.bkg_cash, da.bkg_stocks)
   intraday.value = da.intraday
   last_bkg_pdf.value = da.last_bkg_pdf
   dats.value = da.dats
@@ -438,7 +442,8 @@ function setList(da) {
   chartda = JSON.parse(chartda).reverse()
   stocksVal.value = da.stocks_val
   month.value = da.intraday.substring(5, 7)
-  chaseCash.value = da.chase_cash
+  bkgCash.value = da.bkg_cash
+  bkgStocks.value = da.bkg_stocks
   fidelCash.value = da.fidel_cash
   emitter.emit('dats', dats.value)
 }
