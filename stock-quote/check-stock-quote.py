@@ -42,8 +42,11 @@ def main():
                 quantity = shares[row.symbol]
                 portfolio = Portfolio(row, quantity)
                 displaySec(portfolio, sp)
-                totalValue += float(portfolio.values)
+                if row.symbol == 'BEKE':
+                    continue
+                else:
+                    totalValue += float(portfolio.values)
             totalValue = f"{totalValue:,.2f}"
-            printTailer(sp, totalValue)
+            printTailer(sp, totalValue + ' (Excluding BEKE)')
         print(padsp(' ', 31) + f'STOCK QUOTES from {database}.stock_quotes LOADED at {chunk[6].load_time}')
 if __name__=="__main__": main()
