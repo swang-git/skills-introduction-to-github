@@ -18,16 +18,21 @@ session = Session()
 # q = session.query(reminders).filter(text("user_id = 1 and status = 'A' and due_date between now() and date_add(now(), interval 3 day)"))
 # print('query', q)
 today = datetime.date.today()
-result1 = session.execute(text("SELECT * FROM reminders WHERE status = 'A' and due_date between :today and date_add(:today, interval 7 day) and user_id=:userId"), {'today':today, 'userId':1} )
-result2 = session.execute(text("SELECT * FROM spends WHERE status = 'A' and cat_id = 2 and subcat_id = 4 and purchasedon between :today and date_add(:today, interval 7 day)"), {'today':today} )
+# result1 = session.execute(text("SELECT * FROM reminders WHERE status = 'A' and due_date between :today and date_add(:today, interval 7 day) and user_id=:userId"), {'today':today, 'userId':1} )
+# result2 = session.execute(text("SELECT purchasedon FROM spends WHERE status = 'A' and cat_id = 2 and subcat_id = 4 and purchasedon between :today and date_add(:today, interval 7 day)"), {'today':today})
 
-for rec in result1: print('due_date:', rec.due_date, result1.rowcount)
-for rec in result2: print('teetime:', rec.purchasedon, result2.rowcount)
+stmt1 = "SELECT due_date FROM reminders WHERE status = 'A' and due_date between :today and date_add(:today, interval 7 day) and user_id=:userId order by due_date"
+stmt2 = "SELECT purchasedon FROM spends WHERE status = 'A' and cat_id = 2 and subcat_id = 4 and purchasedon between :today and date_add(:today, interval 7 day) order by purchasedon"
+
+result1 = session.execute(text(stmt1), { 'today': today, 'userId':1 })
+result2 = session.execute(text(stmt2), { 'today': today })
+
+for rec in result1: print('due_date:', rec.due_date, result1.rowcount, 'reminders')
+for rec in result2: print('teetime:', f"{rec.purchasedon}"[:16], 'golf teetime')
 
 result1.close()
 result2.close()
 sys.exit(0)
-
 
 def openIt():
 #     exit_code = os.WEXITSTATUS(os.system('xdg-open "http://71.59.72.103/QV1/reminder/list"'))
