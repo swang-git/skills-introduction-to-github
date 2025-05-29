@@ -6,8 +6,8 @@ if [ $# -ne 1 ]; then
 fi
 db=$1
 dd=`date +%a`
-target_file=/etv/BAK/db/dump_${dd}_${db}.sql
+target_file=/Users/swang/linmbak/db/dump_${dd}_${db}.sql
 
 echo dumping database $target_file $argv
 
-mysqldump -uswang -pVVKKll11@@ -B $db --routines > $target_file &
+mysqldump -uswang -pVVKKll11## -B $db --routines > $target_file &

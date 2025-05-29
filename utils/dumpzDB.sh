@@ -7,6 +7,7 @@ fi
 db=$1
 dd=`date +%a`
 target_file=/Users/swang/linmbak/db/dumpz_${dd}_${db}.sql.gz
+##target_file=/Users/swang/tmp/dumpz_${db}.sql.gz
 
 echo dumping database $target_file $argv
 
