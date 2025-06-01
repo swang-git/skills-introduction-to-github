@@ -23,7 +23,7 @@
       <td class="q-pl-sm">{{ ac[0] }}</td>
       <td class="q-px-sm">{{ ac[1].substring(0, 61) }}</td>
       <td class="q-px-sm text-right">{{ ac[2] }}</td>
-      <td class="q-pl-sm text-right">{{ ac[3] }}</td>
+      <td class="q-pl-sm text-right">{{ parseFloat(ac[3]).toFixed(2) }}</td>
     </q-tr>
   </div>
   <div v-if="showData[2]">
@@ -37,7 +37,7 @@
         <td class="q-pl-sm">{{ act[0] }}</td>
         <td class="q-px-sm">{{ act[1].substring(0, 61) }}</td>
         <td class="q-px-sm text-right">{{ act[2] }}</td>
-        <td class="q-pl-sm text-right">{{ act[3] }}</td>
+        <td class="q-pl-sm text-right">{{ parseFloat(act[3]).toFixed(2) }}</td>
       </q-tr>
     </div>
   </div>
@@ -187,6 +187,7 @@ function loadStmt (da) {
     return reLoadDataTryNewYmon()
   }
   assets.value = da.assets
+  console.log(`-CK-loasStmt`, [assets.value.begin_date, assets.value.end_date])
   chk.value = da.chk
   console.log('chk.act=', chk.value.act[0])
   sav.value = da.sav
@@ -194,8 +195,8 @@ function loadStmt (da) {
   assets.value.bank = bank.value
   assets.value.year = year.value
   assets.value.month = month.value
-  assets.value.begin_date = (new Date(assets.value.begin_date)).yyyymmdd()
-  assets.value.end_date = (new Date(assets.value.end_date)).yyyymmdd()
+  // assets.value.begin_date = (new Date(assets.value.begin_date)).yyyymmdd()
+  // assets.value.end_date = (new Date(assets.value.end_date)).yyyymmdd()
   assets.value.begin_balance = parseFloat(chk.value.begin_balance) + parseFloat(sav.value.begin_balance)
   assets.value.end_balance = parseFloat(chk.value.end_balance) + parseFloat(sav.value.end_balance)
 }

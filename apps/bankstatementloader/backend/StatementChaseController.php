@@ -69,6 +69,7 @@ class StatementChaseController extends Controller {
     if (is_null($lines)) return ['info' => $filename, 'status' => 'NO_FILE'];
 
     [$start, $assets] = $this->getAssets($lines);
+    Log::info("start=$start, assets:", $assets);
     $lines = array_slice($lines, $start + 3);
     [$start, $chk] = $this->getCheckingData($lines);
     $lines = array_slice($lines, $start + 2);
