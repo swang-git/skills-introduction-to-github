@@ -98,7 +98,8 @@ class WatcherController extends Controller {
                     'current_val' => $current_val, 'pct_of_acct' => $pct_of_acct, 'quantity' => $quantity,
                     'cost_basis_per_share' => $cost_per_share, 'cost_basis' => $cost_base];
                 // Log::info($posData);
-                $upsertReturn = FidelityPosition::upsert($posData, ['date', 'acct_num', 'symbol'], ['price', 'pchange', 'today_gl', 'total_gl', 'current_val', 'quantity']);
+                $upsertReturn = FidelityPosition::upsert($posData, ['date', 'acct_num', 'symbol'], 
+                  ['price', 'pchange', 'today_gl', 'today_gl_p', 'total_gl', 'total_gl_p', 'current_val', 'pct_of_acct', 'quantity']);
                 // $dm = new FidelityPosition;
                 // $dm->date = $date;
                 // $dm->acct_num = $acct_num;
