@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers;
 
+use App\Models\bankstatement\ChaseBkgCash;
 use App\Models\bankstatement\SecurityMeta;
 use App\Models\bankstatement\StockQuote;
 use App\Models\bankstatement\BankStatementHolding;
@@ -98,9 +99,9 @@ class BankStatementController extends Controller
       $dats = $nacd->merge($dats);
     }
 		[$bkgd, $stocks, $cash, $intraday, $last_bkg_pdf] = $this->getChaseBkgAssets();
-		$dats = $bkgd->merge($dats); Log::info("-CK-XXX stocks=$stocks cash=$cash", $bkgd->toArray());
+		$dats = $bkgd->merge($dats); //Log::info("-CK-XXX stocks=$stocks cash=$cash", $bkgd->toArray());
 		$stock_val = $bkgd[0]->end_balance - $cash;
-		return ['stocks_val' => $stock_val, 'fidel_cash' => $fidel_cash, 'dats' => $dats, 'bkg_stocks' => $stocks, 'bkg_cash' => $cash, 
+		return ['stocks_val' => $stock_val, 'fidel_cash' => $fidel_cash, 'dats' => $dats, 'bkg_stocks' => $stocks, 'bkg_cash' => $cash,
         'intraday' => $intraday, 'last_bkg_pdf' => $last_bkg_pdf, 'status' => "OK" ];
 	}
 
@@ -156,7 +157,12 @@ class BankStatementController extends Controller
 		}
 		// $cash = 40465.51;
 		// $cash = 41745.24;
-		$cash = 41482.49;
+		// $cash = 41482.49;
+		// $cash = 41844.12;
+    $loadMonth = substr(StockQuote::where('status', 'A')->max('load_time'), 0, 7);
+    $cash = ChaseBkgCash::where([ ['status', 'A'], ['date', 'like', "$loadMonth%"] ])->value('cash');
+    if (is_null($cash)) $cash = ChaseBkgCash::where('status', 'A')->orderByDesc('date')->limit(1)->value('cash');
+    Log::info("loadMonth=$loadMonth cash=$cash");
 		$bkgd = StockQuote::select(DB::raw("1 as user_id") , DB::raw("'BKG' as bank"),
 				DB::raw("DATE_FORMAT(load_time, '%Y') as year"),
 				DB::raw("DATE_FORMAT(load_time, '%m') as month"),
