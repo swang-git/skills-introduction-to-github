@@ -192,13 +192,15 @@ function loadStmt (da) {
   console.log('chk.act=', chk.value.act[0])
   sav.value = da.sav
   assets.value.tran_cnt = da.chk.act.length + da.sav.act.length
-  assets.value.bank = bank.value
-  assets.value.year = year.value
-  assets.value.month = month.value
+  //assets.value.bank = bank.value
+  //assets.value.year = year.value
+  //assets.value.month = month.value
   // assets.value.begin_date = (new Date(assets.value.begin_date)).yyyymmdd()
   // assets.value.end_date = (new Date(assets.value.end_date)).yyyymmdd()
-  assets.value.begin_balance = parseFloat(chk.value.begin_balance) + parseFloat(sav.value.begin_balance)
-  assets.value.end_balance = parseFloat(chk.value.end_balance) + parseFloat(sav.value.end_balance)
+  //assets.value.begin_balance = da.assets.begin_balance
+  //assets.value.end_balance = da.assets.end_balance
+  //assets.value.begin_balance = parseFloat(chk.value.begin_balance) + parseFloat(sav.value.begin_balance)
+  //assets.value.end_balance = parseFloat(chk.value.end_balance) + parseFloat(sav.value.end_balance)
 }
 function loadData(stmt) {
   if (stmt.bank !== 'Chase') {

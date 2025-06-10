@@ -15,8 +15,8 @@ use App\Traits\PDFTrait;
 
 class StatementChaseController extends Controller {
 	public function __construct() {	}
-  private $chk_nos = [];
   use PDFTrait;
+  private $notes = [];
 
   public function addActivity(Request $da) { //Log::info('addActivity', $da->toArray());
     $userId = Auth::user()->id;
@@ -64,18 +64,19 @@ class StatementChaseController extends Controller {
     $filename = config('constants.DOC_DIR') . "/Chase/${ymon}.txt";
     $lines = $this->getLines($filename);
     // Log::info('lines', [$lines]);
-    foreach($lines as $line) Log::info("[$line]");
+    foreach ($lines as $i => $line) Log::info("$i:[$line]");
     Log::info("============ the above is the Chase $ymon Statement ==============");
     if (is_null($lines)) return ['info' => $filename, 'status' => 'NO_FILE'];
 
     [$start, $assets] = $this->getAssets($lines);
-    Log::info("start=$start, assets:", $assets);
+    // Log::info("start=$start, assets:", $assets);
     $lines = array_slice($lines, $start + 3);
-    [$start, $chk] = $this->getCheckingData($lines);
-    $lines = array_slice($lines, $start + 2);
+    [$start, $chk] = $this->getAccountData($lines, 'chk');
+    // Log::info("start=$start, chk:", $chk);
+    $lines = array_slice($lines, $start + 1);
     // Log::info("savings part start=$start", $lines);
-    $sav = $this->getSavingsData($lines);
-    // Log::info('chk return', $chk);
+    [$start, $sav] = $this->getAccountData($lines, 'sav');
+    // Log::info("start=$start, sav:", $sav);
     return ['assets' => $assets, 'chk' => $chk, 'sav' => $sav, 'status' => "OK"];
   }
 
@@ -93,15 +94,12 @@ class StatementChaseController extends Controller {
       'tran_cnt',
     ];
     array_shift($lines);
-    for ($i=0; $i<count($lines); $i++) {
-      // if ($i == 9) break;
-      $line = $lines[$i];
-      // if ($line == '[Assets]') continue;
+    foreach ($lines as $i => $line) {
       $key = $keys[$i];
 
       $x = preg_replace("/{$key}:(.*)/", "$1", $line);
       if ($x == $line or is_null($x)) {
-        Log::warn("somethig is wrong key=[$key] line=[$line] exiting...");
+        Log::error("somethig is wrong key=[$key] line=[$line] exiting...");
         exit(-1);
       } else {
         $assets[$key] = $x;
@@ -112,129 +110,59 @@ class StatementChaseController extends Controller {
     }
   }
 
-  private function getCheckingData($lines) { // Log:info("getCheckingData lines=");
+  private function getAccountData($lines, $note_type) { //Log:info("getAccountData lines=", $lines);
     $act = [];
-    $chk = ['act' => $act];
+    $nos = [];
+    $acct = ['act' => $act];
     $keys = [
       'account',
       'begin_balance',
       'end_balance',
-      'tran',
-      'nos1',
-      'nos2',
-      'nos3',
     ];
-    for ($i=0; $i<count($lines); $i++) {
-      $line = $lines[$i];
+    // for ($i=0; $i<count($lines); $i++) {
+    foreach ($lines as $i => $line) {
+      // $line = trim($lines[$i]);
+      if (!preg_match('/(.*):(.*)/', $line)) break;
+      if ($line == '[Savings]') {
+        $acct['act'] = $act;
+        $acct['nos'] = $nos;
+        return [$i, $acct]; //checking data
+      }
       if ($line == '[Checking]') continue;
-      $key = $keys[$i];
-
-      $x = preg_replace("/{$key}:(.*)/", "$1", $line);
-      if ($x == $line or is_null($x)) {
-        Log::warn("somethig is wrong key=[$key] line=[$line] exiting...", [__line__]);
-        exit(-1);
-      } else if ($key == 'tran') {
-        $trans = explode('__', $x);
-        $start_val = $chk['begin_balance'];
-        foreach ($trans as $tr) {
-          $t = explode(' ~ ', $tr);
+      if ($i<=2) {
+        $key = $keys[$i];
+        $x = preg_replace("/{$key}:(.*)/", "$1", $line);
+        if ($x == $line or is_null($x)) {
+          Log::error("somethig is wrong key=[$key] line=[$line] exiting...", [__line__]);
+          exit(-1);
+        } else {
+          $acct[$key] = $x;
+        }
+      } else if ($i > 2) {
+        [$key, $x] = explode(':', $line, 2); // get the key
+        Log::info("key=$key x=$x");
+        if ($key == 'tran') {
+          if (!isset($acct['tran'])) $acct['tran'] = $acct['begin_balance'];
+          $t = explode(' ~ ', $x);
           $date = $t[0];
           $desc = $t[1];
           $amnt = $t[2];
-          $balc = $amnt + $start_val;
+          $balc = $amnt + $acct['tran'];
           $act[] = [$date, $desc, $amnt, $balc];
-          $start_val = $balc;
+          $acct['tran'] = $balc;
+          // $acct['begin_balance'] = $balc;
+          continue;
+        } else if ($key == 'note') {
+          $t = explode(' ~ ', $x);
+          $note = $note_type == 'chk' ? 'chk:' . $t[0] : 'sav:' . $t[0];
+          $amnt = $t[1];
+          $this->notes[] = [$note, $amnt];
+          continue;
         }
-        $chk['act'] = $act;
-        continue;
-      } else if ($key == 'nos1') {
-        $t = explode(' ~ ', $x);
-        $note = 'chk:' . $t[0];
-        $amnt = str_replace('%', '', $t[1]);
-        $this->chk_nos[] = [$note, $amnt];
-        continue;
-      } else if ($key == 'nos2') {
-        $t = explode(' ~ ', $x);
-        $note = 'chk:' . $t[0];
-        $amnt = $t[1];
-        $this->chk_nos[] = [$note, $amnt];
-        continue;
-      } else if ($key == 'nos3') {
-        $t = explode(' ~ ', $x);
-        $note = 'chk:' . $t[0];
-        $amnt = $t[1];
-        $this->chk_nos[] = [$note, $amnt];
-        // Log::info("i=$i chk", [$chk, __line__]);
-        return [$i, $chk];
-      } else {
-        $chk[$key] = $x;
-        // Log::info("-CK- key=[$key] line=[$line]", $assets);
-        // if ($key == 'nos3') break;
-        continue;
       }
     }
-  }
-
-  private function getSavingsData($lines) { //Log:info("getSavingsData liine=", $lines);
-    $act = [];
-    $sav = ['act' => $act];
-    $keys = [
-      'account',
-      'begin_balance',
-      'end_balance',
-      'tran',
-      'nos1',
-      'nos2',
-      'nos3',
-    ];
-    for ($i=0; $i<count($lines); $i++) {
-      $line = $lines[$i];
-      if ($line == '[Checking]') continue;
-      $key = $keys[$i];
-
-      $x = preg_replace("/{$key}:(.*)/", "$1", $line);
-      if ($x == $line or is_null($x)) {
-        Log::warn("somethig is wrong key=[$key] line=[$line] exiting...", [__line__]);
-        exit(-1);
-      } else if ($key == 'tran') {
-        $trans = explode('__', $x);
-        $start_val = $sav['begin_balance'];
-        foreach ($trans as $tr) {
-          $t = explode(' ~ ', $tr);
-          $date = $t[0];
-          $desc = $t[1];
-          $amnt = $t[2];
-          // Log::info("saving amnt=[$amnt] begin_balance=[$start_val]", [__line__]);
-          $balc = $amnt + $start_val;
-          $act[] = [$date, $desc, $amnt, $balc];
-          $start_val = $balc;
-        }
-        $sav['act'] = $act;
-        continue;
-      } else if ($key == 'nos1') {
-        $t = explode(' ~ ', $x);
-        $note = 'sav:' . $t[0];
-        $amnt = str_replace('%', '', $t[1]);
-        $nos[] = [$note, $amnt];
-        continue;
-      } else if ($key == 'nos2') {
-        $t = explode(' ~ ', $x);
-        $note = 'sav:' . $t[0];
-        $amnt = $t[1];
-        $nos[] = [$note, $amnt];
-        continue;
-      } else if ($key == 'nos3') {
-        $t = explode(' ~ ', $x);
-        $note = 'sav:' . $t[0];
-        $amnt = $t[1];
-        $nos[] = [$note, $amnt];
-        // Log::info("i=$i sav", [$sav, __line__]);
-        $sav['nos'] = array_merge($this->chk_nos, $nos);
-        return $sav;
-      } else {
-        $sav[$key] = $x;
-        continue;
-      }
-    }
+    $acct['act'] = $act;
+    $acct['nos'] = $this->notes;
+    return [$i, $acct];
   }
 }

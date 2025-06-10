@@ -1,5 +1,5 @@
 #!/bin/bash
-echo '=========== starting ============'
+#echo '=========== starting ============'
 # if [ $# -ne 1 ]; then
 #   # echo "Usage: $0 [database name]"
 #   echo "Please provide database name"
@@ -26,5 +26,5 @@ echo '=========== starting ============'
 
 dumpDaily DailyDat
 dumpDaily DailyArt
-dumpDB prod
 dumpDB golf
+dumpDB prod
