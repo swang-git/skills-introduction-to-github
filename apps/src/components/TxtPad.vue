@@ -6,8 +6,8 @@
       <q-input v-model='txt' type="textarea" autogrow dark counter input-style="line-height:1.2;min-height:140px" input-class="text-h6 bg-teal-10 q-px-xs" />
     </q-card-section>
     <q-card-actions align="between" class="bg-teal-9 q-pb-xs">
-    <q-btn round glossy color="amber-8" icon="chevron_left" v-close-popup />
-    <q-btn glossy color="primary" icon-right="save" label="save" size="15px" rounded @click="saveLnk()" />
+    <q-btn round glossy color="amber-9" icon="chevron_left" v-close-popup />
+    <q-btn round glossy color="green-9" icon="add_circle" @click="saveLnk()" />
     </q-card-actions>
   </q-card>
 </q-dialog>

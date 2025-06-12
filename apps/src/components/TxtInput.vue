@@ -8,7 +8,7 @@
   </template>
   <div v-if="rightIcon" class="q-pt-sm">
     <!-- <q-btn round outline :color="iColor" :icon="label=='Notes' ? 'delete' : icon" @click="clearField()" /> -->
-    <q-btn round :color="iColor" icon="edit" @click="editSelected(props.label.toLowerCase())" />
+    <q-btn round glossy :color="iColor" icon="edit" @click="editSelected(props.label.toLowerCase())" />
   </div>
 </q-input>
 </template>

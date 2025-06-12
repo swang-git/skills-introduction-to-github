@@ -7,6 +7,7 @@
     <q-btn v-if="/NOTE_LINK/.test(tit)" icon="link"      round @click="lnk" color="cyan-10" glossy size="16px"  />
     <q-btn v-else-if="/Miles/.test(tit)" outline rounded :label="tit" no-caps no-wrap readonly />
     <q-btn v-else-if="tit==='NO_TIT'" flat />
+    <q-btn v-else-if="tit==='TIT_GLUCOSE'" rounded glossy icon="edit" icon-right="add_circle" label="notes" @click="note" />
     <q-btn v-if="act=='add'" icon-right="add_circle" @click="add" color="green-9" rounded glossy label="Create" />
     <q-btn v-if="act=='upd'" icon-right="update"     @click="upd" color="indigo-9"  rounded glossy label="update" />
   </div>
@@ -53,6 +54,7 @@ function lnk () { emit('do-action', 'lnk') }
 function msg () { emit('do-action', 'msg') }
 function psd () { emit('do-action', 'psd') }
 function info () { emit('do-action', 'info') }
+function note () { emit('do-action', 'note') }
 // psd() { console.log('-ck-showPostDate'); this.$emit('do-action', 'psd') },
   
 </script>

@@ -359,15 +359,15 @@ function getValue (col, row) {
   calcEAG_A1C_A1Cp(row)
   if (col.name === 'glucose') {
     // return  col.value
-    if (col.value / 18.015 < 10) return  col.value + ' / ' + (col.value / 18.015).toFixed(1)
-    else return col.value + ' / ' + (col.value / 18.015).toFixed(0)
+    if (col.value / 18.015 < 10) return  col.value + '~' + (col.value / 18.015).toFixed(1)
+    else return col.value + '~' + (col.value / 18.015).toFixed(0)
   } else if (col.name === 'food' && col.value == null) {
     // return row.a1cp + ' / ' + row.a1c + ' / ' + row.eag + ' / ' + (row.eag / 18.015).toFixed(1)
     // return row.a1cp + ' / ' + row.a1c + ' / ' + row.eag + ' / ' + row.glu
     // return '90天平均 ' + row.eag + ' (mg/dL) / ' + row.glu + ' (中国标准)'
     // return '过去90天加权平均 ' + row.eag + ' (mg/dL) / ' + row.glu + ' (中国标准)'
     // return '90天平均 ' + row.eag + ' (mg/dL) / ' + row.glu + ' (mmol/L)'
-    return '90天平均 ' + row.eag + ' / ' + row.glu
+    return '90天平均 ' + row.eag + '~' + row.glu
   }
   return col.value
 }
@@ -382,7 +382,7 @@ function getValue (col, row) {
 //   return col.value
 // }
 function getStyle (col) {
-  if (col === 'datetime') return "width:176px;white-space:nowrap;"
+  if (col === 'datetime') return "width:160px;white-space:nowrap;"
   // else if (col === 'glucose') return "max-width:0px"
   else if (col === 'drink') return "width:90px"
   else if (col === 'week') return "max-width:20px"
@@ -391,7 +391,7 @@ function getStyle (col) {
 function getClass (col, row) {
   // console.log(`-CK-row.id = ${row.id} clickedIex = ${clickedIdx.value}`)
   let bgc = row.id == lastClickedRow.value.row.id ? 'bg-indigo-9 ' : ''
-  if (col === 'datetime') return bgc + 'cursor-pointer no-wrap;text-center'
+  if (col === 'datetime') return bgc + 'cursor-pointer text-no-wrap;text-center'
   else if (col === 'week') return bgc + 'text-center text-no-wrap'
   else if (col === 'food' && row.food == null) return bgc + 'text-cyan-2 text-bold text-body1 cursor-pointer'
   else if (col === 'food' || col === 'datetime') return bgc + 'text-left text-no-wrap cursor-pointer'

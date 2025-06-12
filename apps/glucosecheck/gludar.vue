@@ -1,6 +1,6 @@
 <template>
 <q-dialog v-model="opened" transition-show="rotate" persistent>
-  <q-layout container class="bg-teal-10" :style="isDesk ? { 'min-width':'700px', 'height':'660px' } : { 'min-width':'455px', 'height':'620px' } ">
+  <q-layout container class="bg-teal-10" :style="isDesk ? { 'min-width':'700px', 'height':'600px' } : { 'min-width':'455px', 'height':'620px' } ">
     <LayoutHeader tit="Glucose Daily Check" @do-action="doAction" />
     <LayoutFooter :act=action tit="TIT_GLUCOSE" @do-action="doAction" class="q-pb-"/>
     <q-page-container v-if="isDesk">
@@ -26,7 +26,7 @@
           <TxtInput class="col-6" :obj="row" label="Drink" icon="local_bar" iColor="green" :rightIcon="true" @click="openSelection('local_bar', 'Drink', drOpt)" />
           <TxtInput class="col-6" :obj="row" label="Fruit" icon="apple" iColor="green-3" :rightIcon="true" @click="openSelection('apple', 'Fruit', frOpt)" />
         </div>
-        <TxaInput class="col-12 q-pa-xs" :obj="row" label="notes" icon="description" iColor="white" />
+        <!-- <TxaInput class="col-12 q-pa-xs" :obj="row" label="notes" icon="description" iColor="white" /> -->
       </q-page>
     </q-page-container>
     <!-- Phone session -->
@@ -112,6 +112,7 @@ function updSelectedOpt (model, txt) {
   else if (model == 'Drink') row.value.drink = txt
   else if (model == 'Fruit') row.value.fruit = txt
   else if (model == 'Food') row.value.food = txt
+  else if (model == 'Note') row.value.note = txt
 }
 function setSelectedOpt (model, opt) {
   console.log(`-fn-setSelectedOpt model=${model} selectedOpt=${opt.label}`)
@@ -167,11 +168,16 @@ function openIt (rw, act, exop, brop, luop, diop, drop, frop, foop) {
   opened.value = true
   // openNumPad()
 }
+function adupNote () {
+  console.log(`-fn-adupNote`)
+  emitter.emit('open-TxtPad', 'Note', row.value.note, 'Edit Notes')
+}
 function doAction (act) {
   if (act === 'add') add()
   else if (act === 'upd') upd()
   else if (act === 'del') del()
   else if (act === 'info') showInfo()
+  else if (act === 'note') adupNote()
 }
 
 function setBloodPressure (x) {
