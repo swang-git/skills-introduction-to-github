@@ -83,7 +83,7 @@
           <q-tr v-if="p.row.drink!=null"><td style="width:20px">饮 料</td><td colspan="4" style="width:680px">{{ p.row.drink }}</td></q-tr>
           <q-tr v-if="p.row.fruit!=null && p.row.glucose"><td style="width:20px">水 果</td><td colspan="4" style="width:680px">{{ p.row.fruit }}(昨日)</td></q-tr>
           <q-tr v-else-if="p.row.fruit!=null"><td style="width:20px">水 果</td><td colspan="4" style="width:680px">{{ p.row.fruit }}</td></q-tr>
-          <q-tr v-if="p.row.note !=null && p.row.glucose"><td style="width:20px">昨 日 三 顿 餐 饮</td><td colspan="4" style="width:680px" v-html="p.row.note" /></q-tr>
+          <q-tr v-if="p.row.yestFood !=null && p.row.glucose"><td style="width:20px">昨 日 三 顿 餐 饮</td><td colspan="4" style="width:680px" v-html="p.row.yestFood" /></q-tr>
           <q-tr v-else-if="p.row.note !=null"><td style="width:20px">注 释</td><td colspan="4" style="width:680px" v-html="p.row.note" /></q-tr>
           <q-tr v-if="p.row.bloodPressure!=null">
             <td class="text-left" colspan="5">BLOOD PRESSURE : <span class="text-white"> {{ p.row.bloodPressure }} </span></td>
@@ -191,28 +191,28 @@ getList()
 function showA1xChart () {
 // do nothing -- redirect to other charts
 }
-function X_OLD_showAllCharts () {
-  console.log('-fn-showAllCharts', dalist.value)
-  clvs.value = []
-  dalist.value.filter(x => x.food == null).forEach((p, i) => clvs.value.push({ idx: p.idx, date: p.datetime, clv:p.clvl==undefined ? 0 : p.clvl.toFixed(1) }))
-  clvs.value.forEach((p, i) => {
-    const x = dalist.value[p.idx + 1] // prev day
-    const y = dalist.value[p.idx]     // this morning
-    p.note = y!=undefined ? y.note : 'no note'
-    p.food = x!=undefined ? x.food : 'no food'
-    p.fdtm = x!=undefined ? x.datetimeOrig : 'no food time'
-    p.gptm = x!=undefined ? ((new Date(p.date).getTime() - new Date(x.datetimeOrig).getTime()) / 1000 / 60 / 60).toFixed(1) : 'no time gap'
-    // console.log(p.idx, p.clv, p.date, x.datetime, p.food)
-  })
-  // this.a1cData = gluSections.value.map(p => (p.eag * 0.0555).toFixed(1))
-  // this.a1cLabels = gluSections.value.map(p => p.dat)
-  emitter.emit('open-ChartProxy')
-}
+// function X_OLD_showAllCharts () {
+//   console.log('-fn-showAllCharts', dalist.value)
+//   clvs.value = []
+//   dalist.value.filter(x => x.food == null).forEach((p, i) => clvs.value.push({ idx: p.idx, date: p.datetime, clv:p.clvl==undefined ? 0 : p.clvl.toFixed(1) }))
+//   clvs.value.forEach((p, i) => {
+//     const x = dalist.value[p.idx + 1] // prev day
+//     const y = dalist.value[p.idx]     // this morning
+//     p.note = y!=undefined ? y.note : 'no note'
+//     p.food = x!=undefined ? x.food : 'no food'
+//     p.fdtm = x!=undefined ? x.datetimeOrig : 'no food time'
+//     p.gptm = x!=undefined ? ((new Date(p.date).getTime() - new Date(x.datetimeOrig).getTime()) / 1000 / 60 / 60).toFixed(1) : 'no time gap'
+//     // console.log(p.idx, p.clv, p.date, x.datetime, p.food)
+//   })
+//   // this.a1cData = gluSections.value.map(p => (p.eag * 0.0555).toFixed(1))
+//   // this.a1cLabels = gluSections.value.map(p => p.dat)
+//   emitter.emit('open-ChartProxy')
+// }
 function showAllCharts () {
   console.log('-fn-showAllCharts', dalist.value)
   clvs.value = []
   // dalist.value.filter(x => x.food == null).forEach((p, i) => clvs.value.push({ idx: p.idx, date: p.datetime, clv:p.clvl==undefined ? 0 : p.clvl.toFixed(1) }))
-  dalist.value.filter(x => x.food == null).forEach((p, i) => clvs.value.push({ idx: p.idx, date: p.datetime, note: p.note, clv:p.clvl==undefined ? 0 : p.clvl.toFixed(1) }))
+  dalist.value.filter(x => x.food == null).forEach((p, i) => clvs.value.push({ idx: p.idx, date: p.datetime, yestFood:p.yestFood, note: p.note, clv:p.clvl==undefined ? 0 : p.clvl.toFixed(1) }))
   clvs.value.forEach((p, i) => {
     const x = dalist.value[p.idx + 1] // prev day
     const y = dalist.value[p.idx]     // this morning
@@ -461,9 +461,8 @@ function getList () {
 function setList (da) {
   // console.log('-fn-setList', da.lst.filter(p => p.fastingSearch==='glucose'), da)
   console.log('-fn-setList', da)
-  // da.lst.forEach(p => { if (p.note !== null) p.note = p.note.replace(/\n/g, '<br />'); p.week = p.datetime.chwk2() })
   da.lst.forEach(p => { if (p.note !== null) p.note = p.note.replace(/\n/g, '<br />'); p.week = '(' + p.datetime.chwk1() + ')'})
-  // da.lst.forEach(p => { if (p.note !== null) p.note = p.note.replace(/\n/g, '<br />'); p.week = p.datetime.chwk3() })
+  da.lst.forEach(p => { if (p.breakfast == null) p.yestFood = null; else p.yestFood = '早餐：' + p.breakfast + '<br />午餐：' + p.lunch + '<br />晚餐：' + p.dinner; p.clvl = p.glucose / 18.015 })
   dats.value = da.lst
   exOpt.value = da.exOpt
   brOpt.value = da.brOpt
@@ -472,8 +471,9 @@ function setList (da) {
   drOpt.value = da.drOpt
   frOpt.value = da.frOpt
   foOpt.value = da.foOpt
+
   emitter.emit('dats', dats.value)
-  // console.log('-dalist:', dalist.value)
+  console.log('-dalist:', dalist.value)
   // setGluData()
 }
 function setGluData () {
