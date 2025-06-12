@@ -7,12 +7,14 @@
     <q-icon :name="icon" :color="iColor" size="lg" />
   </template>
   <div v-if="rightIcon" class="q-pt-sm">
-    <q-btn round outline :color="iColor" :icon="label=='Notes' ? 'delete' : icon" @click="clearField()" />
+    <!-- <q-btn round outline :color="iColor" :icon="label=='Notes' ? 'delete' : icon" @click="clearField()" /> -->
+    <q-btn round :color="iColor" icon="edit" @click="editSelected(props.label.toLowerCase())" />
   </div>
 </q-input>
 </template>
 <script setup>
 import { computed } from 'vue'
+import emitter from 'tiny-emitter/instance'
 const props = defineProps([
   'label',
   'icon',
@@ -43,6 +45,11 @@ function getPropertyKey () {
   else if (props.label === 'email') return 'email'
   else if (props.label === 'Blood Pressure') return 'bloodPressure'
   else if (props.label === 'Won or Lost') return 'quan'
+  else if (props.label === 'Check Type') return 'type'
+  else if (props.label === 'Exercise') return 'exercise'
+  else if (props.label === 'Breakfast') return 'breakfast'
+  else if (props.label === 'Lunch') return 'lunch'
+  else if (props.label === 'Dinner') return 'dinner'
   return props.label
 }
 const compObj = computed(() => { return props.obj })
@@ -77,7 +84,7 @@ const compInput = computed({
     if (props.label === 'Gift Card Number') {
       compObj.value.gcardNum = val
       compObj.value.gcardId = -1
-    } 
+    }
     Reflect.set(compObj.value, getPropertyKey(), val)
     // else if (props.label === 'Document Link') compObj.value.link = val
     // else if (props.label === 'Type') compObj.value.tag = val
@@ -104,6 +111,10 @@ const compInput = computed({
 
 function clearField () {
   Reflect.set(compObj.value, getPropertyKey(), val)
+}
+function editSelected (label) {
+  console.log(`-fn-editSelected selectedValue=${label}`)
+  emitter.emit('open-TxtPad', props.label, compObj.value[label], 'Edit ' + props.label)
 }
 // function clearField () {
 //   if (props.label === 'Tag') compObj.value.tag = null

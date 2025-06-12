@@ -24,7 +24,7 @@ const opened = ref(false)
 console.log('-ST-TxtPad')
 emitter.on('open-TxtPad', (x, y, z) => openIt(x, y, z))
 function openIt(i, lnk, tit) { 
-  console.log(`-fn-openIt i=${i} lnk=${lnk} tit=${tit}`)
+  console.log(`-fn-TxtPad.openIt i=${i} lnk=${lnk} tit=${tit}`)
   idx = i
   txt.value = lnk
   title.value = tit

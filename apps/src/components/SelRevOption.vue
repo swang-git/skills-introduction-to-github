@@ -21,7 +21,7 @@
 
       <q-card-section style="max-height:40vh" class="scroll">
         <div class="scroll text-h6" v-for="o in options" :key=o.value>
-          <q-radio v-model="cspId" :val="o.value" :label="o.label" @click="selectedOpt(o)" />
+          <q-radio v-model="selId" :val="o.value" :label="o.label" @click="selectedOpt(o)" />
         </div>
       </q-card-section>
 
@@ -37,7 +37,7 @@
 <script setup>
 import emitter from 'tiny-emitter/instance'
 import { ref, computed } from 'vue'
-import { libFunctions } from '../../src/composables/libFunctions'
+import { libFunctions } from '../composables/libFunctions'
 const { $q } = libFunctions()
 
 const emit = defineEmits(['selected-option', 'add-new-csp'])
@@ -46,8 +46,8 @@ const cspOptions = ref([])
 const opened = ref(false)
 var model = null
 var iconName = null
-var cspId = 0
-console.log('-ST-SelOptionsWithSearch')
+var selId = 0
+console.log('-ST-SelRevOption')
 
 const options = computed(() =>{
   var filterKey = searchQuery.value && searchQuery.value.toLowerCase()
@@ -66,20 +66,16 @@ const options = computed(() =>{
 })
 
 function selectedOpt (opt) {
-  console.log(`-fn-selectedOpt: model=${model} cspId=${cspId}`, opt)
-  if (opt.value === -1) {
-    $q.notify({ message: model + '(Add New)' })
-  }
-  emit('selected-option', cspId, model, opt)
+  console.log(`-fn-selectedOpt: model=${model}`, opt)
+  emit('selected-option', model, opt)
   opened.value = false
 }
-emitter.on('open-SelOptionsWithSearch', (icon, mod, opts, idx) => openIt(icon, mod, opts, idx))
-function openIt (icon, mod, opts, idx) {
-  // console.log('-fn-selOptionsWithSearch.openIt', opts)
+emitter.on('open-SelRevOption', (icon, mod, opts) => openIt(icon, mod, opts))
+function openIt (icon, mod, opts) {
+  // console.log('-fn-SelRevOption.openIt', opts)
   cspOptions.value = opts
   model = mod
   iconName = icon
-  cspId = idx
   opened.value = true
 }
 </script>

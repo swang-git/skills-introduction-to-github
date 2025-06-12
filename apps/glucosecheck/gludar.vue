@@ -1,29 +1,35 @@
 <template>
 <q-dialog v-model="opened" transition-show="rotate" persistent>
-  <q-layout container class="bg-teal-10" :style="isDesk ? { 'min-width':'777px', 'height':'500px' } : { 'min-width':'455px', 'height':'620px' } ">
+  <q-layout container class="bg-teal-10" :style="isDesk ? { 'min-width':'700px', 'height':'660px' } : { 'min-width':'455px', 'height':'620px' } ">
     <LayoutHeader tit="Glucose Daily Check" @do-action="doAction" />
     <LayoutFooter :act=action tit="TIT_GLUCOSE" @do-action="doAction" class="q-pb-"/>
     <q-page-container v-if="isDesk">
       <q-page>
         <div class="row" style="width:102.3%">
-          <DateTimePicker style="width:40%" class="q-pt-sm" label="Created Date and Time" :date-time="row.datetime" @upd-dt="updDateTime" txsz="text-h6" />
-          <q-chip style="max-width:8.5%;margin-left:-3px" class="text-h6 text-bold text-cyan-2 bg-teal-10 q-mt-md">{{ (row.fasting/18).toFixed(1) }}</q-chip>
-          <NumInput style="width:24%" class="q-pt-sm" :obj="row" label="Sugar Level" icon="bloodtype" iColor="red" :rightIcon="true" :showRight="true" @click="openNumPad()" />
-          <NumInput style="width:25%" class="q-pt-sm" :obj="row" label="Weight" mask="#.#" icon="重" iconSize="30" iColor="cyan-2" :rightIcon="true" :showRight="true" />
+          <DateTimePicker style="width:40.4%" class="q-pt-sm" label="Created Date and Time" :date-time="row.datetime" @upd-dt="updDateTime" txsz="text-h6" />
+          <q-chip style="max-width:7.7%;margin-left:-3px" class="text-h6 text-bold text-cyan-2 bg-teal-10 q-mt-md">{{ (row.glucose/18).toFixed(1) }}</q-chip>
+          <NumInput style="width:25%" class="q-pt-sm" :obj="row" label="Sugar Level" icon="bloodtype" iColor="red" :rightIcon="true" :showRight="true" @click="openNumPad()" />
+          <TxtInput class="q-mt-xs" style="width:24%" :obj="row" label="Check Type" icon="bloodtype" iColor="green-9" @click="openSelection('bloodtype', 'Check Type', tyOpt)" />
         </div>
-        <div class="row" style="width:99.9%"> 
-          <NumInput class="col-4" :obj="row" label="Hi Blood Pressure" icon="tire_repair" iColor="pink-3" :rightIcon="true" :showRight="true" />
-          <NumInput class="col-4" :obj="row" label="Lo Blood Pressure" icon="tire_repair" iColor="blue-3" :rightIcon="true" :showRight="true" />
-          <NumInput class="col-4" :obj="row" label="Heart Pulse" icon="monitor_heart" iColor="red" :rightIcon="true" :showRight="true" />
+        <div class="row" style="width:99.1%">
+          <NumInput class="col-3" :obj="row" label="Hi Blood Pressure" icon="tire_repair" iColor="pink-3" :rightIcon="true" :showRight="true" />
+          <NumInput class="col-3" :obj="row" label="Lo Blood Pressure" icon="tire_repair" iColor="blue-3" :rightIcon="true" :showRight="true" />
+          <NumInput class="col-3" :obj="row" label="Heart Pulse" icon="monitor_heart" iColor="red" :rightIcon="true" :showRight="true" />
+          <NumInput class="col-3" :obj="row" label="Weight" mask="#.#" icon="重" iconSize="30" iColor="cyan-2" :rightIcon="true" :showRight="true" />
         </div>
-        <TxtInput class="col-12" :obj="row" label="Food" icon="ramen_dining" iColor="yellow" :rightIcon="true" />
+        <TxtInput class="col-12" :obj="row" label="Food" icon="ramen_dining" iColor="teal-4" :rightIcon="true" @click="openSelection('ramen_dining', 'Food', foOpt)" />
+        <TxtInput class="col-12" :obj="row" label="Exercise" icon="run_circle" iColor="pink-4" :rightIcon="true" @click="openSelection('sports_golf', 'Exercise', exOpt)" />
+        <TxtInput class="col-12" :obj="row" label="Breakfast" icon="egg" iColor="brown-6" :rightIcon="true" @click="openSelection('egg', 'Breakfast', brOpt)" />
+        <TxtInput class="col-12" :obj="row" label="Lunch" icon="lunch_dining" iColor="yellow-9" :rightIcon="true" @click="openSelection('lunch_dining', 'Lunch', luOpt)" />
+        <TxtInput class="col-12" :obj="row" label="Dinner" icon="dinner_dining" iColor="indigo-3" :rightIcon="true" @click="openSelection('dinner_dining', 'Dinner', diOpt)" />
         <div class="row">
-          <TxtInput class="col-6" :obj="row" label="Drink" icon="local_bar" iColor="green" />
-          <TxtInput class="col-6" :obj="row" label="Fruit" icon="apple" iColor="green-3" :iconRight="true" />
+          <TxtInput class="col-6" :obj="row" label="Drink" icon="local_bar" iColor="green" :rightIcon="true" @click="openSelection('local_bar', 'Drink', drOpt)" />
+          <TxtInput class="col-6" :obj="row" label="Fruit" icon="apple" iColor="green-3" :rightIcon="true" @click="openSelection('apple', 'Fruit', frOpt)" />
         </div>
-        <TxaInput class="col-12 q-pa-xs" :obj="row" label="昨 日 餐 饮" icon="description" iColor="white" />
+        <TxaInput class="col-12 q-pa-xs" :obj="row" label="notes" icon="description" iColor="white" />
       </q-page>
     </q-page-container>
+    <!-- Phone session -->
     <q-page-container v-else class="q-ma-xs">
       <div class="row">
         <DateTimePicker style="width:68.8%" class="q-px-sm" label="Created Date and Time" :date-time="row.datetime" @upd-dt="updDateTime" txsz="text-h6" />
@@ -31,10 +37,10 @@
       </div>
       <div class="row">
         <TxtInput style="width:50%" :obj="row" label="Blood Pressure" icon="tire_repair" iColor="pink-3" @click="openNumPad('BP')" />
-        <div style="width:18%"><q-chip class="text-h6 text-cyan-2 bg-teal-10 q-mt-sm">{{ (row.fasting/18).toFixed(1) }}</q-chip></div>
+        <div style="width:18%"><q-chip class="text-h6 text-cyan-2 bg-teal-10 q-mt-sm">{{ (row.glucose/18).toFixed(1) }}</q-chip></div>
         <NumInput style="width:32%" :obj="row" label="Blood Glucose Level" icon="bloodtype" iColor="red" @click="openNumPad()" />
       </div>
-      <TxtInput :obj="row" label="Food"  icon="ramen_dining" iColor="green" :rightIcon="true" />
+      <TxtInput v-if="row.food.length>0" :obj="row" label="Food" icon="ramen_dining" iColor="green" :rightIcon="true" />
       <TxtInput :obj="row" label="Drink" icon="local_bar" iColor="yellow" :rightIcon="true" />
       <TxtInput :obj="row" label="Fruit" icon="apple" iColor="cyan-3" :rightIcon="true" />
       <TxaInput :obj="row" label="昨 日 餐 饮" icon="description" iColor="cyan-3" />
@@ -46,6 +52,8 @@
 </q-dialog>
 <NumPadAuto @sugar-level="setSugarLevel" @blood-pressure="setBloodPressure" />
 <ConfirmDialog @user-confirmed="delFromDB" />
+<SelRevOption @selected-option="setSelectedOpt" />
+<TxtPad @upd-lnk="updSelectedOpt" />
 <gludarInfo :row="row" />
 </template>
 <script setup>
@@ -59,6 +67,8 @@ import LayoutHeader from '../src/components/LayoutHeader'
 import LayoutFooter from '../src/components/LayoutFooter'
 import DateTimePicker from '../src/components/DateTimePicker'
 import NumPadAuto from '../src/components/NumPadAuto'
+import SelRevOption from '../src/components/SelRevOption'
+import TxtPad from '../src/components/TxtPad'
 import gludarInfo from './gludar_m_info'
 
 import { axiosFunctions } from '../src/composables/axiosFunctions'
@@ -71,31 +81,74 @@ const { isDesk } = libFunctions()
 const opened = ref(false)
 const action = ref(null)
 const row = ref({ datetime: null })
+const emit = defineEmits(['close-expand'])
 var rowOrig = {}
 
-const emit = defineEmits(['close-expand'])
+const exOpt = ref([])
+const brOpt = ref([])
+const luOpt = ref([])
+const diOpt = ref([])
+const drOpt = ref([])
+const frOpt = ref([])
+const foOpt = ref([])
+const tyOpt = [{value: 1, label: '空腹'}, {value: 2, label: '餐一'} , {value: 3, label: '餐二'}, {value: 4, label: '餐三'} , {value: 5, label: '随机'}]
+
 
 console.log('-ST-gludar')
-emitter.on('open-gludar', (rw, act) => openIt(rw, act))
+emitter.on('open-gludar', (rw, act, exOpt, brOpt, luOpt, diOpt, drOpt, frOpt, foOpt) => openIt(rw, act, exOpt, brOpt, luOpt, diOpt, drOpt, frOpt, foOpt))
 
 //== function section
-function XXXsetBloodPressureFone (x) {
-  console.log(`setBloodPressure=${x}`)
-  row.value.bloodPressure = x
+// function XXXsetBloodPressureFone (x) {
+//   console.log(`setBloodPressure=${x}`)
+//   row.value.bloodPressure = x
+// }
+
+function updSelectedOpt (model, txt) {
+  console.log(`-fn-updSelectedOpt model=${model} selectedOpt=${txt}`)
+  if (model == 'Exercise') row.value.exercise = txt
+  else if (model == 'Breakfast') row.value.breakfast = txt
+  else if (model == 'Lunch') row.value.lunch = txt
+  else if (model == 'Dinner') row.value.dinner = txt
+  else if (model == 'Drink') row.value.drink = txt
+  else if (model == 'Fruit') row.value.fruit = txt
+  else if (model == 'Food') row.value.food = txt
+}
+function setSelectedOpt (model, opt) {
+  console.log(`-fn-setSelectedOpt model=${model} selectedOpt=${opt.label}`)
+  if (model == 'Exercise') row.value.exercise = opt.label
+  else if (model == 'Breakfast') row.value.breakfast = opt.label
+  else if (model == 'Lunch') row.value.lunch = opt.label
+  else if (model == 'Dinner') row.value.dinner = opt.label
+  else if (model == 'Drink') row.value.drink = opt.label
+  else if (model == 'Fruit') row.value.fruit = opt.label
+  else if (model == 'Check Type') row.value.type = opt.label
+  else if (model == 'Food') row.value.food = opt.label
+}
+function openSelection (icon, model, opts) {
+  console.log(`-fn-openSelection`, opts)
+  emitter.emit('open-SelRevOption', icon, model, opts)
 }
 function setSugarLevel (x) {
   console.log(`-fn-setSugarLevel=${x}`)
-  row.value.fasting = x
+  row.value.glucose = x
 }
 function openNumPad (flag) {
   // console.log(`-fn-openNumPadSL flag=${flag}`)
-  if (isDesk) return 
+  if (isDesk) return
   if (flag == 'BP') return emitter.emit('open-num-pad-auto', '输入血压', flag, null)
   else return emitter.emit('open-num-pad-auto', '血糖测试', 60, 300)
 }
-function openIt (rw, act) {
-  console.log(`-fn-gludar.openIt act=${act}`, rw)
+function openIt (rw, act, exop, brop, luop, diop, drop, frop, foop) {
+  console.log(`-fn-gludar.openIt act=${act}`, luop)
   action.value = act
+  exOpt.value = exop
+  brOpt.value = brop
+  luOpt.value = luop
+  diOpt.value = diop
+  drOpt.value = drop
+  frOpt.value = frop
+  foOpt.value = foop
+
   row.value = rw
   if (act == 'del') return del()
   if (act == 'add') {
@@ -154,7 +207,6 @@ function add () {
   paxios(path, inData)
   opened.value = false
   emit('close-expand')
-  // this.$emit('create', row.value)
 }
 function upd () {
   console.log('-fn-upd', row.value)

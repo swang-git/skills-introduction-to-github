@@ -14,7 +14,7 @@
       <div v-if="$q.screen.gt.xs" class="col text-bold">
         <q-toggle v-model="visibleColumnsDesk" val="datetime" label="时间" />
         <q-toggle v-model="visibleColumnsDesk" val="week" label="星期" />
-        <q-toggle v-model="visibleColumnsDesk" val="fasting" label="血糖" />
+        <q-toggle v-model="visibleColumnsDesk" val="glucose" label="血糖" />
         <q-toggle v-model="visibleColumnsDesk" val="food" label="食入" />
         <q-toggle v-model="visibleColumnsDesk" val="drink" label="饮入" />
         <q-toggle v-model="visibleColumnsDesk" val="fruit" label="水果" />
@@ -25,7 +25,7 @@
     <div v-else class="row">
       <div v-if="$q.screen.gt.xs" class="col">
         <q-toggle v-model="visibleColumnsFone" val="datetime" label="时间" />
-        <q-toggle v-model="visibleColumnsFone" val="fasting" label="血糖量" />
+        <q-toggle v-model="visibleColumnsFone" val="glucose" label="血糖量" />
         <q-toggle v-model="visibleColumnsFone" val="a1cp" label="%" />
       </div>
       <!-- <q-select
@@ -59,9 +59,9 @@
         <table v-if="isDesk" style="border:1px solid #ccc;margin-top:-8px;min-width:100%">
           <q-tr v-if="p.row.food ==null">
             <td>今 日</td>
-            <td>eAG: {{ p.row.fasting }} mg/dL (空腹血糖)</td>
-            <td>A1c: {{ ((p.row.fasting + 46.7) / 28.7).toFixed(1) }}%</td>
-            <td style="white-space:nowrap">eAG: {{ (p.row.fasting / 18.015).toFixed(1) }} mmol/L (中)</td>
+            <td>eAG: {{ p.row.glucose }} mg/dL (空腹血糖)</td>
+            <td>A1c: {{ ((p.row.glucose + 46.7) / 28.7).toFixed(1) }}%</td>
+            <td style="white-space:nowrap">eAG: {{ (p.row.glucose / 18.015).toFixed(1) }} mmol/L (中)</td>
             <td class="text-right">
               <q-fab v-model="fabOpen" flat icon="keyboard_arrow_down" direction="down">
                 <q-btn round glossy color="red-10"   @click="showDar(p.row, 'del')" size="16px" style="border:1px solid cyan" icon="delete" />
@@ -71,7 +71,7 @@
             </td>
           </q-tr>
           <q-tr v-if="p.row.food !=null">
-            <td>主 食</td><td colspan="3" style="width:557px">{{ p.row.food }} {{ p.row.fasting }}</td>
+            <td>主 食</td><td colspan="3" style="width:557px">{{ p.row.food }} {{ p.row.glucose }}</td>
             <td>
               <q-fab v-model="fabOpen" flat icon="keyboard_arrow_down" direction="down">
                 <q-btn round glossy color="pink-9"  @click="showDar(p.row, 'del')" size="16px" style="border:1px solid cyan" icon="delete" />
@@ -81,9 +81,9 @@
             </td>
           </q-tr>
           <q-tr v-if="p.row.drink!=null"><td style="width:20px">饮 料</td><td colspan="4" style="width:680px">{{ p.row.drink }}</td></q-tr>
-          <q-tr v-if="p.row.fruit!=null && p.row.fasting"><td style="width:20px">水 果</td><td colspan="4" style="width:680px">{{ p.row.fruit }}(昨日)</td></q-tr>
+          <q-tr v-if="p.row.fruit!=null && p.row.glucose"><td style="width:20px">水 果</td><td colspan="4" style="width:680px">{{ p.row.fruit }}(昨日)</td></q-tr>
           <q-tr v-else-if="p.row.fruit!=null"><td style="width:20px">水 果</td><td colspan="4" style="width:680px">{{ p.row.fruit }}</td></q-tr>
-          <q-tr v-if="p.row.note !=null && p.row.fasting"><td style="width:20px">昨 日 三 顿 餐 饮</td><td colspan="4" style="width:680px" v-html="p.row.note" /></q-tr>
+          <q-tr v-if="p.row.note !=null && p.row.glucose"><td style="width:20px">昨 日 三 顿 餐 饮</td><td colspan="4" style="width:680px" v-html="p.row.note" /></q-tr>
           <q-tr v-else-if="p.row.note !=null"><td style="width:20px">注 释</td><td colspan="4" style="width:680px" v-html="p.row.note" /></q-tr>
           <q-tr v-if="p.row.bloodPressure!=null">
             <td class="text-left" colspan="5">BLOOD PRESSURE : <span class="text-white"> {{ p.row.bloodPressure }} </span></td>
@@ -150,15 +150,23 @@ const clickedIdx = ref(0)
 const itemsPerPageDesk = 21
 const itemsPerPageIM = 14
 const dats = ref([])
+const exOpt = ref([])
+const brOpt = ref([])
+const luOpt = ref([])
+const diOpt = ref([])
+const drOpt = ref([])
+const frOpt = ref([])
+const foOpt = ref([])
 const separator = ref('cell')
 const faVal = ref(null)
-const visibleColumnsDesk = ref(['datetime', 'week', 'fasting', 'weight', 'BMI', 'food', 'a1cp'])
-const visibleColumnsFone = ref(['datetime', 'fasting', 'weight', 'a1cp'])
+const visibleColumnsDesk = ref(['datetime', 'week', 'glucose', 'weight', 'BMI', 'food', 'a1cp'])
+const visibleColumnsFone = ref(['datetime', 'glucose', 'weight', 'a1cp'])
 const columns = ref([
   { required: true, label: '测 试 时 间', align: 'center', name: 'datetime', field: 'datetime', sortable: true, headerStyle:'font-weight:800;font-size:22px' },
   // { required: false, label: '星期', align: 'center', name: 'week', field: 'week', sortable: true, headerStyle:'max-width:50px;font-weight:800;font-size:22px;white-space:nowrap' },
   { required: false, label: '周', align: 'center', name: 'week', field: 'week', sortable: true, headerStyle:'max-width:50px;font-weight:800;font-size:22px;white-space:nowrap' },
-  { required: true, label: '血 糖 值', align: 'center', name: 'fasting', field: 'fasting', sortable: true, headerStyle:'max-width:30px;font-weight:800;font-size:22px;white-space:nowrap' },
+  { required: true, label: '血 糖 值', align: 'center', name: 'glucose', field: 'glucose', sortable: true, headerStyle:'max-width:30px;font-weight:800;font-size:22px;white-space:nowrap' },
+  { required: true, label: '类型', align: 'center', name: 'type', field: 'type', sortable: true, headerStyle:'max-width:30px;font-weight:800;font-size:22px;white-space:nowrap' },
   { required: false, label: '体 重', align: 'center', name: 'weight', field: 'weight', sortable: false, format:(val, row) => `${parseFloat(val).toFixed(1)}` },
   { required: false, label: 'BMI', align: 'center', name: 'BMI', field: 'BMI', sortable: false, format:(val, row) => `${parseFloat(val).toFixed(1)}` },
   { required: false, label: '食入 或 空腹', align: 'center', name: 'food', field: 'food', sortable: false, headerStyle:'font-weight:800;font-size:22px' },
@@ -323,7 +331,7 @@ function calcEAG_A1C_A1Cp (row) {
   const dt = new Date(row.datetime.replace(' ', 'T'))
   const p90dt = prev90date(dt)
   // console.log(`-fn-geteAG from ${dt} to ${p90dt}`, (new Date(dt).getTime() - p90dt)/24/60/60/1000)
-  const glucoses = dats.value.filter(a => (new Date(a.datetime.replace(' ', 'T'))).getTime() >= p90dt).map(x => x.fasting)
+  const glucoses = dats.value.filter(a => (new Date(a.datetime.replace(' ', 'T'))).getTime() >= p90dt).map(x => x.glucose)
   if (glucoses.length === 0) {
     return
   }
@@ -332,7 +340,7 @@ function calcEAG_A1C_A1Cp (row) {
   const a1cp = ((eAG90 + 46.7) / 28.7).toFixed(1)
   const a1c = (10.929 * (a1cp - 2.15)).toFixed(1)
   row.glu = eAGml // 中国标准 mmol/L
-  row.clvl = row.fasting / 18.015
+  row.clvl = row.glucose / 18.015
   // console.log(`row.clvl = ${row.clvl}`)
   row.eag = eAG90.toFixed(1) // mg/dL
   row.a1cp = a1cp
@@ -349,7 +357,7 @@ function prev90date (dt) {
 }
 function getValue (col, row) {
   calcEAG_A1C_A1Cp(row)
-  if (col.name === 'fasting') {
+  if (col.name === 'glucose') {
     // return  col.value
     if (col.value / 18.015 < 10) return  col.value + ' / ' + (col.value / 18.015).toFixed(1)
     else return col.value + ' / ' + (col.value / 18.015).toFixed(0)
@@ -364,7 +372,7 @@ function getValue (col, row) {
   return col.value
 }
 // function getValue (col, row) {
-//   if (col.name === 'fasting') {
+//   if (col.name === 'glucose') {
 //     if (col.value / 18 < 10) return  col.value + '~' + (col.value / 18).toFixed(1)
 //     else return col.value + '~' + (col.value / 18).toFixed(0)
 //   } else if (col.name === 'food' && col.value == null) {
@@ -375,7 +383,7 @@ function getValue (col, row) {
 // }
 function getStyle (col) {
   if (col === 'datetime') return "width:176px;white-space:nowrap;"
-  // else if (col === 'fasting') return "max-width:0px"
+  // else if (col === 'glucose') return "max-width:0px"
   else if (col === 'drink') return "width:90px"
   else if (col === 'week') return "max-width:20px"
   else return "white-space:nowrap"
@@ -388,31 +396,31 @@ function getClass (col, row) {
   else if (col === 'food' && row.food == null) return bgc + 'text-cyan-2 text-bold text-body1 cursor-pointer'
   else if (col === 'food' || col === 'datetime') return bgc + 'text-left text-no-wrap cursor-pointer'
   else if (col === 'drink' || col === 'fruit' || col === 'a1cp') return bgc + 'text-center text-no-wrap'
-  else if (col === 'fasting' && between(row.fasting,   0, 101) && isFasting(row)) return bgc + 'text-center text-green-9'
-  else if (col === 'fasting' && between(row.fasting, 100, 126) && isFasting(row)) return bgc + 'text-center text-green-7'
-  else if (col === 'fasting' && between(row.fasting, 125, 141) && isFasting(row)) return bgc + 'text-center text-green-5'
-  else if (col === 'fasting' && between(row.fasting, 140, 156) && isFasting(row)) return bgc + 'text-center text-blue'
-  else if (col === 'fasting' && between(row.fasting, 155, 999) && isFasting(row)) return bgc + 'text-center text-pink-4'
-  else if (col === 'fasting' && between(row.fasting,   0, 141) && noFasting(row)) return bgc + 'text-center text-green'
-  else if (col === 'fasting' && between(row.fasting, 140, 201) && noFasting(row)) return bgc + 'text-center text-amber'
-  else if (col === 'fasting' && between(row.fasting, 200, 999) && noFasting(row)) return bgc + 'text-center text-pink-5'
+  else if (col === 'glucose' && between(row.glucose,   0, 101) && row.type === '空腹') return bgc + 'text-center text-green-9'
+  else if (col === 'glucose' && between(row.glucose, 100, 126) && row.type === '空腹') return bgc + 'text-center text-green-7'
+  else if (col === 'glucose' && between(row.glucose, 125, 141) && row.type === '空腹') return bgc + 'text-center text-green-5'
+  else if (col === 'glucose' && between(row.glucose, 140, 156) && row.type === '空腹') return bgc + 'text-center text-blue'
+  else if (col === 'glucose' && between(row.glucose, 155, 999) && row.type === '空腹') return bgc + 'text-center text-pink-4'
+  else if (col === 'glucose' && between(row.glucose,   0, 141) && row.type === '餐二') return bgc + 'text-center text-green'
+  else if (col === 'glucose' && between(row.glucose, 140, 201) && row.type === '餐二') return bgc + 'text-center text-amber'
+  else if (col === 'glucose' && between(row.glucose, 200, 999) && row.type === '餐二') return bgc + 'text-center text-pink-5'
   else return 'text-right'
 }
-function isFasting (row) {
-  // return (row.drink === null && row.food === null && row.fruit === null)
-  return (row.drink === null && row.food === null)
-}
-function noFasting (row) {
-  // return (row.drink != null || row.food != null || row.fruit != null)
-  return (row.drink != null || row.food != null)
-}
+// function isFasting (row) {
+//   // return (row.drink === null && row.food === null && row.fruit === null)
+//   return (row.drink === null && row.food === null)
+// }
+// function noFasting (row) {
+//   // return (row.drink != null || row.food != null || row.fruit != null)
+//   return (row.drink != null || row.food != null)
+// }
 function showExpend (col, p) {
   console.log(`%c-fn-showExpand col=${col} row.id=${p.row.id}, lastRowId=${lastClickedRow.value.row.id}`, 'color: red;font-size:18px')
   if (isDesk) return showExpendDesk(col, p)
   if (col == 'datetime') {
     lastClickedRow.value.expand = false
     return showDar(p.row, 'show')
-  } else if (col == 'fasting') {
+  } else if (col == 'glucose') {
     lastClickedRow.value.expand = false
     return showDar(p.row, 'upd')
   } else if (col == 'a1cp') {
@@ -444,19 +452,26 @@ function showDar (row, act) {
   // clone.datetime = row.datetimeOrig
   // this.$refs.gludar.openIt(clone)
   if (clone.note != null) clone.note = clone.note.replace(/<br \/>/g, '\n')
-  emitter.emit('open-gludar', clone, act)
+  emitter.emit('open-gludar', clone, act, exOpt.value, brOpt.value, luOpt.value, diOpt.value, drOpt.value, frOpt.value, foOpt.value)
 }
 function getList () {
   const path = process.env.API + '/glucosecheck/getList'
   gaxios(path)
 }
 function setList (da) {
-  // console.log('-fn-setList', da.lst.filter(p => p.fastingSearch==='fasting'), da)
+  // console.log('-fn-setList', da.lst.filter(p => p.fastingSearch==='glucose'), da)
   console.log('-fn-setList', da)
   // da.lst.forEach(p => { if (p.note !== null) p.note = p.note.replace(/\n/g, '<br />'); p.week = p.datetime.chwk2() })
   da.lst.forEach(p => { if (p.note !== null) p.note = p.note.replace(/\n/g, '<br />'); p.week = '(' + p.datetime.chwk1() + ')'})
   // da.lst.forEach(p => { if (p.note !== null) p.note = p.note.replace(/\n/g, '<br />'); p.week = p.datetime.chwk3() })
   dats.value = da.lst
+  exOpt.value = da.exOpt
+  brOpt.value = da.brOpt
+  luOpt.value = da.luOpt
+  diOpt.value = da.diOpt
+  drOpt.value = da.drOpt
+  frOpt.value = da.frOpt
+  foOpt.value = da.foOpt
   emitter.emit('dats', dats.value)
   // console.log('-dalist:', dalist.value)
   // setGluData()

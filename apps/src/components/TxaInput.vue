@@ -1,5 +1,5 @@
 <template>
-  <q-input rounded outlined class="text-h6 q-px-sm q-pt-xs" input-style="line-height:1.6;height:100px" v-model="compInput" :label="label" type="textarea" dark>
+  <q-input rounded outlined class="text-h6 q-px-sm q-pt-xs" input-style="line-height:1.6;height:33px" v-model="compInput" :label="label" type="textarea" dark>
     <template v-slot:prepend>
       <q-icon :name="icon" :color="iColor" />
     </template>
@@ -33,6 +33,11 @@ function getPropertyKey () {
   else if (props.label === 'Dictionary Notes') return 'note'
   else if (props.label === 'Notes') return 'note'
   else if (props.label === '昨 日 餐 饮') return 'note'
+  else if (props.label === 'Notes') return 'note'
+  else if (props.label === 'Exercise') return 'exercise'
+  else if (props.label === 'Breakfast') return 'breakfast'
+  else if (props.label === 'Lunch') return 'lunch'
+  else if (props.label === 'Dinner') return 'dinner'
   else if (props.label === 'Details') return 'details'
   return props.label
 }
