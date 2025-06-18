@@ -40,6 +40,7 @@ const routes = [
       { path: 'htlist', component: () => import('../../healthtest/htlist') },
       { path: 'totext', component: () => import('../../totext/ToText') },
       { path: 'yalipics', component: () => import('../../yalipics/PicList') },
+      { path: 'yalipics/slide', component: () => import('../../yalipics/PicScreenFit') },
       { path: 'tvmanager', component: () => import('../../tvmanager/tvlist') },
 
 

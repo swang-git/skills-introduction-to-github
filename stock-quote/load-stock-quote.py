@@ -10,7 +10,8 @@ def my_argparse():
 
 if __name__=="__main__": print('')
 # symbols = ['WBD']
-symbols = ['T', 'WBD', 'CHTR', 'CSCO', 'DELL', 'MSFT', 'BEKE']
+# symbols = ['T', 'WBD', 'CHTR', 'CSCO', 'DELL', 'MSFT', 'BEKE']
+symbols = ['T', 'WBD', 'CHTR', 'CSCO', 'DELL', 'MSFT']
 database = my_argparse().database
 # print(f'database={database}')
 for symbol in symbols:

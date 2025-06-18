@@ -30,10 +30,12 @@ def main():
         sys.exit(0)
     else:
         print(padsp(' ', 31) + f'STOCK QUOTES from {database}.stock_quotes LOADED at {rows[0].load_time}')
-        symbols = ['T', 'WBD', 'CHTR', 'DELL', 'CSCO', 'MSFT', 'BEKE']
-        shares = {'T': 287, 'WBD': 69, 'CHTR':20, 'DELL':36, 'CSCO':640, 'MSFT':400, 'BEKE':100}
+        # symbols = ['T', 'WBD', 'CHTR', 'DELL', 'CSCO', 'MSFT', 'BEKE']
+        symbols = ['T', 'WBD', 'CHTR', 'DELL', 'CSCO', 'MSFT']
+        # shares = {'T': 287, 'WBD': 69, 'CHTR':20, 'DELL':36, 'CSCO':640, 'MSFT':400, 'BEKE':100}
+        shares = {'T': 287, 'WBD': 69, 'CHTR':20, 'DELL':36, 'CSCO':640, 'MSFT':400}
         sp = ''
-        num_of_stocks = 7
+        num_of_stocks = len(symbols)
         for chunk in chunked(rows, num_of_stocks):
             # if len(chunk) <= 0:break
             totalValue = 0
@@ -48,5 +50,5 @@ def main():
                     totalValue += float(portfolio.values)
             totalValue = f"{totalValue:,.2f}"
             printTailer(sp, totalValue + ' (Excluding BEKE)')
-        print(padsp(' ', 31) + f'STOCK QUOTES from {database}.stock_quotes LOADED at {chunk[6].load_time}')
+        # print(padsp(' ', 31) + f'STOCK QUOTES from {database}.stock_quotes LOADED at {chunk[5].load_time}')
 if __name__=="__main__": main()

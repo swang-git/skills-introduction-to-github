@@ -559,9 +559,9 @@ def addDailyArt(art):
     else:
         dlout(3, 'Exist:Art and upd idx', art.idx, art.tag, art.qid, art.fid, art.txt[0:40], art.aut)
         # flw = session.query(DailyArt).filter(DailyArt.tag==art.tag, DailyArt.qid==art.qid, DailyArt.fid==art.fid)
-        flw.update({"idx": art.idx})
-        # flwupd = { "idx": art.idx }
-        # flw.update(flwupd)
+        # flw.update({"idx": art.idx})
+        flwupd = { "idx": art.idx }
+        flw.update(flwupd)
         session.commit()
         
 # def addDailyArt(art):
