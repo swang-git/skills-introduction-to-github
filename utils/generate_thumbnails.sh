@@ -33,7 +33,6 @@ for file in *.jpg *.jpeg; do
 
         # Generate thumbnail filename (e.g., "image.jpg" → "thumbnails/image_thumbnail.jpg")
         # thumbnail_file="$THUMBNAILS_DIR/${file%.*}_thumbnail.${file##*.}"
-
         # Resize using sips (maintain aspect ratio)
         sips --resampleWidth "$THUMBNAIL_WIDTH" "$file" --out "$thumbnail_file" &>/dev/null
 
