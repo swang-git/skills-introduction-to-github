@@ -1,41 +1,56 @@
 <template>
-<q-dialog v-model="opened" persistent>
-  <div style="background:teal;padding:10px;margin:-336px 0 0 200px">
-    <q-card-actions align="between">
-      <div style="font-size:20px"> Par for Hole {{ holeIdx }} </div>
-      <q-btn glossy color="amber-10" round v-close-popup icon="close" />
-    </q-card-actions>
-    <table style="y-overflow:auto;margin:auto">
-      <q-tr><td v-for="par in [3, 4, 5]" :key=par.x><q-btn size="xl" color="green-9" style="width:60px;height:60px" @click="setPar(par)">{{par}}</q-btn></td></q-tr>
-    </table>
-  </div>
-</q-dialog>
+  <q-dialog v-model="opened" persistent>
+    <div style="background: teal; padding: 10px; margin: -336px 0 0 200px">
+      <q-card-actions align="between">
+        <div style="font-size: 20px">Par for Hole {{ holeIdx }}</div>
+        <q-btn glossy color="amber-10" round v-close-popup icon="close" />
+      </q-card-actions>
+      <table style="y-overflow: auto; margin: auto">
+        <q-tr
+          ><td v-for="par in [3, 4, 5]" :key="par.x">
+            <q-btn
+              size="xl"
+              color="green-9"
+              style="width: 60px; height: 60px"
+              @click="setPar(par)"
+              >{{ par }}</q-btn
+            >
+          </td></q-tr
+        >
+      </table>
+    </div>
+  </q-dialog>
 </template>
 <script setup>
 import { ref } from 'vue'
 // import { useStore } from 'vuex'
 // const store = useStore()
+// import { useGolfStore } from 'src/stores/golf'
+// const store = useGolfStore()
 import { libFunctions } from '../composables/libFunctions'
 const { opened, store } = libFunctions()
 
 const emit = defineEmits(['set-pars'])
-var holes = ref({})
+// var holes = ref({})
+var holes = {}
 var holeIdx = ref(0)
 // const opened = ref(false)
 
-defineExpose({ openIt})
+defineExpose({ openIt })
 console.log(`-ST-CourseHolePad`)
-function openIt (idx, hls) {
+function openIt(idx, hols) {
   holeIdx.value = idx
-  holes.value = hls
-  console.log(`-CK-fn-openIt holeIdx=${holeIdx.value}`, holes)
+  holes = hols // <= this is course.value.holes
+  // console.log(`-CK-fn-openIt holeIdx=${holeIdx.value} holes.value=${holes.value.h1}`, holes.value)
   opened.value = true
 }
-function setPar (par) {
-  console.log(`-CK-fn setPar for hole ${holeIdx.value} par=${par}`)
-  holes['h' + holeIdx.value] = par
-  let holex = JSON.parse(JSON.stringify(holes))
-  store.holes = holex
+function setPar(par) {
+  holes['h' + holeIdx.value] = par  // <=course.value.holes and store.holes points to the same object - one changes the other changes as well
+  // let holex = JSON.parse(JSON.stringify(holes)) // not necessary
+  // const holesId = store.holes.id
+  // store.holes = holes // <= for display purpose only
+  // store.holes.id = holesId
+  console.log(`-CK-fn setPar for hole ${holeIdx.value} par=${par}`, store.holes)
   emit('set-pars', holeIdx.value, par)
   // console.log('par for hole', holeIdx, this.holex['h' + holeIdx])
   holeIdx.value++

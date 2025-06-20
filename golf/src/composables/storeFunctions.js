@@ -1,19 +1,43 @@
-import { computed } from "vue"
+import { computed } from 'vue'
 import { libFunctions } from "./libFunctions.js"
+// import { useGolfStore } from 'src/stores/golf'
 export function storeFunctions() {
   // const app = getCurrentInstance()
   // const store = app.appContext.config.globalProperties.$store
+  // const store = useGolfStore()
   const { store } = libFunctions()
-  const holes = computed(() => { return store.holes })
-  const hcaps = computed(() => { return store.hcaps })
-  const yards = computed(() => { return store.yards })
-  const yardage = computed(() => { return store.yardage })
-  const slope = computed(() => { return store.slope })
-  const par = computed(() => { return store.par })
-  const rating = computed(() => { return store.rating })
-  const hole = (i) => { return holes.value['h' + i] }
-  const hcap = (i) => { return hcaps.value['p' + i] }
-  const yard = (i) => { return yards.value['y' + i] }
+  const holes = computed(() => {
+    return store.holes
+  })
+  const hcaps = computed(() => {
+    return store.hcaps
+  })
+  const yards = computed(() => {
+    return store.yards
+  })
+  const yardage = computed(() => {
+    return store.yardage
+  })
+  const slope = computed(() => {
+    return store.slope
+  })
+  const par = computed(() => {
+    return store.par
+  })
+  const rating = computed(() => {
+    return store.rating
+  })
+  const hole = (i) => {
+    // console.log(holes.value['h' + 1])
+    return holes.value['h' + i]
+  }
+  // function hole(i) { return holes.value['h' + i] }
+  const hcap = (i) => {
+    return hcaps.value['p' + i]
+  }
+  const yard = (i) => {
+    return yards.value['y' + i]
+  }
   const getScore = (scoreName, holeIdx) => {
     const par = hole(holeIdx)
     // console.log(`-fn-getScore scoreName=${scoreName}, hole=${holeIdx} par=${par}`, holes())
@@ -29,7 +53,7 @@ export function storeFunctions() {
     else if (scoreName === 0) score = 0
     return score
   }
-  function getScoreName (score, i, holeIdx=0) {
+  function getScoreName(score, i, holeIdx = 0) {
     // console.log(`-getScoreName score=${score}, i=${i}, holeIdx=${holeIdx}`)
     // if (score === 0 || score == null) return 'zero'
     var scoreName = null
@@ -62,19 +86,19 @@ export function storeFunctions() {
     const eagle = par - 2
     const Ascores = ABscores.slice(0, 2)
     const Bscores = ABscores.slice(2, 4)
-    const [A0, A1] = Ascores.sort((a, b) => a < b ? -1 : 1)
-    const [B0, B1] = Bscores.sort((a, b) => a < b ? -1 : 1)
+    const [A0, A1] = Ascores.sort((a, b) => (a < b ? -1 : 1))
+    const [B0, B1] = Bscores.sort((a, b) => (a < b ? -1 : 1))
     if (A0 === B0 && A1 === B1) return 0
     var teamscore = 0
-    teamscore  = A0 < B0 ? 1 : A0 === B0 ? 0 : -1
+    teamscore = A0 < B0 ? 1 : A0 === B0 ? 0 : -1
     teamscore += A1 < B1 ? 1 : A1 === B1 ? 0 : -1
     teamscore += A1 < B0 ? 1 : B1 < A0 ? -1 : 0
     // console.log(`-CK-A-calcHL- check birdie teamscore=${teamscore}`, ABscores.every(p => p === eagle))
-    
-    if (A0 === eagle)  teamscore += 5
-    if (A1 === eagle)  teamscore += 5
-    if (B0 === eagle)  teamscore -= 5
-    if (B1 === eagle)  teamscore -= 5
+
+    if (A0 === eagle) teamscore += 5
+    if (A1 === eagle) teamscore += 5
+    if (B0 === eagle) teamscore -= 5
+    if (B1 === eagle) teamscore -= 5
     // if (A0 === birdie && B0 === birdie) teamscore += 0
     if (A0 === birdie && B0 > birdie) teamscore += 1
     else if (B0 === birdie && A0 > birdie) teamscore += -1
@@ -91,7 +115,13 @@ export function storeFunctions() {
     return teamscore
   }
   return {
-    holes,hole,hcap,yard,getScore,calcHL,getScoreName,
+    holes,
+    hole,
+    hcap,
+    yard,
+    getScore,
+    calcHL,
+    getScoreName,
     hcaps,
     yards,
     yardage,

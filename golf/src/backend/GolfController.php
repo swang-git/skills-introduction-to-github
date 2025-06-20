@@ -1038,7 +1038,7 @@ class GolfController extends Controller {
 		$hp->p18 = $h['p18'];
 		return $hp;
 	}
-	public function updCourse(Request $da) { Log::info("course id=" . $da['id'] .", course name=". $da['name'], $da->toArray());
+	public function updCourse(Request $da) { Log::info("-fn-updCourse: course id=" . $da['id'] .", course name=". $da['name'], $da->toArray());
 		$courseId = $da['id'];
 		$course = Course::find($courseId);
 		$course->name = $da['name'];
