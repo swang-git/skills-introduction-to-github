@@ -1365,10 +1365,10 @@
   resolved "https://registry.yarnpkg.com/@polka/url/-/url-1.0.0-next.28.tgz#d45e01c4a56f143ee69c54dd6b12eade9e270a73"
   integrity sha512-8LduaNlMZGwdZ6qWrKlfa+2M4gahzFkprZiAt2TF8uS0qQgBizKXpXURqvTJ4WtmupWxaLqjRb2UCTe72mu+Aw==
 
-"@quasar/app-webpack@^4.2.0":
-  version "4.2.0"
-  resolved "https://registry.yarnpkg.com/@quasar/app-webpack/-/app-webpack-4.2.0.tgz#7847d13ba1b3f1d32933b6cd282c92913fbaa451"
-  integrity sha512-YyatCb+GQSIE5vDvH294DtBmOZmCZj4/s0k+OdLmiCMeNgvBUEA0eY9ehTiRDfTpd3bqkYrasdX6+RcuEcZBqA==
+"@quasar/app-webpack@^4.2.1":
+  version "4.2.1"
+  resolved "https://registry.yarnpkg.com/@quasar/app-webpack/-/app-webpack-4.2.1.tgz#1abb49ebb3677807b9b37231f8053aabfcd0ef7f"
+  integrity sha512-2fJ+i1RGb4Tweo1MbhxtWBV2MYreoMaNrOo2z10PkrPalm0xofplhr2gJ6fOxLXsHSqhrFXpuOWbg6wsi/8eqw==
   dependencies:
     "@quasar/babel-preset-app" "^2.0.3"
     "@quasar/render-ssr-error" "^1.0.3"
@@ -1463,10 +1463,10 @@
     core-js "^3.6.5"
     core-js-compat "^3.6.5"
 
-"@quasar/extras@^1.16.4":
-  version "1.16.17"
-  resolved "https://registry.yarnpkg.com/@quasar/extras/-/extras-1.16.17.tgz#50741489c9cc8a403ae8c595276aa11500ad0b38"
-  integrity sha512-4aX9XU/oj1+8O2C7LQCgywmoIw7suyUEZMPFFLWI61f21mF55VOsMdLCBhjeFgL5U4EWy079mfOR6/J8thi/ag==
+"@quasar/extras@^1.17.0":
+  version "1.17.0"
+  resolved "https://registry.yarnpkg.com/@quasar/extras/-/extras-1.17.0.tgz#966c0464a069d15f929d14f51b61fc8efefcf76c"
+  integrity sha512-KqAHdSJfIDauiR1nJ8rqHWT0diqD0QradZKoVIZJAilHAvgwyPIY7MbyR2z4RIMkUIMUSqBZcbshMpEw+9A30w==
 
 "@quasar/render-ssr-error@^1.0.3":
   version "1.0.3"

@@ -807,8 +807,8 @@ function getBFColor(i = -1) {
     retval = 'green'
     txtclr = 'black'
   } else if (teeColor === 'combo') {
-    retval = 'grey-3'
-    txtclr = 'blue-8'
+    retval = 'cyan-4'
+    txtclr = 'black'
   }
   return 'bg-' + retval + ' text-' + txtclr
 }
