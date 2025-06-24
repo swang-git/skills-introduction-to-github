@@ -8,7 +8,7 @@
         <div class="row" style="width:102.3%">
           <DateTimePicker style="width:40.4%" class="q-pt-sm" label="Created Date and Time" :date-time="row.datetime" @upd-dt="updDateTime" txsz="text-h6" />
           <q-chip style="max-width:7.7%;margin-left:-3px" class="text-h6 text-bold text-cyan-2 bg-teal-10 q-mt-md">{{ (row.glucose/18).toFixed(1) }}</q-chip>
-          <NumInput style="width:25%" class="q-pt-sm" :obj="row" label="Sugar Level" icon="bloodtype" iColor="red" :rightIcon="true" :showRight="true" @click="openNumPad()" />
+          <NumInput style="width:25%" class="q-pt-sm" :obj="row" label="Sugar Level" icon="bloodtype" iColor="red" :rightIcon="true" :showRight="true" @click="showNumPad('GL')" />
           <TxtInput class="q-mt-xs" style="width:24%" :obj="row" label="Check Type" icon="bloodtype" iColor="green-9" @click="openSelection('bloodtype', 'Check Type', tyOpt)" />
         </div>
         <div class="row" style="width:99.1%">
@@ -50,6 +50,7 @@
     </q-page-container>
   </q-layout>
 </q-dialog>
+<NumPad @set-num="setNum" />
 <NumPadAuto @sugar-level="setSugarLevel" @blood-pressure="setBloodPressure" />
 <ConfirmDialog @user-confirmed="delFromDB" />
 <SelRevOption @selected-option="setSelectedOpt" />
@@ -67,6 +68,7 @@ import LayoutHeader from '../src/components/LayoutHeader'
 import LayoutFooter from '../src/components/LayoutFooter'
 import DateTimePicker from '../src/components/DateTimePicker'
 import NumPadAuto from '../src/components/NumPadAuto'
+import NumPad from '../src/components/NumPad'
 import SelRevOption from '../src/components/SelRevOption'
 import TxtPad from '../src/components/TxtPad'
 import gludarInfo from './gludar_m_info'
@@ -103,6 +105,16 @@ emitter.on('open-gludar', (rw, act, exOpt, brOpt, luOpt, diOpt, drOpt, frOpt, fo
 //   row.value.bloodPressure = x
 // }
 
+function setNum (flg, n) {
+  console.log(`-fn-setNum flag=${flg} n=${n}`)
+  if (flg == 'GL') {
+    row.value.glucose = n
+    showNumPad('WT', '当日体重')
+  } else if (flg == 'WT') {
+    row.value.weight = n
+  }
+  // opened.value = false
+}
 function updSelectedOpt (model, txt) {
   console.log(`-fn-updSelectedOpt model=${model.value} selectedOpt=${txt}`)
   if (model.value == 'Exercise') row.value.exercise = txt
@@ -133,8 +145,13 @@ function setSugarLevel (x) {
   console.log(`-fn-setSugarLevel=${x}`)
   row.value.glucose = x
 }
+function showNumPad (flg) {
+  console.log(`-fn-showNumPadSL flag=${flg}`)
+  if (flg == "GL") return emitter.emit('open-num-pad', flg, '血糖测试')
+  else return emitter.emit('open-num-pad', flg, '当日体重')
+}
 function openNumPad (flag) {
-  // console.log(`-fn-openNumPadSL flag=${flag}`)
+  console.log(`-fn-openNumPadSL flag=${flag}`)
   if (isDesk) return
   if (flag == 'BP') return emitter.emit('open-num-pad-auto', '输入血压', flag, null)
   else return emitter.emit('open-num-pad-auto', '血糖测试', 60, 300)

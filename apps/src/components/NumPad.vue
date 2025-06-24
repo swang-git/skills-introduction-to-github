@@ -33,7 +33,7 @@ const keyedNum = ref(0)
 const bloodPressure = ref(null)
 const counter = ref(0)
 const flag = ref(-1)
-const emit = defineEmits(['set-pic-idx', 'set-interval-delay'])
+const emit = defineEmits(['set-pic-idx', 'set-interval-delay', 'set-num'])
 
 console.log('-ST-NumPad')
 emitter.on('open-num-pad', (x, y) => openIt(x, y))
@@ -41,6 +41,13 @@ emitter.on('open-num-pad', (x, y) => openIt(x, y))
 //== function sections
 function setNumber (n) {
   keyedIn.value += n
+  if (flag.value == 'GL' && parseInt(keyedIn.value)>=99) {
+    emit('set-num', 'GL', parseInt(keyedIn.value))
+    // opened.value = false
+  } else if (flag.value == 'WT' && parseInt(keyedIn.value) > 999) {
+    emit('set-num', 'WT', keyedIn.value)
+    opened.value = false
+  }
 }
 function setPicIdx () {
   console.log(`-fn-setPicIdx keyedId=${keyedIn.value}`)

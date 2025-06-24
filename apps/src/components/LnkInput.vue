@@ -47,8 +47,8 @@ function showEditLnk(i) {
   emitter.emit('open-TxtPad', i, lnks.value[i], 'Revise / Add Link')
 }
 function updLnk(i, lnk) {
-  lnks.value[i] = lnk
-  console.log(`-fn-updLnk i=${i} lnk=${lnk}`, lnks.value)
+  lnks.value[i.value] = lnk
+  console.log(`-fn-updLnk i=${i.value} lnk=${lnk}`, lnks.value)
   emit('upd-link', lnks.value)
 }
 </script>
