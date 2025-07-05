@@ -20,6 +20,7 @@
     <RoundButton size="22px" icon="娅" clas="q-ma-xs q-pb-sm" colr="blue-10" iclr="amber" ttip="娅 莉 画 展" @click="openApp('yalipics')" />
     <RoundButton size="22px" icon="查" clas="q-ma-xs q-pb-sm" colr="green-10" iclr="cyan-2" ttip="健 康 检 查" @click="openApp('htlist')" />
     <RoundButton size="22px" icon="视" clas="q-ma-xs q-pb-sm" colr="amber-10" iclr="white" ttip="电 视 列 表" @click="openApp('tvmanager')" />
+    <RoundButton size="22px" icon="式" clas="q-ma-xs q-pb-sm" colr="teal-10" iclr="yellow" ttip="计 算 公 式" @click="openApp('BMICalculator')" />
     <RoundButton size="22px" icon="group" clas="q-ma-xs" colr="indigo-10" iclr="amber" ttip="用 户 管 理" @click="refUserList.getUserList()" v-if="AppAdmin" />
     <RoundButton size="22px" icon="logout" clas="q-ma-xs" colr="amber-10" iclr="grey-10" ttip="系 统 Logout" @click="logout()" v-if="AppAdmin" />
     <RoundButton size="22px" icon="login" clas="q-ma-xs" colr="grey-10" iclr="amber" ttip="系 统 管 理" @click="login()" v-if="!AppAdmin" />

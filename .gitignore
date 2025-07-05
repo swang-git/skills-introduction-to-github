@@ -6,6 +6,9 @@
 ####################
 # Ignore all .log files
 *.log
+*.json
+*.lock
+.gitignore
 
 # Ignore a directory and its contents
 node_modules/

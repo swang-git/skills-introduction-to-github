@@ -42,6 +42,7 @@ const routes = [
       { path: 'yalipics', component: () => import('../../yalipics/PicList') },
       { path: 'yalipics/slide', component: () => import('../../yalipics/PicScreenFit') },
       { path: 'tvmanager', component: () => import('../../tvmanager/tvlist') },
+      { path: 'BMICalculator', component: () => import('../../src/components/BMICalculator') },
 
 
       // { path: 'golf', component: () => import('../../golf/GolfHome') },

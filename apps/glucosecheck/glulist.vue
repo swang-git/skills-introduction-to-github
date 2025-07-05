@@ -1,5 +1,5 @@
 <template>
-<div style="display:grid;place-items:center;height:100vh;margin:-18px 0 0 0">
+<div style="display:grid;place-items:center;height:100vh;margin:-5px 0 0 0">
   <q-table class="sh-sticky-header-table" :rows="palist" :columns="columns" dense dark hide-pagination :grid=false
     :visible-columns="isIM ? visibleColumnsFone : visibleColumnsDesk"
     wrap-cells style="font-family:stfangsong;font-weight:600"
@@ -86,8 +86,13 @@
           <q-tr v-if="p.row.yestFood !=null && p.row.glucose"><td style="width:20px">昨 日 三 顿 餐 饮</td><td colspan="4" style="width:680px" v-html="p.row.yestFood" /></q-tr>
           <q-tr v-else-if="p.row.note !=null"><td style="width:20px">注 释</td><td colspan="4" style="width:680px" v-html="p.row.note" /></q-tr>
           <q-tr v-if="p.row.bloodPressure!=null">
-            <td class="text-left" colspan="5">BLOOD PRESSURE : <span class="text-white"> {{ p.row.bloodPressure }} </span></td>
+            <td class="text-left" colspan="5">血压/心率: <span class="text-white"> {{ p.row.bloodPressure }} </span>
+              <span class="q-pl-md">体重: </span><span class="text-white"> {{ p.row.weight }} </span>
+            </td>
           </q-tr>
+          <!-- <q-tr>
+            <td class="text-left" colspan="5">体重：<span class="text-white">{{ p.row.weight }}</span> BMI below 18.5(Under) 18.5 - 24.9(Normal) 25 - 29.9 (Over) >30 (Obesity)</td>
+          </q-tr> -->
           <q-tr>
             <td class="bg-cyan-10">项 目</td>
             <td class="bg-cyan-9" style="white-space:nowrap">过 去 90 天 的 血 糖 平 均 值</td>
@@ -123,6 +128,7 @@
   </q-table>
   <gludar @close-expand="lastClickedRow.expand = false" />
   <ChartProxy :clvs="clvs" :glus="gluSections" :gludata="gludata" :xlabel="xlabel" />
+  // <BMICalculator />
 </div>
 </template>
 <script setup>
@@ -131,6 +137,7 @@ import emitter from 'tiny-emitter/instance'
 import gludar from './gludar'
 import ChartProxy from './ChartProxy'
 
+// import BMICalculator from '../src/components/BMICalculator'
 import { axiosFunctions } from '../src/composables/axiosFunctions'
 const { gaxios } = axiosFunctions()
 import { dayFunctions } from '../src/composables/dayFunctions'
@@ -167,7 +174,7 @@ const columns = ref([
   { required: false, label: '周', align: 'center', name: 'week', field: 'week', sortable: true, headerStyle:'max-width:50px;font-weight:800;font-size:22px;white-space:nowrap' },
   { required: true, label: '血 糖 值', align: 'center', name: 'glucose', field: 'glucose', sortable: true, headerStyle:'max-width:30px;font-weight:800;font-size:22px;white-space:nowrap' },
   { required: true, label: '类型', align: 'center', name: 'type', field: 'type', sortable: true, headerStyle:'max-width:30px;font-weight:800;font-size:22px;white-space:nowrap' },
-  { required: false, label: '体 重', align: 'center', name: 'weight', field: 'weight', sortable: false, format:(val, row) => `${parseFloat(val).toFixed(1)}` },
+  // { required: false, label: '体 重', align: 'center', name: 'weight', field: 'weight', sortable: false, format:(val, row) => `${parseFloat(val).toFixed(1)}` },
   { required: false, label: 'BMI', align: 'center', name: 'BMI', field: 'BMI', sortable: false, format:(val, row) => `${parseFloat(val).toFixed(1)}` },
   { required: false, label: '食入 或 空腹', align: 'center', name: 'food', field: 'food', sortable: false, headerStyle:'font-weight:800;font-size:22px' },
   { required: false, label: '饮 入', align: 'center', name: 'drink', field: 'drink', sortable: true, headerStyle:'font-weight:800;font-size:22px'},
