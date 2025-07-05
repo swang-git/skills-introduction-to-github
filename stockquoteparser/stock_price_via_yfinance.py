@@ -10,8 +10,14 @@ def my_argparse():
     parser.add_argument("database", metavar='str', type=str, nargs='?', default='prod', help='load today quotes to database, default=devx')
     return parser.parse_args()
 
+def write_lines_to_file(date, stock, lines):
+    filename = "/Users/swang/sites/tmp/" + date + "_" + stock
+    with open(filename, 'w') as file:
+        file.writelines(f"{i}. {line}\n" for i, line in enumerate(lines, start=1))
+
 def get_stock_quote(date, stock):
     pdf_path = "/Users/swang/sites/webdata/docs/stocks/" + date + '_' + stock + ".pdf"
+    ## print("pdf_path=%s"%pdf_path)
     reader = PdfReader(pdf_path)
 
     # Loop through each page
@@ -28,6 +34,8 @@ def get_stock_quote(date, stock):
         #     line = line.strip()  # Remove extra whitespace
         #     if line:  # Skip empty lines
         #         print(f"Page {page_num + 1}: {line}")  # Process each line
+
+    write_lines_to_file(date, stock, pdf_lines)
 
     for idx, line in enumerate(pdf_lines):
         line = pdf_lines[idx]
@@ -64,14 +72,14 @@ database = my_argparse().database
 
 date = datetime.now().strftime("%Y%m%d")
 stocks = ['T', 'WBD', 'CHTR', 'CSCO', 'DELL', 'MSFT']
-# stocks = ['MSFT']
+#stocks = ['MSFT']
 for stock in stocks:
     pdata = get_stock_quote(date, stock)
-    # print(pdata)
+    print(pdata)
     quote = StockQuote(stock)
     if quote.isQuoteAlreadyInDBforToday(database):
         # print("data is already loaded for %s"%stock)
         continue
     quote.setData(pdata)
-    # quote.saveToDB(database)
+    quote.saveToDB(database)
     # quote.showData()

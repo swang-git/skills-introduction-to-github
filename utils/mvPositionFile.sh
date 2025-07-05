@@ -26,6 +26,6 @@ ppd=Portfolio_Positions_${bddyyyy}
 
 ## echo "cp /home/swang/Documents/dailydownload/snapshot_$yyyymmdd.pdf /sites/webdata/docs/Portfolio/"
 ## echo "cp /home/swang/Documents/dailydownload/$ppd.csv /sites/webdata/docs/Portfolio/snapshot_$yyyymmdd.csv"
-cp /Users/swang/Documents/dailydownload/snapshot_$yyyymmdd.pdf /Users/swang/sites/webdata/docs/Portfolio/
-cp /Users/swang/Downloads/$ppd.csv /Users/swang/sites/webdata/docs/Portfolio/snapshot_$yyyymmdd.csv
+cp -p /Users/swang/Documents/dailydownload/snapshot_$yyyymmdd.pdf /Users/swang/sites/webdata/docs/Portfolio/
+cp -p /Users/swang/Downloads/$ppd.csv /Users/swang/sites/webdata/docs/Portfolio/snapshot_$yyyymmdd.csv
 

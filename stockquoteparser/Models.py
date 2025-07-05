@@ -7,7 +7,7 @@ from sqlalchemy.orm import sessionmaker
 from datetime import datetime
 from tabulate import tabulate
 import platform
-import sys
+from decimal import Decimal
 
 def dbsession (database):
     if platform.system() == 'Darwin': dbconf="mysql+pymysql://swang:VVKKll11##@localhost/" + database + "?charset=utf8mb4" ## on Mac
@@ -97,75 +97,6 @@ class StockQuote(Base):
             self.status='A'
             return
         
-        url = "https://finance.yahoo.com/quote/" + self.symbol
-        # url = "https://www.google.com/search?q=" + self.symbol + "+stock+price+today"
-        # url = "https://www.google.com/search?q=" + self.symbol
-        # url = "https://www.bing.com/search?q=msft"
-        # print(f"url={url}")
-        # print(url)
-        headers = {'User-Agent': 'Mozilla/5.0'}
-        # headers = {
-#     "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8", 
-#     "Accept-Encoding": "gzip, deflate, br", 
-#     "Accept-Language": "en-US,en;q=0.9", 
-#     "Host": "httpbin.org", 
-#     "Priority": "u=0, i", 
-#     "Sec-Fetch-Dest": "document", 
-#     "Sec-Fetch-Mode": "navigate", 
-#     "Sec-Fetch-Site": "none", 
-    # "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.5 Safari/605.1.15", 
-    # "X-Amzn-Trace-Id": "Root=1-68600c84-6744e5541895445a4982fb77"
-#   }
-        response = requests.get(url, headers=headers)
-        soup = BeautifulSoup(response.text, 'html.parser')
-        # print(soup.prettify())
-        # streamers=soup.find_all('fin-streamer', {'data-symbol': self.symbol})
-        # # streamers=soup.find_all('fin-streamer', {'data-field':'regularMarketChange'})
-        # # x = streamers.split('</fin-streamer>')
-        # for x in streamers: print(x)
-        # sys.exit(0)
-        curr_price=soup.find('span', {'data-testid':"qsp-post-price"}).text
-        # curr_price=soup.find('span', class_='yf-ipw1h0.base')
-        # curr_price=soup.find('span', {'data-testid':"qsp-post-price"}, class_='yf-ipw1h0.base')
-        # curr_price=soup.find('span', {'jsname':"vWLAgc"}, class_='IsqQVc NprOob wT3VGc')
-        # curr_price=soup.find('span', {'jsname':"vWLAgc"})
-        # curr_price=soup.find('span', class_='l_ecrd_vqfcts_lnk')
-        # curr_price_span=soup.find('span')
-        # curr_price=curr_price_span.text
-        # print(curr_price_span.prettify())
-        # print(curr_price)
-        # sys.exit(0)
-        price_change=soup.find('span', {'data-testid':"qsp-price-change"}).text
-        # print(price_change)
-        price_change_percent=soup.find('span', {'data-testid':"qsp-price-change-percent"}).text
-        # print(price_change_percent)
-        open_price=soup.find('fin-streamer', {'data-symbol': self.symbol, 'data-field':'regularMarketOpen'}).text
-        # curr_price=soup.find('fin-streamer', {'data-symbol': self.symbol, 'data-field':'regularMarketPrice'}).text
-        # print('curr_price = [%s] open_price[%s]'%(curr_price,open_price))
-        # print('open_price = [%s]'%open_price)
-        # prchange=soup.find('fin-streamer', {'data-symbol': self.symbol, 'data-field':'regularMarketChange'}).text
-        # price_change=soup.find('fin-streamer', {'data-field':'regularMarketChange'}).text
-        price=curr_price
-        price_change=price_change
-        # print('price_change = %s'%price_change)
-        prchangepct=soup.find('fin-streamer', {'data-field':'regularMarketChangePercent'}).text
-        # print('prchangepct = %s'%prchangepct)
-        dayRange=soup.find('fin-streamer', {'data-symbol': self.symbol, 'data-field':'regularMarketDayRange'}).text
-        day_low, day_high = dayRange.split(' - ')
-        # print('dayRange = %s'%dayRange)
-        range52WK=soup.find('fin-streamer', {'data-symbol': self.symbol, 'data-field':'fiftyTwoWeekRange'}).text
-        low_52_week, high_52_week = range52WK.split(' - ')
-        # print('range52WK = %s'%range52WK)
-        self.load_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-        # self.price=open_price
-        self.price=curr_price
-        self.price_change=price_change
-        self.day_low=day_low
-        self.day_high=day_high
-        self.low_52_week=low_52_week
-        self.high_52_week=high_52_week
-        self.status='A'
-
     def showData(self):
         print(f"{' ':>24} price = {self.price:>7} change = {self.price_change:>6} [{self.symbol:>4}]")
 
@@ -194,7 +125,7 @@ class StockQuote(Base):
         # print(pdata)
         self.load_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         self.price=pdata[1]
-        self.price_change=-pdata[2]
+        self.price_change=pdata[2]
         self.day_low=pdata[3]
         self.day_high=pdata[4]
         self.low_52_week=pdata[5]
