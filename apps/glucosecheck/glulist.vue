@@ -86,13 +86,13 @@
           <q-tr v-if="p.row.yestFood !=null && p.row.glucose"><td style="width:20px">昨 日 三 顿 餐 饮</td><td colspan="4" style="width:680px" v-html="p.row.yestFood" /></q-tr>
           <q-tr v-else-if="p.row.note !=null"><td style="width:20px">注 释</td><td colspan="4" style="width:680px" v-html="p.row.note" /></q-tr>
           <q-tr v-if="p.row.bloodPressure!=null">
-            <td class="text-left" colspan="5">血压/心率: <span class="text-white"> {{ p.row.bloodPressure }} </span>
+            <td class="text-left" colspan="5"> 
+              <span>高压: </span><span class="text-white">{{ p.row.hiBP }} </span>
+              <span class="q-pl-md">低压: </span><span class="text-white"> {{ p.row.loBP }} </span>
+              <span class="q-pl-md">心率: </span><span class="text-white"> {{ p.row.htBT }} </span>
               <span class="q-pl-md">体重: </span><span class="text-white"> {{ p.row.weight }} </span>
             </td>
           </q-tr>
-          <!-- <q-tr>
-            <td class="text-left" colspan="5">体重：<span class="text-white">{{ p.row.weight }}</span> BMI below 18.5(Under) 18.5 - 24.9(Normal) 25 - 29.9 (Over) >30 (Obesity)</td>
-          </q-tr> -->
           <q-tr>
             <td class="bg-cyan-10">项 目</td>
             <td class="bg-cyan-9" style="white-space:nowrap">过 去 90 天 的 血 糖 平 均 值</td>
@@ -128,7 +128,6 @@
   </q-table>
   <gludar @close-expand="lastClickedRow.expand = false" />
   <ChartProxy :clvs="clvs" :glus="gluSections" :gludata="gludata" :xlabel="xlabel" />
-  // <BMICalculator />
 </div>
 </template>
 <script setup>
@@ -137,7 +136,6 @@ import emitter from 'tiny-emitter/instance'
 import gludar from './gludar'
 import ChartProxy from './ChartProxy'
 
-// import BMICalculator from '../src/components/BMICalculator'
 import { axiosFunctions } from '../src/composables/axiosFunctions'
 const { gaxios } = axiosFunctions()
 import { dayFunctions } from '../src/composables/dayFunctions'

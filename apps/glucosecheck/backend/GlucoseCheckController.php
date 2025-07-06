@@ -29,7 +29,10 @@ class GlucoseCheckController extends Controller {
 		foreach($dats as $d) {
 			$d->datetime = substr($d->datetime, 0, 16);
       $d->BMI = $d->weight * 0.4536 / 1.73 / 1.73;
-			// if (is_null($d->food)) $d->fastingSearch = 'fasting';
+      $x = explode(' / ', $d->bloodPressure);
+      $d->hiBP = isset($x[0]) ? $x[0] : null;
+      $d->loBP = isset($x[1]) ? $x[1] : null;
+      $d->htBT = isset($x[2]) ? $x[1] : null;
 			if (is_null($d->food)) $d->glucoseSearch = 'glucose';
 		}
 
