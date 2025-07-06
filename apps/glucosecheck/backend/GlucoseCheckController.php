@@ -55,7 +55,7 @@ class GlucoseCheckController extends Controller {
     // Log::info("frOpt", $frOpt);
     $ex = GlucoseCheck::where([ ['status', 'A'], ['user_id', $user->id], ['fruit', '<>', null] ])->distinct()->pluck('food');
     foreach($ex as $i => $e) $foOpt[] = ['value' => $i + 1, 'label' => $e];
-    Log::info("foOpt", $foOpt);
+    // Log::info("foOpt", $foOpt);
 
 		return ['lst' => $dats, 'exOpt' => $exOpt, 'brOpt' => $brOpt, 'luOpt' => $luOpt, 'diOpt' => $diOpt, 'drOpt' => $drOpt, 'frOpt' => $frOpt, 'foOpt' => $foOpt, 'status' => "OK"];
 	}
