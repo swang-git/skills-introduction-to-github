@@ -469,13 +469,13 @@ function setList (da) {
   da.lst.forEach(p => { if (p.note !== null) p.note = p.note.replace(/\n/g, '<br />'); p.week = '(' + p.datetime.chwk1() + ')'})
   da.lst.forEach(p => { if (p.breakfast == null) p.yestFood = null; else p.yestFood = '早餐：' + p.breakfast + '<br />午餐：' + p.lunch + '<br />晚餐：' + p.dinner; p.clvl = p.glucose / 18.015 })
   dats.value = da.lst
-  exOpt.value = da.exOpt
-  brOpt.value = da.brOpt
-  luOpt.value = da.luOpt
-  diOpt.value = da.diOpt
-  drOpt.value = da.drOpt
-  frOpt.value = da.frOpt
-  foOpt.value = da.foOpt
+  exOpt.value = da.exOpt.reverse()
+  brOpt.value = da.brOpt.reverse()
+  luOpt.value = da.luOpt.reverse()
+  diOpt.value = da.diOpt.reverse()
+  drOpt.value = da.drOpt.reverse()
+  frOpt.value = da.frOpt.reverse()
+  foOpt.value = da.foOpt.reverse()
 
   emitter.emit('dats', dats.value)
   console.log('-dalist:', dalist.value)
