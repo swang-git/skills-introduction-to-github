@@ -95,7 +95,9 @@
       </layoutFooter>
     </q-layout>
     <ConfirmDialog @user-confirmed="delFromDB" @user-cancelled="opened = false" />
-    <NumPad ref="refNumPad" @num-teetimes="setNumTeetimes" @teetime-gap="setTeetimeGap" />
+    <!-- <NumPad ref="refNumPad" @num-teetimes="setNumTeetimes" @teetime-gap="setTeetimeGap" /> -->
+    <NumPad ref="refNumPad" @set-teetimes="setTeeTimes" />
+    <TimeTable ref="refTimeTable" @save-teetimes="createGames" />
   </q-dialog>
 </template>
 <script setup>
@@ -110,6 +112,7 @@ import txt from '../components/TxtInput'
 import compDialog from '../components/DialogComponent'
 import ConfirmDialog from '../components/ConfirmDialog'
 import NumPad from '../components/NumPad'
+import TimeTable from '../components/TimeTable'
 import { ref, reactive, onMounted } from 'vue'
 import { useQuasar } from 'quasar'
 import { dayFunctions } from 'src/composables/dayFunctions'
@@ -134,12 +137,12 @@ const opened = ref(false)
 const game_id = ref(null)
 const note = ref(null)
 const title = ref(null)
-// const footerTit = ref('Set Number of Teetimes')
 const teeTimeDone = ref(false)
 const tit = ref(null)
 const msg = ref(null)
 const refNumPad = ref(null)
-onMounted(() => refNumPad)
+const refTimeTable = ref(null)
+onMounted(() => [refNumPad, refTimeTable])
 
 const emit = defineEmits(['upd-match'])
 
@@ -294,12 +297,7 @@ function doAction(act = null) {
 function mat() {
   console.log(`set number of teetimes for gameId=${game_id.value} action=${action.value}`)
   if (action.value === 'upd') return
-  if (game_id.value === 15)
-    emitter.emit(
-      'open-NumPad',
-      'Select Number of Teetimes',
-      [5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19],
-    )
+  if (game_id.value === 15) refNumPad.value.openIt( 'Select Number of Tee Times', [5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19])
   else refNumPad.value.openIt('Select Number of Teetimes', [1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
   action.value = 'add'
 }
@@ -338,41 +336,55 @@ function isCompleted() {
   }
   if (msg.value !== 'setup completed') {
     tit.value = 'Incomplete Game Setup'
-    // dialogName.value = 'InfoPopup'
-    // emitter.emit('open-DialogProxy')
     emitter.emit('open-InfoDisplay', tit.value, msg.value)
     return false
   }
   return true
   // mat()
 }
-function setNumTeetimes(i) {
-  console.log('-fn-setNumTeetimes', i)
-  tmnt.numGroup = i
-  // tmnt.teetime_gaps[0] = 0
-  if (i === 1) {
-    // footerTit.value = i + '  Teetime'
-    emitter.emit('close-NumPad')
+function setTeeTimes(nTeeTimes) {
+  console.log(`-fn-setTeetimes nTeeTimes=${nTeeTimes}`, tmnt.start_at)
+  tmnt.numGroup = nTeeTimes
+  if (nTeeTimes === 1) {
     add()
   } else {
-    // footerTit.value = i + '  Teetimes'
-    emitter.emit(
-      'open-NumPad',
-      'Select Teetime Gap in Minutes',
-      [8, 9, 10, 11, 12, 20, 30, 40, 50, 60, 70, 80, 90],
-      'teetime-gap',
-    )
+    refTimeTable.value.openIt('Set Tee Times', nTeeTimes, tmnt.start_at)
   }
+  refNumPad.value.closeIt()
 }
-function setTeetimeGap(g) {
-  console.log(`-fn-setTeetimeGap=${g} tmnt.numGroup=${tmnt.numGroup}`, tmnt.teetime_gaps)
-  let lastm = tmnt.teetime_gaps[tmnt.teetime_gaps.length - 1]
-  tmnt.teetime_gaps.push(lastm + g)
-  if (--tmnt.numGroup == 1) {
-    emitter.emit('close-NumPad')
-    add()
-  }
+function createGames(teeTimes) {
+  console.log('-fn-createGames', teeTimes)
+  tmnt.teeTimes = teeTimes
+  add()
+  refTimeTable.value.closeIt()
 }
+// function setNumTeetimes(i) {
+//   console.log('-fn-setNumTeetimes', i)
+//   tmnt.numGroup = i
+//   // tmnt.teetime_gaps[0] = 0
+//   if (i === 1) {
+//     // footerTit.value = i + '  Teetime'
+//     emitter.emit('close-NumPad')
+//     add()
+//   } else {
+//     // footerTit.value = i + '  Teetimes'
+//     emitter.emit(
+//       'open-NumPad',
+//       'Select Teetime Gap in Minutes',
+//       [8, 9, 10, 11, 12, 20, 30, 40, 50, 60, 70, 80, 90],
+//       'teetime-gap',
+//     )
+//   }
+// }
+// function setTeetimeGap(g) {
+//   console.log(`-fn-setTeetimeGap=${g} tmnt.numGroup=${tmnt.numGroup}`, tmnt.teetime_gaps)
+//   let lastm = tmnt.teetime_gaps[tmnt.teetime_gaps.length - 1]
+//   tmnt.teetime_gaps.push(lastm + g)
+//   if (--tmnt.numGroup == 1) {
+//     emitter.emit('close-NumPad')
+//     add()
+//   }
+// }
 // === main ===
 console.log(`-ST-TeamMathCreator isDesk=${isDesk}`)
 emitter.on('golf-checkReminder', (x) => {

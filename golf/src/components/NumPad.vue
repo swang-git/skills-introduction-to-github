@@ -10,7 +10,7 @@
       </q-card-actions>
       <q-card-actions v-else align="evenly">
         <div v-for="i in numList" :key=i>
-          <q-btn size="lg" color="amber" round outline @click="emit('num-teetimes', i)">{{ i }}</q-btn>
+          <q-btn size="lg" color="amber" round outline @click="emit('set-teetimes', i)">{{ i }}</q-btn>
         </div>
       </q-card-actions>
     </q-card>
@@ -19,25 +19,21 @@
 </template>
 <script setup>
 import { ref } from 'vue'
-import emitter from 'tiny-emitter/instance'
-const emit = defineEmits(['num-teetimes', 'teetime-gap'])
+// import emitter from 'tiny-emitter/instance'
+const emit = defineEmits(['set-teetimes'])
 const opened = ref(false)
 const title = ref(null)
 const numList = ref(null)
-// const padType = ref(null)
 
-defineExpose({openIt})
+defineExpose({ openIt, closeIt })
 console.info('-ST-NumPad')
 
+function closeIt() { opened.value = false }
 function openIt(tit, nlist) {
   title.value = tit
   numList.value = nlist
-  // padType.value = ptype
   opened.value = true
 }
-// function sendNumTeetimes (i) {
-//   emit('num-teetimes', i)
-// }
-emitter.on('open-NumPad', (x,y) => openIt(x,y))
-emitter.on('close-NumPad', () => opened.value = false)
+// emitter.on('open-NumPad', (x,y) => openIt(x,y))
+// emitter.on('close-NumPad', () => opened.value = false)
 </script>
