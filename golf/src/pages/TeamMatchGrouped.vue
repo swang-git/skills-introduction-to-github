@@ -15,9 +15,9 @@
 
     <div style="margin-bottom:10px" class="bg-teal-10">
       <div v-for="(gx, i) in groups" :key="gx" style="margin-left:-6px">
-        <div class="row inset-shadow-down q-pl-sm" :class="getTeeColor(gx.tee)" style="width':screenwidth-10+'px';font-size:17.2px">
+        <div class="row inset-shadow-down q-pl-xs no-wrap" :class="getTeeColor(gx.tee)" style="width:screenwidth-10+'px';font-size:17.9px">
           <div class="cursor-pointer" @click="emit('change-tmnt', gx.tmntId, 'upd')">{{ gx.ttm }} Play {{ gx.teename }}</div>
-          <div class="q-pl-xs ellipsis" :style="{'width':screenwidth/1.62 + 'px'}" @click="emit('course-info', gx.tmntId, gx.teename)">{{ gx.course }}</div>
+          <div class="q-pl-xs ellipsis" :style="{'width':screenwidth/1.88 + 'px'}" @click="emit('course-info', gx.tmntId, gx.teename)">{{ gx.course }}</div>
         </div>
         <table style="border:1px solid green;margin-left:4px" :class="getBGcolor(i)">
           <tr v-for="(p, pi) in gx.players.sort((a,b) => { return a.team < b.team ? -1 : 1})" :key="p" class="text-h6 text-white">

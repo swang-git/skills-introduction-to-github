@@ -1795,20 +1795,21 @@ class GolfController extends Controller {
 		}
 	}
 	public function addTournament(Request $da) { Log::info('adding Tournament', $da->toArray());
-		$ng = isSet($da['numGroup']) ? $da['numGroup'] : 1 ;
+		// $ng = isSet($da['numGroup']) ? $da['numGroup'] : 1 ;
 		$st = $da['start_at'];
-		$tg = $ng > 1 ? $da['teetime_gap'] : null;
+		// $tg = $ng > 1 ? $da['teetime_gap'] : null;
+		$tgs = $da['teetime_gaps'];
 		$dm = null;
-		for ($i=0; $i<$ng; $i++) {
-			$tm = $i * $tg;
+		foreach ($tgs as $i => $tg) {
+			// $tm = $i * $tg;
 			$dm = new Tournament;
-			$dm->start_at = date("Y-m-d H:i", strtotime("+$tm minutes", strtotime($st)));
+			$dm->start_at = date("Y-m-d H:i", strtotime("+$tg minutes", strtotime($st)));
 			$dm->game_id = $da['game_id'];
 			$dm->course_id = $da['course_id'];
 			$dm->year = substr($da['start_at'], 0, 4);
 			$dm->fees = empty($da['fees']) ? null : $da['fees'];
 			$dm->mens_tee_id = $da['mtee_id'];
-			$ttgap = $da->teetime_gap;
+			// $ttgap = $da->teetime_gap;
 			$dm->teetime_gap = $da->teetime_gap;
 			$dm->lady_tee_id = empty($da['ltee_id']) ? null : $da['ltee_id'];
 			$dm->note = empty($da['note']) ? null : $da['note'];
@@ -1822,6 +1823,34 @@ class GolfController extends Controller {
 		if ($da->game_id > 0) return ['status' => "OK"]; // TeamMatch
 		else return $this->getTournamentList(); 
 	}
+	// public function addTournament(Request $da) { Log::info('adding Tournament', $da->toArray());
+	// 	$ng = isSet($da['numGroup']) ? $da['numGroup'] : 1 ;
+	// 	$st = $da['start_at'];
+	// 	$tg = $ng > 1 ? $da['teetime_gap'] : null;
+	// 	$dm = null;
+	// 	for ($i=0; $i<$ng; $i++) {
+	// 		$tm = $i * $tg;
+	// 		$dm = new Tournament;
+	// 		$dm->start_at = date("Y-m-d H:i", strtotime("+$tm minutes", strtotime($st)));
+	// 		$dm->game_id = $da['game_id'];
+	// 		$dm->course_id = $da['course_id'];
+	// 		$dm->year = substr($da['start_at'], 0, 4);
+	// 		$dm->fees = empty($da['fees']) ? null : $da['fees'];
+	// 		$dm->mens_tee_id = $da['mtee_id'];
+	// 		$ttgap = $da->teetime_gap;
+	// 		$dm->teetime_gap = $da->teetime_gap;
+	// 		$dm->lady_tee_id = empty($da['ltee_id']) ? null : $da['ltee_id'];
+	// 		$dm->note = empty($da['note']) ? null : $da['note'];
+	// 		$dm->save();
+	// 	}
+	// 	// $nd = DB::select("CALL get_tournaments_for_date_and_game(?, ?)", [$dm->game_id, substr($dm->start_at, 0, 10)]);
+	// 	// return [ 'matches' => Collect($nd), 'status' => 'OK'];
+	// 	// if ($da->game_id == 13) return $this->getTournaments($da->game_id); // JZsMatch
+	// 	Log::info("added New Tournament for $da->game_id from addTournament");
+	// 	// if ($da->game_id > 0) return $this->getTournaments($da->game_id); // TeamMatch
+	// 	if ($da->game_id > 0) return ['status' => "OK"]; // TeamMatch
+	// 	else return $this->getTournamentList(); 
+	// }
 	// public function getTournament($gameId, $tid) { Log::info("getTournament($gameId, $tid)");
 	// 	$tournament = Tournament::where([['game_id', $gameId], ['status', 'A'], ['id', $tid]])
 	// 		->select('id', 'game_id', 'start_at', 'teetime_gap', 'course_id', 'note', 'fees', 'mens_tee_id', 'lady_tee_id')
