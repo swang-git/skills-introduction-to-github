@@ -406,9 +406,9 @@ function getClass (col, row) {
   else if (col === 'glucose' && between(row.glucose, 125, 141) && row.type === '空腹') return bgc + 'text-center text-green-5'
   else if (col === 'glucose' && between(row.glucose, 140, 156) && row.type === '空腹') return bgc + 'text-center text-blue'
   else if (col === 'glucose' && between(row.glucose, 155, 999) && row.type === '空腹') return bgc + 'text-center text-pink-4'
-  else if (col === 'glucose' && between(row.glucose,   0, 141) && row.type === '餐二') return bgc + 'text-center text-green'
-  else if (col === 'glucose' && between(row.glucose, 140, 201) && row.type === '餐二') return bgc + 'text-center text-amber'
-  else if (col === 'glucose' && between(row.glucose, 200, 999) && row.type === '餐二') return bgc + 'text-center text-pink-5'
+  else if (col === 'glucose' && between(row.glucose,   0, 141) && row.type.slice(0, 1) === '餐') return bgc + 'text-center text-green'
+  else if (col === 'glucose' && between(row.glucose, 140, 201) && row.type.slice(0, 1) === '餐') return bgc + 'text-center text-amber'
+  else if (col === 'glucose' && between(row.glucose, 200, 999) && row.type.slice(0, 1) === '餐') return bgc + 'text-center text-pink-5'
   else return 'text-right'
 }
 // function isFasting (row) {
