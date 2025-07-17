@@ -188,7 +188,7 @@ getList()
 //== computed sections
 const compCash = computed(() => {
   // const val = holdings.value.filter(p => /INDIVIDUAL/.test(p.account_name)).reduce((a, b) => a + b.end_balance, bkgCash.value)
-  const val = fidelCash.value + bkgCash.value
+  const val = parseFloat(fidelCash.value) + parseFloat(bkgCash.value)
   return fmtcy(val)
 })
 
@@ -434,7 +434,7 @@ function showDetails (e, i) {
 emitter.on('bankstatement-getList', (da) => setList(da))
 
 function setList(da) {
-  console.log('-CK-setList', da.last_bkg_pdf, da.bkg_cash, da.bkg_stocks)
+  console.log(`-fn-setList last_bkg_pdf=${da.last_bkg_pdf}, fidel_cash=${da.fidel_cash} bkg_cash=${da.bkg_cash} bkg_stockss=${da.bkg_stocks}`)
   intraday.value = da.intraday
   last_bkg_pdf.value = da.last_bkg_pdf
   dats.value = da.dats
