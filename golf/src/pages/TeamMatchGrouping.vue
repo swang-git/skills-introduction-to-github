@@ -104,6 +104,11 @@
     </q-btn>
   </q-card-actions>
 
+  <q-btn-group glossy spread>
+    <q-btn v-if="openSlots===1" color="cyan-10" no-caps :label="'Show Player List (' + openSlots + ' open)'" @click="showPlayerList" />
+    <q-btn v-else-if="openSlots>1" color="cyan-10" no-caps :label="'Show Player List (' + openSlots + ' opens)'" @click="showPlayerList" />
+  </q-btn-group>
+  
   <!--show aliases -->
   <q-card v-if="openSlots>0" class="bg-teal-10">
     <q-card-section v-if="gameId==14 && lastHandicapDate" class="q-pa-none">
@@ -146,10 +151,10 @@
       </div>
     </q-card-actions>
   </q-card>
-  <q-btn-group glossy spread>
+  <!-- <q-btn-group glossy spread>
     <q-btn v-if="openSlots===1" color="cyan-10" no-caps :label="'Show Player List (' + openSlots + ' open)'" @click="showPlayerList" />
     <q-btn v-else-if="openSlots>1" color="cyan-10" no-caps :label="'Show Player List (' + openSlots + ' opens)'" @click="showPlayerList" />
-  </q-btn-group>
+  </q-btn-group> -->
   <TeamMatchPlayers :tplayers="getTplayers()" :paliases="aliases" @move-to-grouping="moveToGrouping" />
   <!-- <KJNewPlayerDialog ref="refKJNewPlayerDialog" /> -->
   <!-- <KJNewPlayerDialog /> -->
