@@ -104,11 +104,13 @@
     </q-btn>
   </q-card-actions>
 
-  <q-btn-group glossy spread>
-    <q-btn v-if="openSlots===1" color="cyan-10" no-caps :label="'Show Player List (' + openSlots + ' open)'" @click="showPlayerList" />
-    <q-btn v-else-if="openSlots>1" color="cyan-10" no-caps :label="'Show Player List (' + openSlots + ' opens)'" @click="showPlayerList" />
-  </q-btn-group>
-  
+  <q-card-actions v-if="openSlots>=1" align="left">
+    <q-btn glossy class="text-cyan-1" icon="person" color="cyan-10" no-caps label="Select No-Alias-Player" @click="showPlayerList" />
+    <!-- <q-btn outline round color="cyan-2" :label="openSlots" /> -->
+    <span v-if="openSlots===1" class="q-pl-md text-h5 text-cyan-2"><strong>{{ openSlots }}</strong> open</span>
+    <span v-else class="q-pl-md text-h5 text-cyan-2"><strong>{{ openSlots }}</strong> opens</span>
+  </q-card-actions>
+
   <!--show aliases -->
   <q-card v-if="openSlots>0" class="bg-teal-10">
     <q-card-section v-if="gameId==14 && lastHandicapDate" class="q-pa-none">
