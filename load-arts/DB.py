@@ -1,7 +1,7 @@
 from Utils import dlout
 import sqlalchemy
 from datetime import datetime
-from sqlalchemy import create_engine, func, desc, text
+from sqlalchemy import create_engine, func, desc, text, update
 from sqlalchemy.orm import sessionmaker
 from Models import DailyDat
 from Models import DailyArt
@@ -268,8 +268,7 @@ def addDailyDatWW(art):
         art_rec = session.query(DailyArt.idx, DailyArt.txt).filter_by(
             tag=art.tag, qid=art.qid, fid=art.qid)
         if art_rec.scalar() is None or art_rec.first().txt == '' or dat_rec.first().aut == 'WW':
-            print('adding Art WW -- exist Dat but no Art',
-                  art.idx, art.lnk, art.qid, art.aut, art.tit)
+            print('adding Art WW -- exist Dat but no Art', art.img, art.idx, art.lnk, art.qid, art.aut, art.tit)
             art.getArt()
             if dat_rec.first().aut == 'WW':
                 dat_rec.update({'aut': art.aut, 'img': art.img,
@@ -279,8 +278,7 @@ def addDailyDatWW(art):
             # daily_art.idx = 0
             addDailyArt(daily_art)
         else:
-            print('Exist:Art WW, update idx',
-                  art.idx, art.qid, art.lnk, art.tit)
+            print('Exist:Art WW, update idx', art.img, art.idx, art.qid, art.lnk, art.tit)
             # art_rec.update({'idx': art.idx})
             art_rec.idx = art.idx
             session.commit()
@@ -543,8 +541,7 @@ def addDailyArt(art):
         art.status = 'A'
         art.addtm = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         if (art.tag == 'PXHY' and art.nwd is not None and int(art.nwd) > 0) or (art.txt is not None and len(art.txt) >= 0):
-            print('adding:DailyArt', art.tag, art.qid,
-                  art.fid, art.nwd, art.aut, art.tim, art.txt)
+            print('adding:DailyArt', art.tag, art.qid, art.fid, art.nwd, art.aut, art.tim, art.txt)
             session.add(art)
             session.commit()
         else:
@@ -560,8 +557,14 @@ def addDailyArt(art):
         dlout(3, 'Exist:Art and upd idx', art.idx, art.tag, art.qid, art.fid, art.txt[0:40], art.aut)
         # flw = session.query(DailyArt).filter(DailyArt.tag==art.tag, DailyArt.qid==art.qid, DailyArt.fid==art.fid)
         # flw.update({"idx": art.idx})
-        flwupd = { "idx": art.idx }
-        flw.update(flwupd)
+        # flwupd = {'idx': art.idx}
+        # flw.update(flwupd)
+        # flw.update({'idx':art.idx})
+        # for record in flw: record.idx = art.idx
+        upd = update(DailyArt).where(DailyArt.tag==art.tag, DailyArt.qid==art.qid, DailyArt.fid==art.fid).values(idx=art.idx)
+        print('====upd:======', upd)
+        # upd = flw.update({'idx':art.idx})
+        session.execute(upd)
         session.commit()
         
 # def addDailyArt(art):

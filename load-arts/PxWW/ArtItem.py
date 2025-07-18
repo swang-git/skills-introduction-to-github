@@ -41,7 +41,8 @@ class Art:
 
     def process_vdo(self):
         # print(self.bs.prettify())
-        for vdo in self.bs.find_all('iframe'):
+        # for vdo in self.bs.find_all('iframe'):
+        for vdo in self.newsContent.find_all('iframe'):
             if vdo.get('src') is None: return
             new_tag = self.soup.new_tag("pVDO")
             new_tag.string = '<iframe width="100%" height="85%" src="' + vdo.get('src') + '"></iframe>'
@@ -57,6 +58,33 @@ class Art:
                 # sys.exit(0)
 
     def process_img(self):
+        self.img = 0
+        print('========-fn-process_img for', self.qid)
+        imgobj = Img(self.tag, self.ymd, self.qid)
+        for img in self.newsContent.find_all('img'):
+        # for img in self.art.find_all('img'):
+            img_src = img.get('src')
+            # if 'http' not in img_src: img_src = self.bas_url + img_src
+            if img_src is None or 'button.jpg' in img_src: continue
+
+            # if re.search('images/(tu_)((03|06).gif)|((ts|ys).png)', img_src) is not None:
+            #     img.decompose()
+            #     continue
+
+            # new_tag = self.soup.new_tag("pIMG")  ## avoid duplicated pictures
+            # new_tag = self.soup.new_tag("img")  ## avoid duplicated pictures
+
+            img_string = imgobj.sav(img_src, self.img+1)
+            if img_string is None: continue
+            try:
+                img.replace_with(img_string)
+                self.img += 1
+            except Exception as e:
+                print('Img.replace_with Exception, exception msg:', str(e), 'P_TAG:', ptag, 'NEW_TAG', new_tag)
+                # sys.exit(0)
+
+    def XXX_process_img(self):
+        self.img = 0
         imgobj = Img(self.tag, self.ymd, self.qid)
         for img in self.bs.find_all('img'):
             img_src = img.get('src')
@@ -299,14 +327,14 @@ class Art:
 
         # if 'video' in self.lnk: return self.get_videoArt()
         # if 'bcbay' in self.lnk: return self.get_bcbayArt()
+        self.newsContent = self.bs.find('div', id="newsContent")
         self.process_img()
         self.process_vdo()
 
-        cont = self.bs.find('div', id="newsContent")
         # dlout(3, cont.prettify())
 
         ##__ temp TESTING
-        self.txt = self.parse_and_get_txt(cont)
+        self.txt = self.parse_and_get_txt(self.newsContent)
         self.afz = len(self.txt)
         return
 
