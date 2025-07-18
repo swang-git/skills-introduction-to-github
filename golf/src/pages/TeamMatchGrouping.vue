@@ -133,8 +133,12 @@
           <div>{{ p.alias }}</div>
           <q-tooltip class="text-white text-h6 bg-indigo-9">{{ p.handicap }} {{ p.name }}</q-tooltip>
         </div>
+        <div v-else-if="p.alias!=null && p.alias.length==3 && /^[A-Z]+$/.test(p.alias)" :class="shadow('round-66')" style="font-size:22px" @click="moveToGrouped(p)">
+          <div style="margin:5px 0 0 -3px">{{ p.alias }}</div>
+          <q-tooltip class="text-white text-h6 bg-indigo-9">{{ p.handicap }} {{ p.name }}</q-tooltip>
+        </div>
         <div v-else-if="p.alias!=null && p.alias.length==3" :class="shadow('round-66')" style="font-size:22px" @click="moveToGrouped(p)">
-          <div style="margin:5px 0 0 2px">{{ p.alias }}</div>
+          <div style="margin:5px 0 0 3px">{{ p.alias }}</div>
           <q-tooltip class="text-white text-h6 bg-indigo-9">{{ p.handicap }} {{ p.name }}</q-tooltip>
         </div>
         <div v-else-if="p.alias!=null && p.alias.length==4" :class="shadow('round-66')" style="font-size:19px" @click="moveToGrouped(p)">
