@@ -360,8 +360,8 @@ function getHoldings (e) {
 }
 function getAllHoldings (row, i) {
   let x = getBankRow(row, i)
-  console.log('row: ', row)
-  console.log(x[0].bank, x[1].bank, x[2].bank)
+  console.log('-CK-fn-getAllHoldings row: ', row)
+  console.log(`-CK-x0.banl=${x[0].bank} x1.bank=${x[1].bank} x2.bank=${x[2].bank}`)
   if (x[0].bank !== 'Fidelity' ||  x[1].bank !== 'Chase' || x[2].bank !=='BOA') {
     let tit = 'Bank Row Assignment Wrong'
     let msg = 'at bank row=' + row.bank + ' and rowIdx=' +i

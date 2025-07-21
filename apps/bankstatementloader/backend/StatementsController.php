@@ -149,7 +149,7 @@ class StatementsController extends Controller {
       } else if ($i < 36 and preg_match('/Ending\s+Portfolio\s+Value\*\*(.*)/', $line)) {
         $data['cend'] = $this->cleanMoney($lines[$i + 1]);
         $data['yend'] = $this->cleanMoney($lines[$i + 2]);
-      } else if ($i <= 76 and $line == 'X85-275143') {
+      } else if ($i <= 80 and $line == 'X85-275143') {
         $data['indAcct'] = $line;
         $data['indSval'] = $this->cleanMoney($lines[$i + 1]);
         $data['indEval'] = $this->cleanMoney($lines[$i + 2]);
@@ -157,6 +157,21 @@ class StatementsController extends Controller {
         $data['acct'] = $lines[$i + 2];
         $data['sval'] = $this->cleanMoney($lines[$i + 3]);
         $data['eval'] = $this->cleanMoney($lines[$i + 4]);
+      }
+    }
+    return $data;
+  }
+  private function getHsaStatementHeaders($lines)  { Log::debug("-CK-getHsaStatementHeaders $lines[87]");
+    $data = [];
+    for ($i=80; $i<count($lines); $i++) {
+      $line = $lines[$i];
+      // if ($line == 'HEALTH SAVINGS ACCOUNT') {
+        // Log::debug("-CK-getHsaStatementHeaders i=[$i] line=[$line]");
+      // if (strpos($line, 'HEALTH SAVINGS ACCOUNT') > 0) {
+      if (preg_match('/^HEALTH\s+SAVINGS\s+ACCOUNT$/', $line)) {
+        $data['acct'] = $lines[$i + 3];
+        $data['bval'] = $this->cleanMoney($lines[$i + 4]);
+        $data['eval'] = $this->cleanMoney($lines[$i + 5]);
       }
     }
     return $data;
@@ -205,12 +220,16 @@ class StatementsController extends Controller {
     $accountSepLine = $this->getAccountSepLine($lines);
     // Log::info("-CK-Roth Account Separation Line=$accountSepLine");
     $dataRoth = $this->getRothStatementHeaders($lines);
+    $dataHsa = $this->getHsaStatementHeaders($lines);
+    Log::info("-CK-HSA HEADER", $dataHsa);
     $dataRoth = $this->getIndRothHoldings($dataRoth, $lines, 0, $accountSepLine);
     $dataRoth = $this->getRothHoldings($dataRoth, $lines, $accountSepLine, count($lines));
+    $dataHsa = $this->getHsaHoldings($dataHsa, $lines, 1132, count($lines));
     $dataRoth = $this->getIndRothActivity($dataRoth, $lines, 0, $accountSepLine);
-    $dataRoth = $this->getRothActivity($dataRoth, $lines, $accountSepLine, count($lines));
+    $dataRoth = $this->getRothActivity($dataRoth, $lines, $accountSepLine, 1170);
+    $dataHsa = $this->getHsaActivity($dataHsa, $lines, 1171, count($lines));
 
-    return ['dataIra' => $dataIra, 'dataRoth' => $dataRoth, 'dataAnn' => $dataAnn, 'status' => 'OK'];
+    return ['dataIra' => $dataIra, 'dataRoth' => $dataRoth, 'dataHsa' => $dataHsa, 'dataAnn' => $dataAnn, 'status' => 'OK'];
   }
   private function getAccountSepLine($lines)  {
     $accountSepLine = 0;
@@ -554,13 +573,14 @@ class StatementsController extends Controller {
   //   }
   //   return [ 'status' => "OK" ];
   // }
-  public function addActivity(Request $da) { // Log::info('addActivity for All Banks(Fidelity/Chase/BOA)', $da->toArray());
+  public function addActivity(Request $da) { Log::info('-CK-addActivity for All Banks(Fidelity/Chase/BOA)', $da->toArray());
     $userId = Auth::user()->id;
     foreach($da->toArray() as $d) {
       $dm = new BankStatementActivity($d);
       $dm->user_id = $userId;
       if ($dm->amount == '-') $dm->amount = null;
       if ($dm->price == '-') $dm->price = null;
+      if ($dm->cost == 'Total.00') $dm->cost = null;
       $dm->upsert([
                     ['idx'=>$dm->idx, 'bank'=>$dm->bank, 'year'=>$dm->year, 'month'=>$dm->month, 'account_num'=>$dm->account_num,
                     'account_name'=>$dm->account_name, 'sett_date'=>$dm->sett_date, 'security'=>$dm->security,

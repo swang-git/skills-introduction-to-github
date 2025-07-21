@@ -38,8 +38,9 @@ trait PDFTrait {
     return [$EAI, $EY];
   }
   protected function cleanMoney($str, $flag=null) { //Log::info("-CK-$flag str=$str LINE=".__LINE__);
-    if ($flag != null) //Log::info("-CK-$flag str=$str");
-    if ($str == '--' || $str == '-') return null;
+    // if ($flag != null) //Log::info("-CK-$flag str=$str");
+    // if ($str == '--' || $str == '-') return null;
+    if ($str == '--' || $str == '-') return 0.0;
     $x = explode(' ', $str);
     $m = $x[0];
     $mLong = preg_replace('/[$|,]/', '', $m); // Log::info("-CK-$flag str=$str mLong=$mLongLINE=".__LINE__);

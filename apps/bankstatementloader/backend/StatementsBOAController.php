@@ -296,8 +296,9 @@ class StatementsBOAController extends Controller {
     $savinfo['nos'] = $nos;
     return $savinfo;
   }
-  public function loadMonthlyStatements($ymon) { Log:info("loadMonthlyStatements $ymon");
-    $docRoot = "/sites/webdata/docs/BOA/";
+  public function loadMonthlyStatements($ymon) { Log:info("-fn-loadMonthlyStatements(BOA) $ymon");
+    // $docRoot = "/sites/webdata/docs/BOA/";
+    $docRoot = config('constants.DOC_DIR') . "/BOA/";
 
     $clines = $this->parsePDF($docRoot . "${ymon}_checking.pdf");
     if (is_string($clines)) return ['info' => $clines, 'status' => 'NO_FILE'];
@@ -306,7 +307,7 @@ class StatementsBOAController extends Controller {
     $this->writeToTempFile($filename, $clines);
     $assets = $this->getAssets($clines);   // partially
     $chkinfo = $this->getCheckingData($clines);
-    
+
     $slines = $this->parsePDF($docRoot . "${ymon}_savings.pdf");
     $filename = "BOA_monthly_statement_$ymon" . '_savings';
     $this->writeToTempFile($filename, $slines);

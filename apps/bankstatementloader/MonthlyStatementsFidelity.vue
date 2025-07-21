@@ -153,6 +153,24 @@
       <td class="q-px-sm text-right">{{ h[7] }}</td>
       <td class="text-right">{{ h[8] }}</td>
     </q-tr>
+
+    <q-tr>
+      <td colspan="7" class="text-h5 q-pl-xs text-amber-9">Holdings for HSA Account {{ dataHsa.acct }}</td>
+      <td colspan="1" class="text-right">
+        <q-btn glossy color="indigo-9" label="Add" @click="addHoldings(dataHsa.acct, 'HSA', dataHsa.holdings)" />
+      </td>
+    </q-tr>
+    <q-tr class="q-pl-" v-for="h in dataHsa.holdings" :key="h">
+      <td class="q-pl-xs text-left">{{ h[0] }}</td>
+      <td class="q-px-sm text-right">{{ h[1] }}</td>
+      <td class="q-px-sm text-right">{{ h[2] }}</td>
+      <td class="q-px-sm text-right">{{ h[3] }}</td>
+      <td class="q-px-sm text-right">{{ h[4] }}</td>
+      <td class="q-px-sm text-right">{{ h[5] }}</td>
+      <td class="q-px-sm text-right">{{ h[6] }}</td>
+      <td class="q-px-sm text-right">{{ h[7] }}</td>
+      <td class="text-right">{{ h[8] }}</td>
+    </q-tr>
   </div>
 
   <div v-if="showData[5]" style="font-size:19px"> <!-- activity section -->
@@ -217,6 +235,22 @@
       <td class="q-px-md text-right">{{ h[4] }}</td>
       <td class="q-pl-md text-right">{{ h[5] }}</td>
     </q-tr>
+
+    <q-tr>
+      <td colspan="5" class="text-h5 q-pl-xs text-amber-9">Activity for HSA Account {{ dataHsa.acct }}</td>
+      <td colspan="1" class="text-right">
+        <q-btn color="indigo-9" label="Add" @click="addActivity(dataHsa.acct, 'HSA', dataHsa.activity)" />
+      </td>
+    </q-tr>
+    <!-- <div v-for="h in dataRoth.activity" :key="h.x"> <td>{{ h }}</td></div> -->
+    <q-tr class="q-pl-" v-for="h in dataHsa.activity" :key="h">
+      <td class="q-pl-xs text-left">{{ h[0] }}</td>
+      <td class="q-px-md text-right">{{ h[1] }}</td>
+      <td class="q-px-md text-right text-no-wrap ellipsis">{{ h[2].substring(0, 27) }}</td>
+      <td class="q-px-md text-right">{{ h[3] }}</td>
+      <td class="q-px-md text-right">{{ h[4] }}</td>
+      <td class="q-pl-md text-right">{{ h[5] }}</td>
+    </q-tr>
   </div>
 
   <q-btn-group spread glossy class="bg-grey-9" v-if="dataIra.holdings!==undefined">
@@ -249,6 +283,7 @@ const showBank = ref([4])
 const dataAnn = ref({})
 const dataIra = ref({})
 const dataRoth = ref({})
+const dataHsa = ref({})
 const assets = ref({})
 const showData = ref([4])
 const aGL = ref(0)
@@ -324,12 +359,12 @@ function addAssets () {
 function getAssets () {
   // console.log('-CK-fn-getAssets')
   const asts = { bank:'Fidelity', tran_cnt: 0 }
-  asts.begin_balance = parseFloat(dataAnn.value.sbal) + parseFloat(dataIra.value.bpval) + parseFloat(dataRoth.value.bpval)
-  asts.end_balance = parseFloat(dataAnn.value.ebal) + parseFloat(dataIra.value.cend) + parseFloat(dataRoth.value.cend)
+  asts.begin_balance = parseFloat(dataAnn.value.sbal) + parseFloat(dataIra.value.bpval) + parseFloat(dataRoth.value.bpval) + parseFloat(dataHsa.value.bval)
+  asts.end_balance = parseFloat(dataAnn.value.ebal) + parseFloat(dataIra.value.cend) + parseFloat(dataRoth.value.cend) + parseFloat(dataHsa.value.eval)
   asts.primary_account = 'INDIVIDUAL ' + dataIra.value.indAcct
 
-  asts.begin_balanceX = asts.begin_balance.toFixed(2) + ' == ' + dataAnn.value.sbal + ' + ' + dataIra.value.bpval + ' + ' + dataRoth.value.bpval
-  asts.end_balanceX = asts.end_balance.toFixed(2) + ' == ' + dataAnn.value.ebal + ' + ' + dataIra.value.cend + ' + ' + dataRoth.value.cend
+  asts.begin_balanceX = asts.begin_balance.toFixed(2) + ' == ' + dataAnn.value.sbal + ' + ' + dataIra.value.bpval + ' + ' + dataRoth.value.bpval + ' + ' + dataHsa.value.bval
+  asts.end_balanceX = asts.end_balance.toFixed(2) + ' == ' + dataAnn.value.ebal + ' + ' + dataIra.value.cend + ' + ' + dataRoth.value.cend + ' + ' + dataHsa.value.eval
   asts.gl = (asts.end_balance - asts.begin_balance).toFixed(2)
 
   year.value = ymon.value.substring(0, 4)
@@ -370,6 +405,7 @@ function loadFidelityMonthlyStatements () {
 }
 emitter.on('bankstatementloader-loadFidelityMonthlyStatements', (x) => setStatement(x))
 function setStatement (da) {
+  console.log(`-fn-setStatement da:`, da.dataRoth)
   if (da.status === 'NO_FILE') {
     $q.dialog({
       title: 'The PDF File Not Exists, Get File in First',
@@ -380,6 +416,7 @@ function setStatement (da) {
   dataIra.value = da.dataIra
   dataRoth.value = da.dataRoth
   dataAnn.value = da.dataAnn
+  dataHsa.value = da.dataHsa
   getAssets()
   // console.log('-CK-setStatement', dataIra.value.holdingsInd)
 }

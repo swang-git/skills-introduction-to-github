@@ -1365,15 +1365,15 @@
   resolved "https://registry.yarnpkg.com/@polka/url/-/url-1.0.0-next.28.tgz#d45e01c4a56f143ee69c54dd6b12eade9e270a73"
   integrity sha512-8LduaNlMZGwdZ6qWrKlfa+2M4gahzFkprZiAt2TF8uS0qQgBizKXpXURqvTJ4WtmupWxaLqjRb2UCTe72mu+Aw==
 
-"@quasar/app-webpack@^4.2.1":
-  version "4.2.1"
-  resolved "https://registry.yarnpkg.com/@quasar/app-webpack/-/app-webpack-4.2.1.tgz#1abb49ebb3677807b9b37231f8053aabfcd0ef7f"
-  integrity sha512-2fJ+i1RGb4Tweo1MbhxtWBV2MYreoMaNrOo2z10PkrPalm0xofplhr2gJ6fOxLXsHSqhrFXpuOWbg6wsi/8eqw==
+"@quasar/app-webpack@^4.3.0":
+  version "4.3.0"
+  resolved "https://registry.yarnpkg.com/@quasar/app-webpack/-/app-webpack-4.3.0.tgz#73b022efc32710b2e79d967125808a74495e73c4"
+  integrity sha512-0olDra1djAIF8V0ziR6gB73MqmqjO8usiH/Az1BXj24xWV//gGnqJOPPTn+PgFUlL4DAiNrXMIgNuCspwWYNZA==
   dependencies:
     "@quasar/babel-preset-app" "^2.0.3"
     "@quasar/render-ssr-error" "^1.0.3"
     "@quasar/ssl-certificate" "^1.0.0"
-    "@quasar/ssr-helpers" "3.0.1"
+    "@quasar/ssr-helpers" "3.0.2"
     "@rollup/pluginutils" "^5.1.0"
     "@types/chrome" "^0.0.271"
     "@types/compression" "^1.7.5"
@@ -1483,12 +1483,13 @@
     fs-extra "^11.1.1"
     selfsigned "^2.1.1"
 
-"@quasar/ssr-helpers@3.0.1":
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/@quasar/ssr-helpers/-/ssr-helpers-3.0.1.tgz#00325ba4d09d28a5883d4698abbcf4a0d16eea51"
-  integrity sha512-PcPgWElA+PeBTigWINq9rXm3LmUEROdiANizr6hEzVK1EwYzscmweXf0yCc31pbduEbTtTjl4Sr3VLW4e5l/Cg==
+"@quasar/ssr-helpers@3.0.2":
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/@quasar/ssr-helpers/-/ssr-helpers-3.0.2.tgz#0a59c8c9df591d6e8d7f7996c5f1f60580069cfb"
+  integrity sha512-JhHDk86o1ucR6toNkpIaAsgA0KuKKYDrOKJHN0O7IEvI2bQOCnmL9ttgRI/A4EeWOe4davqNFfwcwjuk0Ecv/w==
   dependencies:
     serialize-javascript "^6.0.0"
+    source-map "^0.7.3"
 
 "@rollup/pluginutils@^5.1.0":
   version "5.1.4"
@@ -5397,10 +5398,10 @@ qs@6.13.0:
   dependencies:
     side-channel "^1.0.6"
 
-quasar@^2.16.0:
-  version "2.18.1"
-  resolved "https://registry.yarnpkg.com/quasar/-/quasar-2.18.1.tgz#3e9c68ef1db72cbbb188f2f943ac03662e712162"
-  integrity sha512-db/P64Mzpt1uXJ0MapaG+IYJQ9hHDb5KtTCoszwC78DR7sA+Uoj7nBW2EytwYykIExEmqavOvKrdasTvqhkgEg==
+quasar@^2.18.2:
+  version "2.18.2"
+  resolved "https://registry.yarnpkg.com/quasar/-/quasar-2.18.2.tgz#3bcf2e53371ec10bffc81b319b320e620e3953b7"
+  integrity sha512-SeSAamH4vgYH9alLTdVL2o1fTTwz7VZnS2+gvIwt6qsH3ndrn/tQW64sWE78VSvrHlWINYbXESVF/cvWEuTYxg==
 
 queue-microtask@^1.2.2:
   version "1.2.3"
@@ -6039,7 +6040,7 @@ source-map@^0.6.0, source-map@~0.6.0:
   resolved "https://registry.yarnpkg.com/source-map/-/source-map-0.6.1.tgz#74722af32e9614e9c287a8d0bbde48b5e2f1a263"
   integrity sha512-UjgapumWlbMhkBgzT7Ykc5YXUT46F0iKu8SGXq0bcwP5dz/h0Plj6enJqjz1Zbq2l5WaqYnrVbwWOWMyF3F47g==
 
-source-map@^0.7.4:
+source-map@^0.7.3, source-map@^0.7.4:
   version "0.7.4"
   resolved "https://registry.yarnpkg.com/source-map/-/source-map-0.7.4.tgz#a9bbe705c9d8846f4e08ff6765acf0f1b0898656"
   integrity sha512-l3BikUxvPOcn5E74dZiq5BGsTb5yEwhaTSzccU6t4sDOH8NWJCstKO5QT2CvtFoK6F0saL7p9xHAqHOlCPJygA==
