@@ -18,7 +18,7 @@ export function libFunctions() {
   function desk() {
     return (
       Platform.is.desktop &&
-      (Platform.is.platform === 'linux' || Platform.is.platform === 'win') &&
+      (Platform.is.platform === 'linux' || Platform.is.platform === 'win' || Platform.is.platform === 'mac') &&
       !Platform.has.touch
     )
   }
@@ -172,31 +172,26 @@ export function libFunctions() {
     // emitter.emit('num-items', data.length)
     return data
   })
-  const golfUserType = computed({
-    get: () => store.usertype,
-    set: (val) => store.userType = val,
-    // set: val => $store.commit('golf/setGolfUserType', val)
-  })
+  // const golfUserType = computed({
+  //   get: () => store.usertype,
+  //   set: (val) => store.userType = val,
+  //   // set: val => $store.commit('golf/setGolfUserType', val)
+  // })
   // const doGroup = computed(() => {
   //   return golfUserType.value === 'doGroup'
   // })
   // const SYSAdmin = (() => { return golfUserType.value == undefined ? false : golfUserType.value === 'SysAdmin' })
   // const SysAdmin = SYSAdmin()
-  const SysAdmin = computed(() => {
-    return store.usertype === 'SysAdmin' // || isSysAdminCookie
-  })
-  const PGCsAdmin = computed(() => {
-    return store.usertype === 'PGCsAdmin'
-  })
-  const JZsAdmin = computed(() => {
-    return store.usertyp === 'JZsAdmin'
-  })
-  const KJsAdmin = computed(() => {
-    return store.usertype === 'KJsAdmin'
-  })
-  const ALsAdmin = computed(() => {
-    return store.usertype === 'ALsAdmin'
-  })
+
+  // const SysAdmin = computed(() => { return store.usertype === 'SysAdmin' })
+  // const JZsAdmin = computed(() => { return store.usertype === 'JZsAdmin' })
+  // const PGCsAdmin = computed(() => { return store.usertype === 'PGCsAdmin' })
+  const SysAdmin = computed(() => { return store.usertype === 'SysAdmin' || localStorage.getItem('usertype') === 'SysAdmin' })
+  const JZsAdmin = computed(() => { return store.usertype === 'JZsAdmin' || localStorage.getItem('usertype') === 'JZsAdmin' })
+  const PGCsAdmin = computed(() => { return store.usertype === 'PGCsAdmin' || localStorage.getItem('usertype') === 'PGCsAdmin' })
+  const KJsAdmin = computed(() => { return store.usertype === 'KJsAdmin' })
+  const ALsAdmin = computed(() => { return store.usertype === 'ALsAdmin' })
+
   const pagename = computed({
     get: () => store.page,
     set: (val) => store.page = val,
@@ -228,6 +223,11 @@ export function libFunctions() {
     // getUsertype()
     // getList()
   }
+  // function JZsAdmin () { return store.usertype === 'JZsAdmin' }
+  // function KJsAdmin () { return store.usertype === 'KJsAdmin' }
+  // function ALsAdmin () { return store.usertype === 'ALsAdmin' }
+  // function PGCsAdmin () { return store.usertype === 'PGCsAdmin' }
+  // function PGCsAdmin () { return store.usertype === 'PGCsAdmin' }
   return {
     userGuidePage,
     $q,
@@ -252,7 +252,7 @@ export function libFunctions() {
     screenheight,
     isIM,
     isMate,
-    golfUserType,
+    // golfUserType,
     searchQuery,
     dats,
     dalist,

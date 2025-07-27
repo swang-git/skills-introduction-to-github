@@ -32,7 +32,8 @@
 </div>
 </template>
 <script setup>
-import { scroll, useQuasar } from 'quasar'
+// import { scroll, useQuasar } from 'quasar'
+import { scroll } from 'quasar'
 import emitter from 'tiny-emitter/instance'
 import { ref, getCurrentInstance, onMounted } from "vue";
 // import { utilFunctions } from '../composables/utilFunctions'
@@ -57,7 +58,7 @@ import KjGameDataDisplay from './KjGameDataDisplay'
 import SimpPlayerDialog from '../components/SimpPlayerDialog'
 
 //== data section
-const $q = useQuasar()
+// const $q = useQuasar()
 // const forceLoad = ref(false)
 // const dev = false
 const { getScrollTarget, setVerticalScrollPosition } = scroll
@@ -249,7 +250,8 @@ function addNewPlayer () {
   refSimpPlayerDialog.value.openIt('create', {}, false, gameId.value)
 }
 function changeTmnt(tmntId, act) {
-  console.log(`-CK-fn-changeTmnt act=${act} tmntId=${tmntId} isLocal=${isLocal} system_admin_cookie=${$q.cookies.get('sid_system_admin')}`)
+  // console.log(`-CK-fn-changeTmnt act=${act} SysAdmin=${SysAdmin.value} tmntId=${tmntId} isLocal=${isLocal} system_admin_cookie=${$q.cookies.get('sid_system_admin')}`)
+  console.log(`-CK-fn-changeTmnt act=${act} SysAdmin=${SysAdmin.value} tmntId=${tmntId} isLocal=${isLocal} localStorage=${localStorage.getItem('usertype')}`)
   if (isLocal || SysAdmin.value) {
     const g = games.value.find(p => p.id === tmntId)
     console.log(`-CK-change-tmnt`, g)

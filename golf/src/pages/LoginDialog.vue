@@ -86,7 +86,7 @@ function onReset() {
 emitter.on("golf-login", (x) => setLogin(x));
 function setLogin(da) {
   store.usertype = da.usertype;
-  // $q.localStorage.set('golf_usertype', da.usertype)
+  localStorage.setItem('usertype', da.usertype)
   // golf_usertype.value = da.usertype
   // console.log('-CK-login back', da.usertype)
   // emitter.emit("golf-usertype", da.usertype);

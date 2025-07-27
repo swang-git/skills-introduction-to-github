@@ -15,6 +15,7 @@ export const useGolfStore = defineStore('golf', {
     hcaps: {},
     tounament: {},
     usertype: null,
+    pageTitle: 'PageTitle',
   }),
   actions: {
     increment() {

@@ -153,7 +153,7 @@
             <RoundButton icon="logout" colr="black"   clas="q-ma-xs q-pb-xs" ttip='SysAdmin Logout' @click="logout()" v-if="SysAdmin" />
             <RoundButton icon="logout" colr="red"     clas="q-ma-xs q-pb-xs" ttip='PGCsAdmin Logout' @click="logout()" v-else-if="PGCsAdmin" />
             <RoundButton icon="logout" colr="blue-10" clas="q-ma-xs q-pb-xs" ttip='JZsAdmin Logout' @click="logout()" v-else-if="JZsAdmin" />
-            <RoundButton icon="login"  colr="green-9" clas="q-ma-xs q-pb-xs" ttip='Admin Login'  @click="login()"  v-else />
+            <RoundButton icon="login"  colr="green-9" clas="q-ma-xs q-pb-xs" ttip='Admin Login' @click="login()"  v-else />
           </q-item-section>
           <q-item-section v-if="SysAdmin" class="cursor-pointer" @click="logout()">
             <q-item-label class="text-h6">SysAdmin logout</q-item-label>
@@ -235,10 +235,10 @@ function openApp(app) {
 //emitter.on('golf-logout', () => golfUserType.value = null)
 function logout () {
   const path = process.env.API + '/golf/logout'
-  // q.localStorage.set('golf_usertype', null)
+  localStorage.setItem('usertype', null)
+  store.usertype = null
   //emitter.emit('golf-usertype', null)
   // golf_usertype = null
-  store.usertype = null
   gaxios(path)
   // console.log(`-fn-logout JZsAdmin=${JZsAdmin.value}`)
 }
