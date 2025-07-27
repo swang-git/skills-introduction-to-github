@@ -23,8 +23,7 @@ class ShoppingController extends Controller
      */
     public function index() { }
     public function getShoppingDates() {
-        $dates = ShoppingPurchase::where('status', 'A')->select('date as value', 'date as label')->orderBy('date', 'desc')->distinct()->get();
-        Log::info(Collect($dates));
+        $dates = ShoppingPurchase::where('status', 'A')->select('date as value', 'date as label')->orderBy('date', 'desc')->distinct()->get(); //Log::info(Collect($dates));
         return ['lst' => $dates, 'status' => "OK"];
     }
     public function getAllItems() {
@@ -36,10 +35,8 @@ class ShoppingController extends Controller
         if ($date != null) return $date;
         else return "neverBoughtThisItem"; date('Y-m-d');  // no purchased date for this item
     }
-    public function getShoppingList() { Log::info(['getShoppingList']);
-        $docdir = config('constants.DOC_DIR'); Log::info("docdir=$docdir");
-        $sdocArr = scandir($docdir . "/shopping");
-        $attached = array_diff($sdocArr, array('.', '..')); //Log::info($attached);
+    public function getShoppingList() { // Log::info(['getShoppingList']);
+        $attached = array_diff(scandir("/sites/webdata/docs/shopping"), array('.', '..')); //Log::info($attached);
         $itemList = DB::select('CALL get_shopping_list()'); //Log::info($itemList);
         $itemClasses = ShoppingClass::where('status', 'A')->select('id as value', 'class as label')->orderBy('id', 'desc')->get();
         // foreach($itemList as $m) $m->name = $m->name->strtoupper();
@@ -51,15 +48,15 @@ class ShoppingController extends Controller
         // Log::info("getThisDatePurchases Last purchased date $date");
         $signedItems = ShoppingPurchase::where([ ['shopping_purchases.status', 'A'], ['date', $date], ['payees.status', 'A'] ])
             ->join('payees', 'payees.id', 'shopping_purchases.payee_id')
-            ->select('payee_id', 'shopping_purchases.id', 'date', 'item_id', 'payee_id', 'shopping_purchases.name',
-            'price', 'units', 'uni', 'tax', 'disct', 'costs', 'shopping_purchases.status', 'payees.name as payee')
-            ->orderBy('payee_id')
-            ->orderBy('shopping_purchases.created_at')->get();
+            ->select('shopping_purchases.id', 'date', 'item_id', 'payee_id', 'shopping_purchases.name',
+                    'price', 'units', 'uni', 'tax', 'disct', 'costs', 'shopping_purchases.status', 'payees.name as payee')
+            ->orderBy('payee_id', 'asc')->orderBy('name', 'asc')->get();
         $itemcnt = str_pad(count($signedItems), 2, ' ', STR_PAD_LEFT);
-        $unsignedItems = ShoppingPurchase::where([ ['status', 'A'], ['date', $date], ['payee_id', null] ])
-            // ->select('id', 'date', 'item_id', 'payee_id', 'name', 'price', 'units', 'uni', 'tax', 'disct', 'costs', 'status', DB::raw("'unsigned' as payee"))
-            ->select('id', 'date', 'item_id', 'payee_id', 'name', 'price', 'units', 'uni', 'tax', 'disct', 'costs', 'status')
-            ->orderBy('created_at')->get();
+        // Log::info("getThisDatePurchases store-signed purchases: $itemcnt items on $date");
+        $unsignedItems = ShoppingPurchase::where([ ['shopping_purchases.status', 'A'], ['date', $date], ['payee_id', null] ])
+            ->select('shopping_purchases.id', 'date', 'item_id', 'payee_id', 'shopping_purchases.name',
+                    'price', 'units', 'uni', 'tax', 'disct', 'costs', 'shopping_purchases.status', DB::raw("'unsigned' as payee"))
+            ->orderBy('payee_id', 'asc')->get();
         $itemcnt = str_pad(count($unsignedItems), 2, ' ', STR_PAD_LEFT);
         // Log::info("getThisDatePurchases store-unsign purchases: $itemcnt items on $date");
         $items = $itemcnt > 0 ? $signedItems->merge($unsignedItems) : $signedItems;
@@ -121,12 +118,9 @@ class ShoppingController extends Controller
         $da->costs = $request->costs;
         try {
             $da->save();
-            // $itemList = DB::select('CALL get_shopping_list()'); //Log::info($itemList);
+            $itemList = DB::select('CALL get_shopping_list()'); //Log::info($itemList);
             // return $itemList;
-            // return $da;
-            // return ['addedItem' => $da, 'status' => "OK" ];
-            return ['status' => "OK" ];
-            // return $this->getThisDatePurchases($da->date);
+            return $da;
         } catch(Exception $ex) {
             Log::info(['FAILED CALL addPurchasedItem',$da->toArray()]);
             return $ex->getMessage();

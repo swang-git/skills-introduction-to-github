@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 import os
 import sys
-# import requests
+import requests
 from urllib import request
 from urllib.request import Request, urlopen
 import re

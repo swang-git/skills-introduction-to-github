@@ -35,12 +35,12 @@
           </q-item-section>
         </q-item>
 
-        <q-item v-if="isLocal" clickable v-ripple @click="openApp('/apps/watcher')">
+        <q-item v-if="isDesk" clickable v-ripple @click="openApp('/apps/watcher')">
           <q-item-section avatar>
             <q-btn round glossy icon="img:/arts/icons/quasar-logo.svg" />
           </q-item-section>
           <q-item-section class="text-h6 text-lime" style="font-family:youyuan" v-if="!isIM">
-            <q-tooltip class="bg-teal-10 text-h4 text-red">Build Ver: {{ compVer }}</q-tooltip>
+            <q-tooltip class="bg-teal text-h4 text-pink">Build Version: {{ compVer }}</q-tooltip>
             Quasar Version: {{ $q.version }}
           </q-item-section>
         </q-item>
@@ -62,7 +62,7 @@ import emitter from 'tiny-emitter/instance'
 import { libFunctions } from 'src/composables/libFunctions'
 import { axiosFunctions } from 'src/composables/axiosFunctions'
 const { gaxios } = axiosFunctions()
-const { isDesk, isFone, isIM, isLocal, store } = libFunctions()
+const { isDesk, isFone, isIM, store } = libFunctions()
 
 // name: 'ArtsHome',
 const clickedIdx = ref(-1)

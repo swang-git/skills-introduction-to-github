@@ -276,7 +276,7 @@ function getGamefee (p) {
 //   tmntId = tmnt.id
 //   // console.log('-fn-userSelected(tid) for tmnt Id', tmnt.id, activeGames)
 //   console.log('-fn-userSelected(tid) for tmnt Id', tmnt)
-//   store.pageTitle = 'Grouping ' + tmnt.game
+//   $store.commit('golf/setPageTitle', 'Grouping ' + tmnt.game)
 //   groups = []
 //   getPGCGamePlayers()
 // }

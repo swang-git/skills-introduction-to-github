@@ -111,7 +111,7 @@ export default defineConfig((ctx) => {
       // open: true // opens browser window automatically
       https: false,
       host: 'devx',
-      port: ctx.mode.spa ? '8080' : (ctx.mode.pwa ? 9080 : 9090),
+      // port: ctx.mode.spa ? '8080' : (ctx.mode.pwa ? 9080 : 9090),
       proxy: [
         {
           context: ['/api'],

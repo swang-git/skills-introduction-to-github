@@ -227,7 +227,7 @@
 <script setup>
 /* eslint-disable */
 import { ref, computed, getCurrentInstance, onMounted } from 'vue'
-// import { useQuasar } from 'quasar'
+import { useQuasar } from 'quasar'
 import holidays from 'src/components/HolidayDialog'
 import InfoDisplay from 'src/components/InfoDisplay'
 import LoginDialog from 'pages/LoginDialog'
@@ -236,16 +236,14 @@ import RegisterDialog from 'pages/RegisterDialog'
 import emitter from 'tiny-emitter/instance'
 import { axiosFunctions } from '../composables/axiosFunctions'
 import { libFunctions } from '../composables/libFunctions'
-import { dayFunctions } from '../composables/dayFunctions'
 import PlatformDataPad from '../components/PlatformDataPad'
 
 // const app = getCurrentInstance()
 // const store = app.appContext.config.globalProperties.$store
 // import { useStore } from 'vuex'
 // const store = useStore()
-// const $q = useQuasar()
-const { $q, store, golfUserType, JZsAdmin, KJsAdmin, ALsAdmin, SysAdmin, isIM, isDesk, PGCsAdmin, doGroup, pagename, userGuidePage } = libFunctions()
-const { yyyymmdd } = dayFunctions()
+const $q = useQuasar()
+const { store, golfUserType, JZsAdmin, KJsAdmin, ALsAdmin, SysAdmin, isIM, isDesk, PGCsAdmin, doGroup, pagename, userGuidePage } = libFunctions()
 
 const oneHour = 1000 * 60 * 60
 const curApp = ref(null)
@@ -306,7 +304,7 @@ function addNewCourse () {
 }
 function setUserType (da) {
   // console.log('-CK-fn-setUsertype', da.usertype)
-  store.usertype = da.usertype
+  store.userType = da.usertype
   // console.log(`-CK-fn-setUserType match Login JZsAdmin=${JZsAdmin.value} SysAdmin=${SysAdmin.value} PGCsAdmin=${PGCsAdmin.value} usertype=${da.usertype}`)
 }
 function getUserType () {
@@ -317,7 +315,7 @@ function logout () {
   const path = process.env.API + '/golf/logout'
   gaxios(path)
   emitter.emit('golf-usertype', null)
-  store.usertype = null
+  store.userType = null
   $q.notify({
     color: "yellow",
     textColor: "red-10",
@@ -452,7 +450,7 @@ function goHome () {
 }
 function setTitle (tit) {
   let tm = (new Date()).toString().split(' ')[4]
-  console.log(`-ck-%c${tm} setTitle`, 'color:indianRed;font-size:13px')
+  // console.log(`-ck-%c${tm} setTitle`, 'color:indianRed;font-size:13px')
   const ymd = (new Date()).yyyymmdd()
   // this.appTitle = tit.split(' ')[0] + ' ' + ymd + ' (' + (this.isDesk ? this.getDay2(ymd) : this.getDay3(ymd)) + ')'
   let appTitle = tit

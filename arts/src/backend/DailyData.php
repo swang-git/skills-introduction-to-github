@@ -10,7 +10,7 @@ class DailyData extends Model
     *
     * @var string
     */
-    protected $table = 'Art.daily_data'; //default table name will be DailyArt
+    protected $table = 'daily_data'; //default table name will be DailyArt
 
     /**
     * Indicates if the model should be timestamped if no created_at and updated_at columns
@@ -24,5 +24,5 @@ class DailyData extends Model
     *
     * @var string
     */
-    // protected $connection = 'MyWeb';
+    protected $connection = 'MyWeb';
 }

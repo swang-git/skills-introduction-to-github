@@ -153,8 +153,9 @@ function onReset() {
   accept.value = false;
 }
 emitter.on('golf-createAccount', (x) => setAccount(x))
+// const $store = useStore()
 function setAccount(da) {
-  store.usertype = da.usertype
+  store.userType = da.usertype
   console.info('-ab-setAccount back', da.usertype)
 }
 function createAccount() {

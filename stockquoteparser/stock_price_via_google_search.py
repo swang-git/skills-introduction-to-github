@@ -1,4 +1,4 @@
-#!/Users/swang/myenv/bin/python
+#!/usr/bin/python
 
 from PyPDF2 import PdfReader
 from datetime import datetime
@@ -21,12 +21,12 @@ def check_number(name, n, stock, line):
         sys.exit(-1)
 
 def write_lines_to_file(date, stock, lines):
-    filename = "/Users/swang/sites/tmp/" + date + "_g_" + stock
+    filename = "/sites/tmp/" + date + "_g_" + stock
     with open(filename, 'w') as file:
         file.writelines(f"{i}. {line}\n" for i, line in enumerate(lines, start=1))
 
 def get_stock_quote(date, stock):
-    pdf_path = "/Users/swang/sites/webdata/docs/gstocks/" + date + '_' + stock + ".pdf"
+    pdf_path = "/sites/webdata/docs/gstocks/" + date + '_' + stock + ".pdf"
     # print("pdf_path=%s"%pdf_path)
     reader = PdfReader(pdf_path)
 

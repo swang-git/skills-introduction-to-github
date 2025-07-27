@@ -5,7 +5,7 @@ export const useGolfStore = defineStore('golf', {
   state: () => ({
     count: 0,
     page: null,
-    pageTitle: null,
+    pageTile: null,
     par: 0,
     rating: 0,
     slope: 0,
@@ -13,10 +13,8 @@ export const useGolfStore = defineStore('golf', {
     holes: {},
     yards: {},
     hcaps: {},
-    tournament: {},
-    tournamentId: 0,
+    tounament: {},
     usertype: null,
-    showSelectedGame: false,
   }),
   actions: {
     increment() {

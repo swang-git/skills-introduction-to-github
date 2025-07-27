@@ -1,6 +1,6 @@
 <template>
 <q-dialog v-model="opened" persistent>
-  <q-card class="bg-teal-10" style="margin:-500px 0 0 205px">
+  <q-card class="bg-teal-10" style="margin:155px 0 0 205px">
     <q-card-section>
       <div class="inset-shadow-down text-h5 text-center text-cyan-2">Yards for Hole {{ holeIdx }} (Par {{ hole(holeIdx) }})</div>
     </q-card-section>

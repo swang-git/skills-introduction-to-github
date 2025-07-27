@@ -1,4 +1,4 @@
-#!/Users/swang/myenv/bin/python
+#!/usr/bin/python3
 import sys
 import os
 import shutil
@@ -23,9 +23,9 @@ appx = ' ' + app + ' '
 app_js =  os.path.join(app, 'js')
 app_fonts =  os.path.join(app, 'fonts')
 ##home_dir = "/home/swang/"
-home_dir = "/Users/swang/sites/"
+home_dir = "/sites/"
 ##home_dir = "/sites/"
-sites = "/Users/swang/sites/"
+sites = "/sites/"
 ##sites = "/home/sites/"
 app_dir = home_dir + "projects/" + app
 dist_dir = app_dir + "/dist/spa"

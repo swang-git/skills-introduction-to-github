@@ -1,5 +1,4 @@
 <template>
-<div style="display:flex;justify-content:center">
 <div class="q-px-xs fixed" style="width:800px;border:cyan solid 1px">
   <div class="row q-pl-xs q-pr-sm text-h6 text-amber">
     <div class="col-5">
@@ -16,7 +15,7 @@
     </template>
     <template v-slot:body="p">
       <q-tr :props="p" v-if="isEdit">
-        <q-td key="name"  :props="p" class="edt" :class="a(p.row)" @click="delPurchasedItemDialog(p.row)">{{ p.row.name }}</q-td>
+        <q-td key="name"  :props="p" :class="getTXTcolor(p.row)" @click="delPurchasedItemDialog(p.row)">{{ p.row.name }}</q-td>
         <q-td key="price" :props="p" class="edt" @click="openNumPad('price', p.row)">{{ p.row.price }}</q-td>
         <q-td key="units" :props="p" class="edt" @click="openNumPad('units', p.row)">{{ p.row.units }}</q-td>
         <q-td key="uni"   :props="p" class="edt" @click="openUniPad('uni',   p.row)">{{ p.row.uni }}</q-td>
@@ -25,7 +24,7 @@
         <q-td key="costs" :props="p" class="edt" @click="openNumPad('costs', p.row)">{{ p.row.costs }}</q-td>
       </q-tr>
       <q-tr :props="p" v-else>
-        <q-td key="name"  :props="p" :class="a(p.row)">{{ p.row.name }}</q-td>
+        <q-td key="name"  :props="p" :class="getTXTcolor(p.row)">{{ p.row.name }}</q-td>
         <q-td key="price" :props="p">{{ p.row.price }}</q-td>
         <q-td key="units" :props="p">{{ p.row.units }}</q-td>
         <q-td key="uni"   :props="p"><span class="q-mr-sm">{{ p.row.uni }}</span></q-td>
@@ -46,7 +45,7 @@
     <UniPad @upd-item="updItem" />
     <TaxPad @upd-item="updItem" />
     <SelOptPad @selected-opt="setSelectedOpt" />
-    <StoreList @get-this-date-purchases="getList" @add-purchasing-item="addPurchasingItem" />
+    <StoreList @get-this-date-purchases="getList" />
   </div>
   <q-option-group v-model="separator" inline class="text-h6 text-white" :options="[
       { label: 'Horizontal', value: 'horizontal' },
@@ -56,16 +55,13 @@
     ]"
   />
 </div>
-</div>
 </template>
 <script setup>
 import { ref, computed } from 'vue'
 import { libFunctions } from '../src/composables/libFunctions'
-import { dayFunctions } from '../src/composables/dayFunctions'
 import { axiosFunctions } from '../src/composables/axiosFunctions'
 const { gaxios, paxios } = axiosFunctions()
 const { buildApp, isDesk, isIM, palist, $q } = libFunctions()
-const { yyyymmdd } = dayFunctions()
 import emitter from 'tiny-emitter/instance'
 import PUCPad from './PUCPad'
 import UniPad from './UniPad'
@@ -80,7 +76,7 @@ emitter.emit('items-per-page', rwsPerPage)
 
 //== data sections
 const separator = ref('cell')
-const isEdit = ref(true)
+const isEdit = ref(false)
 const selOptTitle = ref('Item')
 const chkdStores = ref([])
 const storeOpt = ref([])
@@ -89,7 +85,6 @@ const selectedItemId = ref(null)
 const selectedItem = ref(null)
 const searchTitle = ref(null)
 const date = ref(null)
-const today = (new Date).yyyymmdd()
 const dats = ref([])
 // const pItems = ref([])
 const tag = ref(null)
@@ -136,8 +131,6 @@ emitter.on('shopping-delPurchasedItem', () => {
   emitter.emit('put-item-back-to-candidateItemsInClass', candidateItem)
 })
 emitter.on('shopping-getThisDatePurchases', (da) => setList(da))
-// emitter.on('shopping-addPurchasedItem', (da) => addPurchasedItem(da.addedItem))
-// emitter.on('shopping-addPurchasedItem', () => getList())
 const compTotal = computed({
   get: () => {
     let total = 0.00
@@ -173,13 +166,6 @@ const searchItems = computed(() => {
 })
 
 //== function sections
-function addPurchasingItem(item) {
-  console.log(`-fn-addPurchasingItem`, item)
-  dats.value.push(item)
-  date.value = today
-  dats.value = dats.value.filter(x => x.date == today)
-  emitter.emit('dats', dats.value)
-}
 function showItemsInChkdStores () {
   // console.log(`-fn-showItemsInChkdStores storeOpt.length=${storeOpt.value.length} chkStores.length=${chkdStores.value.length}`, palist.value)
   if (storeOpt.value.length === 1 && chkdStores.value.length === 0) return
@@ -200,7 +186,7 @@ function getStyle (col) {
 }
 function getClass (col, row) {
   if (col === 'name') {
-    return a(row) + ' ellipsis' 
+    return getTXTcolor(row) + ' ellipsis' 
   }
 }
 function test_sortZhArray () { // testing chinese char sorting
@@ -208,10 +194,10 @@ function test_sortZhArray () { // testing chinese char sorting
   const zs = zharray.sort((a, b) => a.localeCompare(b, 'zh', { ignorePunctuation: true }))
   console.log(zs)
 }
-function a (row) {
-  console.log('-CK-storeOpt', storeOpt.value, row.payee_id)
+function getTXTcolor (row) {
+  // console.log('storeOpt', storeOpt.value, row)
   const matched = storeOpt.value.filter(p => { return p.value === row.payee_id })[0]
-  return matched == null ? 'text-cyan-1' : 'text-' + matched.color
+  return 'text-' + matched.color
 }
 function showSelOpt (tit) {
   emitter.emit('open-SelOptPad', tit)
@@ -252,12 +238,11 @@ function setList (da) {
   if (selectedItemId.value > 0) {
     const tms1 = items.filter(p => { return p.item_id === selectedItemId.value })
     const tms2 = items.filter(p => { return p.item_id !== selectedItemId.value })
-      // .sort((a, b) => a.name.localeCompare(b.name, 'zh', { ignorePunctuation: true }))
+      .sort((a, b) => a.name.localeCompare(b.name, 'zh', { ignorePunctuation: true }))
     items = tms1.concat(tms2)
     tit = date.value.substring(2) + ' 买的' + selectedItem.value + '及其它'
   }
-  // dats.value = items.sort((a, b) => (a.payee + a.name).localeCompare(b.payee+b.name, 'zh', { ignorePunctuation: true })).sort((a, b) => a.payee_id - b.payee_id)
-  dats.value = items
+  dats.value = items.sort((a, b) => (a.payee + a.name).localeCompare(b.payee+b.name, 'zh', { ignorePunctuation: true })).sort((a, b) => a.payee_id - b.payee_id)
   emitter.emit('dats', dats.value)
   purchasedItems.value = palist.value
   // console.table(palist.value.map(p => p.payee + ' ~ ' + p.name))
@@ -332,13 +317,8 @@ function updPurchasedItem (item) {
 }
 var candidateItem = null
 function delPurchasedItem (item) {
-  if (item.id == null) {
-    $q.dialog({
-      title:'item.id is null'
-    })
-  }
   item.status = 'D'
-  console.log('-dg-delPurchasedItem', item)
+  // console.log('-dg-delPurchasedItem', item)
   const path = process.env.API + '/shopping/delPurchasedItem/' + item.id
   gaxios(path)
   candidateItem = item

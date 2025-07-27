@@ -28,10 +28,11 @@
   <SelOptionsWithSearch ref="refSelOptionsWithSearch" @selected-option="selectedPlayer" />
   <SimpPlayerDialog ref="refSimpPlayerDialog" />
   <KjGameDataDisplay />
+  <InfoDisplay />
 </div>
 </template>
 <script setup>
-import { scroll } from 'quasar'
+import { scroll, useQuasar } from 'quasar'
 import emitter from 'tiny-emitter/instance'
 import { ref, getCurrentInstance, onMounted } from "vue";
 // import { utilFunctions } from '../composables/utilFunctions'
@@ -46,6 +47,7 @@ import TeamMatchCreator  from './TeamMatchCreator'
 import TeamMatchList from './TeamMatchList'
 import TeamMatchGrouping from './TeamMatchGrouping'
 import TeamMatchGrouped from './TeamMatchGrouped'
+import InfoDisplay from '../components/InfoDisplay'
 import CourseInfo from '../components/CourseInfo'
 import KJNewPlayerDialog from '../components/KJNewPlayerDialog'
 // import Tooltip from 'src/components/ToolTip'
@@ -55,12 +57,18 @@ import KjGameDataDisplay from './KjGameDataDisplay'
 import SimpPlayerDialog from '../components/SimpPlayerDialog'
 
 //== data section
+const $q = useQuasar()
+// const forceLoad = ref(false)
+// const dev = false
 const { getScrollTarget, setVerticalScrollPosition } = scroll
 const app = getCurrentInstance()
 const route = app.appContext.config.globalProperties.$route
+// const store = app.appContext.config.globalProperties.$store
+// const { getInit } = utilFunctions()
 const { gaxios } = axiosFunctions()
 const { today, yyyymmddHHMM} = dayFunctions()
-const { $q, store, buildApp, isLocal, searchQuery, dats, SysAdmin, iPhone11ProMax, isDesk, dalist, userGuidePage } = libFunctions()
+// const { golfUserType, isLocal, isSysAdminCookie, searchQuery, dats, SysAdmin, JZsAdmin, KJsAdmin, ALsAdmin, iPhone11ProMax, mate60ProMax, iPhone13, screenwidth, isDesk, dalist, userGuidePage } = libFunctions()
+const { store, buildApp, isLocal, searchQuery, dats, SysAdmin, iPhone11ProMax, isDesk, dalist, userGuidePage } = libFunctions()
 const groupingDone = ref(false)
 const tmnt = ref({})
 const gameId = ref(null)
@@ -82,7 +90,7 @@ const kjNewPlayer = ref([])
 const kjAliases = ref([])
 // const lastHandicapDate = ref(null)
 // const screen_height = $q.screen.height
-// const screen_minWidth = $q.screen.minWidth
+// const screen_width = $q.screen.width
 const exNeshanic = /^(Neshanic)\s+(Valley)\s+(.*)/
 const refSelOptionsWithSearch = ref(null)
 const handicaps = ref(null)
@@ -90,7 +98,7 @@ const handicapFlag = ref(null)
 const aliases = ref([])
 var kjGamePlayerList = []
 var kjPlayer = null
-const aliasesJZ = ref([])
+var aliasesJZ = []
 var aliasesMM = []
 var handicapsJZ = {}
 var handicapsMM = {}
@@ -125,7 +133,7 @@ emitter.on('golf-getHandicaps', (x) => setHandicaps(x))
 // functions section
 // function checkDeviceType () {
 //   console.log('%c-CHECKING DEVICE TYPE', "font-size:10px;font-weight:600;color:red")
-//   console.log(`%cHeight=${screen_height} minWidth=${screen_minWidth}`, "font-size:10px;font-weight:600;color:red")
+//   console.log(`%cHeight=${screen_height} Width=${screen_width}`, "font-size:10px;font-weight:600;color:red")
 // }
 function setPlayerHandicap (p) {
   if (handicapFlag.value == 13) {
@@ -152,7 +160,7 @@ function switchHandicap () {
   })
 }
 function switchAliases (aliName) {
-  aliases.value = aliName == 'JZs' ? aliasesJZ.value : aliasesMM
+  aliases.value = aliName == 'JZs' ? aliasesJZ : aliasesMM
 }
 function getAliases (gameId) {
   console.log(`-fn-getAliases`)
@@ -160,10 +168,9 @@ function getAliases (gameId) {
   gaxios(path)
 }
 function setAliases (da) {
-  da.gameId == 13 ? aliasesJZ.value = da.aliases : aliasesMM = da.aliases
-  // aliasesJZ.value[14].alias = 'HHH'
-  aliases.value = gameId.value == 13 ? aliasesJZ.value : aliasesMM
-  console.log(`-fn-setAliases`, da.aliases)
+  console.log(`-fn-setAliases`)
+  da.gameId == 13 ? aliasesJZ = da.aliases : aliasesMM = da.aliases
+  aliases.value = gameId.value == 13 ? aliasesJZ : aliasesMM
 }
 function getHandicaps (gameId) {
   console.log(`-fn-getHandicaps`)
@@ -174,13 +181,13 @@ function setHandicaps (da) {
   console.log(`-fn-setHandicaps`, da)
   if (da.gameId == 13) {
     da.handicaps.forEach(p => handicapsJZ[p.player_id] = p.handicap)
-    aliasesJZ.value.forEach(p => p.handicap = handicapsJZ[p.player_id])
+    aliasesJZ.forEach(p => p.handicap = handicapsJZ[p.player_id])
   } else {
     da.handicaps.forEach(p => handicapsMM[p.player_id] = p.handicap)
     aliasesMM.forEach(p => p.handicap = handicapsMM[p.player_id])
   }
   handicaps.value = gameId.value == 13 ? handicapsJZ : handicapsMM
-  aliases.value = gameId.value == 13 ? aliasesJZ.value : aliasesMM
+  aliases.value = gameId.value == 13 ? aliasesJZ : aliasesMM
 }
 function selectedPlayer (model, selectedOpt) {
   console.log('-CK-fn-selectedPlayer', selectedOpt)
@@ -505,6 +512,7 @@ getHandicaps(14)
 matchName.value = route.params.match
 if (matchName.value === 'JZsMatch') {
   store.page = 'JZsMatch'
+  // store.page = 'team_match_groups')
   gameId.value = 13
 } else if (matchName.value === 'KJsMatch') {
   store.page = 'KJsMatch'

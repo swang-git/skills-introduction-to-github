@@ -9,18 +9,20 @@ from sqlalchemy import create_engine, func, desc
 from sqlalchemy.orm import sessionmaker
 from Models import recorded, channel_ALL, channel
 
-if not os.path.isdir("/dtv/rec"):
-    print("Please DO: [ sudo mount /dev/sdd1 /dtv ]")
-    sys.exit(1)
+##if not os.path.isdir("/dtv/rec"):
+##    print("Please DO: [ sudo mount /dev/sdd1 /dtv ]")
+##    sys.exit(1)
 # else:
     # print("/dev/sdd1(could be /dev/sdf1) already mounted")
 
 now = datetime.strptime(str(datetime.now())[:19], '%Y-%m-%d %H:%M:%S')
-limitNum = 15
+#####limitNum = 15
+limitNum = 22
 if len(sys.argv) > 1: limitNum = int(sys.argv[1])
 print('===== starting link-myth-title limitNum:%s ~ current time:%s ~ sqlchemy version:%s'%(limitNum, str(now)[:16], sqlalchemy.__version__))
 
-dbconf="mysql://mythtv:mythtvVVKK0#@localhost/mythconverg?charset=utf8mb4"
+##dbconf="mysql://mythtv:mythtvVVKK0#@localhost/mythconverg?charset=utf8mb4"
+dbconf="mysql://root:Ybsjll11@localhost/mythconverg?charset=utf8mb4"
 engine = create_engine(dbconf, echo=False)
 Session = sessionmaker(bind=engine)
 session = Session()
@@ -42,18 +44,14 @@ def minuteDiff(starttime, endtime): # duration in minutes
     return int((d2_ts-d1_ts) / 60)
 
 def getFullpath(basename):
-    if   os.path.exists('/home/swang/atv/' + basename): return '/home/swang/atv/' + basename
-    elif os.path.exists('/home/swang/btv/' + basename): return '/home/swang/btv/' + basename
-    elif os.path.exists('/home/swang/ctv/' + basename): return '/home/swang/ctv/' + basename
-    elif os.path.exists('/home/swang/dtv/' + basename): return '/home/swang/dtv/' + basename
-    elif os.path.exists('/home/swang/htv/' + basename): return '/home/swang/htv/' + basename
+    if   os.path.exists('/home/swang/htv/' + basename): return '/home/swang/htv/' + basename
+    elif os.path.exists('/ctv/' + basename): return '/ctv/' + basename
+    elif os.path.exists('/dtv/' + basename): return '/dtv/' + basename
 
 def getFullDirname(basename):
-    if   os.path.exists('/home/swang/atv/' + basename): return '/home/swang/atv/'
-    elif os.path.exists('/home/swang/btv/' + basename): return '/home/swang/btv/'
-    elif os.path.exists('/home/swang/ctv/' + basename): return '/home/swang/ctv/'
-    elif os.path.exists('/home/swang/dtv/' + basename): return '/home/swang/dtv/'
-    elif os.path.exists('/home/swang/htv/' + basename): return '/home/swang/htv/'
+    if   os.path.exists('/home/swang/htv/' + basename): return '/home/swang/htv/'
+    elif os.path.exists('/ctv/' + basename): return '/ctv/'
+    elif os.path.exists('/dtv/' + basename): return '/dtv/'
 
 def cleanupRecording():
     for idx, rec in enumerate(session.query(recorded).filter(recorded.watched == 2).order_by(recorded.starttime.desc())):
@@ -114,12 +112,12 @@ for idx, rec in enumerate(session.query(recorded).filter(recorded.watched == 0).
         session.query(recorded).filter(recorded.basename == rec.basename).delete(synchronize_session=False)
         continue
 
-    channux = session.query(channel_ALL).filter_by(chanid = rec.chanid).first()
+    ##channux = session.query(channel_ALL).filter_by(chanid = rec.chanid).first()
+    ##if channux == None:
+    channux = session.query(channel).filter_by(chanid = rec.chanid).first()
     if channux == None:
-        channux = session.query(channel).filter_by(chanid = rec.chanid).first()
-        if channux == None:
-            print('No such chanid[%s] [%s] in channel_ALL' %(rec.chanid, rec.title))
-            continue
+       print('No such chanid[%s] [%s] in channel_ALL' %(rec.chanid, rec.title))
+       continue
     channum = channux.channum.replace('_', '.')
     # chan = session.query(channel).filter_by(chanid = rec.chanid).first()
     # if chan == None: chan = session.query(channel_old_id).filter_by(chanid = rec.chanid).first()

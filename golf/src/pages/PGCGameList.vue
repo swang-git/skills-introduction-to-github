@@ -50,7 +50,7 @@ import { ref, onMounted } from 'vue'
 import { dayFunctions } from '../composables/dayFunctions'
 const { today } = dayFunctions()
 import { libFunctions } from '../composables/libFunctions'
-const { store, dats, dalist, isDesk, PGCsAdmin } = libFunctions()
+const { $store, dats, dalist, isDesk, PGCsAdmin } = libFunctions()
 import { axiosFunctions } from '../composables/axiosFunctions'
 const { gaxios } = axiosFunctions()
 import PGCGameResults from'./PGCGameResults'
@@ -72,8 +72,8 @@ onMounted(() => {
 
 console.log('-ST-PGCGameList')
 
-store.pageTitle = 'PGC Game List'
-store.page = 'PGCGameList'
+$store.commit('golf/setPageTitle', 'PGC Game List')
+$store.commit('golf/setPage', 'PGCGameList')
 getPGCGames()
 emitter.on('golf-getPGCGamePlayers', (x) => setPGCGamePlayers(x))
 emitter.on('golf-getPGCGames', (x) => setPGCGames(x.lst))

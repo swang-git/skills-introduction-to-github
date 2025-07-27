@@ -1,0 +1,8 @@
+
+#!/bin/bash
+mount //192.168.1.1/media  -t cifs /media -o username=XXXXX,password=XXX11,vers=1.0
+##mount //192.168.1.115/svrD -t cifs /svrD  -o username=XXXXX,password=XXX44,vers=2.0
+chown swang.swang /media
+chown swang.swang /media/BACK_UP
+chown swang.swang /media/BACK_UP/DB_DUMPS
+chown swang.swang /media/BACK_UP/PROJ_BAK

@@ -1,4 +1,4 @@
-# Quasar App (arts)
+# Quasar App (xarts)
 
 A Quasar Project
 

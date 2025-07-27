@@ -1,10 +1,14 @@
-import sys, os, re
-import requests_html
 from bs4 import BeautifulSoup, Comment
-from os.path import dirname
-sys.path.append(os.path.join(dirname(dirname(sys.path[0]))))
-sys.path.append(os.path.join(dirname(sys.path[0])))
-from Utils import Img
+from datetime import datetime
+# from urllib import request
+import re, sys, requests_html, time
+##import re, sys, time
+
+from Utils import conv_dt, dlout, Img, padsp, pedsp, repl_puncts
+# from Utils import Img
+# from Utils import padsp
+# from Utils import pedsp
+# from Utils import repl_puncts
 
 class Art:
     def __getattr__(self, key): return None
@@ -109,8 +113,8 @@ class Art:
         
         # if re.search('(^)([=|\-|\+|@|*|~|—|_]{4,})', line) != None: print('XXXX_', line, '_XXXX')
         # if re.search('发表评论于\s+\d{4}-\d\d-\d\d \d\d:\d\d:\d\d', line): line += '    '  ## for Unicode
-        if re.search('发表评论于 +[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}', line): line += '    ' ## for ASCII
-        line = re.sub('[=|-|+|@|*|~|—|_]{4,}', '～～～～～～～～～\n', line)
+        if re.search('发表评论于\s+[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}', line): line += '    ' ## for ASCII
+        line = re.sub('[=|\-|\+|@|*|~|—|_]{4,}', '～～～～～～～～～\n', line)
         line = re.sub('^～～～～～～～～～', '\n～～～～～～～～～', line)
         return line
 

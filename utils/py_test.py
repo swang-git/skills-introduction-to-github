@@ -1,10 +1,15 @@
-#!/Users/swang/myenv/bin/python
-import sys
+#!/usr/bin/python
+import os, sys
 
-funds = ['FFTWX', 'FSKAX', 'FXAIX']
-stocks = ['CHTR', 'CSCO', 'DELL', 'MSFT', 'T']
-price = 123.23
-pchange = -12.34
-print(f"{' ':>300} price = {price:>6} change = {pchange:>6}")
+import loading_ww_test
+
+# import TEST_WX_loading
 sys.exit(0)
 
+from PyClasses import Security
+saveToDB = False
+funds = ['FFTWX', 'FSKAX', 'FXAIX']
+stocks = ['CHTR', 'CSCO', 'DELL', 'MSFT', 'T']
+sec = Security(saveToDB, funds, stocks)
+sec.loadFund()
+sec.loadStock()

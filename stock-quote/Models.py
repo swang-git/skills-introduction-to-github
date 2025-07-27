@@ -11,7 +11,7 @@ import sys
 
 def dbsession (database):
     if platform.system() == 'Darwin': dbconf="mysql+pymysql://swang:VVKKll11##@localhost/" + database + "?charset=utf8mb4" ## on Mac
-    elif platform.system() == 'Linux': dbconf="mysql://swang:VVKKll11##@localhost/" + database + "?charset=utf8mb4"
+    elif platform.system() == 'Linux': dbconf="mysql://swang:Ybsjll11@localhost/" + database + "?charset=utf8mb4"
 
     engine = create_engine(dbconf, echo=False)
     # engine = create_engine('mysql+pymysql://swang:VVKKll11##@localhost:3306/devx')

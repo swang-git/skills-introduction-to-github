@@ -25,7 +25,6 @@
   <ChaseBrockerageIntraday @intra-day="setIntraday"/>
   <YearlyStatementNAC />
 </div>
-<!-- <q-btn v-show="isLoading" glossy rounded icon="arrow_left" class="bg-yellow" label="back" @click="isLoading=false" /> -->
 </template>
 <script setup>
 import { reactive, computed, ref } from 'vue'
@@ -44,7 +43,6 @@ const intraday = ref(null)
 // emitter.on('intraday', (x) => intraday.value = x)
 
 console.log(`-ST-bankstatementloader`)
-// localStorage.clear()
 
 const options = ([
   { label: 'Fidelity Credit Card', value: 'FidelCC', color: 'red' },
@@ -54,15 +52,12 @@ const options = ([
   { label: 'Chase Brokerage Intraday', value: 'ChaseBkg', color: 'blue' },
   // { label: 'North American Company', value: 'NAC', color: 'lime' },
 ])
-const isLoading = ref(false)
 const url = ref(null)
 const urlname = ref(null)
 const statement = reactive({
   // bank: 'NAC',
-  // bank: 'Chase',
-  // bank: 'ChaseBkg',
+  bank: 'ChaseBkg',
   // bank: 'FidelCC',
-  bank: localStorage.getItem('selected_bank'),
   // bank: 'Fidelity',
   // bank: 'BOA',
   date: new Date().yyyymmdd()
@@ -133,17 +128,12 @@ function setStatementLink() {
   // const date = statement.date
   const date = compDate.value
   // const yyyymm = date.yyyymm().replace('-', '')
-  const yyyymm = date.replace('-', '').substring(0, 6)
-  console.log(`-fn-setStatementLink bank=${statement.bank} date=${date} yyyymm=${yyyymm}`)
-  // const yyyymm = '2025-03'
-  // let bank = localStorage.getItem('selected_bank')
-  // if (bank == null) localStorage.setItem('selected_bank', statement.bank)
-  // else statement.bank = bank
-  if (statement.bank === 'FidelCC') { url.value = '/docs/fidelity_credit_card/' + date + '.pdf'; urlname.value='FIDELITY CREDIT CARD MONTHLY STATEMENT' }
-  else if (statement.bank === 'BOA') { url.value = '/docs/BOA/' + yyyymm + '_savings.pdf'; urlname.value = 'BANK OF AMERICA MONTHLY STATEMENT' }
+  const yyyymm = '2025-03'
+  console.log(`-fn-setStatementLink bank=${statement.bank} date=${date}`)
+  if (statement.bank === 'FidelCC') { url.value = 'docs/fidelity_credit_card/' + date + '.pdf'; urlname.value='FIDELITY CREDIT CARD MONTHLY STATEMENT' }
+  else if (statement.bank === 'BOA') { url.value = 'docs/BOA/' + yyyymm + '_savings.pdf'; urlname.value = 'BANK OF AMERICA MONTHLY STATEMENT' }
   else if (statement.bank === 'Chase') { url.value = '/docs/Chase/' + yyyymm + '.pdf'; urlname.value = 'CHASE MONTHLY STATEMENT' }
-  // else if (statement.bank === 'ChaseBkg') { url.value = '/docs/Chase/' + intraday.value + '_bkg.pdf'; urlname.value = 'Chase Brokerage Intraday' }
-  else if (statement.bank === 'ChaseBkg') { url.value = '/docs/Chase/' + yyyymm + '_bkg.pdf'; urlname.value = 'Chase Brokerage Intraday' }
+  else if (statement.bank === 'ChaseBkg') { url.value = '/docs/Chase/' + intraday.value + '_bkg.pdf'; urlname.value = 'Chase Brokerage Intraday' }
   else if (statement.bank === 'Fidelity') { url.value = '/docs/Fidelity/' + yyyymm + '_ira.pdf'; urlname.value = 'FIDELITY MONTHLY STATEMENT (IRA/ROTH)' }
   else if (statement.bank === 'NAC') { url.value = '/docs/NAC/' + yyyymm + '.pdf'; urlname.value = 'North American Company Yearly Statement' }
   return closeOthersAndBuildApp()
@@ -158,12 +148,13 @@ function getBankStatementDate() {
   else if (date < 5 && bank === 'Fidelity') month -= 1 // do last month if in the first 4 days of the month
   // else if (date >= 20 && bank === 'BOA') month -= 1 // do last month if in the first 4 days of the month
   // else if (date < 20 && bank === 'BOA') month -= 1 // do last last month if in the first 4 days of the month
-  else if (date <= 20 && bank === 'BOA') month -= 1 // do last last month if in the first 4 days of the month
+  else if (date < 20 && bank === 'BOA') month -= 0 // do last last month if in the first 4 days of the month
   // else if (date < 20 && bank === 'BOA') month -= 1 // do last last month if in the first 4 days of the month
   else if (date < 25 && /Chase/.test(bank)) month -= 1 // do last month if in the first 4 days of the month
+  // else if (date <  16 && bank === 'Chase') month -= 2 // do last last month if in the first 4 days of the month
   // else if (date <  7 && bank === 'FidelCC') month -= 1 // do last last month if in the first 4 days of the month
   // else if (date >= 7 && bank === 'FidelCC') month -= 0 // do last last month if in the first 4 days of the month
-  else if (date >= 5 && bank === 'FidelCC') month += 1 // do last last month if in the first 4 days of the month
+  else if (date >= 7 && bank === 'FidelCC') month += 1 // do last last month if in the first 4 days of the month
   // else if (bank === 'NAC') { month = 7; date = 21 } // yearly statement
 
   // else if (date >= 7 && bank === 'FidelCC') month -= 7 // do last last month if in the first 4 days of the month
@@ -190,20 +181,19 @@ function getBankStatementDate() {
     date = '20'
   }
   let ret = year + '-' + month + '-' + date
-  // if (bank === 'ChaseBkg') {
-  //   let month = d.getMonth() + 1
-  //   ret = year + '-' + month + '-' + d.getDate()
-  // }
+  if (bank === 'ChaseBkg') {
+    let month = d.getMonth() + 1
+    ret = year + '-' + month + '-' + d.getDate()
+  }
   // console.log(`-CK-setBankSatementDate bank=${bank} compDate=${ret}`)
   statement.date = ret
   return ret
 }
 function updDate(x) {
   statement.date = x
-  console.log(`-CK-fn-updDate statement.date=${statement.date}`)
+  // console.log(`-CK-fn-updDate statement.date=${statement.date}`)
 }
 function loadStateements() {
-  isLoading.value = true
   $q.notify('Loading Statement ' + statement.bank)
   // setStatementLink()
   if (statement.bank === 'FidelCC')  {
@@ -244,6 +234,6 @@ function loadStateements() {
     emitter.emit('close-MonthlyStatementsFidelity')
     emitter.emit('close-ReconFidelityCC')
   }
-  console.log(`-fn-CK-LoadStateement for bank=${statement.bank} date=${statement.date}`)
+  console.log('-fn-CK-LoadStateement for', statement.bank)
 }
 </script>

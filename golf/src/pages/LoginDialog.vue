@@ -51,7 +51,7 @@ const opened = ref(false);
 
 if (process.env.API === "/api") password.value = "Ybsjll11";
 // console.log(`-ST-LoginDialog process.env.API=${process.env.API}`)
-emitter.on('open-LoginDialog', () => { opened.value = true });
+emitter.on("open-LoginDialog", () => (opened.value = true));
 function onSubmit() {
   if (accept.value !== true) {
     $q.notify({
@@ -85,7 +85,7 @@ function onReset() {
 }
 emitter.on("golf-login", (x) => setLogin(x));
 function setLogin(da) {
-  store.usertype = da.usertype
+  store.usertype = da.usertype;
   // $q.localStorage.set('golf_usertype', da.usertype)
   // golf_usertype.value = da.usertype
   // console.log('-CK-login back', da.usertype)

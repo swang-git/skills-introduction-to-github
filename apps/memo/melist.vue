@@ -1,10 +1,8 @@
 <template>
-<div class="q-px-xs" style="display:grid;place-items:center;height:93vh">
-<div class="{ fixed: clickedIdx < 8 }">
+<div class="q-px-xs" :class="{ fixed: clickedIdx < 8 }">
   <q-table class="sh-sticky-header-table" v-model:rows="palist" :columns="columns" dense :hide-header="isIM"
     :grid=false :visible-columns="isDesk ? visibleColumnsDesk : visibleColumnsFone" :style="{ width:(screenwidth-4)+'px' }" 
-    row-key="id" :separator="separator" :showCol="showCol" wrap-cells hide-pagination
-    :pagination="isDesk ? { rowsPerPage: 23 } : { rowsPerPage: 13 }"
+    row-key="id" :separator="separator" :showCol="showCol" wrap-cells :hide-pagination="true" :pagination="isDesk ? { rowsPerPage: 23 } : { rowsPerPage: 13 }"
   >
   <template v-slot:header="props">
     <q-tr :props="props">
@@ -69,7 +67,6 @@
   <medar />
   <InfoDisplay />
   <ImgDisplay />
-</div>
 </div>
 </template>
 <script setup>

@@ -223,6 +223,7 @@ function loadData (stmt) {
     return
   }
   opened.value = ''
+  // console.log('-CK-fn-loadData BOA statement')
   showData.value[0] = true
   statement.value = stmt
   bank.value = stmt.bank
@@ -230,7 +231,6 @@ function loadData (stmt) {
   year.value = x[0]
   month.value = x[1]
   ymon = x[0] + x[1]
-  console.log(`-CK-fn-loadData BOA bank=${stmt.bank} date=${stmt.date} ymon=${ymon}`)
   const path = process.env.API + '/bankstatementloader/loadMonthlyStatementsBOA/' + ymon
   gaxios(path)
 }
@@ -239,7 +239,7 @@ function reLoadDataTryNewYmon () {
   let mx = month.value - 1
   month.value = month.value.replace(/[1-9]/, mx)
   ymon = year.value + month.value
-  console.log(`-CK-new ymon=${ymon}`)
+  // console.log(`-CK-new ymon={$ymon}`)
   const path = process.env.API + '/bankstatementloader/loadMonthlyStatementsBOA/' + ymon
   gaxios(path)
 }

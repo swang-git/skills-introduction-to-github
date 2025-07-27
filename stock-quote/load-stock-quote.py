@@ -1,4 +1,4 @@
-#!/Users/swang/myenv/bin/python
+#!/usr/bin/python
 from Models import StockQuote
 import argparse, sys
 

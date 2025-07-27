@@ -86,7 +86,7 @@ function drawChart (da) {
   var food = da.map(p => p.food)
   var fdtm = da.map(p => p.fdtm)
   var gptm = da.map(p => p.gptm)
-  var note = da.map(p => p.yestFood == null ? p.note : p.yestFood)
+  var note = da.map(p => p.note)
   var labels = da.map(p => p.date.substring(5, 10))
   config.data.labels = labels
   config.data.datasets[0].cktm = da.map(p => p.date)

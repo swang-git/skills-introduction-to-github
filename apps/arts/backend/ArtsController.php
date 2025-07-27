@@ -201,9 +201,9 @@ class ArtsController extends Controller {
  	public function search($cat, $txt)
     {
         $arts = DailyDat::fromQuery('CALL MyWeb.art_search(?,?)', [$cat, "%$txt%"]);   // dd($arts);
-		$pagetit = "搜索作者含有“${txt}”的文章";
-		if ($cat == 'tit') $pagetit = "搜索题目含有“${txt}”的文章";
-		else if ($cat == 'txt') $pagetit = "搜索文章内容含有“${txt}”的文章";
+		$pagetit = "搜索作者含有“{$txt}”的文章";
+		if ($cat == 'tit') $pagetit = "搜索题目含有“{$txt}”的文章";
+		else if ($cat == 'txt') $pagetit = "搜索文章内容含有“{$txt}”的文章";
 		$dats = $this->get_art_list($arts, $pagetit);
 		$dats['key'] = "/" . $cat . "/" . $txt;       // use as url as well
 		// $dats['key'] = "/search/" . $cat . "/" . $txt;       // use as url as well

@@ -1,1 +1,0 @@
-select DATE_FORMAT(starttime-INTERVAL 4 HOUR, '%m-%d %H:%i') as 'start time', basename, TIMESTAMPDIFF(MINUTE, starttime, endtime) as Min, ROUND(filesize/1024/1024/1024, 1) as fsz, title from recorded order by starttime asc;

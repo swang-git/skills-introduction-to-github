@@ -1,0 +1,13 @@
+127.0.0.1   article www.article
+::1         localhost dex
+192.168.1.136 article www.article 
+192.168.1.136 devx www.devx 
+192.168.1.136 prod www.prod 
+192.168.1.136 golf www.golf 
+192.168.1.136 django www.django 
+71.59.72.103 prod
+##192.168.1.116 shengli shengli.hopto.org
+##192.168.1.141 dev 192.168.1.116
+##71.59.72.101 daily 71.59.72.103
+##71.59.72.103 shengli shengli.hopto.org
+##71.59.72.103 pgc pgc.hopto.org

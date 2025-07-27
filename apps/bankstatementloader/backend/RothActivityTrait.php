@@ -414,7 +414,7 @@ trait RothActivityTrait {
         // Log::info("Roth Actv Core Fund Activity dd/dd line $line");
         // $secs = "CORE";
         $date = $line;
-        // $secs = $this->shortName($lines[$i + 4]);
+        $secs = $this->shortName($lines[$i + 4]);
         $desc = $lines[$i + 1] .' '. $lines[$i + 2] .' '. $lines[$i + 3];
         $quan = $this->cleanMoney($lines[$i + 6]);
         $pric = $this->cleanMoney($lines[$i + 7]);

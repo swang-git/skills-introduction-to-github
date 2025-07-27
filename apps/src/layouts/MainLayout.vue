@@ -5,31 +5,30 @@
     <q-header v-if="curApp!='arts'" class="bg-teal-9 inset-shadow-down">
       <q-toolbar style="margin-left:-5px">
         <q-btn v-if="isDesk" glossy @click="drawerClick()" round dense icon="img:icons/quasar-logo.svg" size="18px" />
+        <!-- <q-btn v-else to="/" round dense glossy color="blue"><q-icon name="🏠" style="margin:-13px 0 0 0" /></q-btn> -->
         <q-btn v-else to="/" round dense glossy color="blue"><q-icon :name="compVer" style="margin:-13px 0 0 0" /></q-btn>
         <q-toolbar-title>
           <div class="row q-pt-sm no-wrap">
             <span >{{ appTitle }}</span>
             <div style="float:right">
-              <q-btn v-if="/exp/i.test(curApp)" round glossy color="teal-9" @click="showYearChart" style="margin:-8px 10px 0 3px">
+              <q-btn v-if="/Expense/i.test(curApp)" round glossy color="teal-9" @click="showYearChart" style="margin:-8px 10px 0 3px">
                 <q-icon name="donut_small" color="lime" />
                 <q-tooltip class="text-h6 bg-indigo-9 text-yellow">消费分类总览（总支出分类）</q-tooltip>
               </q-btn>
-              <q-btn v-if="/Exp/i.test(curApp) && audCookies" round glossy color="indigo-9" @click="toggleAUD" style="margin:-8px 10px 0 3px">
+              <q-btn v-if="/Expense/i.test(curApp) && audCookies" round glossy color="indigo-9" @click="toggleAUD" style="margin:-8px 10px 0 3px">
                 <q-icon name="track_changes" color="cyan-2" />
                 <q-tooltip class="text-h6 bg-cyan-9">toggle show upd/add/del lines</q-tooltip>
               </q-btn>
-              <q-btn v-if="/exp/i.test(curApp)" round glossy color="brown-9" @click="checkGiftCardBalance" style="margin:-8px 10px 0 3px">
+              <q-btn v-if="/Expense/i.test(curApp)" round glossy color="brown-9" @click="checkGiftCardBalance" style="margin:-8px 10px 0 3px">
                 <q-icon name="balance" color="amber" />
                 <!-- <q-tooltip class="text-h6 bg-cyan-9">check gift card balances</q-tooltip> -->
               </q-btn>
-              <q-btn v-if="/watcher/i.test(curApp)" round glossy color="indigo" :icon="weightUnit" class="chicon-pos" @click="selectWeightUnit" />
-              <q-btn v-if="/watcher/i.test(curApp)" round glossy color="purple" icon="图" class="chicon-pos" @click="showWatcherChart" />
-              <q-btn v-if="/glucose/i.test(curApp)" round glossy color="blue-9" icon="释" class="chicon-pos" @click="getA1cExplainations()" />
-              <q-btn v-if="/glucose/i.test(curApp)" round glossy color="indigo" icon="M" class="chicon-pos" @click="openBMICalculator()" />
-              <q-btn v-if="/glucose/i.test(curApp)" round glossy color="lime-9" icon="B" class="chicon-pos" @click="getBMIdefinitions()" />
-              <q-btn v-if="/glucose/i.test(curApp)" round glossy color="teal-9" icon="空" class="chicon-pos" @click="showClvlChart" />
-              <q-btn v-if="/banksta/i.test(curApp)" round glossy color="teal-9" icon="图" class="chicon-pos" @click="emitter.emit('show-charts')" />
-              <q-btn v-if="/healtht/i.test(curApp)" round glossy color="teal-9" icon="图" class="chicon-pos" @click="showHealthTestChart" />
+              <q-btn v-if="/watcher/i.test(curApp)"    round glossy color="indigo" :icon="weightUnit" class="chicon-pos" @click="selectWeightUnit" />
+              <q-btn v-if="/watcher/i.test(curApp)"    round glossy color="purple" icon="图" class="chicon-pos" @click="showWatcherChart" />
+              <q-btn v-if="/glucoseche/i.test(curApp)" round glossy color="blue-9" icon="释" class="chicon-pos" @click="getA1cDefinitions()" />
+              <q-btn v-if="/glucoseche/i.test(curApp)" round glossy color="teal-9" icon="空" class="chicon-pos" @click="showClvlChart" />
+              <q-btn v-if="/bankstatem/i.test(curApp)" round glossy color="teal-9" icon="图" class="chicon-pos" @click="emitter.emit('show-charts')" />
+              <q-btn v-if="/healthtest/i.test(curApp)" round glossy color="teal-9" icon="图" class="chicon-pos" @click="showHealthTestChart" />
               <div v-if="/tvmanager/i.test(curApp)" class="q-mb-sm q-mx-sm">
                 <q-fab color="brown-9" padding="xs sm sm" label="Upcoming Recordings" direction="right" icon="history" >
                   <q-fab-action v-for="hr in [3, 5, 8, 10, 12, 24]" :key="hr" color="primary" @click="getTvShows(hr)" icon="history" :label="hr" class="text-h6" />
@@ -45,10 +44,6 @@
               </q-input>
             </div>
             <div v-else>
-              <!-- <q-btn v-if="/glucoseche/i.test(curApp)" round glossy color="blue-9" icon="释" class="chicon-pos" @click="getA1cExplainations()" />
-              <q-btn v-if="/glucoseche/i.test(curApp)" round glossy color="indigo" icon="M" class="chicon-pos" @click="openBMICalculator()" />
-              <q-btn v-if="/glucoseche/i.test(curApp)" round glossy color="lime-9" icon="B" class="chicon-pos" @click="getBMIdefinitions()" />
-              <q-btn v-if="/glucoseche/i.test(curApp)" round glossy color="teal-9" icon="空" class="chicon-pos" @click="showClvlChart" /> -->
               <q-input dark borderless v-model="searchQuery" input-class="text-right text-h6" class="absolute-bottom-right" dense @keyup="search()"  style="width:100px">
                 <template v-slot:append>
                   <q-icon v-if="searchQuery===''" name="search" />
@@ -62,9 +57,9 @@
     </q-header>
 
     <div v-if="curApp!='arts' && curApp!=='golf' && isDesk">
-      <q-drawer v-model="drawer" :mini="isDesk ? true : !drawer || miniState" :width="230" :breakpoint="400" show-if-above class="bg-teal-10">
+      <q-drawer v-model="drawer" :mini="isDesk ? true : !drawer || miniState" :width="230" :breakpoint="400" show-if-above class="bg-teal-9">
         <q-scroll-area class="fit" style="font-family:youyuan">
-          <q-list padding style="margin-left:-10px">
+          <q-list padding>
             <AppItem appl="日 常 消 费" colr="purple-9" iclr="yellow" size="27px" styl="margin:-1px 0 0 0" icon="monetization_on" appn="exlist" />
             <AppItem appl="采 购 清 单" colr="indigo-9" iclr="white"  size="27px" styl="margin: 1px 0 0 0" icon="add_shopping_cart" appn="shopping" />
             <AppItem appl="温 馨 提 示" colr="teal-9"   iclr="white"  size="27px" styl="margin:-0px 0 0 0" icon="schedule" appn="reminder" />
@@ -77,7 +72,6 @@
             <AppItem appl="网 上 阅 读" colr="indigo-9" iclr="white"  size="25px" styl="margin:-6px 0 0 0" icon="文" appn="../arts" />
             <AppItem appl="英 汉 字 典" colr="brown-9"  iclr="yellow" size="25px" styl="margin:-1px 0 0 0" icon="translate" appn="dictionary" />
             <AppItem appl="法 定 假 日" colr="pink-9"   iclr="yellow" size="25px" styl="margin:-1px 0 0 0" icon="card_giftcard" appn="" @click="showHolidays()" />
-            <!-- <AppItem appl="计 算 公 式" colr="teal-9"   iclr="yellow" size="25px" styl="margin:-6px 0 0 0" icon="式" appn="" @click="openBMICalculator()" /> -->
             <AppItem appl="月 报 分 析" colr="brown-9"  iclr="white"  size="25px" styl="margin:-6px 0 0 0" icon="报" appn="bankstatementloader" />
             <AppItem appl="健 康 检 查" colr="indigo-9" iclr="white"  size="25px" styl="margin:-6px 0 0 0" icon="查" appn="htlist" />
             <AppItem appl="电 视 列 表" colr="grey-9"   iclr="yellow" size="25px" styl="margin:-5px 0 0 0" icon="视" appn="tvmanager" />
@@ -130,7 +124,7 @@ const router = useRouter()
 
 const { isIM, isDesk, isFone, dalist, $q } = libFunctions()
 const { getDay3 } = dayFunctions()
-const { getA1cExplainations, getBMIdefinitions } = infoFunctions()
+const { getA1cDefinitions } = infoFunctions()
 
 //== data
 const tvfab = ref(false)
@@ -200,10 +194,6 @@ const weightUnit = computed(() => {
 })
 
 //== functions
-function openBMICalculator () {
-  curApp.value = 'BMICalc'
-  router.push({ path: 'BMICalculator' })
-}
 function getTvShows (hours) {
   console.log(`-fn-getTvShows hours=${hours}`)
   emitter.emit('tv-shows-in-hours', hours)

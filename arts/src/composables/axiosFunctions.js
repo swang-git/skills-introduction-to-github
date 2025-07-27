@@ -1,9 +1,12 @@
 import emitter from 'tiny-emitter/instance.js'
-import { getCurrentInstance } from 'vue'
+//import { getCurrentInstance } from 'vue'
+import { useQuasar } from 'quasar'
+import axios from 'axios'
 export function axiosFunctions() {
-  const app = getCurrentInstance()
-  const axios = app.appContext.config.globalProperties.$axios
-  const q = app.appContext.config.globalProperties.$q
+  //const app = getCurrentInstance()
+  //const axios = app.appContext.config.globalProperties.$axios
+//  const q = app.appContext.config.globalProperties.$q
+  const $q = useQuasar()
   function gaxios(path) {
     // console.log(`=====gaxios path=${path}`)
     let target = null
@@ -69,14 +72,14 @@ export function axiosFunctions() {
   }
   const notifyFunc = (path, target, error) => {
     console.error(path, 'Failed loading', target, 'with ', error)
-    q.notify({
+    $q.notify({
       color: 'yellow-9',
       position: 'bottom',
       message: '<strong class="text-h5 text-black"> FAILED for ' + target + '</strong>',
       icon: 'report_problem',
       html: true,
     })
-    q.dialog({
+    $q.dialog({
       color: 'teal-9',
       fullWidth: true,
       title: '<strong class="text-white text-h6">' + target + ' status:</strong>',

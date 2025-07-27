@@ -1,0 +1,19 @@
+-- set network buffers   212992 <-- original
+sysctl -w net.core.rmem_max=1048576   
+sysctl -w net.core.rmem_max=2097152 <-- currently setting
+
+
+Low level test for network packet loss - CONNECT/EXTEND/PRIME/EXPAND:
+
+1) From a cmd prompt run:
+"C:\Program Files\Silicondust\HDHomeRun\hdhomerun_config" FFFFFFFF set /tuner0/vchannel <channel number>
+"C:\Program Files\Silicondust\HDHomeRun\hdhomerun_config" FFFFFFFF save /tuner0 null
+
+Replace "<channel number>" with one of your HD channels. For HDHomeRun PRIME, make sure that it is a non-DRM channel.
+
+If you have more than one HDHomeRun unit then replace "FFFFFFFF" with the device ID of the desired unit.
+
+You should see a series of dots. "n" indicates network packet loss. "t" indicates a reception error. "s" is informational.
+
+mythbackend.service
+less /etc/systemd/system/multi-user.target.wants/mythbackend.service 

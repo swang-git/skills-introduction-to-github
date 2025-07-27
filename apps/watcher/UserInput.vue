@@ -1,6 +1,6 @@
 <template>
 <q-dialog v-model="opened" persistent>
-  <q-layout container style="height:388px;max-width:555px;margin-top:-460px" class="bg-teal-10" >
+  <q-layout container style="height:388px;max-width:555px;margin-top:150px" class="bg-teal-10" >
     <LayoutHeader tit="今日体重 / 退休金市价" @do-action="doAction" />
     <LayoutFooter :act="action" tit="NOTE_LINK" @do-action="doAction" />
     <q-page-container>
@@ -96,7 +96,7 @@ function openIt (rw, act) {
   opened.value = true
 }
 // function getMask () {
-//   // return [', '.valuejing'].includes(type.value) ? '#.#' : '#.##'
+//   // return ['pond', 'jing'].includes(this.type) ? '#.#' : '#.##'
 //   return '#.#'  // decimal number changing will trigger compInput.set(val) so must keep it the same length
 // }
 function updDate (val) {
@@ -152,7 +152,7 @@ function add () {
     let msg = 'Please provide Date'
     return emitter.emit('open-InfoDisplay', tit, msg)
   }
-  // LocalStorag('we.valueightUnit', type.value)
+  // LocalStorage.set('weightUnit', this.type)
   $q.localStorage.set('weightUnit', type.value)
   var inData = getInputData()
   inData.id = -1
@@ -179,6 +179,7 @@ function msg () {
   emitter.emit('open-NotePad', row.value.note)
 }
 function getInputData () {
+  // console.log('-fn-getInputData-row', row.value)
   type.value = $q.localStorage.getItem('weightUnit')
   var inData = {}
   inData.id = row.value.id
@@ -196,7 +197,6 @@ function getInputData () {
     if (row.value.note.indexOf('PNotes:') === 0) inData.note = row.value.note
     else inData.note = 'PNotes: ' + row.value.note
   }
-  console.log(`-fn-getInputData type=${type.value}`, inData)
   return inData
 }
 </script>

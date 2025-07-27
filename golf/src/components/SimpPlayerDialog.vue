@@ -52,7 +52,7 @@ const $q = useQuasar()
 import { axiosFunctions } from '../composables/axiosFunctions'
 const { paxios } = axiosFunctions()
 import { libFunctions } from '../composables/libFunctions'
-const { isIM, dalist, isDesk, SysAdmin } = libFunctions()
+const { isIM, $store, dalist, isDesk, SysAdmin } = libFunctions()
 var year = (new Date()).getFullYear()
 const fees = ref(0)
 const mtype = ref('G')

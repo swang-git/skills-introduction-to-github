@@ -9,7 +9,7 @@ from Models import HomePage
 from Models import ArtItem
 import sys, os
 
-dbconf = "mysql+pymysql://swang:VVKKll11##@localhost/MyWeb?charset=utf8mb4"
+dbconf = "mysql+pymysql://swang:Ybsjll11@localhost/MyWeb?charset=utf8mb4"
 # engine = create_engine(dbconf, encoding='utf8', echo=False)
 engine = create_engine(dbconf, echo=False)
 
@@ -265,14 +265,17 @@ def addDailyDatWW(art):
         dat_rec.idx = art.idx
         session.commit()
         art.afz = dat_rec.one().afz
-        art_rec = session.query(DailyArt.idx, DailyArt.txt).filter_by(
-            tag=art.tag, qid=art.qid, fid=art.qid)
+        art_rec = session.query(DailyArt.idx, DailyArt.txt).filter_by(tag=art.tag, qid=art.qid, fid=art.qid)
         if art_rec.scalar() is None or art_rec.first().txt == '' or dat_rec.first().aut == 'WW':
             print('adding Art WW -- exist Dat but no Art', art.img, art.idx, art.lnk, art.qid, art.aut, art.tit)
             art.getArt()
             if dat_rec.first().aut == 'WW':
-                dat_rec.update({'aut': art.aut, 'img': art.img,
-                               'vdo': art.vdo, 'afz': art.afz, 'ffz': art.ffz})
+                dat_rec = session.query(DailyDat.aut, DailyDat.ymd, DailyDat.afz, DailyDat.fsz, DailyDat.ffz, DailyDat.img, 
+                                        DailyDat.vdo).filter_by(tag=art.tag, ymd=art.ymd, qid=art.qid)
+                upd = update(DailyDat).where(DailyDat.tag==art.tag, DailyDat.qid==art.qid, DailyDat.ymd==art.ymd).values(
+                    aut=art.aut, img=art.img, vdo=art.vdo, afz=art.afz, ffz=art.ffz)
+                session.execute(upd)
+                # dat_rec.update({'aut': art.aut, 'img': art.img, 'vdo': art.vdo, 'afz': art.afz, 'ffz': art.ffz})
                 session.commit()
             daily_art = DailyArt(art)
             # daily_art.idx = 0
@@ -295,8 +298,7 @@ def addDailyDatWW(art):
                 art.vdo += flw.vdo
 
         art.ffz = art.afz + art.fsz
-        art_rec.update({'idx': art.idx, "flw": art.flw, "fsz": art.fsz,
-                       "ffz": art.ffz, "img": art.img, "vdo": art.vdo})
+        art_rec.update({'idx': art.idx, "flw": art.flw, "fsz": art.fsz, "ffz": art.ffz, "img": art.img, "vdo": art.vdo})
         session.commit()
 
 
@@ -343,8 +345,7 @@ def addDailyDatHY(art):
                 art.vdo += flw.vdo
 
         art.ffz = art.afz + art.fsz
-        art_rec.update({'idx': art.idx, "flw": art.flw, "fsz": art.fsz,
-                       "ffz": art.ffz, "img": art.img, "vdo": art.vdo})
+        art_rec.update({'idx': art.idx, "flw": art.flw, "fsz": art.fsz, "ffz": art.ffz, "img": art.img, "vdo": art.vdo})
         session.commit()
 
 

@@ -32,7 +32,7 @@ export function cssFunctions() {
     else if (tee === 'White') tee = 'bg-white'
     else if (tee === 'Black') tee = 'bg-grey-10 text-cyan-3'
     else if (tee === 'Red') tee = 'bg-red'
-    else if (tee === 'Combo') tee = 'bg-cyan-4 text-black'
+    else if (tee === 'Combo') tee = 'bg-purple-10 text-white'
     return tee
   }
   const condShadow = (val, cls1, cls2, cls3) => {

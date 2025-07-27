@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/python
 import os
 import sys
 from urllib.request import Request, urlopen
@@ -30,7 +30,7 @@ import lxml.html as lh
 
 TESTING = False
 # TESTING = True
-MAX_PAGES = 3 
+MAX_PAGES = 60
 
 
 tag = 'PXJL'
@@ -44,13 +44,13 @@ if len(sys.argv) >= 3 :
     start_page = int(sys.argv[2])
 [ymd, theday, prvday] = get_cn_zone_dates(dyx)
 print('proc_day:', theday, 'prev_day:', prvday, 'ymd', ymd, tag, dyx, '\n')
-# logFile = '/Users/swang/tmp/logs/px/load' + tag + '_' + str(abs(dyx)) + '_' + wkdayname() + '.log' 
+# logFile = '/home/swang/tmp/logs/px/load' + tag + '_' + str(abs(dyx)) + '_' + wkdayname() + '.log' 
 logFile = getLogFile(tag, dyx)
 tee = TeeToFileAndScreen(logFile, 'w')
 # sys.exit(0)
 
 if TESTING: MAX_PAGES = 2
-test_site = 'file:///Users/swang/tmp/qglt0920.html'
+test_site = 'file:///home/swang/tmp/qglt0920.html'
 # soup = BeautifulSoup(open(sit), "html.parser")
 # soup = BeautifulSoup(request.urlopen(sit), "html5lib")
 

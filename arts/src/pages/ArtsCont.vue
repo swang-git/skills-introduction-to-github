@@ -57,12 +57,12 @@ const data = ref({})
 emitter.on('get-cont', () => getCont())
 emitter.on('arts-getCont', (da) => setCont(da))
 function setCont(da) {
-  console.log(`-fn-setCont topTitle=${da.cont.topTitle}`, da)
+  console.log(`-fn-setCont`, da.cont)
   tag.value = route.params.tag
   ymd.value = route.params.ymd
   data.value = da.cont
-  // document.title = data.value.topTitle
-  document.title = da.cont.topTitle
+  document.title = data.value.topTitle
+  // document.title = da.cont.topTitle
   store.clickedCont = da.cont
   store.topTit = da.cont.topTitle
   setPrevNextYmds()

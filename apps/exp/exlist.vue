@@ -1,7 +1,5 @@
 <template>
-<!-- <div style="display:flex;justify-content:center;align-items:center;height:100vh"> -->
-<div style="display:grid;place-items:center;height:100vh">
-<div :class="{ fixed : clickedIdx < 9}" style="width:800px">
+<div class="q-px-xs" :class="{ fixed : clickedIdx < 9}" style="width:800px">
   <div v-if="isDesk" class="row text-h6 no-wrap" style="height:36px;margin:0 1px 0 0;border:1px solid cyan">
     <div style="width:28%" class="text-yellow-9 q-pl-sm">总支出: {{ totalSpend }}</div>
     <div style="width:28%" class="text-yellow-8 text-center">年支出: {{ yearSpend }}</div>
@@ -9,7 +7,7 @@
     <div style="width:4%"  class="text-teal-4 text-center" v-if="loadingTime>0">{{ loadingTime }}</div>
     <div style="width:15%" class="text-yellow-3 text-right">比赛: <b :class="gWL>=0 ? 'text-green' : 'text-red'">${{ gWLval }}</b></div>
   </div>
-  <div :style="isIM ? { margin:'-4px 0 0 0' } : { margin:'0px 1px 0 0', border:'1px solid cyan' }">
+  <div :style="isIM ? { margin:'-4px 0 0 0' } : { margin:'8px 1px 0 0', border:'2px solid cyan' }">
     <q-table v-if="isDesk" class="bg-teal-10" dark v-model:rows="palist" :columns="columns" dense
       :card-class="isIM ? 'bg-teal-10' : null" :card-style="isIM ? 'width:344px;margin:0 0 0 40px;font-size:30px' : null"
       :grid=isIM :visible-columns="isIM ? visibleColumnsFone : visibleColumnsDesk"
@@ -73,7 +71,6 @@
 	<ChartsProxy3 :data="dalist" />
 	<ExpDetailsPad :data="dalist" />
   <GiftCardBalanceSheet ref="refGiftCardBalanceSheet" />
-</div>
 </div>
 </template>
 <script setup>

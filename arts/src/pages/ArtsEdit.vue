@@ -60,7 +60,7 @@ function closeEdit () {
 }
 function saveEdit () {
   // flwIdx = route.params.flwIdx
-  console.info(`-CK-saveEdit tag=${store.tag} ymd=${store.ymd} qid=${store.qid} art.tit=${store.art.tit} flwIdx=${flwIdx} art=`, store.art)
+  // console.info(`-CK-saveEdit tag=${store.tag} ymd=${store.ymd} qid=${store.qid} art.tit=${store.art.tit} flwIdx=${flwIdx} art=`, store.art)
   var inData = {}
   if (flwIdx.value >= 0) { //. editing flw
     inData.flwIdx = flwIdx.value

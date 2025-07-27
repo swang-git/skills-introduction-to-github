@@ -1,16 +1,15 @@
 <template>
-<q-dialog v-model="opened" transition-show="slide-right" transition-hide="slide-right" persistent>
-  <div style="margin-left:272px">
-  <q-layout view="hHh Lpr lFr" style="background:RGB(28, 68, 78);border:solid #ddd 1px;" class="bg-cyan-10 q-px-md">
+<q-dialog v-model="opened" transition-show="scale" transition-hide="slide-right" maximized>
+  <q-layout view="hHh Lpr fff" container style="background:RGB(28, 68, 78)">
     <q-header>
       <q-toolbar class="glossy bg-indigo-10 row text-no-wrap">
         <q-btn flat @click="drawerL = !drawerL" round><q-icon name="list" color="amber" size="lg" /></q-btn>
         <div style="margin:auto" class="row text-h6 text-no-wrap">
-          <q-btn size="17px" glossy round color="amber-9" icon="chevron_left" v-close-popup @click="emit('get-this-date-purchases')" />
+          <q-btn size="17px" outline round color="amber-9" icon="chevron_left" v-close-popup @click="emit('get-this-date-purchases')" />
           <q-btn style="width:160px" flat @click="openItemPad" no-caps :label="isDesk ? 'Add' : ''" >
             <q-icon name="fiber_new" size="lg" :color="compBtnColor" />{{ compCI }}
           </q-btn>
-          <q-btn flat @click="sortItems" size="lg" icon="store" color="amber" no-caps>{{ className }}</q-btn>
+          <q-btn flat @click="showCoupon=!showCoupon" size="lg" icon="store" color="amber" no-caps>{{ className }}</q-btn>
         </div>
         <q-input dark borderless v-model="searchQuery" input-class="text-right text-h6" class="fixed-right">
           <template v-slot:append>
@@ -21,7 +20,14 @@
         <q-btn @click="drawerR = !drawerR" round><q-icon name="store" size="lg" color="cyan" /></q-btn>
       </q-toolbar>
     </q-header>
-    <q-drawer side="left" v-model="drawerL" :width="400" :breakpoint="300" lass="bg-cyan-10 q-pa-xs" behavior=mobile>
+    <q-footer v-if="isDesk" v-model="footerState">
+      <q-toolbar>
+        <q-btn icon="shopping_cart" color="green" round flat />
+        <div style="margin:auto" class="text-h6"> Shopping List </div>
+        <q-btn round glossy icon="close" color="orange" v-close-popup size="md" @click="emit('get-this-date-purchases')" />
+      </q-toolbar>
+    </q-footer>
+    <q-drawer side="left" v-model="drawerL" :width="500" :breakpoint="300" lass="bg-cyan-10 q-pa-xs" behavior=mobile>
       <q-input dark borderless v-model="searchItems" class="text-h5" input-class="text-right text-h6" bg-color="teal-10" label="Search Items">
         <template v-slot:append>
           <q-icon v-if="searchItems === ''" name="pageview" size="lg" class="q-pr-xl" />
@@ -29,6 +35,7 @@
         </template>
       </q-input>
       <div v-for="p in compSearchItems" :key="p.id" class="text-no-wrap bg-cyan-10 q-pa-xs q-pl-xs">
+        <!-- <q-btn @click="delShoppingItem(p)" flat icon="cancel" color="yellow-9" dark dense size="lg">{{ p.name }} ~ {{ p.class }}</q-btn> -->
         <q-btn @click="removeItem(p)" flat icon="cancel" color="yellow-9" dark dense size="lg">{{ p.name }} ~ {{ p.class }}</q-btn>
       </div>
     </q-drawer>
@@ -37,24 +44,38 @@
         <q-radio :label="c.label" v-model="classId" :val="c.value" color="red" dark dense @click="showItems4Class(c)" class="text-h6" />
       </div>
     </q-drawer>
-    <q-page-container style="margin:-5px 0 5px 0;overflow-y:true">
-      <div style="margin:-20px 0 0 0">
-        <q-tr class="text-h6 text-purple-2">
-          <th class="q-pl-sm text-right" style="width:600px">品名</th>
-          <th class="q-pl-sm text-right" style="width:100px">单价</th>
-          <th class="q-pl-sm text-right" style="width:105px">数量</th>
-          <th class="q-pl-sm text-right" style="width:104px">花费</th>
-        </q-tr>
-        <q-tr v-for="m in compCandidateItems" :key=m class="text-amber text-h6">
-          <td class="q-pl-sm text-right text-no-wrap cursor-pointer" @click="addPurchasedItem(m, true)">{{ m.name }}</td>
-          <td class="q-pl-sm text-right text-white">{{ m.price }}</td>
-          <td class="q-pl-sm text-right text-white">{{ m.units }}</td>
-          <td class="q-pl-sm text-right text-white">{{ m.costs }}</td>
-        </q-tr>
+    <div v-show="showCoupon" class="outer q-px-xl bg-teal-10" style="margin-top:60px" />
+    <div>
+      <div v-if="!showCoupon && !addNewClassOrItem && compCandidateItems.length===0 && itemList.length===0" class="q-pa-xl text-white text-h5">
+        <span>No items in this store click on "Add New Items" to add new item</span>
       </div>
-    </q-page-container>
+      <div v-else style="margin-top: 50px">
+        <div v-if="showCoupon">
+          <div v-for="f in attached" :key=f.x><span colspan="4" class="text-left q-pl-xl q-pb-sm" v-html="getShoppingURL(f)"></span></div>
+        </div>
+        <div v-else style="margin:0 0 0 120px" :style="getContHeight">
+          <table class="q-pl-xl q-pb-xl">
+            <!-- <q-tr class="text-h6 text-purple-2" style="position:fixed;z-index:10"> -->
+            <q-tr class="text-h6 text-purple-2">
+              <th class="text-right">品名</th>
+              <th class="q-pl-xl text-right" style="width:100px">单价</th>
+              <th class="q-pl-xl text-right" style="width:100px">数量</th>
+              <th class="q-pl-xl text-right" style="width:100px">花费</th>
+            </q-tr>
+            <q-tr v-show="compCandidateItems.length>0"><td></td><td colspan="3"><hr style="margin:-2px 0 0 -44px"></td></q-tr>
+            <q-tr v-for="m in compCandidateItems" :key=m class="text-white text-h6 text-right">
+              <td class="cursor-pointer text-amber" @click="addPurchasedItem(m, true)">
+                <div v-if="isDesk">{{ m.name }}</div><div v-else class="ell">{{ m.name }}</div>
+              </td>
+              <td>{{ m.price }}</td>
+              <td>{{ m.units }}</td>
+              <td>{{ m.costs }}</td>
+            </q-tr>
+          </table>
+        </div>
+      </div>
+    </div>
   </q-layout>
-  </div>
 </q-dialog>
 <ItemPad @add-item="addNewItem" @add-class="addNewClass" />
 <ConfirmDialog @user-confirmed="removeItemFromDB"/>
@@ -90,9 +111,8 @@ const selClasses = ref([])
 const itemClasses = ref([])
 const newCIname = ref(null)
 const itemList = ref([])
-const sortBy = ref('PurchaseTime')
 
-const emit = defineEmits(['get-this-date-purchases', 'add-purchasing-item'])
+const emit = defineEmits(['get-this-date-purchases'])
 
 console.info('-ST-StoreList')
 emitter.on('open-StoreList', () => openIt())
@@ -116,19 +136,9 @@ emitter.on('shopping-getShoppingList', (da) => {
 //   // if (this.inData.class_id === classId.value) candidateItemsInClass.value.push(this.inData)
 // })
 emitter.on('shopping.addShoppingItem', (da) => { itemList.value = da.itemList })
-// emitter.on('shopping.addPurchasedItem', (da) => { purchasedItems.value = da.itemList })
+emitter.on('shopping.addPurchasedItem', (da) => { purchasedItems.value = da.itemList })
 
 //== function sections
-function sortItems () {
-  console.log(`-fn-sortItems`)
-  if (sortBy.value == 'PurchaseTime') {
-    candidateItemsInClass.value = candidateItemsInClass.value.sort((a, b) => { return a.updated_at < b.updated_at ? 1 : -1})
-    sortBy.value = 'ItemName'
-  } else if (sortBy.value == 'ItemName') {
-    candidateItemsInClass.value = candidateItemsInClass.value.sort((a, b) => a.name.localeCompare(b.name, 'zh'))
-    sortBy.value = 'PurchaseTime'
-  }
-}
 function addNewItem (newItem) {
   console.log(`-fn-addNewItem`, newItem)
   candidateItemsInClass.value.unshift(newItem)
@@ -204,7 +214,6 @@ function addPurchasedItem (item, fromCan=false) {
   const path = process.env.API + '/shopping/addPurchasedItem'
   // console.log('-fn- adding  purchased item', item.name, args.inData)
   paxios(path, item)
-  emit('add-purchasing-item', item)
 }
 function showItems4Class (clsOpt) {
   console.log(`-fn-showItems4Class classId=${clsOpt.value} className=${clsOpt.label}`)
@@ -215,7 +224,7 @@ function showItems4Class (clsOpt) {
   const items = itemList.value.filter(p => {
     return p.class_id === cId && (p.date < today() || p.costs === null)
   })
-  // items.sort((a, b) => a.name.localeCompare(b.name, 'zh'))
+  items.sort((a, b) => a.name.localeCompare(b.name, 'zh'))
   candidateItemsInClass.value = items
   drawerR.value = false
 }
@@ -293,5 +302,3 @@ const compSearchItems = computed(() => {
   return data
 })
 </script>
-<style>
-</style>

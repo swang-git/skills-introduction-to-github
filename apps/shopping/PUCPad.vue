@@ -60,7 +60,7 @@ function setNumber (np) {
   } else if (np === 'P') {
     if (item.value.units === 0 || item.value.costs === 0) return
     const discount = item.value.disct === null ? 0 : parseFloat(item.value.disct)
-    item.value.price = ((parseFloat(item.value.costs) - discount) / item.value.units).toFixed(2)
+    item.value.price = ((parseFloat(item.value.costs) - discount) / item.value.units).toFixed(3)
     emit('upd-item', item.value)
     opened.value = false
     return

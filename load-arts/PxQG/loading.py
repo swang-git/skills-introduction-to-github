@@ -1,18 +1,28 @@
-#!/Users/swang/myenv/bin/python
-import os, sys, time
+#!/usr/bin/python3
+import os
+import sys
+import requests
 from urllib import request
-from urllib.request import Request, urlopen
+import re
 from os.path import dirname
 sys.path.append(os.path.join(dirname(dirname(sys.path[0]))))
 sys.path.append(os.path.join(dirname(sys.path[0])))
-from Utils import get_cn_zone_dates
+from Utils import Txt
 from Utils import get_now
 from Utils import dlout
-from Utils import TeeToFileAndScreen, getLogFile
+from Utils import conv_dt
+from Utils import get_cn_tit
+from Utils import get_cn_dat
+from Utils import get_cn_zone_dates
+from Utils import padsp, TeeToFileAndScreen, getLogFile
 import DB
+from Models import DailyDat
+from Models import DailyArt
+from Models import HomePage
 
 from bs4 import BeautifulSoup
 from PxQG.ArtItemQG import Art
+import time
 from UpdateHomePage import updHomePage
 
 
@@ -20,8 +30,7 @@ TESTING = False
 # TESTING = True
 MAX_PAGES = 60
 tag = 'PXQG'
-INDEX_1 = '1'   # for PXZJ change this to '60'
-INDEX_2 = '2'   # for PXZJ change this to '60'
+CAT_INDEX = '2'   # for PXZJ change this to '60'
 # print('Loading ' + tag + ' ......')
 dyx = 0
 if len(sys.argv) >= 2 : dyx = int(sys.argv[1])
@@ -42,31 +51,19 @@ artList = []
 process_done = False
 for page in range(1, MAX_PAGES):
     if process_done: break
-    # http://bbs1.people.com.cn/board/1/1_1.html
-    # http://bbs1.people.com.cn/board/1/2_1.html
-    url1 = 'http://bbs1.people.com.cn/board/1/' + INDEX_1 + '_' + str(page) + '.html'
-    url2 = 'http://bbs1.people.com.cn/board/1/' + INDEX_2 + '_' + str(page) + '.html'
+    url = 'http://bbs1.people.com.cn/board/1/' + CAT_INDEX + '_' + str(page) + '.html'   # http://bbs1.people.com.cn/board/1/2_1.html
     if TESTING: url = test_site
-    print('processing page', url1)
-    req = Request(url1, headers={'User-Agent': 'Mozilla/5.0'})
-    page = urlopen(req).read()
-    soup = BeautifulSoup(page,  "html.parser")
+    print('processing page', url)
+    page = requests.get(url, headers={'User-Agent': 'Mozilla/5.0'})
+    # soup = BeautifulSoup(page.text,  "html5lib")
+    soup = BeautifulSoup(page.text,  "html.parser")
     # print(soup.prettify())
-    items1 = soup.find_all('li', {'class' : 'treeReplyItem'})
 
-    print('processing page', url2)
-    req = Request(url2, headers={'User-Agent': 'Mozilla/5.0'})
-    page = urlopen(req).read()
-    soup = BeautifulSoup(page,  "html.parser")
-    # print(soup.prettify())
-    items2 = soup.find_all('li', {'class' : 'treeReplyItem'})
-
-    items = items1 + items2
-
+    items = soup.find_all('li', {'class' : 'treeReplyItem'})
     idx = 0
     for item in items:
         dlout(5, 'processing ART:', idx)
-        art = Art(INDEX_2, idx, tag, item, theday, TESTING)
+        art = Art(CAT_INDEX, idx, tag, item, theday, TESTING)
         # if art.dng: continue
         if art.is_item_for_theday():
             art.parse_and_set_attrs()

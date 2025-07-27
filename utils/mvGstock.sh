@@ -14,6 +14,6 @@ if [ $# -eq 1 ]; then
 fi
 
 echo $ymd
-echo "cp -p /Users/swang/Documents/gstocks/${ymd}_*.pdf /Users/swang/sites/webdata/docs/gstocks"
-cp -p /Users/swang/Documents/gstocks/${ymd}_*.pdf /Users/swang/sites/webdata/docs/gstocks
+echo "cp -p /home/swang/Documents/gstocks/${ymd}_*.pdf /sites/webdata/docs/gstocks"
+cp -p /home/swang/Documents/gstocks/${ymd}_*.pdf /sites/webdata/docs/gstocks
 

@@ -32,7 +32,7 @@ def wkdayname():
 
 
 def getLogFile(tag, dyx):
-    logFile = '/Users/swang/tmp/logs/cn/load' + tag + \
+    logFile = '/home/swang/tmp/logs/cn/load' + tag + \
         '_' + str(abs(dyx)) + '_' + wkdayname() + '.log'
     return logFile
 
@@ -220,14 +220,14 @@ class Img:
         #     # imgfile += hashlib.md5(lnk.encode('utf')).hexdigest() + '.png'
         # else: imgfile += imgfilename
 
-        savroot = "/Users/swang/sites/webdata"
+        savroot = "/sites/webdata"
         savpath = "/daily_data/" + self.tag + "/" + \
             str(self.year) + "/" + str(self.ymd) + "/images/"
         os.makedirs(savroot + savpath, exist_ok=True)
         savfile = savpath + imgfile
         dlout(4, 'QID', self.qid)
         if self.qid == 'testing':
-            tofile = "/Users/swang/tmp/" + self.tag + "_" + self.ymd + "_" + imgfile
+            tofile = "/home/swang/tmp/" + self.tag + "_" + self.ymd + "_" + imgfile
         else:
             tofile = savroot + savfile
 
@@ -398,9 +398,9 @@ def get_vdocomp(vdo):
 
 
 def get_fin_filename(tag):
-    return "/Users/swang/tmp/" + tag + datetime.fromtimestamp(time.time()).strftime('%Y%m%d')
-    # return "/Users/swang/tmp/" + tag + "_market_" + datetime.fromtimestamp(time.time()).strftime('%Y%m%d')
-    # return "/Users/swang/tmp/" + tag + "_market_" + datetime.fromtimestamp(time.time()).strftime('%Y%m%d_%H_%M_%S')
+    return "/home/swang/tmp/" + tag + datetime.fromtimestamp(time.time()).strftime('%Y%m%d')
+    # return "/home/swang/tmp/" + tag + "_market_" + datetime.fromtimestamp(time.time()).strftime('%Y%m%d')
+    # return "/home/swang/tmp/" + tag + "_market_" + datetime.fromtimestamp(time.time()).strftime('%Y%m%d_%H_%M_%S')
 
 
 def get_fin_header():
@@ -463,7 +463,7 @@ def get_x_http_line(line):
 
 def repl_comma(mo):
     # if re.match('\d', mo.group(1)) and not re.match('”', mo.group(1)) and re.match('\d', mo.group(3)):
-    if re.match(r'\D', mo.group(1)) or re.match(r'\D', mo.group(3)): ## \D means non-digit
+    if re.match('\D', mo.group(1)) or re.match('\D', mo.group(3)):
         # print(mo.group(1), mo.group(2), mo.group(3))
         return mo.group(1) + '，' + mo.group(3)
     else:
@@ -472,7 +472,7 @@ def repl_comma(mo):
 
 def repl_semi_colon(mo):
     # if re.match('\d', mo.group(1)) and not re.match('”', mo.group(1)) and re.match('\d', mo.group(3)):
-    if re.match(r'\D', mo.group(1)) and re.match(r'\D', mo.group(3)):
+    if re.match('\D', mo.group(1)) and re.match('\D', mo.group(3)):
         # print(mo.group(1), mo.group(2), mo.group(3))
         return mo.group(1) + ':' + mo.group(3)
     else:
@@ -481,7 +481,7 @@ def repl_semi_colon(mo):
 
 def repl_period(mo):
     # if re.match('\d', mo.group(1)) and not re.match('”', mo.group(1)) and re.match('\d', mo.group(3)):
-    if re.match('[a-zA-Z0-9]', mo.group(1)) and re.match('([a-zA-Z0-9]|r\s+)', mo.group(3)):
+    if re.match('[a-zA-Z0-9]', mo.group(1)) and re.match('([a-zA-Z0-9]|\s+)', mo.group(3)):
         # print('repl_p, g1:', mo.group(1), 'g2:', mo.group(2), 'g3:', mo.group(3))
         return mo.group(1) + '.' + mo.group(3)
     else:
@@ -496,12 +496,12 @@ def repl_puncts(line):
     # if pattern.match(line) is not None: return line
     if pattern.match(line):
         return line
-    if re.match('<(img|iframe)r\s+', line):
+    if re.match('<(img|iframe)\s+', line):
         return line
 
     line = re.sub('。{3,}', '……', line)
-    line = re.sub('r\.{3,}', '……', line)
-    line = re.sub('(r\D)(,)(r\D)', repl_comma, line)
+    line = re.sub('\.{3,}', '……', line)
+    line = re.sub('(\D)(,)(\D)', repl_comma, line)
     line = re.sub('(\D)(,)(\d)', repl_comma, line)
     line = re.sub('(\D)(\.)(\D)', repl_period, line)
     line = re.sub('(\D)(\.)(\d)', repl_period, line)

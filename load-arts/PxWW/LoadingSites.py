@@ -1,7 +1,7 @@
 import sys, re
 import requests_html
 from bs4 import BeautifulSoup
-from ArtItem import Art
+from PxWW.ArtItem import Art
 from DB import addDailyDatWW
 def getBreakingNews(urlbase, MAX_PAGES, idx, daList, tag, ymd, theday, prvday):
     for page in range(1, MAX_PAGES):

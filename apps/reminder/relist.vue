@@ -1,10 +1,8 @@
 <template>
-<div style="display:grid;place-items:center">
-<!-- <div class="q-px-xs" :class="{ fixed: clickedIdx < 8 }"> -->
-<q-table class="sh-sticky-header-table" v-model:rows="palist" :columns="columns" dense :hide-header="isIM"
+<div class="q-px-xs" :class="{ fixed: clickedIdx < 8 }">
+<q-table class="sh-sticky-header-table" v-model:rows="palist" :columns="columns"
   :grid=false :visible-columns="isDesk ? visibleColumnsDesk : visibleColumnsFone" :style="{height:isIM ? '565px':''}"
-  row-key="id" :separator="separator" :showCol="showCol" wrap-cells hide-pagination
-  :pagination="isDesk ? { rowsPerPage:rowsPerPageDesk } : { rowsPerPage:rowsPerPageFone }"
+  row-key="id" :separator="separator" :showCol="showCol" wrap-cells hide-pagination :pagination="isDesk ? { rowsPerPage: 23 } : { rowsPerPage: 13 }"
 >
   <template v-slot:top="props">
     <q-select v-if="isIM"
@@ -126,12 +124,10 @@ import InfoDisplay from '../src/components/InfoDisplay'
 
 // const cols = ref(['ID'])
 var lastClickedP = { key:0, pageIndex: 0 }
-var clickedRow = {}
-const clickedIdx = ref(0)
+var clickedRow = { id:0 }
+var clickedIdx = ref(0)
 const dats = ref([])
 const separator = ref('cell')
-const rowsPerPageDesk = ref(22)
-const rowsPerPageFone = ref(12)
 const showCol = ref(null)
 const fabOpen = ref(true)
 const cols = [
@@ -150,7 +146,7 @@ const columns = [cols[0], cols[1], cols[2], cols[3], cols[4], cols[5], cols[6], 
 
 console.log('-ST-relist')
 buildApp('温馨提示', 'reminder')
-emitter.emit('items-per-page', isIM ? rowsPerPageFone.value : rowsPerPageDesk.value)
+emitter.emit('items-per-page', isIM ? 12 : 18)
 getList()
 
 //== function section

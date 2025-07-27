@@ -16,7 +16,7 @@ use App\Models\expense\PayMethod;
 use App\Models\expense\ShoppingPurchase;
 use App\Models\expense\GiftCard;
 use App\Models\expense\GiftCardBalance;
-use App\Models\golf\Score as Score;
+use App\Models\golf\Score;
 use App\Models\golf\Course;
 use App\Models\golf\CourseHandicap;
 use App\Models\golf\CoursePar;
@@ -70,7 +70,7 @@ class ExpenseController extends Controller {
 		$scoreId = Score::where([ ['player_id', $playerId], ['teetime', $teetime], ['course_id', $courseId] ])->value('id');
 		// $x = Score::where([ ['player_id', $playerId], ['teetime', $teetime], ['course_id', $courseId] ])->select('id')->get();
 		// if (count($x) == 1) $scoreId = $x[0]->id;
-		Log::info("playerId=$da->playerId, scoreId=$scoreId", [__line__, __file__]);
+		Log::info("playerId=$da->playerId, scoreId=$scoreId");
 		return [ 'scoreId' => $scoreId, 'status' => "OK" ];
 	}
 	public function getScore(Request $da) { Log::info("playerId=$da->playerId, scoreId=$da->scoreId");
@@ -123,9 +123,9 @@ class ExpenseController extends Controller {
 	private function resetGolfPlayPayeeId($spendId) { Log::info('running resetGolfPlayPayeeId');
 		$date30 = mktime(0, 0, 0, date("m"), date("d") + 30, date("Y")); // keep this for referencing
 		$mdate = Date('Y-m-d', $date30); // not used - just for referencing
-		$userId = Auth::user()->id;
+		$userId = Auth::user()->id; 
 		// Log::info('getList for userId:' . $userId .', email: '. Auth::user()->email .' date30(referencing):'.$mdate);
-		$dats = DB::select('CALL get_spendings(?, ?)', [$userId, $spendId]);
+		$dats = DB::select('CALL get_spendings(?, ?)', [$userId, $spendId]); 
 		// Log::info("get_spendings for userId $userId:", [$dats[0]->date]);
 		foreach($dats as $d) {
 			$date = $d->date;
@@ -189,7 +189,7 @@ class ExpenseController extends Controller {
 					continue;
 				}
 				$dc = Course::find($payeId);
-				if ($dc == null) {
+				if ($dc == null) { 
 					Log::info("=NO=paye=[$paye] Course::find($payeId)=null do update payeId id=$d->id payeId=$payeId catsId=$catsId subc=$subc date=$date");
 					$courseName = $paye;
 					$this->updPayeId(null, $paye, $id, $subc, $date, $payeId); // could a new course -- need to add it to courses table and update payeId
@@ -217,7 +217,7 @@ class ExpenseController extends Controller {
 			}
 		}
 
-		$cx = Course::where([['status', 'A'], ['name', $courseName]])->select('id', 'name')->get();
+		$cx = Course::where([['status', 'A'], ['name', $courseName]])->select('id', 'name')->get(); 
 		if ($cx == null or count($cx) == 0) {
 			Log::info("=NC=Course=[$courseName] NOT exists in golf.courses -- spid=$id date=$date");
 		}
@@ -234,7 +234,7 @@ class ExpenseController extends Controller {
 			}
 			if ($payeId != $coId) {
 				Log::info("=upd=$dx->purchasedon $id==$dx->id\t payeId=$payeId payee_id=$dx->payee_id\t ==> $coId \t $courseName");
-				$dx->payee_id = $coId; // updating
+				$dx->payee_id = $coId; // updating 
 				$dx->save();
 			}
 		}
@@ -243,9 +243,9 @@ class ExpenseController extends Controller {
 		// $this->resetGolfPlayPayeeId($spendId);
 		$date30 = mktime(0, 0, 0, date("m"), date("d") + 30, date("Y")); // keep this for referencing
 		$mdate = Date('Y-m-d', $date30); // not used - just for referencing
-		$userId = Auth::user()->id;
+		$userId = Auth::user()->id; 
 		// Log::info('getList for userId:' . $userId .', email: '. Auth::user()->email .' date30(referencing):'.$mdate);
-		$dats = DB::select('CALL get_spendings(?, ?)', [$userId, $spendId]);
+		$dats = DB::select('CALL get_spendings(?, ?)', [$userId, $spendId]); 
 		// Log::info("get_spendings for userId $userId:", [$dats[0]->date]);
 		foreach($dats as $d) {
 			// if ($d->date > $mdate) $d->future = true;
@@ -320,7 +320,7 @@ class ExpenseController extends Controller {
 		$pyeOptions[] = $obj;
 		return ['lst' => $pyeOptions, 'status' => "OK"];
 	}
-	private function col_map ($nd, $d) { //Log::info('add input', $d->toArray());
+	private function col_map($nd, $d) { //Log::info('add input', $d->toArray());
 		$subc = $d->subc;
 		$nd['user_id'] = Auth::user()->id;
 		$nd['purchasedon'] = $d['purchasedon'];
@@ -420,7 +420,7 @@ class ExpenseController extends Controller {
 	 * version [version 1.0]
 	 * @return [void]
 	 */
-	private function get_last_balance($purchasedon, $paymId, $gcardNum, $cost) {
+	private function get_last_balance($purchasedon, $paymId, $gcardNum, $cost) { 
 		Log::info("get_last_balance for purchasedon=$purchasedon, paymId=$paymId gcardNum=$gcardNum, cost=$cost", [__line__]);
 	// public function testDB($purchasedon, $paymId, $gcardNum) {
 		// $lastB = GiftCardBalance::where([['spend_datetime', '<', $purchasedon], ['pay_method_id', $paymId], ['card_num', $gcardNum]])
@@ -434,7 +434,7 @@ class ExpenseController extends Controller {
 			if (is_null($newCardB) or $newCardB == 0) {
 				Log::info("can NOT get new card get_last_balance(from GiftCard) for $paymId, $gcardNum exit...", [__line__]);
 				exit(-10);
-			}
+			} 
 			Log::info("get_last_balance(from GiftCard) new card value=$newCardB, cost=$cost, lastCardB=$lastCardB", ['line' => __LINE__]);
 			// if (is_null($lastCardB) or $lastCardB == 0 or $lastCardB < $cost) return $newCardB;
 			if (is_null($lastCardB) or $lastCardB == 0) return $newCardB;
@@ -540,7 +540,7 @@ class ExpenseController extends Controller {
 		$origPaymId = $origSpend->paymethod_id;
 		$updPaymId = $d->paymId;
 		// case 0: paid by non-gift cards for both old and new spendings
-		if (!$this->isPaidByGiftCard($origPaymId) and !$this->isPaidByGiftCard($updPaymId)) {
+		if (!$this->isPaidByGiftCard($origPaymId) and !$this->isPaidByGiftCard($updPaymId)) { 
 			$msg = "case 0: paid by non-gift cards for both old and new spendings oldPaymId=[$origPaymId] newPaymId=[$updPaymId]";
 			return $this->updateAndReturn($d, $msg);
 			// Log::info("a regular update for old PaymId=$origPaymId and new PaymId=$updPaymId", [__line__]);
@@ -671,7 +671,7 @@ class ExpenseController extends Controller {
 	// 				$this->upd_ins_gcb_record($d->gcardId, $d->purchasedon, $d->paymId, $d->gcardNum, $d->id);
 	// 				Log::info("newInfo spend_id=$d->id, nDtim=$d->purchasedon, nPaymId=$d->paymId, nGcardNum=$d->gcardNum]", [__line__]);
 	// 				$this->updGCBalances($d->purchasedon, $d->paymId, $d->gcardNum);
-	// 			}
+	// 			} 
 	// 			if (in_array($origPaymId, $this->giftCardIds, true) and !is_null($origCardNum)) {
 	// 				Log::info("origInfo oTime=$origTime, oPaymId=$origPaymId, oCardNum=$origCardNum", [__line__]);
 	// 				$this->updGCBalances($origTime, $origPaymId, $origCardNum);
@@ -712,7 +712,7 @@ class ExpenseController extends Controller {
 		Log::info("spend_id=$d->id deleted");
 		return ['row' => $d->toArray(), 'status' => "OK"];
 	}
-	public function addNewCSP(Request $indata) { Log::info("addNewCSP", $indata->toArray());
+	public function addNewCSP(Request $indata) { Log::info("addNewCSP", $indata->toArray()); 
 		$user = Auth::user();
 		$name = $indata['name'];   // name for Category, Subcategory or Payee
 		$parentId = $indata['parentId'];

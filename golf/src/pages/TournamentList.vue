@@ -39,6 +39,9 @@
 </template>
 <script setup>
 import { ref } from 'vue'
+// import { useStore } from 'vuex'
+// import { useQuasar } from 'quasar'
+// import { useRouter } from 'vue-router'
 import emitter from 'tiny-emitter/instance'
 
 import { libFunctions } from '../composables/libFunctions'
@@ -47,6 +50,9 @@ import { axiosFunctions } from '../composables/axiosFunctions'
 const { gaxios, paxios } = axiosFunctions()
 const { PGCsAdmin, store, $q, $router } = libFunctions()
 const { gameExpired, todayGame, getNNextSunday } = dayFunctions()
+// const router = useRouter()
+// const store = useStore()
+// const q = useQuasar()
 
 import TournamentCreator from 'pages/TournamentCreator'
 
@@ -92,18 +98,20 @@ function showEnterScores (tmnt) {
   $router.push({ path: 'EnterScores' })
 }
 function showSignup (tmnt) {
-  store.tournamentId = tmnt.id
-  store.tournament = tmnt
-  store.showSelectedGame = true
-  console.log('stored tournament', store.tournament)
+  // this.$store.state.golf.tournamentId = tmnt.id
+  // this.$store.state.golf.tournament = tmnt
+  // this.$store.state.golf.tournament = tmnt
+  // this.$store.state.golf.showSelectedGame = true
+  // console.log('stored tournament', store.state.golf.tournament)
   $router.push({ path: '/SignupVue/' + tmnt.id })
 }
 function showScores () {
-  // store.dispatch('getTournamentId', tournamentId)
-  // store.tournamentId = tmnt.id
-  // var params = { 'tid': store.tournamentId }
+  // var tournamentId = tmnt.id
+  // this.$store.dispatch('getTournamentId', tournamentId)
+  // this.$store.state.golf.tournamentId = tmnt.id
+  // var params = { 'tid': tmnt.id }
   console.log('tournamentId', store.tournament.id)
-  // $router.push({ path: '/TournamentScores' })
+  // this.$$router.push({ path: '/TournamentScores' })
   $router.push({ path: '/TournamentScoreVue' })
   // this.$$router.push({ name: 'TournamentScores', params: params })
   // this.$$router.push({ name: 'PlayersRanking', params: params })
