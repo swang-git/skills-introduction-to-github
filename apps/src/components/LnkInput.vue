@@ -3,7 +3,7 @@
   <q-card class="bg-secondary" :style="{ width:isIM ? '100%' : '522px' }">
     <q-card-actions class="bg-teal-10" align="between">
       <q-btn round icon="link_off" color="red" @click="lnks.pop()"><q-tooltip class="text-body1 bg-red" anchor="top middle">remove the last link</q-tooltip></q-btn>
-      <q-btn round icon="add_link" color="green" @click="lnks.push('add new link')"><q-tooltip class="text-body1 bg-green" anchor="top middle">add a new link</q-tooltip></q-btn>
+      <q-btn round icon="add_link" color="green" @click="lnks.push('Add New Link')"><q-tooltip class="text-body1 bg-green" anchor="top middle">add a new link</q-tooltip></q-btn>
     </q-card-actions>
     <q-card-section>
       <div v-for="(lnk, i) in lnks" :key=lnk>
@@ -30,25 +30,24 @@ import TxtPad from './TxtPad'
 
 const props = defineProps(['label', 'obj'])
 const emit = defineEmits(['upd-link'])
-
 const opened = ref(false)
 const lnks = ref([])
 
-// console.log('-ST-lnkInput')
+console.log('-ST-lnkInput')
 emitter.on('open-LnkInput', (x) => openIt(x))
 
 function openIt (lnk) {
-  // console.log(`-CK-fn-LnkInput.openIt lnk=${lnk}`)
+  console.log(`-CK-fn-LnkInput.openIt lnk=${lnk}`)
   opened.value = true
   lnks.value = lnk
 }
 function showEditLnk(i) {
-  console.log('-fn-editLnk', i)
+  console.log(`-fn-showEditLnk i=${i}`)
   emitter.emit('open-TxtPad', i, lnks.value[i], 'Revise / Add Link')
 }
 function updLnk(i, lnk) {
-  // lnks.value[i.value]
-  // console.log(`-fn-updLnk i=${i.value} lnk=${lnk}`, lnks.value)
+  lnks.value[i] = lnk
+  console.log(`-fn-updLnk i=${i} lnk=${lnk}`, lnks.value)
   emit('upd-link', lnks.value)
 }
 </script>

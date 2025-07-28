@@ -60,7 +60,7 @@ const emit = defineEmits(['added-row', 'upded-row', 'deled-row'])
 //== function sections
 function updLink (lnks) {
   row.value.link = lnks.join('@')
-  console.log('-fn-updLink', row.value.link)
+  console.log(`-fn-updLink link=${row.value.link}`)
 }
 function openIt (rw, act) {
   console.log(`-fn- medar.openIt act=${act}`, rw)
