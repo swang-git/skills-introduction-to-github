@@ -25,47 +25,26 @@ class WatcherController extends Controller {
     public function index() {
         return view('welcome');
     }
-    public function getPositions($date) { Log::info("WatcherController/getpositions $date");
+    public function getPositions($date) { //Log::info("WatcherController/getpositions $date");
         $x = explode('-', $date);
-        $ccSta3 = $x[0].'-'.$x[1].'-1'; 
+        $ccSta3 = $x[0].'-'.$x[1].'-1';
         $ccEnd3 = $x[0].'-'.($x[1]+1).'-3'; Log::info("WatcherController/getpositions $date start=$ccSta3 end=$ccEnd3");
         $ccBalance = Spend::where([['status', 'A'], ['cat_id', 15], ['purchasedon', '>', $ccSta3], ['purchasedon', '<=', $ccEnd3]])->orderByDesc('purchasedon')->limit(1)->value('unitprice');
         $ccDueDate = Spend::where([['status', 'A'], ['cat_id', 15], ['purchasedon', '>', $ccSta3], ['purchasedon', '<=', $ccEnd3]])->max('purchasedon');
         $today_sec_cnt = FidelityPosition::where('date', $date)->count('*');
         Log::info("today security count for $date: $today_sec_cnt");
-        if ($today_sec_cnt == 0) return $this->loadPositions($date);
-        $pos = DB::select("CALL get_positions(?)", [$date]); 
+        // if ($today_sec_cnt == 0) return
+        $this->loadPositions($date);
+        $pos = DB::select("CALL get_positions(?)", [$date]); // union data from stock_quotes
         return ['positions' => $pos, 'ccBalance' => $ccBalance, 'ccDueDate' => $ccDueDate, 'status' => 'OK'];
     }
-    // public function getPositions($date) { Log::info("WatcherController/getpositions $date");
-    //     // $pos = FidelityPositionView::where('date', $date)->select('*')->get(); 
-    //     // $pos = DB::select("CALL get_fidelity_positions(?)", [$date]); 
-    //     $pos = DB::select("CALL get_positions(?)", [$date]); 
-    //     $numSecurities = count($pos);
-    //     $preDate = FidelityPosition::where('date', '<', $date)->max('date');
-    //     $ownSecurities = FidelityPosition::where('date', $preDate)->count('*');
-    //     Log::info("Number of securities=$numSecurities, preNumSecurities=$ownSecurities, preDate=$preDate");
-    //     if ($numSecurities > 0 and $numSecurities != $ownSecurities) { 
-    //         return ['positions' => $pos, 'currSecurities' => $numSecurities, 'preNumSecurities' => $ownSecurities, 'preDate' => $preDate, 'status' => 'misMatch'];
-    //     } else if ($numSecurities == $ownSecurities) { 
-    //         // $today = Date('Y-m-d', time());
-    //         $x = explode('-', $date);
-    //         $ccSta3 = $x[0].'-'.$x[1].'-1'; 
-    //         $ccEnd3 = $x[0].'-'.($x[1]+1).'-3'; Log::info("WatcherController/getpositions $date start=$ccSta3 end=$ccEnd3");
-    //         $ccBalance = Spend::where([['status', 'A'], ['cat_id', 15], ['purchasedon', '>', $ccSta3], ['purchasedon', '<=', $ccEnd3]])->orderByDesc('purchasedon')->limit(1)->value('unitprice');
-    //         $ccDueDate = Spend::where([['status', 'A'], ['cat_id', 15], ['purchasedon', '>', $ccSta3], ['purchasedon', '<=', $ccEnd3]])->max('purchasedon');
-    //         return ['positions' => $pos, 'ccBalance' => $ccBalance, 'ccDueDate' => $ccDueDate, 'status' => 'OK'];
-    //     } else {
-    //         Log::info("load fidelity position for date=$dae");
-    //         return $this->loadPositions($date);
-    //     }
-    // }
     public function loadPositions($date) { Log::info("WatcherController/Loading positions $date");
         $yyyymmdd = str_replace("-", "", $date);
-        $fname = "/sites/webdata/docs/Portfolio/snapshot_$yyyymmdd.csv";
+        // $fname = "/sites/webdata/docs/Portfolio/snapshot_$yyyymmdd.csv";
+        $fname = config('constants.DOC_DIR') . "/Portfolio/snapshot_$yyyymmdd.csv";
         if (!file_exists($fname)) {
             Log::info("$fname not exists");
-            return [ 'status' => "{$fname} not exists" ];
+            return [ 'status' => "${fname} not exists" ];
         }
         Log::info("WatcherController/Loading positions $fname");
         $lines = file($fname, FILE_SKIP_EMPTY_LINES|FILE_IGNORE_NEW_LINES);
@@ -113,13 +92,14 @@ class WatcherController extends Controller {
                     if ($quantity == '') $quantity = $current_val;
                 }
 
-                $posData= ['date' => $date, 'acct_num' => $acct_num, 'acct_name' => $acct_name, 'symbol' => $symbol, 
-                    'company' => $company, 'price' => $price, 'pchange' => $pchange, 
-                    'today_gl' => $today_gl, 'today_gl_p' => $today_gl_p, 'total_gl' => $total_gl, 'total_gl_p' => $total_gl_p, 
-                    'current_val' => $current_val, 'pct_of_acct' => $pct_of_acct, 'quantity' => $quantity, 
+                $posData= ['date' => $date, 'acct_num' => $acct_num, 'acct_name' => $acct_name, 'symbol' => $symbol,
+                    'company' => $company, 'price' => $price, 'pchange' => $pchange,
+                    'today_gl' => $today_gl, 'today_gl_p' => $today_gl_p, 'total_gl' => $total_gl, 'total_gl_p' => $total_gl_p,
+                    'current_val' => $current_val, 'pct_of_acct' => $pct_of_acct, 'quantity' => $quantity,
                     'cost_basis_per_share' => $cost_per_share, 'cost_basis' => $cost_base];
                 // Log::info($posData);
-                $upsertReturn = FidelityPosition::upsert($posData, ['date', 'acct_num', 'symbol'], ['price', 'pchange', 'quantity']);
+                $upsertReturn = FidelityPosition::upsert($posData, ['date', 'acct_num', 'symbol'], 
+                  ['price', 'pchange', 'today_gl', 'today_gl_p', 'total_gl', 'total_gl_p', 'current_val', 'pct_of_acct', 'quantity']);
                 // $dm = new FidelityPosition;
                 // $dm->date = $date;
                 // $dm->acct_num = $acct_num;
@@ -138,7 +118,7 @@ class WatcherController extends Controller {
                 // $dm->cost_basis_per_share = $cost_per_share;
                 // $dm->cost_basis = $cost_base;
                 // $dm->save();
-                Log::info("upsertReturn = $upsertReturn of $date for $acct_num $symbol");
+                Log::info("upsertReturn=$upsertReturn of $date $quantity for $acct_num $symbol");
             }
         }
         $pos = FidelityPosition::where([['status', 'A'], ['date', $date]])->select('*')->get();

@@ -54,7 +54,7 @@
 <NumPadAuto @sugar-level="setSugarLevel" @blood-pressure="setBloodPressure" />
 <ConfirmDialog @user-confirmed="delFromDB" />
 <SelRevOption @selected-option="setSelectedOpt" />
-<TxtPad @upd-lnk="updSelectedOpt" />
+<TxtPad @upd-selected-opt="updSelectedOpt" />
 <gludarInfo :row="row" />
 </template>
 <script setup>
@@ -116,15 +116,15 @@ function setNum (flg, n) {
   // opened.value = false
 }
 function updSelectedOpt (model, txt) {
-  console.log(`-fn-updSelectedOpt model=${model.value} selectedOpt=${txt}`)
-  if (model.value == 'Exercise') row.value.exercise = txt
-  else if (model.value == 'Breakfast') row.value.breakfast = txt
-  else if (model.value == 'Lunch') row.value.lunch = txt
-  else if (model.value == 'Dinner') row.value.dinner = txt
-  else if (model.value == 'Drink') row.value.drink = txt
-  else if (model.value == 'Fruit') row.value.fruit = txt
-  else if (model.value == 'Food') row.value.food = txt
-  else if (model.value == 'Note') row.value.note = txt
+  console.log(`-fn-updSelectedOpt model=${model} selectedOpt=${txt}`)
+  if (model == 'Exercise') row.value.exercise = txt
+  else if (model == 'Breakfast') row.value.breakfast = txt
+  else if (model == 'Lunch') row.value.lunch = txt
+  else if (model == 'Dinner') row.value.dinner = txt
+  else if (model == 'Drink') row.value.drink = txt
+  else if (model == 'Fruit') row.value.fruit = txt
+  else if (model == 'Food') row.value.food = txt
+  else if (model == 'Note') row.value.note = txt
 }
 function setSelectedOpt (model, opt) {
   console.log(`-fn-setSelectedOpt model=${model} selectedOpt=${opt.label}`)

@@ -21,7 +21,8 @@
             <span v-else-if="e.bank=='BKG'"> B &nbsp;K &nbsp;&nbsp;G </span>
             <span v-else>{{ e.bank }}</span>
           </div>
-          <div v-if="isDesk" class="q-pl-sm text-white" style="font-size:17px">{{ e.begin_date }}</div>
+          <div v-if="isDesk" class="q-pl-sm text-white" style="font-size:17px">{{ e.end_date }}</div>
+          <!-- <div v-else-if="isDesk && bank=='NAC'" class="q-pl-sm text-white" style="font-size:17px">{{ e.end_date }}</div> -->
           <div v-if="isDesk" style="width:20px" class="q-pl-md q-pt-xs text-grey text-right text-body1">{{ e.tran_cnt }}</div>
           <div v-if="isDesk" style="width:144px" class="text-right">{{ fmtcy(e.begin_balance) }}</div>
           <div style="width:144px" class="text-right">{{ fmtcy(e.end_balance) }}</div>
@@ -434,7 +435,7 @@ function showDetails (e, i) {
 emitter.on('bankstatement-getList', (da) => setList(da))
 
 function setList(da) {
-  console.log(`-fn-setList last_bkg_pdf=${da.last_bkg_pdf}, fidel_cash=${da.fidel_cash} bkg_cash=${da.bkg_cash} bkg_stockss=${da.bkg_stocks}`)
+  console.log(`-fn-setList last_bkg_pdf=${da.last_bkg_pdf}, fidel_cash=${da.fidel_cash} bkg_cash=${da.bkg_cash} bkg_stockss=${da.bkg_stocks}`, da.dats)
   intraday.value = da.intraday
   last_bkg_pdf.value = da.last_bkg_pdf
   dats.value = da.dats
