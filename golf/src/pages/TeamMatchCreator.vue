@@ -343,9 +343,10 @@ function isCompleted() {
   // mat()
 }
 function setTeeTimes(nTeeTimes) {
-  console.log(`-fn-setTeetimes nTeeTimes=${nTeeTimes}`, tmnt.start_at)
+  console.log(`-fn-setTeetimes nTeeTimes=${nTeeTimes} start_at=${tmnt.start_at}`)
   tmnt.numGroup = nTeeTimes
   if (nTeeTimes === 1) {
+    tmnt.teeTimes = [tmnt.start_at]
     add()
   } else {
     refTimeTable.value.openIt('Set Tee Times', nTeeTimes, tmnt.start_at)
