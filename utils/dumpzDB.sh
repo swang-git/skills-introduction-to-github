@@ -6,8 +6,9 @@ if [ $# -ne 1 ]; then
 fi
 db=$1
 dd=`date +%a`
-####target_file=/f36/bak/db/dumpz_${dd}_${db}.sql.gz
-target_file=/home/swang/bak/db/dumpz_${dd}_${db}.sql.gz
+##_target_file=/f36/bak/db/dumpz_${dd}_${db}.sql.gz
+##_target_file=/home/swang/bak/db/dumpz_${dd}_${db}.sql.gz
+target_file=/run/media/swang/Seagate/BAK/db/dumpz_${dd}_${db}.sql.gz
 
 echo dumping database $target_file $argv
 
