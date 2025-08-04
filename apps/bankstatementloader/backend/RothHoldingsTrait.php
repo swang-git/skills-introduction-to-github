@@ -189,15 +189,15 @@ trait RothHoldingsTrait {
         // $hFlag = self::$holdFlag; Log::info("-CK-holdFlag=$hFlag");
         // [$EAI, $EY] = $this->getEaiEy($lines[$i + ]);
         $secs = 'FDRXX';
-        $xx = explode(' ', $lines[$i + 1]);
-        $bval = $xx[0] == 'unavailable' ? 0 : $xx[0];
-        $quan = $xx[1];
-        $pric = $xx[2];
-        $eval = $xx[3];
+        // $xx = explode(' ', $lines[$i + 1]);
+        $bval = $lines[$i + 5];
+        $quan = $lines[$i + 6];
+        $pric = $lines[$i + 7];
+        $eval = $lines[$i + 8];
         $cost = 'not applicable';
         $nrgl = 'not applicable';
-        $EAI = $lines[$i + 2];
-        $EY = $lines[$i + 3];
+        $EAI = $lines[$i + 9];
+        $EY = $lines[$i + 10];
         $x = [
           $secs,
           $bval,

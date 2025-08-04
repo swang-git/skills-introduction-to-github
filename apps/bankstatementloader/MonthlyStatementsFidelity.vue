@@ -358,6 +358,7 @@ function addAssets () {
 }
 function getAssets () {
   // console.log('-CK-fn-getAssets')
+  dataHsa.value.eval = parseFloat(dataHsa.value.eval).toFixed(2)
   const asts = { bank:'Fidelity', tran_cnt: 0 }
   asts.begin_balance = parseFloat(dataAnn.value.sbal) + parseFloat(dataIra.value.bpval) + parseFloat(dataRoth.value.bpval) + parseFloat(dataHsa.value.bval)
   asts.end_balance = parseFloat(dataAnn.value.ebal) + parseFloat(dataIra.value.cend) + parseFloat(dataRoth.value.cend) + parseFloat(dataHsa.value.eval)

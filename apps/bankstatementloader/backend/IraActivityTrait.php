@@ -239,7 +239,7 @@ trait IraActivityTrait {
     for ($i=$start; $i<$end; $i++) {
       $line = $lines[$i];
       $this->setActvFlag($line);
-      Log::debug("-CK-melformat date -> c e03/31 $line", [__line__, __file__]);
+      // Log::debug("-CK-melformat date -> c e03/31 $line", [__line__, __file__]);
       if (self::$actvFlag == 'Securities BS' and preg_match('/(.*)\d\d\/\d\d(.*)/', $line)) {
         // $this->shortName($lines[$i + 1]),
         $date = preg_replace('/(.*)(\d\d\/\d\d)(.*)/', "$2", $line);

@@ -201,7 +201,9 @@ trait PDFTrait {
   }
   protected function writeToTempFile($filename, $lines) {
     // $ccfile = "/sites/tmp/$filename";
-    $ccfile = config('constants.USER_SITE') . "/tmp/$filename";
+    // $ccfile = config('constants.USER_SITE') . "/tmp/$filename";
+    $ccfile = config('constants.SITES') . "/tmp/$filename";
+    Log::DEBUG("writeOutTempFile: $ccfile");
     $fp = fopen($ccfile, 'w');
     $i = 0;
     foreach($lines as $line) {

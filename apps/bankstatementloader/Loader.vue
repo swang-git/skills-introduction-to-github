@@ -55,8 +55,9 @@ const options = ([
 const url = ref(null)
 const urlname = ref(null)
 const statement = reactive({
+  bank: localStorage.getItem('bank'),
   // bank: 'NAC',
-  bank: 'ChaseBkg',
+  // bank: 'ChaseBkg',
   // bank: 'FidelCC',
   // bank: 'Fidelity',
   // bank: 'BOA',
@@ -129,6 +130,7 @@ function setStatementLink() {
   const date = compDate.value
   // const yyyymm = date.yyyymm().replace('-', '')
   const yyyymm = '2025-03'
+  localStorage.setItem('bank', statement.bank)
   console.log(`-fn-setStatementLink bank=${statement.bank} date=${date}`)
   if (statement.bank === 'FidelCC') { url.value = 'docs/fidelity_credit_card/' + date + '.pdf'; urlname.value='FIDELITY CREDIT CARD MONTHLY STATEMENT' }
   else if (statement.bank === 'BOA') { url.value = 'docs/BOA/' + yyyymm + '_savings.pdf'; urlname.value = 'BANK OF AMERICA MONTHLY STATEMENT' }
