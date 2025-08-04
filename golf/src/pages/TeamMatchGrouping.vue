@@ -121,15 +121,15 @@
       <!-- <div v-for="p in paliases[aliName].filter(p => !tpids.includes(p.player_id))" :key="p"> -->
       <!-- <div :class="shadow('round-66')" style="padding:15px 0 0 9px;font-size:24px" @click="switchAliases">JZs</div> -->
       <div v-for="p in paliases.filter(p => !tpids.includes(p.player_id))" :key="p">
-        <div v-if="(zhcharRegExp.test(p.alias) && p.alias.length==1)" :class="shadow('round-66')" style="font-size:36px" @click="moveToGrouped(p)">
+        <div v-if="(zhcharRegExp.test(p.alias) && p.alias.length==1)" :class="shadow('round-66')" style="font-size:36px;font-family:stzhongsong" @click="moveToGrouped(p)">
           <div style="margin:-4px 0 0 0px">{{ p.alias }}</div>
           <q-tooltip class="text-white text-h6 bg-indigo-9">{{ p.handicap }} {{ p.name }}</q-tooltip>
         </div>
-        <div v-else-if="zhcharRegExp.test(p.alias)" :class="shadow('round-66')" style="font-size:23px" @click="moveToGrouped(p)">
+        <div v-else-if="zhcharRegExp.test(p.alias)" :class="shadow('round-66')" style="font-size:23px;font-family:stzhongsong" @click="moveToGrouped(p)">
           <div style="margin:4px 0 0 -4px">{{ p.alias }}</div>
           <q-tooltip class="text-white text-h6 bg-indigo-9">{{ p.handicap }} {{ p.name }}</q-tooltip>
         </div>
-        <div v-else-if="p.alias!=null && p.alias.length==2" :class="shadow('round-66')" @click="moveToGrouped(p)">
+        <div v-else-if="p.alias!=null && p.alias.length==2" :class="shadow('round-66')" style="font-family:stzhongsong" @click="moveToGrouped(p)">
           <div>{{ p.alias }}</div>
           <q-tooltip class="text-white text-h6 bg-indigo-9">{{ p.handicap }} {{ p.name }}</q-tooltip>
         </div>
