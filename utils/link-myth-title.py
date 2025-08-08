@@ -104,7 +104,7 @@ for idx, rec in enumerate(session.query(recorded).filter(recorded.watched == 0).
     tem = datetime.strptime(str(rec.starttime + timedelta(hours=-round(delta/60/60) + int(durationMinutes)/60)), '%Y-%m-%d %H:%M:%S')
     diff = (now - tem).total_seconds()
     # print('minuteDiff is %d' % (int(diff)/60))
-    if diff < 0: etm = fgcolor('red', etm)
+    if diff < 0: etm = fgcolor('green', etm)
 
     recordedfile = getFullpath(rec.basename)
     if recordedfile == None:
