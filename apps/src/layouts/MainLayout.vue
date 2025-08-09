@@ -60,11 +60,11 @@
       <q-drawer v-model="drawer" :mini="isDesk ? true : !drawer || miniState" :width="230" :breakpoint="400" show-if-above class="bg-teal-9">
         <q-scroll-area class="fit" style="font-family:youyuan">
           <q-list padding>
-            <AppItem appl="日 常 消 费" colr="purple-9" iclr="yellow" size="27px" styl="margin:-1px 0 0 0" icon="monetization_on" appn="exlist" />
-            <AppItem appl="采 购 清 单" colr="indigo-9" iclr="white"  size="27px" styl="margin: 1px 0 0 0" icon="add_shopping_cart" appn="shopping" />
-            <AppItem appl="温 馨 提 示" colr="teal-9"   iclr="white"  size="27px" styl="margin:-0px 0 0 0" icon="schedule" appn="reminder" />
+            <AppItem appl="日 常 消 费" colr="purple-9" iclr="yellow" size="27px" styl="margin: 0 0 0 1.5px" icon="monetization_on" appn="exlist" />
+            <AppItem appl="采 购 清 单" colr="indigo-9" iclr="white"  size="27px" styl="margin: 3pxpx 0 0 0" icon="add_shopping_cart" appn="shopping" />
+            <AppItem appl="温 馨 提 示" colr="teal-9"   iclr="white"  size="27px" styl="margin: 0 0 0 1.5px" icon="schedule" appn="reminder" />
             <AppItem appl="备 忘 录 表" colr="grey-9"   iclr="white"  size="27px" styl="margin: 0px 0 0 0" icon="assignment" appn="memo" />
-            <AppItem appl="每 天 看 看" colr="pink-9"   iclr="yellow" size="25px" styl="margin:-6px 0 0 0" icon="健" appn="watcher" />
+            <AppItem appl="每 天 看 看" colr="pink-9"   iclr="yellow" size="25px" styl="margin:-5px 0 0 1.5px" icon="健" appn="watcher" />
             <AppItem appl="银 行 月 报" colr="indigo-9" iclr="yellow" size="28px" styl="margin: 1px 0 0 0" icon="account_balance" appn="bankstatement" />
             <AppItem appl="月 报 明 细" colr="brown-9"  iclr="white"  size="25px" styl="margin:-6px 0 0 0" icon="析" appn="holdings" />
             <AppItem appl="血 糖 控 制" colr="pink-7"   iclr="yellow" size="27px" styl="margin:-1px 0 0 0" icon="bloodtype" appn="glucosecheck" />

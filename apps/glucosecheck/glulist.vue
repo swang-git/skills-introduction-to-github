@@ -1,11 +1,12 @@
 <template>
-<div style="display:grid;place-items:center;height:100vh;margin:-5px 0 0 0">
+  <!-- <div style="display:grid;place-items:center;height:100vh;width:800px;margin:-5px 0 0 0"> -->
+<div style="width:800px">
   <q-table class="sh-sticky-header-table" :rows="palist" :columns="columns" dense dark hide-pagination :grid=false
-    :visible-columns="isIM ? visibleColumnsFone : visibleColumnsDesk"
-    wrap-cells style="font-family:stfangsong;font-weight:600"
-    :fullscreen="isIM ? true : false" table-style="isIM ? {width:'373px'} : {}" :style="isIM ? {height: '585px'} : {}"
-    row-key="datetime"
-    :pagination="isIM ? {rowsPerPage:itemsPerPageIM} : {rowsPerPage:itemsPerPageDesk}"
+    :visible-columns="isIM ? visibleColumnsFone : visibleColumnsDesk" wrap-cells 
+    :fullscreen="isIM ? true : false" table-style="isIM ? {width:'373px'} : {}"
+    row-key="datetime" :pagination="isIM ? {rowsPerPage:itemsPerPageIM} : {rowsPerPage:itemsPerPageDesk}"
+    :style="isIM ? { height:'screenheight', margin:'-3px 0 0 1.5px' } : { margin:'-1px 2px 0 4px' }" 
+    style="width:99%;border:2px solid cyan"
     :separator="separator" :faVal="faVal">
 
     <!-- <template v-slot:top="props"> -->
