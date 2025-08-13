@@ -47,11 +47,13 @@ def getFullpath(basename):
     if   os.path.exists('/home/swang/htv/' + basename): return '/home/swang/htv/' + basename
     elif os.path.exists('/ctv/' + basename): return '/ctv/' + basename
     elif os.path.exists('/dtv/' + basename): return '/dtv/' + basename
+    elif os.path.exists('/xtv/' + basename): return '/xtv/' + basename
 
 def getFullDirname(basename):
     if   os.path.exists('/home/swang/htv/' + basename): return '/home/swang/htv/'
     elif os.path.exists('/ctv/' + basename): return '/ctv/'
     elif os.path.exists('/dtv/' + basename): return '/dtv/'
+    elif os.path.exists('/xtv/' + basename): return '/xtv/'
 
 def cleanupRecording():
     for idx, rec in enumerate(session.query(recorded).filter(recorded.watched == 2).order_by(recorded.starttime.desc())):
