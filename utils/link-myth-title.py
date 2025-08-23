@@ -45,14 +45,18 @@ def minuteDiff(starttime, endtime): # duration in minutes
 
 def getFullpath(basename):
     if   os.path.exists('/home/swang/htv/' + basename): return '/home/swang/htv/' + basename
+    elif os.path.exists('/atv/' + basename): return '/atv/' + basename
+    elif os.path.exists('/btv/' + basename): return '/btv/' + basename
     elif os.path.exists('/ctv/' + basename): return '/ctv/' + basename
-    elif os.path.exists('/dtv/' + basename): return '/dtv/' + basename
+    elif os.path.exists('/stv/' + basename): return '/stv/' + basename
     elif os.path.exists('/xtv/' + basename): return '/xtv/' + basename
 
 def getFullDirname(basename):
     if   os.path.exists('/home/swang/htv/' + basename): return '/home/swang/htv/'
+    elif os.path.exists('/atv/' + basename): return '/atv/'
+    elif os.path.exists('/btv/' + basename): return '/btv/'
     elif os.path.exists('/ctv/' + basename): return '/ctv/'
-    elif os.path.exists('/dtv/' + basename): return '/dtv/'
+    elif os.path.exists('/stv/' + basename): return '/stv/'
     elif os.path.exists('/xtv/' + basename): return '/xtv/'
 
 def cleanupRecording():
