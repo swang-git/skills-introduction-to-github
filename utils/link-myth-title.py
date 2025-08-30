@@ -63,7 +63,8 @@ def cleanupRecording():
     for idx, rec in enumerate(session.query(recorded).filter(recorded.watched == 2).order_by(recorded.starttime.desc())):
         recordedfile = getFullpath(rec.basename)
         if recordedfile == None:
-            print('No file found in file system for [%s] [%s] [%s] delete record in recorded table'%(rec.basename, rec.starttime, rec.title))
+            tit = fgcolor('yellow', rec.title)
+            print('No file found in file system for [%s] [%s] [%s] delete record in recorded table'%(rec.basename, rec.starttime, tit))
             session.query(recorded).filter(recorded.basename == rec.basename).delete(synchronize_session=False)
             continue
         basename = rec.basename
@@ -114,7 +115,8 @@ for idx, rec in enumerate(session.query(recorded).filter(recorded.watched == 0).
 
     recordedfile = getFullpath(rec.basename)
     if recordedfile == None:
-        if idx + 1 < limitNum: print('No recorded file with title=%s basename=%s starttime=%s'%(rec.title,rec.basename,stm))
+        tit = fgcolor('yellow', rec.title)
+        if idx + 1 < limitNum: print('No recorded file with title=%s basename=%s starttime=%s'%(tit, rec.basename,stm))
         session.query(recorded).filter(recorded.basename == rec.basename).delete(synchronize_session=False)
         continue
 
