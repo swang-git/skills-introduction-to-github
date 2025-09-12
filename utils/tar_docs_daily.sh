@@ -11,7 +11,7 @@
 yesterday=`date -d '1 day ago' '+%Y%m%d'`
 Yr=`echo $yesterday|cut -c1-4`
 
-doc_dir=/f36/bak/dc
+doc_dir=/run/media/swang/Seagate/BAK/dc
 tar_file=${doc_dir}/${Yr}.tar
 
 docs_dir=/sites/webdata/docs

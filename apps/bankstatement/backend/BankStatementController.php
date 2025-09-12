@@ -10,6 +10,7 @@ use App\Models\bankstatement\BankStatementNote;
 use App\Models\bankstatement\BankAccountActivity;
 use App\Models\bankstatement\BankStatementActivity;
 use App\Models\bankstatementloader\BankSecurityHolding;
+use App\Models\watcher\HealthRecord;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -101,8 +102,11 @@ class BankStatementController extends Controller
 		[$bkgd, $stocks, $cash, $intraday, $last_bkg_pdf] = $this->getChaseBkgAssets();
 		$dats = $bkgd->merge($dats); //Log::info("-CK-XXX stocks=$stocks cash=$cash", $bkgd->toArray());
 		$stock_val = $bkgd[0]->end_balance - $cash;
+
+    $currFidelPortfo = HealthRecord::where('status', 'A')->orderByDesc('date')->limit(1)->value('portfolio');
+    Log::info("currentFidelityPortFolio=$currFidelPortfo", []);
 		return ['stocks_val' => $stock_val, 'fidel_cash' => $fidel_cash, 'dats' => $dats, 'bkg_stocks' => $stocks, 'bkg_cash' => $cash,
-        'intraday' => $intraday, 'last_bkg_pdf' => $last_bkg_pdf, 'status' => "OK" ];
+        'intraday' => $intraday, 'last_bkg_pdf' => $last_bkg_pdf, 'curr_fidel_portfo' => $currFidelPortfo, 'status' => "OK" ];
 	}
 
   private function getLastMatchingFile($directory, $pattern) {

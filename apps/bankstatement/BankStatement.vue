@@ -176,6 +176,7 @@ const last_bkg_pdf = ref(null)
 const bkgCash = ref(0)
 const bkgStocks = ref(0)
 const fidelCash = ref(0)
+const currFidelPortfo = ref(0)
 
 buildApp('银行月报', 'Bankstatement')
 emitter.on('show-charts', () => showCharts())
@@ -195,7 +196,7 @@ const compCash = computed(() => {
 
 const compTotalVal = computed(() => {
   let val = 0
-  dats.value.forEach((p, i) => { if (i<5) val += parseFloat(p.end_balance) })
+  dats.value.forEach((p, i) => { if (i<5) { val += p.bank=='Fidelity' ? parseFloat(currFidelPortfo.value) : parseFloat(p.end_balance) }})
   // var val = 0
   // if (holdings.value.length === 0) dats.value.forEach((p, i) => { if (i<5) val += parseFloat(p.end_balance) })
   // else val = monthTotal.value
@@ -435,7 +436,7 @@ function showDetails (e, i) {
 emitter.on('bankstatement-getList', (da) => setList(da))
 
 function setList(da) {
-  console.log(`-fn-setList last_bkg_pdf=${da.last_bkg_pdf}, fidel_cash=${da.fidel_cash} bkg_cash=${da.bkg_cash} bkg_stockss=${da.bkg_stocks}`, da.dats)
+  console.log(`-fn-setList currFidelPortfo=${da.curr_fidel_fortfo}, last_bkg_pdf=${da.last_bkg_pdf}, fidel_cash=${da.fidel_cash} bkg_cash=${da.bkg_cash} bkg_stockss=${da.bkg_stocks}`, da.dats)
   intraday.value = da.intraday
   last_bkg_pdf.value = da.last_bkg_pdf
   dats.value = da.dats
@@ -446,6 +447,8 @@ function setList(da) {
   bkgCash.value = da.bkg_cash
   bkgStocks.value = da.bkg_stocks
   fidelCash.value = da.fidel_cash
+  currFidelPortfo.value = da.curr_fidel_portfo
+  console.log(`currFidelPortfo=${currFidelPortfo.value}`)
   emitter.emit('dats', dats.value)
 }
 emitter.on('bankstatement-getHoldings', (da) => setHoldings(da))

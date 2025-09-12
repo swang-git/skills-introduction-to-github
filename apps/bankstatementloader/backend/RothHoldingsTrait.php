@@ -182,6 +182,7 @@ trait RothHoldingsTrait {
   }
   private function getHsaHoldings($data, $lines, $start, $end) { Log::info("-fn-getHasHoldings (242-996192) start=$start end=$end");
     $holdings = [];
+    $start = 1000;
     for ($i=$start; $i < $end; $i++) { // start = 1132
       $line = $lines[$i];
       $this->setHoldFlag($line);

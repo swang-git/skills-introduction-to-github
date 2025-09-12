@@ -325,92 +325,11 @@ trait RothActivityTrait {
   }
   private function getHsaActivity($data, $lines, $start, $end) { Log::info("-fn-getHsaActivity (242-996192) start=$start end=$end");
     $activity = [];
+    $start = 1000;
     for ($i=$start; $i<$end; $i++) {
       $line = $lines[$i];
       $this->setActvFlag($line);
-      // if (preg_match('/Fees/', self::$actvFlag)) Log::debug("=CK=actvFlag=" . self::$actvFlag);
-      // if (self::$actvFlag == "Fees and Charges") Log::debug("=CK=actvFlag=" . self::$actvFlag . $line);
-      if (self::$actvFlag == 'Dividends Int' and preg_match('/^\d\d\/\d\d$/', $line)) {
-        // Log::info("Roth Actv Dividends Int dd/dd line $line");
-        [$ni, $secs] = $this->getSecurity($lines, $i);
-        // $security = $this->shortName($securityName);
-        $date = $line;
-        $desc = $lines[$ni + 1];
-        $quan = '-';
-        if ($desc == 'Reinvestment') {
-          if (preg_match('/$/', $quan)) {
-            // if (preg_match('/^[+-]?\d+(\.\d+)?$/', $quan) !== 1) { // check if contains something other than numbers
-              Log::debug("-CK-str_contains $ start=$start quan=$quan", [__line__, __file__]);
-            $q = explode('$', $quan);
-            if (count($q) == 2) {
-              $quan = $q[0];
-              $pric = array_pop($q);
-              $amnt = $this->cleanMoney($lines[$ni + 3]);
-            } else {
-              $pric = $lines[$ni + 3];
-              $amnt = $this->cleanMoney($lines[$ni + 4]);
-            }
-          }
-        } else if ($desc == 'Dividend' && $lines[$ni + 2] == 'Received') {
-          $desc .= ' Received';
-          $quan = '-';
-          $pric = '-';
-          $amnt = $this->cleanMoney($lines[$ni + 5]);
-        } else {
-          $desc = substr($lines[$ni], 9);  // 'somecusip Interest Earned'
-          $quan = $lines[$ni + 1];
-          $pric = $lines[$ni + 2];
-          $amnt = $this->cleanMoney($lines[$ni + 3]);
-        }
-        $x = [
-          $date,
-          $secs,
-          $desc,
-          $quan,
-          $pric,
-          $amnt,
-        ];
-        $activity[] = $x;
-        // if (preg_match('/FDIC INSURED DEPOSIT/', $securityName)) $desc .= ' ' . $securityName;
-        // $quantity = $lines[$i + 4];
-        // $price = $lines[$i + 5];
-        // $amount = $this->cleanMoney($lines[$i + 6]);
-        // $x = [
-        //   $line,
-        //   $security,
-        //   $desc,
-        //   $quantity,
-        //   $price,
-        //   $amount,
-        // ];
-        // $activity[] = $x;
-      } else if (self::$actvFlag == 'Fees and Charges' and preg_match('/^\d\d\/\d\d$/', $line)) { //__ToBe_revised
-        Log::debug("=X=Roth Ind Actv Fees and Charges Int dd/dd line $line");
-        $securityName = $lines[$i + 1];
-        $security = $this->shortName($securityName);
-        if ($security == 'BEKE') {
-          $desc = 'Ke Hold Ads Fees and Charges';
-          $quantity = null;
-          $price = null;
-          // $amount = $this->cleanMoney(str_replace('Total', '', $lines[$i + 2]));
-          $amount = $this->cleanMoney($lines[$i + 10]);
-        } else {
-          $desc = $lines[$i + 3];
-          $quantity = $lines[$i + 4];
-          $price = $lines[$i + 5];
-          $amount = $this->cleanMoney($lines[$i + 6]);
-        }
-        if (preg_match('/FDIC INSURED DEPOSIT/', $securityName)) $desc .= ' ' . $securityName; //__ToBe_revised
-        $x = [
-          $line,
-          $security,
-          $desc,
-          $quantity,
-          $price,
-          $amount,
-        ];
-        $activity[] = $x;
-      } else if (self::$actvFlag == 'Core Fund Activity' and preg_match('/^\d\d\/\d\d$/', $line)) {
+      if (self::$actvFlag == 'Core Fund Activity' and preg_match('/^\d\d\/\d\d$/', $line)) {
         // Log::info("Roth Actv Core Fund Activity dd/dd line $line");
         // $secs = "CORE";
         $date = $line;
@@ -431,6 +350,110 @@ trait RothActivityTrait {
         ];
         $activity[] = $x;
       }
+
+      // // if (preg_match('/Fees/', self::$actvFlag)) Log::debug("=CK=actvFlag=" . self::$actvFlag);
+      // // if (self::$actvFlag == "Fees and Charges") Log::debug("=CK=actvFlag=" . self::$actvFlag . $line);
+      // if (self::$actvFlag == 'Dividends Int' and preg_match('/^\d\d\/\d\d$/', $line)) {
+      //   // Log::info("Roth Actv Dividends Int dd/dd line $line");
+      //   [$ni, $secs] = $this->getSecurity($lines, $i);
+      //   // $security = $this->shortName($securityName);
+      //   $date = $line;
+      //   $desc = $lines[$ni + 1];
+      //   $quan = '-';
+      //   if ($desc == 'Reinvestment') {
+      //     if (preg_match('/$/', $quan)) {
+      //       // if (preg_match('/^[+-]?\d+(\.\d+)?$/', $quan) !== 1) { // check if contains something other than numbers
+      //         Log::debug("-CK-str_contains $ start=$start quan=$quan", [__line__, __file__]);
+      //       $q = explode('$', $quan);
+      //       if (count($q) == 2) {
+      //         $quan = $q[0];
+      //         $pric = array_pop($q);
+      //         $amnt = $this->cleanMoney($lines[$ni + 3]);
+      //       } else {
+      //         $pric = $lines[$ni + 3];
+      //         $amnt = $this->cleanMoney($lines[$ni + 4]);
+      //       }
+      //     }
+      //   } else if ($desc == 'Dividend' && $lines[$ni + 2] == 'Received') {
+      //     $desc .= ' Received';
+      //     $quan = '-';
+      //     $pric = '-';
+      //     $amnt = $this->cleanMoney($lines[$ni + 5]);
+      //   } else {
+      //     $desc = substr($lines[$ni], 9);  // 'somecusip Interest Earned'
+      //     $quan = $lines[$ni + 1];
+      //     $pric = $lines[$ni + 2];
+      //     $amnt = $this->cleanMoney($lines[$ni + 3]);
+      //   }
+      //   $x = [
+      //     $date,
+      //     $secs,
+      //     $desc,
+      //     $quan,
+      //     $pric,
+      //     $amnt,
+      //   ];
+      //   $activity[] = $x;
+      //   // if (preg_match('/FDIC INSURED DEPOSIT/', $securityName)) $desc .= ' ' . $securityName;
+      //   // $quantity = $lines[$i + 4];
+      //   // $price = $lines[$i + 5];
+      //   // $amount = $this->cleanMoney($lines[$i + 6]);
+      //   // $x = [
+      //   //   $line,
+      //   //   $security,
+      //   //   $desc,
+      //   //   $quantity,
+      //   //   $price,
+      //   //   $amount,
+      //   // ];
+      //   // $activity[] = $x;
+      // } else if (self::$actvFlag == 'Fees and Charges' and preg_match('/^\d\d\/\d\d$/', $line)) { //__ToBe_revised
+      //   Log::debug("=X=Roth Ind Actv Fees and Charges Int dd/dd line $line");
+      //   $securityName = $lines[$i + 1];
+      //   $security = $this->shortName($securityName);
+      //   if ($security == 'BEKE') {
+      //     $desc = 'Ke Hold Ads Fees and Charges';
+      //     $quantity = null;
+      //     $price = null;
+      //     // $amount = $this->cleanMoney(str_replace('Total', '', $lines[$i + 2]));
+      //     $amount = $this->cleanMoney($lines[$i + 10]);
+      //   } else {
+      //     $desc = $lines[$i + 3];
+      //     $quantity = $lines[$i + 4];
+      //     $price = $lines[$i + 5];
+      //     $amount = $this->cleanMoney($lines[$i + 6]);
+      //   }
+      //   if (preg_match('/FDIC INSURED DEPOSIT/', $securityName)) $desc .= ' ' . $securityName; //__ToBe_revised
+      //   $x = [
+      //     $line,
+      //     $security,
+      //     $desc,
+      //     $quantity,
+      //     $price,
+      //     $amount,
+      //   ];
+      //   $activity[] = $x;
+      // } else if (self::$actvFlag == 'Core Fund Activity' and preg_match('/^\d\d\/\d\d$/', $line)) {
+      //   // Log::info("Roth Actv Core Fund Activity dd/dd line $line");
+      //   // $secs = "CORE";
+      //   $date = $line;
+      //   $secs = $this->shortName($lines[$i + 4]);
+      //   $desc = $lines[$i + 1] .' '. $lines[$i + 2] .' '. $lines[$i + 3];
+      //   $quan = $this->cleanMoney($lines[$i + 6]);
+      //   $pric = $this->cleanMoney($lines[$i + 7]);
+      //   $amnt = $this->cleanMoney($lines[$i + 8]);
+      //   $balc = $this->cleanMoney($lines[$i + 9]);
+      //   $x = [
+      //     $date,
+      //     $secs,
+      //     $desc,
+      //     $quan,
+      //     $pric,
+      //     $amnt,
+      //     $balc,
+      //   ];
+      //   $activity[] = $x;
+      // }
     }
     // $activity['cost'] = 0;
     $data['activity'] = $activity;
