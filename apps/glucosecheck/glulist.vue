@@ -58,12 +58,13 @@
     <q-tr v-show="p.expand" :props="p">
       <q-td colspan="100%" class="q-pt-xs">
         <table v-if="isDesk" style="border:1px solid #ccc;margin-top:-8px;min-width:100%">
-          <q-tr v-if="p.row.food ==null">
+          <q-tr v-if="p.row.food==null" style="max-height:5px">
             <td>今 日</td>
-            <td>eAG: {{ p.row.glucose }} mg/dL (空腹血糖)</td>
-            <td>A1c: {{ ((p.row.glucose + 46.7) / 28.7).toFixed(1) }}%</td>
-            <td style="white-space:nowrap">eAG: {{ (p.row.glucose / 18.015).toFixed(1) }} mmol/L (中)</td>
-            <td class="text-right">
+            <td>eag: {{ p.row.glucose }} mg/dl (空腹血糖)</td>
+            <td>a1c: {{ ((p.row.glucose + 46.7) / 28.7).toFixed(1) }}%</td>
+            <td class="text-no-wrap">eag: {{ (p.row.glucose / 18.015).toFixed(1) }} mmol/l</td>
+            <!-- <td class="text-no-wrap colsapn=2">eAG: {{ (p.row.glucose / 18.015).toFixed(1) }} mmol/L(中国标准) -->
+            <td class="text-center">
               <q-fab v-model="fabOpen" flat icon="keyboard_arrow_down" direction="down">
                 <q-btn round glossy color="red-10"   @click="showDar(p.row, 'del')" size="16px" style="border:1px solid cyan" icon="delete" />
                 <q-btn round glossy color="indigo-9" @click="showDar(p.row, 'upd')" size="16px" style="border:1px solid cyan" icon="update" />
@@ -73,7 +74,7 @@
           </q-tr>
           <q-tr v-if="p.row.food !=null">
             <td>主 食</td><td colspan="3" style="width:557px">{{ p.row.food }} {{ p.row.glucose }}</td>
-            <td>
+            <td class="text-center">
               <q-fab v-model="fabOpen" flat icon="keyboard_arrow_down" direction="down">
                 <q-btn round glossy color="pink-9"  @click="showDar(p.row, 'del')" size="16px" style="border:1px solid cyan" icon="delete" />
                 <q-btn round glossy color="indigo"  @click="showDar(p.row, 'upd')" size="16px" style="border:1px solid cyan" icon="update" />
@@ -390,6 +391,7 @@ function getValue (col, row) {
 function getStyle (col) {
   if (col === 'datetime') return "width:160px;white-space:nowrap;"
   // else if (col === 'glucose') return "max-width:0px"
+  else if (col === 'food') return "max-width:290px"
   else if (col === 'drink') return "width:90px"
   else if (col === 'week') return "max-width:20px"
   else return "white-space:nowrap"
@@ -399,7 +401,8 @@ function getClass (col, row) {
   let bgc = row.id == lastClickedRow.value.row.id ? 'bg-indigo-9 ' : ''
   if (col === 'datetime') return bgc + 'cursor-pointer text-no-wrap;text-center'
   else if (col === 'week') return bgc + 'text-center text-no-wrap'
-  else if (col === 'food' && row.food == null) return bgc + 'text-cyan-2 text-bold text-body1 cursor-pointer'
+  // else if (col === 'food' && row.food == null) return bgc + 'text-cyan-2 text-bold text-body1 cursor-pointer'
+  else if (col === 'food') return bgc + 'text-cyan-2 cursor-pointer text-no-wrap ellipsis'
   else if (col === 'food' || col === 'datetime') return bgc + 'text-left text-no-wrap cursor-pointer'
   else if (col === 'drink' || col === 'fruit' || col === 'a1cp') return bgc + 'text-center text-no-wrap'
   else if (col === 'glucose' && between(row.glucose,   0, 101) && row.type === '空腹') return bgc + 'text-center text-green-9'
