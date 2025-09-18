@@ -1,8 +1,10 @@
 <template>
-<div class="q-px-xs" :class="{ fixed: clickedIdx < 8 }">
+<!-- <div class="q-px-xs" :class="{ fixed: clickedIdx < 8 }"> -->
+<div class="q-px-xs" :class="{ fixed: clickedIdx>0 && palist[clickedIdx].details.length<99 }">
   <q-table class="sh-sticky-header-table" v-model:rows="palist" :columns="columns" dense :hide-header="isIM"
     :grid=false :visible-columns="isDesk ? visibleColumnsDesk : visibleColumnsFone" :style="{ width:(screenwidth-4)+'px' }" 
-    row-key="id" :separator="separator" :showCol="showCol" wrap-cells :hide-pagination="true" :pagination="isDesk ? { rowsPerPage: 23 } : { rowsPerPage: 13 }"
+    row-key="id" :separator="separator" :showCol="showCol" wrap-cells :hide-pagination="true" 
+    :pagination="isDesk ? { rowsPerPage: 23 } : { rowsPerPage: 13 }"
   >
   <template v-slot:header="props">
     <q-tr :props="props">
@@ -123,10 +125,12 @@ function col (idx) {
 //   return lastClickedP.pageIndex < 9 ? "fixed" : "none"
 // })
 function getVal (row, idx) {
-  // if (idx == 5) console.log(`%c-CKK-fn-getVal name=${row[col(idx).name]}`, 'color:red; font-size:16px')
+  // if (idx === 4) console.log(`%c-CK-fn-getVal name=${row[col(idx).name]} clkIdx=${clickedIdx.value}`, 'color:red; font-size:16px')
+  // console.log(`%c-CK-fn-getVal name=${row[col(idx).name]}`, 'color:red; font-size:16px')
   return row[col(idx).name]
 }
 function ishow (row, idx) {
+  // if (idx === 4) console.log(`%c-CK-fn-getVal name=${palist.value[clickedIdx.value].details} clkIdx=${clickedIdx.value}`, 'color:red; font-size:16px')
   const cont = getVal(row, idx)
   if (/<img/.test(cont)) return 'img'
   else return cont != null && cont != ''
