@@ -25,8 +25,8 @@ def reorder(rows) :
 def get_quote_rows():
     load_date = (datetime.now() + timedelta(days=add_days)).strftime('%Y-%m-%d')
     rows = dbsession(database).query(StockQuote)\
-        .filter(func.date_format(StockQuote.load_time, '%Y-%m-%d').label('formated_date')==load_date)\
-        .order_by(StockQuote.load_time.asc()).all()
+        .filter(func.date_format(StockQuote.load_time, '%Y-%m-%d').label('formated_date')==load_date).all()
+        # .order_by(StockQuote.load_time.asc()).all()
     ordered_rows = reorder(rows)
     # for row in ordered_rows: print(row.symbol)
     return [load_date, ordered_rows]
