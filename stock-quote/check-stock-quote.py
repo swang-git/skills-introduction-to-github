@@ -16,12 +16,20 @@ args = parser.parse_args()
 add_days = args.add_days
 database = args.db
 
+def reorder(rows) :
+    symbols = ['T', 'WBD', 'CHTR', 'DELL', 'CSCO', 'MSFT']
+    order_map = {v: i for i, v in enumerate(symbols)}
+    data_sorted = sorted(rows, key=lambda o: order_map.get(o.symbol, len(symbols)))
+    return data_sorted
+
 def get_quote_rows():
     load_date = (datetime.now() + timedelta(days=add_days)).strftime('%Y-%m-%d')
     rows = dbsession(database).query(StockQuote)\
         .filter(func.date_format(StockQuote.load_time, '%Y-%m-%d').label('formated_date')==load_date)\
         .order_by(StockQuote.load_time.asc()).all()
-    return [load_date, rows]
+    ordered_rows = reorder(rows)
+    # for row in ordered_rows: print(row.symbol)
+    return [load_date, ordered_rows]
 
 def main():
     load_date, rows = get_quote_rows()
