@@ -15,5 +15,5 @@ query="SELECT UTCtoNY(starttime) as starttime, UTCtoNY(endtime) as endtime, LPAD
 #   JOIN channel c on c.chanid = r.chanid WHERE starttime > '$today'"
 
 # echo $query
-mysql -pVVKKll11## -b mythconverg -e"$query order by starttime"
+mysql -pYbsjll11 -b mythconverg -e"$query order by starttime"
 

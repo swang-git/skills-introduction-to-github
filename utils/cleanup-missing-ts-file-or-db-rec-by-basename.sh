@@ -7,23 +7,39 @@ fi
 basen=$1
 # echo "checking recorded file with basename = $basen"
 
-# dir "/home/swang/atv/$basen"
-# dir "/home/swang/btv/$basen"
-# dir "/home/swang/ctv/$basen"
-# dir "/home/swang/dtv/$basen"
-# dir "/home/swang/etv/$basen"
-
-for dr in atv btv ctv dtv etv
+fileExist="Not Exist $basen in /atv /btv /ctv /dtv /stv"
+for dr in /atv /btv /ctv /dtv /stv
 do
-  FILE="/home/swang/$dr/$basen"
+  FILE="$dr/$basen"
   # echo checking $FILE
   if test -f $FILE; then
-    echo
-    echo $FILE exists
-    echo
-    exit
+    #echo $FILE exists
+    fileExist="Yes, rcfile exists $FILE"
+    break
   fi
 done
+# echo $fileExist
+fileEx=${fileExist:0:3}
+# echo $fileEx
+if [ $fileEx = "Not" ]; then
+  echo "delete record $basen ...."
+  mysql -pYbsjll11 -b mythconverg -e "delete from recorded where basename = '$basen'"
+  exit
+else
+  echo $fileExist
+  # echo "checking record in recorded table"
+  record=$(mysql -pYbsjll11 -b mythconverg --batch -N -e "select COUNT(*) from recorded where basename = '$basen'")
+  if [ "$record" -gt 0 ]; then
+    echo "Yes, record exists for $basen in the recorded table"
+    exit
+  else
+    echo "no record in recoded table"
+    echo "delete $FILE ...."
+    sudo rm $FILE
+  fi
+fi
+
+exit
 
 echo
 echo $basen NOT exist in recgroup. delete it from table recorded
