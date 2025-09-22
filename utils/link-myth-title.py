@@ -116,7 +116,7 @@ for idx, rec in enumerate(session.query(recorded).filter(recorded.watched == 0).
     recordedfile = getFullpath(rec.basename)
     if recordedfile == None:
         tit = fgcolor('yellow', rec.title)
-        if idx + 1 < limitNum: print('No recorded file with basename=%s title=%s starttime=%s'%(rec.basename, tit, stm))
+        if idx + 1 < limitNum: print('No recorded file with basename= %s title=%s starttime=%s'%(rec.basename, tit, stm))
         session.query(recorded).filter(recorded.basename == rec.basename).delete(synchronize_session=False)
         continue
 

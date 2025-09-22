@@ -33,7 +33,7 @@ else
     echo "Yes, record exists for $basen in the recorded table"
     exit
   else
-    echo "no record in recoded table"
+    echo "No record in recoded table"
     echo "delete $FILE ...."
     sudo rm $FILE
   fi
