@@ -5,6 +5,14 @@ if [ $# -ne 1 ]; then
 fi
 
 basen=$1
+idx=$(expr index "$basen" 'v')
+# echo $idx
+if [ "$idx" -gt "0" ]; then
+  basen=${basen:5}
+fi
+# echo $basen
+# exit
+echo
 # echo "checking recorded file with basename = $basen"
 
 fileExist="Not Exist $basen in /atv /btv /ctv /dtv /stv"
@@ -15,6 +23,7 @@ do
   if test -f $FILE; then
     #echo $FILE exists
     fileExist="Yes, rcfile exists $FILE"
+    # ls -l $FILE
     break
   fi
 done
@@ -31,6 +40,10 @@ else
   record=$(mysql -pYbsjll11 -b mythconverg --batch -N -e "select COUNT(*) from recorded where basename = '$basen'")
   if [ "$record" -gt 0 ]; then
     echo "Yes, record exists for $basen in the recorded table"
+    mysql -pYbsjll11 -b mythconverg -e "select watched,chanid,title from recorded where basename='$basen'"
+    if [ $fileEx = "Yes" ]; then
+      ls -lh $FILE
+    fi
     exit
   else
     echo "No record in recoded table"
