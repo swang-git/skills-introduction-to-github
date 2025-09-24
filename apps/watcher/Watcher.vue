@@ -36,8 +36,8 @@
         <q-tr><td class="text-no-wrap text-right">Link: </td><td class="q-pl-xs" v-html="getDocLink(e.date)" /></q-tr>
         <q-tr v-if="e.date>=startedDate"><td class="text-no-wrap text-grey-5 text-right">注释: </td><td class="q-pl-xs text-grey-6">{{ startedNote }}</td></q-tr>
       </div>
-      <div class="col-1">
-         <q-fab v-model="fabOpen" flat icon="keyboard_arrow_down" direction="down">
+      <div>
+         <q-fab v-model="fabOpen" flat icon="keyboard_arrow_down" direction="down" style="margin-left:-280px">
           <q-btn round glossy icon="note" @click="showPNote(e)">
             <q-tooltip class="text-h6 bg-green-9">Daily Note - Optional(e.g. buy/sell/convert/pending)</q-tooltip>
           </q-btn>
