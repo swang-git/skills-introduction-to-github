@@ -86,7 +86,8 @@ function drawChart (da) {
   var food = da.map(p => p.food)
   var fdtm = da.map(p => p.fdtm)
   var gptm = da.map(p => p.gptm)
-  var note = da.map(p => p.note)
+  var ystBLD = da.map(p => p.ystBLD)
+  // var note = da.map(p => p.breakfast + '\n' + p.lunch + '\n' + p.dinner)
   var labels = da.map(p => p.date.substring(5, 10))
   config.data.labels = labels
   config.data.datasets[0].cktm = da.map(p => p.date)
@@ -94,7 +95,7 @@ function drawChart (da) {
   config.data.datasets[0].gptm = gptm
   config.data.datasets[0].data = data
   config.data.datasets[0].food = food
-  config.data.datasets[0].note = note
+  config.data.datasets[0].ystBLD = ystBLD
   // console.log('-CK-setChartData', note)
   for (var i=0; i<dl; i++) {
     const val = config.data.datasets[0].data[i]

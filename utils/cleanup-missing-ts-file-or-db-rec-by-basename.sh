@@ -39,7 +39,7 @@ else
   # echo "checking record in recorded table"
   record=$(mysql -pYbsjll11 -b mythconverg --batch -N -e "select COUNT(*) from recorded where basename = '$basen'")
   if [ "$record" -gt 0 ]; then
-    echo "Yes, record exists for  $basen in recorded table"
+    echo "Yes, record exists  for $basen in recorded table"
     mysql -pYbsjll11 -b mythconverg -e "select watched,chanid,starttime,endtime,title from recorded where basename='$basen'"
     if [ $fileEx = "Yes" ]; then
       ls -lh $FILE

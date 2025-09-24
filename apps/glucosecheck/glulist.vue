@@ -60,9 +60,9 @@
         <table v-if="isDesk" style="border:1px solid #ccc;margin-top:-8px;min-width:100%">
           <q-tr v-if="p.row.food==null" style="max-height:5px">
             <td>今 日</td>
-            <td>eag: {{ p.row.glucose }} mg/dl (空腹血糖)</td>
-            <td>a1c: {{ ((p.row.glucose + 46.7) / 28.7).toFixed(1) }}%</td>
-            <td class="text-no-wrap">eag: {{ (p.row.glucose / 18.015).toFixed(1) }} mmol/l</td>
+            <td>eAG: {{ p.row.glucose }} mg/dL (空腹血糖)</td>
+            <td>A1c: {{ ((p.row.glucose + 46.7) / 28.7).toFixed(1) }}%</td>
+            <td class="text-no-wrap">eAG: {{ (p.row.glucose / 18.015).toFixed(1) }} mmol/L</td>
             <!-- <td class="text-no-wrap colsapn=2">eAG: {{ (p.row.glucose / 18.015).toFixed(1) }} mmol/L(中国标准) -->
             <td class="text-center">
               <q-fab v-model="fabOpen" flat icon="keyboard_arrow_down" direction="down">
@@ -219,7 +219,8 @@ function showAllCharts () {
   console.log('-fn-showAllCharts', dalist.value)
   clvs.value = []
   // dalist.value.filter(x => x.food == null).forEach((p, i) => clvs.value.push({ idx: p.idx, date: p.datetime, clv:p.clvl==undefined ? 0 : p.clvl.toFixed(1) }))
-  dalist.value.filter(x => x.food == null).forEach((p, i) => clvs.value.push({ idx: p.idx, date: p.datetime, yestFood:p.yestFood, note: p.note, clv:p.clvl==undefined ? 0 : p.clvl.toFixed(1) }))
+  dalist.value.filter(x => x.food == null).forEach((p, i) => clvs.value.push({ idx: p.idx, date: p.datetime, yestFood:p.yestFood, 
+    ystBLD: p.breakfast+'\n'+p.lunch+'\n'+p.dinner+(p.fruit==null?'':'\n'+p.fruit)+(p.exercise==null?'':'\n'+p.exercise), clv:p.clvl==undefined ? 0 : p.clvl.toFixed(1) }))
   clvs.value.forEach((p, i) => {
     const x = dalist.value[p.idx + 1] // prev day
     const y = dalist.value[p.idx]     // this morning

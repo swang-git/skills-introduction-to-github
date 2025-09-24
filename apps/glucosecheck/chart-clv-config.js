@@ -13,7 +13,7 @@ const checkingTime = (tooltipItems) => {
   return 'Checking Time: ' + cktm
 } 
 const lastDinner = (tooltipItems) => {
-  let note = null
+  let ystBLD = null
   let food = null
   let fdtm = null
   let gptm = null
@@ -23,10 +23,11 @@ const lastDinner = (tooltipItems) => {
     food = item.dataset.food[item.parsed.x]
     fdtm = item.dataset.fdtm[item.parsed.x]
     gptm = item.dataset.gptm[item.parsed.x]
-    note = item.dataset.note[item.parsed.x]
+    ystBLD = item.dataset.ystBLD[item.parsed.x]
   })
   // if (food != null) retv = food + ' at ' + fdtm + '(' + gptm + '小时前) '
-  if (note != null) retv += note.replace('<br />', '\n').replace('<br />', '\n')
+  // if (note != null) retv += note.replace('<br />', '\n').replace('<br />', '\n')
+  if (ystBLD != null) retv += ystBLD
   return retv
 } 
 const data = {
