@@ -22,6 +22,7 @@ do
   # echo checking $FILE
   if test -f $FILE; then
     #echo $FILE exists
+    echo "==========================================================================="
     fileExist="Yes, rcfile exists $FILE in $dr"
     # ls -l $FILE
     break
@@ -44,6 +45,7 @@ else
     if [ $fileEx = "Yes" ]; then
       ls -lh $FILE
     fi
+    echo "==========================================================================="
     exit
   else
     echo "No record in recoded table"
@@ -51,20 +53,3 @@ else
     sudo rm $FILE
   fi
 fi
-
-exit
-
-echo
-echo $basen NOT exist in recgroup. delete it from table recorded
-echo
-### mysql -pVVKKll11## -b mythconverg -e "delete from recorded where basename = \"$basen\""
-mysql -pYbsjll11 -b mythconverg -e "delete from recorded where basename = \"$basen\""
-
-# autoexpchk="mysql -pVVKKll11## -b mythconverg -e 'select chanid from recorded where starttime like $today'"
-# query="select REGEXP_REPLACE(DATE_SUB(starttime, INTERVAL 5 hour), ':00$', '') as start_time, REGEXP_REPLACE(chanid, '0', '-', 4) as chann, title, autoexpire from recorded where starttime like '$today'"
-# query="SELECT REGEXP_REPLACE(DATE_SUB(starttime, INTERVAL 5 hour), ':00$', '') AS start_time, REPLACE(channum, '_', '-') AS chanm, title, autoexpire FROM recorded r \
-  # JOIN channel c on c.chanid = r.chanid WHERE starttime like '%$today'"
-# query="update recorded set autoexpire = 0 where autoexpire = 1"
-# echo $query
-# mysql -pVVKKll11## -b mythconverg -e"$query"
-
