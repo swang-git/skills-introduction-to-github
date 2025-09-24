@@ -1,6 +1,7 @@
 <template>
+<div class="q-pa-xs">
 <!-- <div class="q-pa-xs" :class="{ fixed: clickedIdx < 1}"> -->
-<div style="margin:-23px 0 0 0;display:grid;place-items:center;height:99vh">">
+<!-- <div style="margin:-23px 0 0 0;display:grid;place-items:center;height:99vh">"> -->
   <div v-for="(e, i) in palist" :key=e.id>
     <div :style="getLineBackground(i)" :class="{ 'bg-purple-10':!e.hideIt }" class="q-px-xs">
       <div class="row cursor-pointer;q-qx-sm" style="font-size:20px">
@@ -37,7 +38,7 @@
         <q-tr v-if="e.date>=startedDate"><td class="text-no-wrap text-grey-5 text-right">注释: </td><td class="q-pl-xs text-grey-6">{{ startedNote }}</td></q-tr>
       </div>
       <div>
-         <q-fab v-model="fabOpen" flat icon="keyboard_arrow_down" direction="down" style="margin-left:-280px">
+         <q-fab v-model="fabOpen" flat icon="keyboard_arrow_down" direction="down">
           <q-btn round glossy icon="note" @click="showPNote(e)">
             <q-tooltip class="text-h6 bg-green-9">Daily Note - Optional(e.g. buy/sell/convert/pending)</q-tooltip>
           </q-btn>
@@ -240,16 +241,16 @@ function showIt (i) {
   palist.value.forEach((p, idx) => { if (idx !== i) p.hideIt = true })
   palist.value[i].hideIt = !palist.value[i].hideIt
   // to force it toggle showing details
-  const dat = palist.value[i].date
-  if (dat.length === 10) palist.value[i].date += ' '
-  else palist.value[i].date = dat.replace(/ /g, '')
-  const date = palist.value[i].date.trim()
-  const rowOpened = !palist.value[i].hideIt
+  // const dat = palist.value[i].date
+  // if (dat.length === 10) palist.value[i].date += ' '
+  // else palist.value[i].date = dat.replace(/ /g, '')
+  // const date = palist.value[i].date.trim()
+  // const rowOpened = !palist.value[i].hideIt
   // console.info('B hideIt', i, this.portfData.length, rowOpened, date, this.palist[i].hideIt, '[' + this.palist[i].date + ']', this.palist[i].dif)
-  if (rowOpened) {
-    const path = process.env.API + '/watcher/getPortfolio/' + date
-    gaxios(path)
-  }
+  // if (rowOpened) {
+    // const path = process.env.API + '/watcher/getPortfolio/' + date
+    // gaxios(path)
+  // }
 }
 emitter.on('watcher-getPortfolio', (x) => setPortfolio(x))
 function setPortfolio (da) {
