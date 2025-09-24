@@ -68,7 +68,7 @@
               <q-fab v-model="fabOpen" flat icon="keyboard_arrow_down" direction="down">
                 <q-btn round glossy color="red-10"   @click="showDar(p.row, 'del')" size="16px" style="border:1px solid cyan" icon="delete" />
                 <q-btn round glossy color="indigo-9" @click="showDar(p.row, 'upd')" size="16px" style="border:1px solid cyan" icon="update" />
-                <q-btn round glossy color="green-10" @click="showDar(p.row, 'add')" size="16px" style="border:1px solid cyan" icon="add_circle" />
+                <!-- <q-btn round glossy color="green-10" @click="showDar(p.row, 'add')" size="16px" style="border:1px solid cyan" icon="add_circle" /> -->
               </q-fab>
             </td>
           </q-tr>
@@ -78,7 +78,7 @@
               <q-fab v-model="fabOpen" flat icon="keyboard_arrow_down" direction="down">
                 <q-btn round glossy color="pink-9"  @click="showDar(p.row, 'del')" size="16px" style="border:1px solid cyan" icon="delete" />
                 <q-btn round glossy color="indigo"  @click="showDar(p.row, 'upd')" size="16px" style="border:1px solid cyan" icon="update" />
-                <q-btn round glossy color="primary" @click="showDar(p.row, 'add')" size="16px" style="border:1px solid cyan" icon="add_circle" />
+                <!-- <q-btn round glossy color="primary" @click="showDar(p.row, 'add')" size="16px" style="border:1px solid cyan" icon="add_circle" /> -->
               </q-fab>
             </td>
           </q-tr>
@@ -440,7 +440,7 @@ function showExpend (col, p) {
 }
 function showExpendDesk (col, p) {
   console.log(`%c-fn-showExpand col=${col} row.id=${p.row.id}, lastRowId=${lastClickedRow.value.row.id}`, 'color: red;font-size:18px')
-  if (col == 'datetime') {
+  if (col == 'datetime' || col == 'food') {
     lastClickedRow.value.expand = false
     return showDar(p.row, 'add')
   }
