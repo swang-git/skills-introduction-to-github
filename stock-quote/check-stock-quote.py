@@ -37,7 +37,7 @@ def main():
         print(f"STOCK QUOTES NOT LOADED YET in database={database} FOR {load_date}, EXITING ...")
         sys.exit(0)
     else:
-        print(padsp(' ', 31) + f'STOCK QUOTES from {database}.stock_quotes LOADED at {rows[0].load_time}')
+        # print(padsp(' ', 31) + f'STOCK QUOTES from {database}.stock_quotes LOADED at {rows[0].load_time}')
         # symbols = ['T', 'WBD', 'CHTR', 'DELL', 'CSCO', 'MSFT', 'BEKE']
         symbols = ['T', 'WBD', 'CHTR', 'DELL', 'CSCO', 'MSFT']
         # shares = {'T': 287, 'WBD': 69, 'CHTR':20, 'DELL':36, 'CSCO':640, 'MSFT':400, 'BEKE':100}
@@ -57,6 +57,7 @@ def main():
                 else:
                     totalValue += float(portfolio.values)
             totalValue = f"{totalValue:,.2f}"
-            printTailer(sp, totalValue + ' (Excluding BEKE)')
+            # printTailer(sp, totalValue + ' (Excluding BEKE)')
+            printTailer(sp, totalValue, padsp(' ', 31) + f'STOCK QUOTES from {database}.stock_quotes LOADED at {rows[0].load_time}')
         # print(padsp(' ', 31) + f'STOCK QUOTES from {database}.stock_quotes LOADED at {chunk[5].load_time}')
 if __name__=="__main__": main()
