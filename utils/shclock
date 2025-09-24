@@ -17,4 +17,5 @@
 # xclock -d -strftime '%m/%d %a %H:%M:%S' -update 1 -bg navy -fg gold -chime -face 'Monospace-16' -geometry '250+2000+0'& 
 # xclock -d -strftime '%m/%d %a %H:%M:%S' -update 1 -bg navy -fg gold -chime -face 'Monospace-28' -geometry '418+3444+0'& 
 # xclock -d -strftime '%m-%d %a %H:%M:%S' -update 1 -bg navy -fg gold -chime -face 'Source Code-20' -geometry '258+3800+0'& 
-xclock -d -strftime '%m-%d %a %H:%M:%S' -update 1 -bg navy -fg gold -chime -face 'Source Code-20' -geometry '258+0+0'& 
+# xclock -d -strftime '%m-%d %a %H:%M:%S' -update 1 -bg navy -fg gold -chime -face 'Monospace-20' -geometry '300+0+0'& 
+xclock -d -strftime '%m/%d %a %H:%M:%S' -update 1 -bg navy -fg gold -chime -face 'Source Code-28' -geometry '355+0+0'& 
