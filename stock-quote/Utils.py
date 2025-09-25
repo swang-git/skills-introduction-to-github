@@ -83,7 +83,7 @@ def colorShow(sp, sec):
     print(ptxt)
     # sys.stdout.flush()
 
-fg = lambda text, color: "\33[38;5;" + str(color) + "m" + text + "\33[0m"
+# fg = lambda text, color: "\33[38;5;" + str(color) + "m" + text + "\33[0m"
 def boldit(str):
     return ef.bold + str + rs.bold_dim
 

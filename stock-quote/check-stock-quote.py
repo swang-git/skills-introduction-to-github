@@ -7,6 +7,8 @@ from more_itertools import chunked
 
 from Utils import printHeader, printTailer, displaySec, padsp
 from Models import dbsession, StockQuote, Portfolio
+from sty import ef, rs, FgRegister
+fg = FgRegister()
 
 parser = argparse.ArgumentParser()
 parser.add_argument("add_days", metavar='int', type=int, nargs='?', default='0', help='add/sub days from today, default 0 for today')
@@ -43,9 +45,9 @@ def get_quote_last_2nd_rows(last_day):
             # for row in ordered_rows: print(row.symbol)
             return ordered_rows
 
-def print_rows(rows):
+shares = {'T': 287, 'WBD': 69, 'CHTR':20, 'DELL':36, 'CSCO':640, 'MSFT':400}
+def print_rows(rows, diff=None):
     symbols = ['T', 'WBD', 'CHTR', 'DELL', 'CSCO', 'MSFT']
-    shares = {'T': 287, 'WBD': 69, 'CHTR':20, 'DELL':36, 'CSCO':640, 'MSFT':400}
     sp = ''
     num_of_stocks = len(symbols)
     for chunk in chunked(rows, num_of_stocks):
@@ -63,16 +65,32 @@ def print_rows(rows):
         totalValue = f"{totalValue:,.2f}"
         load_time = rows[5].load_time
         dday = load_time.strftime('%Y-%m-%d (%a)')
-        printTailer(sp, totalValue, f'Date: {dday}',  padsp(sp, 58) + f'{database}.stock_quotes')
+        if (diff==None): printTailer(sp, totalValue, f'Date: {dday}', padsp(sp, 58) + f'{database}.stock_quotes')
+        else: 
+            if diff == 0: cdiff = fg.yellow + diff + fg.rs
+            elif diff > 0: cdiff = fg.green + diff + fg.rs
+            else:
+                diff = str(diff)[1:]
+                cdiff = fg.red + diff + fg.rs
+            cdiff = ef.bold + cdiff + rs.bold_dim
+            printTailer(sp, totalValue, f'Date: {dday} G/L={cdiff}', padsp(sp, 54 - len('$' + str(diff))) + f'{database}.stock_quotes')
         
 
 def main():
     rows1 = get_quote_last_rows()
     last_load_day = rows1[5].load_time.strftime('%Y-%m-%d')
+    total1 = sum(row.price * shares[row.symbol] for row in rows1)
+    # print("total1=%s"%total1)
     # for row in rows1: print("load_time=[%s] symbol=[%s]"%(row.load_time, row.symbol))
     rows2 = get_quote_last_2nd_rows(last_load_day)
+    total2 = sum(row.price * shares[row.symbol] for row in rows2)
+    # print("total2=%s"%total2)
+    diff = total1 - total2
     print_rows(rows2)
-    print_rows(rows1)
-    print(' ╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝')
+    # print(f"\033[1A\033[2K")
+    # print(' ║' + 128*' ' + '║')
+    print_rows(rows1, diff)
+    print(' ╚' + 128*'═' + '╝')
+    # print(diff)
 
 if __name__=="__main__": main()
