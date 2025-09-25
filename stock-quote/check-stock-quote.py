@@ -45,10 +45,12 @@ def get_quote_last_2nd_rows(last_day):
             # for row in ordered_rows: print(row.symbol)
             return ordered_rows
 
-shares = {'T': 287, 'WBD': 69, 'CHTR':20, 'DELL':36, 'CSCO':640, 'MSFT':400}
+def get_shares(): return {'T': 287, 'WBD': 69, 'CHTR':20, 'DELL':36, 'CSCO':640, 'MSFT':400}
+
 def print_rows(rows, diff=None):
     symbols = ['T', 'WBD', 'CHTR', 'DELL', 'CSCO', 'MSFT']
     sp = ''
+    shares = get_shares()
     num_of_stocks = len(symbols)
     for chunk in chunked(rows, num_of_stocks):
         # if len(chunk) <= 0:break
@@ -77,6 +79,7 @@ def print_rows(rows, diff=None):
         
 
 def main():
+    shares = get_shares()
     rows1 = get_quote_last_rows()
     last_load_day = rows1[5].load_time.strftime('%Y-%m-%d')
     total1 = sum(row.price * shares[row.symbol] for row in rows1)
