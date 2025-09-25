@@ -61,7 +61,10 @@ def print_rows(rows):
             else:
                 totalValue += float(portfolio.values)
         totalValue = f"{totalValue:,.2f}"
-        printTailer(sp, totalValue, padsp(' ', 31) + f'STOCK QUOTES from {database}.stock_quotes LOADED at {rows[5].load_time}')
+        load_time = rows[5].load_time
+        dday = load_time.strftime('%Y-%m-%d (%a)')
+        printTailer(sp, totalValue, f'Date: {dday}',  padsp(sp, 58) + f'{database}.stock_quotes')
+        
 
 def main():
     rows1 = get_quote_last_rows()
@@ -70,5 +73,6 @@ def main():
     rows2 = get_quote_last_2nd_rows(last_load_day)
     print_rows(rows2)
     print_rows(rows1)
+    print(' ╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝')
 
 if __name__=="__main__": main()
