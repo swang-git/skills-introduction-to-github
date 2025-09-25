@@ -22,42 +22,53 @@ def reorder(rows) :
     data_sorted = sorted(rows, key=lambda o: order_map.get(o.symbol, len(symbols)))
     return data_sorted
 
-def get_quote_rows():
-    load_date = (datetime.now() + timedelta(days=add_days)).strftime('%Y-%m-%d')
-    rows = dbsession(database).query(StockQuote)\
-        .filter(func.date_format(StockQuote.load_time, '%Y-%m-%d').label('formated_date')==load_date)\
-        .order_by(StockQuote.load_time.desc()).limit(6).all()
+def get_quote_last_rows():
+    rows = dbsession(database).query(StockQuote).order_by(StockQuote.load_time.desc()).limit(6).all()
     ordered_rows = reorder(rows)
     # for row in ordered_rows: print(row.symbol)
-    return [load_date, ordered_rows]
+    # print(load_time.load_time)
+    return ordered_rows
+
+def get_quote_last_2nd_rows(last_day):
+    rows2 = []
+    for add_days in [-1, -2, -3, -4]:
+        load_date = (datetime.now() + timedelta(days=add_days)).strftime('%Y-%m-%d')
+        if (load_date >= last_day): continue
+        # print("load_date=%s last_day=%s comp=%s"%(load_date, last_day, load_date<=last_day))
+        rows2 = dbsession(database).query(StockQuote)\
+            .filter(func.date_format(StockQuote.load_time, '%Y-%m-%d').label('formated_date')==load_date)\
+            .order_by(StockQuote.load_time.desc()).limit(6).all()
+        if (len(rows2) == 6):
+            ordered_rows = reorder(rows2)
+            # for row in ordered_rows: print(row.symbol)
+            return ordered_rows
+
+def print_rows(rows):
+    symbols = ['T', 'WBD', 'CHTR', 'DELL', 'CSCO', 'MSFT']
+    shares = {'T': 287, 'WBD': 69, 'CHTR':20, 'DELL':36, 'CSCO':640, 'MSFT':400}
+    sp = ''
+    num_of_stocks = len(symbols)
+    for chunk in chunked(rows, num_of_stocks):
+        # if len(chunk) <= 0:break
+        totalValue = 0
+        printHeader(sp)
+        for row in chunk:
+            quantity = shares[row.symbol]
+            portfolio = Portfolio(row, quantity)
+            displaySec(portfolio, sp)
+            if row.symbol == 'BEKE':
+                continue
+            else:
+                totalValue += float(portfolio.values)
+        totalValue = f"{totalValue:,.2f}"
+        printTailer(sp, totalValue, padsp(' ', 31) + f'STOCK QUOTES from {database}.stock_quotes LOADED at {rows[5].load_time}')
 
 def main():
-    load_date, rows = get_quote_rows()
-    if len(rows) <= 0: ## no data in DB
-        print(f"STOCK QUOTES NOT LOADED YET in database={database} FOR {load_date}, EXITING ...")
-        sys.exit(0)
-    else:
-        # print(padsp(' ', 31) + f'STOCK QUOTES from {database}.stock_quotes LOADED at {rows[0].load_time}')
-        # symbols = ['T', 'WBD', 'CHTR', 'DELL', 'CSCO', 'MSFT', 'BEKE']
-        symbols = ['T', 'WBD', 'CHTR', 'DELL', 'CSCO', 'MSFT']
-        # shares = {'T': 287, 'WBD': 69, 'CHTR':20, 'DELL':36, 'CSCO':640, 'MSFT':400, 'BEKE':100}
-        shares = {'T': 287, 'WBD': 69, 'CHTR':20, 'DELL':36, 'CSCO':640, 'MSFT':400}
-        sp = ''
-        num_of_stocks = len(symbols)
-        for chunk in chunked(rows, num_of_stocks):
-            # if len(chunk) <= 0:break
-            totalValue = 0
-            printHeader(sp)
-            for row in chunk:
-                quantity = shares[row.symbol]
-                portfolio = Portfolio(row, quantity)
-                displaySec(portfolio, sp)
-                if row.symbol == 'BEKE':
-                    continue
-                else:
-                    totalValue += float(portfolio.values)
-            totalValue = f"{totalValue:,.2f}"
-            # printTailer(sp, totalValue + ' (Excluding BEKE)')
-            printTailer(sp, totalValue, padsp(' ', 31) + f'STOCK QUOTES from {database}.stock_quotes LOADED at {rows[0].load_time}')
-        # print(padsp(' ', 31) + f'STOCK QUOTES from {database}.stock_quotes LOADED at {chunk[5].load_time}')
+    rows1 = get_quote_last_rows()
+    last_load_day = rows1[5].load_time.strftime('%Y-%m-%d')
+    # for row in rows1: print("load_time=[%s] symbol=[%s]"%(row.load_time, row.symbol))
+    rows2 = get_quote_last_2nd_rows(last_load_day)
+    print_rows(rows2)
+    print_rows(rows1)
+
 if __name__=="__main__": main()
