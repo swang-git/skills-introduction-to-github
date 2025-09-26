@@ -29,7 +29,7 @@ def get_stock_quotes(last_day=None):
         return dbsession(database).query(StockQuote).order_by(StockQuote.load_time.desc()).limit(6).all()
 
     backRange = 100
-    for add_days in range(backRange):
+    for add_days in range(1, backRange):
         load_date = (datetime.now() + timedelta(days=-add_days)).strftime('%Y-%m-%d')
         if (load_date >= last_day): continue
         # print("load_date=%s last_day=%s comp=%s"%(load_date, last_day, load_date<=last_day))
@@ -75,12 +75,14 @@ def print_rows(rows, diff=None):
 
 def main():
     shares = get_shares()
+
     rows = get_stock_quotes()
     rows1 = reorder(rows)
     last_load_day = rows1[5].load_time.strftime('%Y-%m-%d')
     total1 = sum(row.price * shares[row.symbol] for row in rows1)
     # print("total1=%s"%total1)
     # for row in rows1: print("load_time=[%s] symbol=[%s]"%(row.load_time, row.symbol))
+    
     rows = get_stock_quotes(last_load_day)
     rows2 = reorder(rows)
     total2 = sum(row.price * shares[row.symbol] for row in rows2)
