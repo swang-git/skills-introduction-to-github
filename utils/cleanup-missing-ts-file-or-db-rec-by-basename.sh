@@ -32,8 +32,13 @@ done
 fileEx=${fileExist:0:3}
 # echo $fileEx
 if [ $fileEx = "Not" ]; then
-  echo "delete record $basen ...."
-  mysql -pYbsjll11 -b mythconverg -e "delete from recorded where basename = '$basen'"
+  cnt=$(mysql -pYbsjll11 -b mythconverg --batch -N -e "select COUNT(*) from recorded where basename = '$basen'")
+  if [ $cnt -gt 0 ]; then
+    echo "delete record $basen ...."
+    mysql -pYbsjll11 -b mythconverg -e "delete from recorded where basename = '$basen'"
+  else
+    echo "No row in recorded table and recorded file for $basen, exiting ..."
+  fi
   exit
 else
   echo $fileExist

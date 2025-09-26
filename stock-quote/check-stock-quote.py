@@ -64,11 +64,12 @@ def print_rows(rows, diff=None):
         dday = load_time.strftime('%Y-%m-%d (%a)')
         if (diff==None): printTailer(sp, totalValue, f'Date: {dday}', padsp(sp, 58) + f'{database}.stock_quotes')
         else: 
-            if diff == 0: cdiff = fg.yellow + diff + fg.rs
-            elif diff > 0: cdiff = fg.green + diff + fg.rs
+            sdiff = f"{diff:,.2f}"
+            if diff == 0: cdiff = fg.yellow + str(sdiff) + fg.rs
+            elif diff > 0: cdiff = fg.green + str(sdiff) + fg.rs
             else:
-                diff = str(diff)[1:]
-                cdiff = fg.red + diff + fg.rs
+                diff = str(sdiff)[1:]
+                cdiff = fg.red + str(sdiff) + fg.rs
             cdiff = ef.bold + cdiff + rs.bold_dim
             printTailer(sp, totalValue, f'Date: {dday} G/L={cdiff}', padsp(sp, 54 - len('$' + str(diff))) + f'{database}.stock_quotes')
         
@@ -86,10 +87,8 @@ def main():
     rows = get_stock_quotes(last_load_day)
     rows2 = reorder(rows)
     total2 = sum(row.price * shares[row.symbol] for row in rows2)
-    # print("total2=%s"%total2)
     diff = total1 - total2
-    diff = f'{diff:,.2f}'
-    diff = float(diff)
+    print("total1=%f total2=%f diff=%f diffx=%f"%(total1, total2, diff, total1-total2))
     print_rows(rows2)
     print_rows(rows1, diff)
     print(' ╚' + 128*'═' + '╝')
