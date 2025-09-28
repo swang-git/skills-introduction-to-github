@@ -12,7 +12,7 @@
     <q-drawer v-model="drawer" :width="isDesk ? 338 : 225" :breakpoint="500" class="bg-teal-10" >
       <q-list no-border link inset-delimiter>
         <q-item-label>
-          <div v-if="isDesk"><q-btn flat @click="goHome()" style="color:rgb(40,255,10);font-size:30px">省千里路 🏠 破万卷书</q-btn></div>
+          <div v-if="isDesk"><q-btn flat @click="goHome()" style="color:rgb(40,255,10);font-size:30.2px">省千里路 🏠 破万卷书</q-btn></div>
           <div v-else style="margin:0 0 0 18px"><q-btn round glossy @click="goHome()" color="green"><q-icon name="🏠" class="q-pb-sm" /></q-btn>
             <span class="q-pl-xl"><q-btn flat icon="天 天 看 看" class="q-pb-xs" /></span>
           </div>
@@ -137,7 +137,7 @@ a:active { color: cyan; }
 .art-tit {
   /* font-family: stfangsong; */
   font-family: youyuan;
-  font-size: 29.8px;
+  font-size: 28.9px;
   font-weight: 500;
   color: white;
 }

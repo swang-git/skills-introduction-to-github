@@ -64,7 +64,7 @@ def print_rows(rows, diff=None):
         dday = load_time.strftime('%Y-%m-%d (%a)')
         if (diff==None): printTailer(sp, totalValue, f'Date: {dday}', padsp(sp, 58) + f'{database}.stock_quotes')
         else: 
-            sdiff = f"{diff:,.2f}"
+            sdiff = f"{diff:,.2f}"  #currency format like 2,550.45
             if diff == 0: cdiff = fg.yellow + str(sdiff) + fg.rs
             elif diff > 0: cdiff = fg.green + str(sdiff) + fg.rs
             else:
