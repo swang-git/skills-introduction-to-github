@@ -11,12 +11,16 @@ from sty import ef, rs, FgRegister
 fg = FgRegister()
 
 parser = argparse.ArgumentParser()
-parser.add_argument("add_days", metavar='int', type=int, nargs='?', default='0', help='add/sub days from today, default 0 for today')
+parser.add_argument("sub_days", metavar='int', type=int, nargs='?', default='0', help='sub days from today(must be < 0), default 0 for today')
 # optional arguments
 parser.add_argument('-d', '--db', type=str, default='prod', help='check quotes in this database default database: prod')
 args = parser.parse_args()
-add_days = args.add_days
+sub_days = args.sub_days
+if sub_days > 0:
+    print("sub_days must negative, %s given, exiting..."%sub_days)
+    sys.exit(1)
 database = args.db
+print("sub_days=%d db=%s"%(sub_days, database))
 
 def reorder(rows) :
     symbols = ['T', 'WBD', 'CHTR', 'DELL', 'CSCO', 'MSFT']
@@ -67,17 +71,19 @@ def print_rows(rows, diff=None):
             sdiff = f"{diff:,.2f}"  #currency format like 2,550.45
             if diff == 0: cdiff = fg.yellow + str(sdiff) + fg.rs
             elif diff > 0: cdiff = fg.green + str(sdiff) + fg.rs
+            elif diff > 0: cdiff = ef.bold + (fg.green + str(sdiff) + fg.rs) + rs.bold_dim
             else:
                 diff = str(sdiff)[1:]
-                cdiff = fg.red + str(sdiff) + fg.rs
-            cdiff = ef.bold + cdiff + rs.bold_dim
+                cdiff = fg.red + str(sdiff)[1:] + fg.rs
+                cdiff = ef.bold + cdiff + rs.bold_dim
+                # print("diff=%s cdiff=%s sdiff=%s"%(diff, cdiff, sdiff))
             printTailer(sp, totalValue, f'Date: {dday} G/L={cdiff}', padsp(sp, 54 - len('$' + str(diff))) + f'{database}.stock_quotes')
         
 
 def main():
     shares = get_shares()
-
-    rows = get_stock_quotes()
+    load_date = (datetime.now() + timedelta(days=sub_days)).strftime('%Y-%m-%d')
+    rows = get_stock_quotes(load_date)
     rows1 = reorder(rows)
     last_load_day = rows1[5].load_time.strftime('%Y-%m-%d')
     total1 = sum(row.price * shares[row.symbol] for row in rows1)
@@ -88,7 +94,7 @@ def main():
     rows2 = reorder(rows)
     total2 = sum(row.price * shares[row.symbol] for row in rows2)
     diff = total1 - total2
-    print("total1=%f total2=%f diff=%f diffx=%f"%(total1, total2, diff, total1-total2))
+    # print("total1=%f total2=%f diff=%f diffx=%f"%(total1, total2, diff, total1-total2))
     print_rows(rows2)
     print_rows(rows1, diff)
     print(' ╚' + 128*'═' + '╝')
