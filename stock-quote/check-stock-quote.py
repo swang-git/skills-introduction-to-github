@@ -28,9 +28,9 @@ def reorder(rows) :
     data_sorted = sorted(rows, key=lambda o: order_map.get(o.symbol, len(symbols)))
     return data_sorted
 
-def get_stock_quotes(last_day=None):
-    if last_day == None: 
-        return dbsession(database).query(StockQuote).order_by(StockQuote.load_time.desc()).limit(6).all()
+def get_stock_quotes(last_day):
+    # if last_day == None:
+    #     return dbsession(database).query(StockQuote).order_by(StockQuote.load_time.desc()).limit(6).all()
 
     backRange = 100
     for add_days in range(1, backRange):
