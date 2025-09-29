@@ -70,12 +70,10 @@ def print_rows(rows, diff=None):
         else: 
             sdiff = f"{diff:,.2f}"  #currency format like 2,550.45
             if diff == 0: cdiff = fg.yellow + str(sdiff) + fg.rs
-            elif diff > 0: cdiff = fg.green + str(sdiff) + fg.rs
-            elif diff > 0: cdiff = ef.bold + (fg.green + str(sdiff) + fg.rs) + rs.bold_dim
+            elif diff > 0: cdiff = ef.bold + fg.green + str(sdiff) + fg.rs + rs.bold_dim
             else:
                 diff = str(sdiff)[1:]
-                cdiff = fg.red + str(sdiff)[1:] + fg.rs
-                cdiff = ef.bold + cdiff + rs.bold_dim
+                cdiff =  ef.bold + fg.red + str(sdiff)[1:] + fg.rs + rs.bold_dim
                 # print("diff=%s cdiff=%s sdiff=%s"%(diff, cdiff, sdiff))
             printTailer(sp, totalValue, f'Date: {dday} G/L={cdiff}', padsp(sp, 54 - len('$' + str(diff))) + f'{database}.stock_quotes')
         
