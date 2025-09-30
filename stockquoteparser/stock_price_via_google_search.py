@@ -167,8 +167,6 @@ for stock in stocks:
         print("get_stock_quote(%s, %s) failed, error=%s"%(date, stock, ex.message))
     finally: print(pdata)
     quote = StockQuote(stock)
-    if quote.isQuoteAlreadyInDBforToday(database):
-        # print("data is already loaded for %s"%stock)
-        continue
+    if quote.isQuoteAlreadyInDBforToday(database): continue
     quote.setData(pdata)
     quote.saveToDB(database)

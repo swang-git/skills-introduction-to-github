@@ -65,25 +65,27 @@ class StockQuote(Base):
     
     def isQuoteAlreadyInDBforToday(self, database):
         session = dbsession(database)
-        load_hour=datetime.now().strftime('%Y-%m-%d %H')
-        # print('load_date=[%s][%s]'%(load_hour, self.symbol))
-        u = session.query(StockQuote).filter(
+        # load_date=datetime.now().strftime('%Y-%m-%d')
+        today = datetime.now().strftime('%Y-%m-%d')
+        # print('today=[%s][%s]'%(today, self.symbol))
+        pdata = session.query(StockQuote).filter(
             StockQuote.symbol==self.symbol,
-            func.date_format(StockQuote.load_time, '%Y-%m-%d %H').label('formated_date')==load_hour).first()
+            func.date_format(StockQuote.load_time, '%Y-%m-%d').label('formated_date')==today).first()
 
-        if u is None: ## no data in DB
+        if pdata is None: ## no data in DB
             return False
         else:
-            print(f'quote for [{self.symbol}] already exists[THIS HOUR do it next hour] in table {database}.stock_quotes, see below:')
+            print(f'quote for [{self.symbol}] already exists for {today} in table {database}.stock_quotes, see below:')
             print(tabulate(
                 [(u.load_time, u.symbol, u.price, u.price_change, u.day_low,u.day_high,u.low_52_week,u.high_52_week)],
                 headers=['Load Time', 'Stock', 'Price', 'Change', 'Day Low', 'Day High', '52WK Low', '52WK High'],
                 tablefmt='grid'))
-
             return True
 
     def getQuote(self, database, flag=None):
-        if self.isQuoteAlreadyInDBforToday(database): return 'exist this hour'
+        # if self.isQuoteAlreadyInDBforToday(database): 
+        #     print("the quote already exists")
+        #     return 'exist today'
         # else: print('Loading data via scraping...')
 
         if flag == 'testing':
@@ -121,8 +123,12 @@ class StockQuote(Base):
         session.close()
 
     def setData(self, pdata):
-        # if self.isQuoteAlreadyInDBforToday(database): return 'exist this hour'
-        # print(pdata)
+        # if self.isQuoteAlreadyInDBforToday(database): 
+        #     print("the quote already exists")
+        #     return 'exist today'
+        # else: print('Loading data via scraping...')
+        # # print(pdata)
+
         self.load_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         self.price=pdata[1]
         self.price_change=pdata[2]

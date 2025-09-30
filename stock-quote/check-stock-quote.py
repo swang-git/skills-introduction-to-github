@@ -28,20 +28,27 @@ def reorder(rows) :
     data_sorted = sorted(rows, key=lambda o: order_map.get(o.symbol, len(symbols)))
     return data_sorted
 
-def get_stock_quotes(last_day=None):
-    if last_day == None:
-        return dbsession(database).query(StockQuote).order_by(StockQuote.load_time.desc()).limit(6).all()
+def get_stock_quotes(load_day):
+    # if load_day == None:
+    #     return dbsession(database).query(StockQuote).order_by(StockQuote.load_time.desc()).limit(6).all()
+    
+    print("load_day=%s sub_days=%s"%(load_day, sub_days))
+    rows = dbsession(database).query(StockQuote)\
+        .filter(func.date_format(StockQuote.load_time, '%Y-%m-%d').label('formated_date')==load_day)\
+        .order_by(StockQuote.load_time.desc()).limit(6).all()
+    if (len(rows) == 6): return rows
 
+    print("loop for previous days, i.e. < %s"%load_day)
     backRange = 100
     for add_days in range(1, backRange):
-        load_date = (datetime.now() + timedelta(days=-add_days)).strftime('%Y-%m-%d')
-        if (load_date >= last_day): continue
-        # print("load_date=%s last_day=%s comp=%s"%(load_date, last_day, load_date<=last_day))
+        prev_day = (datetime.now() + timedelta(days=-add_days)).strftime('%Y-%m-%d')
+        if (prev_day >= load_day): continue
+        print("prev_day=%s load_day=%s comp=%s"%(prev_day, load_day, prev_day<=load_day))
         rows = dbsession(database).query(StockQuote)\
-            .filter(func.date_format(StockQuote.load_time, '%Y-%m-%d').label('formated_date')==load_date)\
+            .filter(func.date_format(StockQuote.load_time, '%Y-%m-%d').label('formated_date')==prev_day)\
             .order_by(StockQuote.load_time.desc()).limit(6).all()
         if (len(rows) == 6): return rows
-    print("There are not quotes for %d days back from %s"%(backRange, last_day))
+    print("There are not quotes for %d days back from %s"%(backRange, load_day))
     sys.exit(1)
 
 def get_shares(): return {'T': 287, 'WBD': 69, 'CHTR':20, 'DELL':36, 'CSCO':640, 'MSFT':400}
@@ -69,7 +76,7 @@ def print_rows(rows, diff=None):
         if (diff==None): printTailer(sp, totalValue, f'Date: {dday}', padsp(sp, 58) + f'{database}.stock_quotes')
         else: 
             sdiff = f"{diff:,.2f}"  #currency format like 2,550.45
-            if diff == 0: cdiff = fg.yellow + str(sdiff) + fg.rs
+            if diff == 0: diff='0.00'; cdiff = ef.bold + fg.yellow + str(sdiff) + fg.rs + rs.bold_dim
             elif diff > 0: cdiff = ef.bold + fg.green + str(sdiff) + fg.rs + rs.bold_dim
             else:
                 diff = str(sdiff)[1:]
@@ -77,22 +84,20 @@ def print_rows(rows, diff=None):
                 # print("diff=%s cdiff=%s sdiff=%s"%(diff, cdiff, sdiff))
             printTailer(sp, totalValue, f'Date: {dday} G/L={cdiff}', padsp(sp, 54 - len('$' + str(diff))) + f'{database}.stock_quotes')
         
-
-def main():
+if __name__=="__main__":
     shares = get_shares()
-    if sub_days == 0:
-        rows = get_stock_quotes()
-    else:
-        load_date = (datetime.now() + timedelta(days=sub_days)).strftime('%Y-%m-%d')
-        # print("load_date=%s"%load_date)
-        rows = get_stock_quotes(load_date)
+    load_day = (datetime.now() + timedelta(days=sub_days)).strftime('%Y-%m-%d')
+    # print("load_date=%s"%load_date)
+    rows = get_stock_quotes(load_day)
     rows1 = reorder(rows)
-    last_load_day = rows1[5].load_time.strftime('%Y-%m-%d')
+    last_load_day = rows1[5].load_time
+
     total1 = sum(row.price * shares[row.symbol] for row in rows1)
     # print("total1=%s"%total1)
     # for row in rows1: print("load_time=[%s] symbol=[%s]"%(row.load_time, row.symbol))
     
-    rows = get_stock_quotes(last_load_day)
+    load_day = (last_load_day + timedelta(days=-1)).strftime('%Y-%m-%d')
+    rows = get_stock_quotes(load_day)
     rows2 = reorder(rows)
     total2 = sum(row.price * shares[row.symbol] for row in rows2)
     diff = total1 - total2
@@ -100,5 +105,3 @@ def main():
     print_rows(rows2)
     print_rows(rows1, diff)
     print(' ╚' + 128*'═' + '╝')
-
-if __name__=="__main__": main()
