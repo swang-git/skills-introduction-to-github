@@ -28,9 +28,9 @@ def reorder(rows) :
     data_sorted = sorted(rows, key=lambda o: order_map.get(o.symbol, len(symbols)))
     return data_sorted
 
-def get_stock_quotes(last_day):
-    # if last_day == None:
-    #     return dbsession(database).query(StockQuote).order_by(StockQuote.load_time.desc()).limit(6).all()
+def get_stock_quotes(last_day=None):
+    if last_day == None:
+        return dbsession(database).query(StockQuote).order_by(StockQuote.load_time.desc()).limit(6).all()
 
     backRange = 100
     for add_days in range(1, backRange):
@@ -80,8 +80,12 @@ def print_rows(rows, diff=None):
 
 def main():
     shares = get_shares()
-    load_date = (datetime.now() + timedelta(days=sub_days)).strftime('%Y-%m-%d')
-    rows = get_stock_quotes(load_date)
+    if sub_days == 0:
+        rows = get_stock_quotes()
+    else:
+        load_date = (datetime.now() + timedelta(days=sub_days)).strftime('%Y-%m-%d')
+        # print("load_date=%s"%load_date)
+        rows = get_stock_quotes(load_date)
     rows1 = reorder(rows)
     last_load_day = rows1[5].load_time.strftime('%Y-%m-%d')
     total1 = sum(row.price * shares[row.symbol] for row in rows1)

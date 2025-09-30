@@ -1,7 +1,7 @@
 <template>
-<div>
-  <q-dialog v-model="opened" transition-show="slide-right" persistent :maximized="isIM">
-    <q-layout container class="bg-teal-10" :style="{ height:compHeight }">
+  <q-dialog v-model="opened" transition-show="slide-right" persistent>
+    <!-- <q-layout container class="bg-teal-10" :style="{ height:compHeight }"> -->
+    <q-layout container class="bg-teal-10">
       <LayoutHeader :tit="getTitle()" @do-action="doAction" :rbtn="iicon" />
       <LayoutFooter :tit="getFoote()" icon="link" :act="action" @do-action="doAction" />
       <q-page-container>
@@ -58,7 +58,6 @@
   <NotePad @save-details="saveNote" />
   <FloatPad />
   <SelOptionsWithSearch @selected-option="selectedOption" />
-</div>
 </template>
 <script setup>
 import { ref, reactive, computed } from 'vue'
