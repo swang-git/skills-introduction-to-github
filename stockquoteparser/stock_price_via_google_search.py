@@ -55,6 +55,8 @@ def get_pdf_text(date, stock):
     # with pdfplumber.open(pdf_path) as pdf, open("output.txt", "w", encoding="utf-8") as f:
     try:
         with pdfplumber.open(pdf_path) as pdf:
+            # logging.getLogger("pdfplumber").setLevel(logging.WARNING)
+            # logging.getLogger("pdfminer").setLevel(logging.WARNING)
             for page in pdf.pages:
                 ptxt = page.extract_text()
                 if ptxt and not re.match(r'None', ptxt):   
