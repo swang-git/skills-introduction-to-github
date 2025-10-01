@@ -38,7 +38,8 @@ def get_shares(): return {'T': 287, 'WBD': 69, 'CHTR':20, 'DELL':36, 'CSCO':640,
 
 def print_rows(rows, diff=None):
     symbols = ['T', 'WBD', 'CHTR', 'DELL', 'CSCO', 'MSFT']
-    sp = ''
+    sp = ""
+    spc = " "
     shares = get_shares()
     num_of_stocks = len(symbols)
     for chunk in chunked(rows, num_of_stocks):
@@ -60,14 +61,16 @@ def print_rows(rows, diff=None):
         else: 
             toplen = 53
             sdiff = f"{diff:,.2f}"  #currency format like 2,550.45
+            spgap = (toplen - len(str(sdiff)))*spc
             if diff == 0: diff='0.00'; cdiff = ef.bold + fg.yellow + str(sdiff) + fg.rs + rs.bold_dim
             elif diff > 0: cdiff = ef.bold + fg.green + str(sdiff) + fg.rs + rs.bold_dim
             else:
                 toplen = 54
                 diff = str(sdiff)[1:]
                 cdiff =  ef.bold + fg.red + str(sdiff)[1:] + fg.rs + rs.bold_dim
+                spgap = (toplen - len(str(sdiff)))*spc
                 # print("diff=%s cdiff=%s sdiff=%s"%(diff, cdiff, sdiff))
-            printTailer(sp, totalValue, f'Date: {dday} G/L={cdiff}', padsp(sp, toplen - len(str(sdiff))) + f'{database}.stock_quotes')
+            printTailer(sp, totalValue, f"Date: {dday} G/L={cdiff}", spgap + f'{database}.stock_quotes')
         
 if __name__=="__main__":
     rowsyst, rowstdy = get_last_2_set_stock_quotes(sub_days)
