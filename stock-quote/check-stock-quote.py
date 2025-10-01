@@ -28,28 +28,34 @@ def reorder(rows) :
     data_sorted = sorted(rows, key=lambda o: order_map.get(o.symbol, len(symbols)))
     return data_sorted
 
-def get_stock_quotes(load_day):
-    # if load_day == None:
-    #     return dbsession(database).query(StockQuote).order_by(StockQuote.load_time.desc()).limit(6).all()
-    
-    print("load_day=%s sub_days=%s"%(load_day, sub_days))
-    rows = dbsession(database).query(StockQuote)\
-        .filter(func.date_format(StockQuote.load_time, '%Y-%m-%d').label('formated_date')==load_day)\
-        .order_by(StockQuote.load_time.desc()).limit(6).all()
-    if (len(rows) == 6): return rows
+def get_last_2_set_stock_quotes(start):
+    rows12 = dbsession(database).query(StockQuote).order_by(StockQuote.load_time.desc()).offset(-sub_days*6).limit(12).all()
+    rowstdy = rows12[0:6]     #last set since sub_days
+    rowsyst = rows12[6:12]    #last 2nd set like today or the last set if sub_days = 0
+    return rowsyst, rowstdy
 
-    print("loop for previous days, i.e. < %s"%load_day)
-    backRange = 100
-    for add_days in range(1, backRange):
-        prev_day = (datetime.now() + timedelta(days=-add_days)).strftime('%Y-%m-%d')
-        if (prev_day >= load_day): continue
-        print("prev_day=%s load_day=%s comp=%s"%(prev_day, load_day, prev_day<=load_day))
-        rows = dbsession(database).query(StockQuote)\
-            .filter(func.date_format(StockQuote.load_time, '%Y-%m-%d').label('formated_date')==prev_day)\
-            .order_by(StockQuote.load_time.desc()).limit(6).all()
-        if (len(rows) == 6): return rows
-    print("There are not quotes for %d days back from %s"%(backRange, load_day))
-    sys.exit(1)
+# def get_stock_quotes(load_day):
+#     # if load_day == None:
+#     #     return dbsession(database).query(StockQuote).order_by(StockQuote.load_time.desc()).limit(6).all()
+    
+#     print("load_day=%s sub_days=%s"%(load_day, sub_days))
+#     rows = dbsession(database).query(StockQuote)\
+#         .filter(func.date_format(StockQuote.load_time, '%Y-%m-%d').label('formated_date')==load_day)\
+#         .order_by(StockQuote.load_time.desc()).limit(6).all()
+#     if (len(rows) == 6): return rows
+
+#     print("loop for previous days, i.e. < %s"%load_day)
+#     backRange = 100
+#     for add_days in range(1, backRange):
+#         prev_day = (datetime.now() + timedelta(days=-add_days)).strftime('%Y-%m-%d')
+#         if (prev_day >= load_day): continue
+#         print("prev_day=%s load_day=%s comp=%s"%(prev_day, load_day, prev_day<=load_day))
+#         rows = dbsession(database).query(StockQuote)\
+#             .filter(func.date_format(StockQuote.load_time, '%Y-%m-%d').label('formated_date')==prev_day)\
+#             .order_by(StockQuote.load_time.desc()).limit(6).all()
+#         if (len(rows) == 6): return rows
+#     print("There are not quotes for %d days back from %s"%(backRange, load_day))
+#     sys.exit(1)
 
 def get_shares(): return {'T': 287, 'WBD': 69, 'CHTR':20, 'DELL':36, 'CSCO':640, 'MSFT':400}
 
@@ -85,23 +91,38 @@ def print_rows(rows, diff=None):
             printTailer(sp, totalValue, f'Date: {dday} G/L={cdiff}', padsp(sp, 54 - len('$' + str(diff))) + f'{database}.stock_quotes')
         
 if __name__=="__main__":
-    shares = get_shares()
-    load_day = (datetime.now() + timedelta(days=sub_days)).strftime('%Y-%m-%d')
-    # print("load_date=%s"%load_date)
-    rows = get_stock_quotes(load_day)
-    rows1 = reorder(rows)
-    last_load_day = rows1[5].load_time
+    rowsyst, rowstdy = get_last_2_set_stock_quotes(sub_days)
+    # for row in rowsyst: print(row.load_time, (row.load_time).strftime('%a'), row.symbol)
+    # for row in rowstdy: print(row.load_time, (row.load_time).strftime('%a'), row.symbol)
 
-    total1 = sum(row.price * shares[row.symbol] for row in rows1)
-    # print("total1=%s"%total1)
-    # for row in rows1: print("load_time=[%s] symbol=[%s]"%(row.load_time, row.symbol))
-    
-    load_day = (last_load_day + timedelta(days=-1)).strftime('%Y-%m-%d')
-    rows = get_stock_quotes(load_day)
-    rows2 = reorder(rows)
-    total2 = sum(row.price * shares[row.symbol] for row in rows2)
-    diff = total1 - total2
-    # print("total1=%f total2=%f diff=%f diffx=%f"%(total1, total2, diff, total1-total2))
-    print_rows(rows2)
-    print_rows(rows1, diff)
+    shares = get_shares()
+    rowsy = reorder(rowsyst)
+    rowst = reorder(rowstdy)
+
+    totaly = sum(row.price * shares[row.symbol] for row in rowsy)
+    totalt = sum(row.price * shares[row.symbol] for row in rowst)
+    diff = totalt - totaly
+    print_rows(rowsy)
+    print_rows(rowst, diff)
     print(' ╚' + 128*'═' + '╝')
+    sys.exit(0)
+
+    # load_day = (datetime.now() + timedelta(days=sub_days)).strftime('%Y-%m-%d')
+    # # print("load_date=%s"%load_date)
+    # rows = get_stock_quotes(load_day)
+    # rows1 = reorder(rows)
+    # last_load_day = rows1[5].load_time
+
+    # total1 = sum(row.price * shares[row.symbol] for row in rows1)
+    # # print("total1=%s"%total1)
+    # # for row in rows1: print("load_time=[%s] symbol=[%s]"%(row.load_time, row.symbol))
+    
+    # load_day = (last_load_day + timedelta(days=-1)).strftime('%Y-%m-%d')
+    # rows = get_stock_quotes(load_day)
+    # rows2 = reorder(rows)
+    # total2 = sum(row.price * shares[row.symbol] for row in rows2)
+    # diff = total1 - total2
+    # # print("total1=%f total2=%f diff=%f diffx=%f"%(total1, total2, diff, total1-total2))
+    # print_rows(rows2)
+    # print_rows(rows1, diff)
+    # print(' ╚' + 128*'═' + '╝')
