@@ -165,7 +165,7 @@ for stock in stocks:
         # print(pdata)
     except Exception as ex:
         print("get_stock_quote(%s, %s) failed, error=%s"%(date, stock, ex.message))
-    finally: print(pdata)
+    # finally: print(pdata)
     quote = StockQuote(stock)
     if quote.isQuoteAlreadyInDBforToday(database): continue
     quote.setData(pdata)

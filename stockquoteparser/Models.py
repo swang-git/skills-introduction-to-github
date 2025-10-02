@@ -68,16 +68,16 @@ class StockQuote(Base):
         # load_date=datetime.now().strftime('%Y-%m-%d')
         today = datetime.now().strftime('%Y-%m-%d')
         # print('today=[%s][%s]'%(today, self.symbol))
-        pdata = session.query(StockQuote).filter(
+        pda = session.query(StockQuote).filter(
             StockQuote.symbol==self.symbol,
             func.date_format(StockQuote.load_time, '%Y-%m-%d').label('formated_date')==today).first()
 
-        if pdata is None: ## no data in DB
+        if pda is None: ## no data in DB
             return False
         else:
             print(f'quote for [{self.symbol}] already exists for {today} in table {database}.stock_quotes, see below:')
             print(tabulate(
-                [(u.load_time, u.symbol, u.price, u.price_change, u.day_low,u.day_high,u.low_52_week,u.high_52_week)],
+                [(pda.load_time, pda.symbol, pda.price, pda.price_change, pda.day_low,pda.day_high,pda.low_52_week,pda.high_52_week)],
                 headers=['Load Time', 'Stock', 'Price', 'Change', 'Day Low', 'Day High', '52WK Low', '52WK High'],
                 tablefmt='grid'))
             return True
