@@ -29,6 +29,7 @@ const showDate = ref(false)
 const newDate = ref(null)
 
 console.log(`-ST-DatePicker props.date=${props.date}`)
+emitter.emit('init-date', props.date)
 emitter.on('new-date', (ndate) => setNewDate(ndate))
 setNewDate(null)
     
@@ -37,7 +38,7 @@ function setNewDate (ndate) {
   newDate.value = ndate == null ? props.date : ndate
 }
 function updDate () {
-  // console.log('-fn-updDate from DatePicker', newDate.value)
+  console.log('-fn-updDate from DatePicker', newDate.value)
   showDate.value = false
   emit('upd-date', newDate.value)
 }

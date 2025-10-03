@@ -3,10 +3,12 @@
   <q-card square class="bg-teal-10">
     <!-- <q-card-section class="text-center text-h6" v-html="getStatementLink()" /> -->
     <div class="text-center text-h6 q-pt-sm">
-      <a :href=url target="_blank">{{ urlname }}</a>
+      <!-- <a :href=url target="_blank">{{ urlname }}</a> -->
+      <a :href=compUrl target="_blank">{{ compUrlname }}</a>
     </div>
     <div v-for="(o) in options" :key="o">
-      <q-radio class="q-px-md" size="lg" keep-color :key="o" v-model="statement.bank" :val="o.value" :label="o.label" :color="o.color" @click="setStatementLink()"/>
+      <!-- <q-radio class="q-px-md" size="lg" keep-color :key="o" v-model="statement.bank" :val="o.value" :label="o.label" :color="o.color" @click="setStatementLink()"/> -->
+      <q-radio class="q-px-md" size="lg" keep-color :key="o" v-model="statement.bank" :val="o.value" :label="o.label" :color="o.color" @click="storeBank()" />
     </div>
     <q-card-actions align="between">
       <DatePicker :date="compDate" txsz="text-h6" @upd-date="updDate" style="width:240px" />
@@ -38,9 +40,12 @@ import DatePicker from '../src/components/DatePicker'
 import emitter from 'tiny-emitter/instance'
 import { libFunctions } from '../src/composables/libFunctions'
 const { isDesk, buildApp, $q } = libFunctions()
+const today = new Date().yyyymmdd()
+// const initDate = ref(null)
 
 const intraday = ref(null)
 // emitter.on('intraday', (x) => intraday.value = x)
+// emitter.on('init-date', (x) => { initDate.value = x; console.log(`initDate=${initDate.value}`)})
 
 console.log(`-ST-bankstatementloader`)
 
@@ -52,31 +57,50 @@ const options = ([
   { label: 'Chase Brokerage Intraday', value: 'ChaseBkg', color: 'blue' },
   // { label: 'North American Company', value: 'NAC', color: 'lime' },
 ])
-const url = ref(null)
-const urlname = ref(null)
 const statement = reactive({
   bank: localStorage.getItem('bank'),
-  // bank: 'NAC',
-  // bank: 'ChaseBkg',
-  // bank: 'FidelCC',
-  // bank: 'Fidelity',
-  // bank: 'BOA',
-  date: new Date().yyyymmdd()
-  // date: '2021-07-20'
+  date: today
+})
+setBankStatementDate()
+
+const compUrlname = computed({
+  get: () => {
+    let urlname = null
+    if (statement.bank === 'FidelCC') urlname ='FIDELITY CREDIT CARD MONTHLY STATEMENT'
+    else if (statement.bank === 'BOA') urlname = 'BANK OF AMERICA MONTHLY STATEMENT (Savings)'
+    else if (statement.bank === 'Chase') urlname = 'CHASE MONTHLY STATEMENT'
+    else if (statement.bank === 'ChaseBkg') urlname = 'Chase Brokerage Intraday'
+    else if (statement.bank === 'Fidelity') urlname = 'FIDELITY MONTHLY STATEMENT (Roth)'
+    else if (statement.bank === 'NAC') urlname = 'North American Company Yearly Statement'
+    return urlname
+  }
+})
+const compUrl = computed({
+  get: () => {
+    const yyyymm = compDate.value.yyyymm().replace('-', '')
+    statement.date = compDate.value
+    let url = null
+    console.log(`-CP-compUrl compDate=${compDate.value} statement.date=${statement.date} statement.bank=${statement.bank} from compUrl`)
+    if (statement.bank === 'FidelCC') url = 'docs/fidelity_credit_card/' + compDate.value + '.pdf'
+    else if (statement.bank === 'BOA') url = 'docs/BOA/' + yyyymm + '_savings.pdf'
+    else if (statement.bank === 'Chase') url = '/docs/Chase/' + yyyymm + '.pdf'
+    else if (statement.bank === 'ChaseBkg') url = '/docs/Chase/' + yyyymm + '_bkg.pdf'
+    else if (statement.bank === 'Fidelity') url = '/docs/Fidelity/' + yyyymm + '_roth.pdf'
+    else if (statement.bank === 'NAC') url = '/docs/NAC/' + yyyymm + '.pdf'
+    return url
+  }
 })
 const compDate = computed({
   get: () => {
-    const newDate = getBankStatementDate()
+    const newDate = statement.date
+    console.log(`-CP-compDate newDate=${newDate} statement.date=${statement.date} from compDate`)
     emitter.emit('new-date', newDate)
     return newDate
   }
 })
 
-setStatementLink()
-
 function setIntraday (x) {
   intraday.value = x
-  setStatementLink()
 }
 function closeOthersAndBuildApp () {
   console.log('-CK-fn-closeOthers for', statement.bank)
@@ -125,22 +149,30 @@ function closeOthersAndBuildApp () {
     buildApp('NAC Yearly Statement')
   }
 }
-function setStatementLink() {
-  // const date = statement.date
-  const date = compDate.value
-  // const yyyymm = date.yyyymm().replace('-', '')
-  const yyyymm = '2025-03'
+function storeBank () {
   localStorage.setItem('bank', statement.bank)
-  console.log(`-fn-setStatementLink bank=${statement.bank} date=${date}`)
-  if (statement.bank === 'FidelCC') { url.value = 'docs/fidelity_credit_card/' + date + '.pdf'; urlname.value='FIDELITY CREDIT CARD MONTHLY STATEMENT' }
-  else if (statement.bank === 'BOA') { url.value = 'docs/BOA/' + yyyymm + '_savings.pdf'; urlname.value = 'BANK OF AMERICA MONTHLY STATEMENT' }
-  else if (statement.bank === 'Chase') { url.value = '/docs/Chase/' + yyyymm + '.pdf'; urlname.value = 'CHASE MONTHLY STATEMENT' }
-  else if (statement.bank === 'ChaseBkg') { url.value = '/docs/Chase/' + intraday.value + '_bkg.pdf'; urlname.value = 'Chase Brokerage Intraday' }
-  else if (statement.bank === 'Fidelity') { url.value = '/docs/Fidelity/' + yyyymm + '_ira.pdf'; urlname.value = 'FIDELITY MONTHLY STATEMENT (IRA/ROTH)' }
-  else if (statement.bank === 'NAC') { url.value = '/docs/NAC/' + yyyymm + '.pdf'; urlname.value = 'North American Company Yearly Statement' }
-  return closeOthersAndBuildApp()
+  setBankStatementDate()
 }
-function getBankStatementDate() {
+
+// function setStatementLink() {
+//   let date = statement.date
+//   // if (date == today) date = compDate.value
+//   // let date = compDate.value
+//   console.log(`-fn-setStatementLink bank=${statement.bank} calDate=${calDate.value}`)
+//   let yyyymm = calDate == null ? today.yyyymm().replace('-', '') : '202505' //calDate.value.yyyymm().replace('-', '')
+//   // let yyyymm = date.yyyymm().replace('-', '')
+//   localStorage.setItem('bank', statement.bank)
+//   if (statement.bank === 'FidelCC') { compUrl.value = 'docs/fidelity_credit_card/' + date + '.pdf'; compUrlname.value='FIDELITY CREDIT CARD MONTHLY STATEMENT' }
+//   else if (statement.bank === 'BOA') { compUrl.value = 'docs/BOA/' + yyyymm + '_savings.pdf'; compUrlname.value = 'BANK OF AMERICA MONTHLY STATEMENT' }
+//   else if (statement.bank === 'Chase') { compUrl.value = '/docs/Chase/' + yyyymm + '.pdf'; compUrlname.value = 'CHASE MONTHLY STATEMENT' }
+//   // else if (statement.bank === 'ChaseBkg') { compUrl.value = '/docs/Chase/' + intraday.value + '_bkg.pdf'; compUrlname.value = 'Chase Brokerage Intraday' }
+//   else if (statement.bank === 'ChaseBkg') { compUrl.value = '/docs/Chase/' + yyyymm + '_bkg.pdf'; compUrlname.value = 'Chase Brokerage Intraday' }
+//   else if (statement.bank === 'Fidelity') { compUrl.value = '/docs/Fidelity/' + yyyymm + '_roth.pdf'; compUrlname.value = 'FIDELITY MONTHLY STATEMENT (IRA/ROTH)' }
+//   else if (statement.bank === 'NAC') { compUrl.value = '/docs/NAC/' + yyyymm + '.pdf'; compUrlname.value = 'North American Company Yearly Statement' }
+//   return closeOthersAndBuildApp()
+// }
+function setBankStatementDate() {
+  console.log('-fn-setBankStatementDate()', statement)
   const bank = statement.bank
   var d = new Date()
   let month = d.getMonth() + 1
@@ -153,6 +185,7 @@ function getBankStatementDate() {
   else if (date < 20 && bank === 'BOA') month -= 0 // do last last month if in the first 4 days of the month
   // else if (date < 20 && bank === 'BOA') month -= 1 // do last last month if in the first 4 days of the month
   else if (date < 25 && /Chase/.test(bank)) month -= 1 // do last month if in the first 4 days of the month
+  else if (date < 25 && /ChaseBkg/.test(bank)) month -= 1 // do last month if in the first 4 days of the month
   // else if (date <  16 && bank === 'Chase') month -= 2 // do last last month if in the first 4 days of the month
   // else if (date <  7 && bank === 'FidelCC') month -= 1 // do last last month if in the first 4 days of the month
   // else if (date >= 7 && bank === 'FidelCC') month -= 0 // do last last month if in the first 4 days of the month
@@ -183,21 +216,16 @@ function getBankStatementDate() {
     date = '20'
   }
   let ret = year + '-' + month + '-' + date
-  if (bank === 'ChaseBkg') {
-    let month = d.getMonth() + 1
-    ret = year + '-' + month + '-' + d.getDate()
-  }
-  // console.log(`-CK-setBankSatementDate bank=${bank} compDate=${ret}`)
+  console.log(`-CK-setBankSatementDate bank=${bank} compDate=${ret}`)
   statement.date = ret
   return ret
 }
 function updDate(x) {
   statement.date = x
-  // console.log(`-CK-fn-updDate statement.date=${statement.date}`)
+  console.log(`-CK-fn-updDate from Loader.vue statement.date=${statement.date}`)
 }
 function loadStateements() {
   $q.notify('Loading Statement ' + statement.bank)
-  // setStatementLink()
   if (statement.bank === 'FidelCC')  {
     emitter.emit('open-ReconFidelityCC', statement)
     emitter.emit('close-MonthlyStatementChase')

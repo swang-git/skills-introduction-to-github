@@ -219,15 +219,17 @@ class StatementsController extends Controller {
     $this->writeToTempFile($filename, $lines);
     $accountSepLine = $this->getAccountSepLine($lines);
     // Log::info("-CK-Roth Account Separation Line=$accountSepLine");
+    $hsaHoldingsStart = $this->getHsaHoldingsStart($lines);
+    $hsaActivityStart = $this->getHsaActivityStart($lines);
     $dataRoth = $this->getRothStatementHeaders($lines);
     $dataHsa = $this->getHsaStatementHeaders($lines);
     Log::info("-CK-HSA HEADER", $dataHsa);
     $dataRoth = $this->getIndRothHoldings($dataRoth, $lines, 0, $accountSepLine);
     $dataRoth = $this->getRothHoldings($dataRoth, $lines, $accountSepLine, count($lines));
-    $dataHsa = $this->getHsaHoldings($dataHsa, $lines, 1132, count($lines));
+    if ($hsaHoldingsStart > 0) $dataHsa = $this->getHsaHoldings($dataHsa, $lines, $hsaHoldingsStart, count($lines));
     $dataRoth = $this->getIndRothActivity($dataRoth, $lines, 0, $accountSepLine);
     $dataRoth = $this->getRothActivity($dataRoth, $lines, $accountSepLine, 1170);
-    $dataHsa = $this->getHsaActivity($dataHsa, $lines, 1171, count($lines));
+    if ($hsaActivityStart > 0) $dataHsa = $this->getHsaActivity($dataHsa, $lines, $hsaActivityStart, count($lines));
 
     return ['dataIra' => $dataIra, 'dataRoth' => $dataRoth, 'dataHsa' => $dataHsa, 'dataAnn' => $dataAnn, 'status' => 'OK'];
   }
@@ -248,6 +250,26 @@ class StatementsController extends Controller {
       }
     }
     return $accountSepLine;
+  }
+  private function getHsaHoldingsStart($lines)  {
+    $start = 0;
+    foreach ($lines as $line) {
+      $start++;
+      if (preg_match('/^SHENGLI\s+WANG\s+-\s+HEALTH\s+SAVINGS\s+ACCOUNTHoldings$/', $line)) {
+        return $start;
+      }
+    }
+    return -1;
+  }
+  private function getHsaActivityStart($lines)  {
+    $start = 0;
+    foreach ($lines as $line) {
+      $start++;
+      if (preg_match('/^SHENGLI\s+WANG\s+-\s+HEALTH\s+SAVINGS\s+ACCOUNTActivity$/', $line)) {
+        return $start;
+      }
+    }
+    return -1;
   }
   private function getPTdate($openDate, $mmdd) { Log::info("-fn-getPTdate $openDate $mmdd");
     $year = explode('/', $openDate)[2];

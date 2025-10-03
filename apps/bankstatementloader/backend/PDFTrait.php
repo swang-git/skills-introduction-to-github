@@ -129,7 +129,7 @@ trait PDFTrait {
     }
     return $newLines;
   }
-  protected function parseFidelityStatememt($pdfFile) { //Log::debug("-CK-parseFidelityStatemt: $pdfFile", [__line__, __file__]);
+  protected function parseFidelityStatememt($pdfFile) { Log::debug("-CKckck-parseFidelityStatemt: $pdfFile", [__line__, __file__]);
     // $config = new \Smalot\PdfParser\Config();
     // $config->setHorizontalOffset("\t");
     // $config->setHorizontalOffset('');
@@ -149,6 +149,10 @@ trait PDFTrait {
     // $items = preg_split("/\t/", $ptxt);
     $lines = [];
     foreach($items as $item) {
+      // if (preg_match('/996192/', $item)) {
+      //   Log::info("CKcKcKcK [$item]");
+      //   exit(0);
+      // }
       $line = preg_replace('/\n/', ' ', trim($item));
       if (!ctype_print($line)) continue;
       $lines[] = preg_replace('/\s+/', ' ', $line);

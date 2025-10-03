@@ -360,12 +360,12 @@ function getAssets () {
   // console.log('-CK-fn-getAssets')
   dataHsa.value.eval = parseFloat(dataHsa.value.eval).toFixed(2)
   const asts = { bank:'Fidelity', tran_cnt: 0 }
-  asts.begin_balance = parseFloat(dataAnn.value.sbal) + parseFloat(dataIra.value.bpval) + parseFloat(dataRoth.value.bpval) + parseFloat(dataHsa.value.bval)
-  asts.end_balance = parseFloat(dataAnn.value.ebal) + parseFloat(dataIra.value.cend) + parseFloat(dataRoth.value.cend) + parseFloat(dataHsa.value.eval)
+  asts.begin_balance = parseFloat(dataAnn.value.sbal) + parseFloat(dataIra.value.bpval) + parseFloat(dataRoth.value.bpval) //+ parseFloat(dataHsa.value.bval)
+  asts.end_balance = parseFloat(dataAnn.value.ebal) + parseFloat(dataIra.value.cend) + parseFloat(dataRoth.value.cend) //+ parseFloat(dataHsa.value.eval)
   asts.primary_account = 'INDIVIDUAL ' + dataIra.value.indAcct
 
-  asts.begin_balanceX = asts.begin_balance.toFixed(2) + ' == ' + dataAnn.value.sbal + ' + ' + dataIra.value.bpval + ' + ' + dataRoth.value.bpval + ' + ' + dataHsa.value.bval
-  asts.end_balanceX = asts.end_balance.toFixed(2) + ' == ' + dataAnn.value.ebal + ' + ' + dataIra.value.cend + ' + ' + dataRoth.value.cend + ' + ' + dataHsa.value.eval
+  asts.begin_balanceX = asts.begin_balance.toFixed(2) + ' == ' + dataAnn.value.sbal + ' + ' + dataIra.value.bpval + ' + ' + dataRoth.value.bpval //+ ' + ' + dataHsa.value.bval
+  asts.end_balanceX = asts.end_balance.toFixed(2) + ' == ' + dataAnn.value.ebal + ' + ' + dataIra.value.cend + ' + ' + dataRoth.value.cend //+ ' + ' + dataHsa.value.eval
   asts.gl = (asts.end_balance - asts.begin_balance).toFixed(2)
 
   year.value = ymon.value.substring(0, 4)

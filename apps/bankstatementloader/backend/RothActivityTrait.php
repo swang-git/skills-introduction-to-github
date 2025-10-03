@@ -325,7 +325,7 @@ trait RothActivityTrait {
   }
   private function getHsaActivity($data, $lines, $start, $end) { Log::info("-fn-getHsaActivity (242-996192) start=$start end=$end");
     $activity = [];
-    $start = 1000;
+    // $start = 1000;
     for ($i=$start; $i<$end; $i++) {
       $line = $lines[$i];
       $this->setActvFlag($line);
