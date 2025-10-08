@@ -6,7 +6,7 @@
       <q-toolbar style="margin-left:-5px">
         <q-btn v-if="isDesk" glossy @click="drawerClick()" round dense icon="img:icons/quasar-logo.svg" size="18px" />
         <!-- <q-btn v-else to="/" round dense glossy color="blue"><q-icon name="🏠" style="margin:-13px 0 0 0" /></q-btn> -->
-        <q-btn v-else to="/" round dense glossy color="blue"><q-icon :name="compVer" style="margin:-13px 0 0 0" /></q-btn>
+        <q-btn v-else to="/" round dense glossy color="blue"><q-icon :name="compVer" style="margin:-9px 0 0 0" /></q-btn>
         <q-toolbar-title>
           <div class="row q-pt-sm no-wrap">
             <span >{{ appTitle }}</span>

@@ -1,7 +1,8 @@
 <template>
 <div>
-  <div class="row q-pl-md">
-    <NumInput class="col-2" :obj="row" label="year" icon="年" iconSize="28px" iColor="cyan" />
+  <div class="row" :class="{'q-pl-sm':'isDesk', 'q-pl-lg':'isIM'}">
+    <NumInput v-if="isDesk" class="col-2" :obj="row" label="year" icon="年" iconSize="28px" iColor="cyan" />
+    <NumInput v-else class="col-5" :obj="row" label="year" icon="年" iconSize="28px" iColor="cyan" />
     <q-btn flat icon="GO" color="yellow" @click="setYear" />
   </div>
   <div class="text-h5 text-cyan-1 q-pl-md">
@@ -48,8 +49,9 @@ const showCol = ref(null)
 
 //======= main =========
 emitter.on('chnyears-getList', (x) => setList(x))
-buildApp('中西年对照表', 'ChnYears')
+buildApp('公历农历生肖对照表', 'ChnYears')
 if (row.value.year > 0) getList(year.value)
+console.log(`-CK-isDesk=${isDesk} isIM=${isIM}`)
 
 //======= functions =========
 function setYear() {
