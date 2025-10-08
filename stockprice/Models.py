@@ -1,0 +1,140 @@
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy import Column, Integer, DateTime, CHAR, DECIMAL, and_, func
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+# import requests
+# from bs4 import BeautifulSoup
+from datetime import datetime
+from tabulate import tabulate
+import platform
+from decimal import Decimal
+
+def dbsession (database):
+    if platform.system() == 'Darwin': dbconf="mysql+pymysql://swang:VVKKll11##@localhost/" + database + "?charset=utf8mb4" ## on Mac
+    elif platform.system() == 'Linux': dbconf="mysql://swang:Ybsjll11@localhost/" + database + "?charset=utf8mb4"
+
+    engine = create_engine(dbconf, echo=False)
+    # engine = create_engine('mysql+pymysql://swang:VVKKll11##@localhost:3306/devx')
+    Session = sessionmaker(bind=engine)
+    session = Session()
+    return session
+
+class Portfolio:
+    def __getattr__(self, key): return None
+    def __init__(self, sec, quantity):
+        self.load_time = sec.load_time
+        self.symbol = sec.symbol
+        self.price = sec.price
+        self.price_change = sec.price_change
+        self.shares = quantity
+        self.values = quantity * sec.price
+        self.day_gl = quantity * sec.price_change
+        self.day_low = sec.day_low
+        self.day_high = sec.day_high
+        self.low_52_week = sec.low_52_week
+        self.high_52_week = sec.high_52_week
+        self.intradayChange = '' # A for after market
+        self.intradayPrice = ''  # A for after market
+
+Base = declarative_base()
+class StockQuote(Base):
+    __tablename__ = 'stock_quotes'
+    id = Column(Integer, primary_key=True)
+    load_time = Column(DateTime)
+    symbol = Column(CHAR(8))
+    price = Column(DECIMAL(12.3))
+    price_change = Column(DECIMAL(12.3))
+    low_52_week = Column(DECIMAL(12.3))
+    high_52_week = Column(DECIMAL(12.4))
+    day_low = Column(DECIMAL(12.4))
+    day_high = Column(DECIMAL(12.4))
+    status = Column(CHAR(1))
+    def __init__(self, symbol):
+        self.symbol = symbol
+    def to_dict(self):
+        return {
+            'load_time': self.load_time,
+            'symbol': self.symbol,
+            'price': self.price,
+            'price_change': self.price_change,
+            'day_low': self.day_low,
+            'day_high': self.day_high,
+            'low_52_week': self.low_52_week,
+            'high_52_week': self.high_52_week,
+        }
+    
+    def isQuoteAlreadyInDBforToday(self, database):
+        session = dbsession(database)
+        # load_date=datetime.now().strftime('%Y-%m-%d')
+        today = datetime.now().strftime('%Y-%m-%d')
+        # print('today=[%s][%s]'%(today, self.symbol))
+        pda = session.query(StockQuote).filter(
+            StockQuote.symbol==self.symbol,
+            func.date_format(StockQuote.load_time, '%Y-%m-%d').label('formated_date')==today).first()
+
+        if pda is None: ## no data in DB
+            return False
+        else:
+            print(f'quote for [{self.symbol}] already exists for {today} in table {database}.stock_quotes, see below:')
+            print(tabulate(
+                [(pda.load_time, pda.symbol, pda.price, pda.price_change, pda.day_low,pda.day_high,pda.low_52_week,pda.high_52_week)],
+                headers=['Load Time', 'Stock', 'Price', 'Change', 'Day Low', 'Day High', '52WK Low', '52WK High'],
+                tablefmt='grid'))
+            return True
+
+    def getQuote(self, database, flag=None):
+        # if self.isQuoteAlreadyInDBforToday(database): 
+        #     print("the quote already exists")
+        #     return 'exist today'
+        # else: print('Loading data via scraping...')
+
+        if flag == 'testing':
+            self.load_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            self.price=111.11
+            self.price_change=-1.1
+            self.day_low=222.22
+            self.day_high=222.33
+            self.low_52_week=333.33
+            self.high_52_week=333.44
+            self.status='A'
+            return
+        
+    def showData(self):
+        print(f"{' ':>24} price = {self.price:>7} change = {self.price_change:>6} [{self.symbol:>4}]")
+
+    def gotData(self):
+        return self.price != None
+
+    def getFakeQuote(self): # for testing
+        self.load_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        self.price=111.11
+        self.price_change=-1.1
+        self.day_low=222.22
+        self.day_high=222.33
+        self.low_52_week=333.33
+        self.high_52_week=333.44
+        self.status='A'
+    
+    def saveToDB(self, database):
+        # print(f'\nSAVING STOCK QUOTES TO {database}.stock_quotes')
+        session = dbsession(database)
+        session.add(self)
+        session.commit()
+        session.close()
+
+    def setData(self, pdata):
+        # if self.isQuoteAlreadyInDBforToday(database): 
+        #     print("the quote already exists")
+        #     return 'exist today'
+        # else: print('Loading data via scraping...')
+        # # print(pdata)
+
+        self.load_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        self.price=pdata[1]
+        self.price_change=pdata[2]
+        self.day_low=pdata[3]
+        self.day_high=pdata[4]
+        self.low_52_week=pdata[5]
+        self.high_52_week=pdata[6]
+        self.status='A'
+        # print(self.to_dict())
