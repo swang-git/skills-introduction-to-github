@@ -415,6 +415,12 @@ Route::group (
   }
 );
 Route::group (
+  array('prefix' => 'chnyears'), function() {
+    Route::view('list', 'chnyears'); 
+    Route::get ('getList/{year}', 'ChnYearsController@getList');
+  }
+);
+Route::group (
   array('prefix' => 'todo'), function() {
     Route::view('list', 'todo');
   }
@@ -442,6 +448,7 @@ Route::group (  // set up here to show login page
     Route::view('healthtest', 'apps')->middleware('auth');
     Route::view('yalipics', 'apps');
     Route::view('tvmanager', 'apps');
+    Route::view('chnyears', 'apps');
   }
 );
 

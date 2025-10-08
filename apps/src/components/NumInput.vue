@@ -67,6 +67,7 @@ function getPropertyKey () { // used by reflection functions get/set and others
   else if (props.label === 'Lo Blood Pressure') return 'lobp'
   else if (props.label === 'Heart Pulse') return 'hpls'
   else if (props.label === 'weight') return 'weight'
+  else if (props.label === 'year') return 'year'
   return props.label
 }
 function reset () {

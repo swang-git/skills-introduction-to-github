@@ -41,6 +41,7 @@ const routes = [
       { path: 'totext', component: () => import('../../totext/ToText') },
       { path: 'yalipics', component: () => import('../../yalipics/PicList') },
       { path: 'tvmanager', component: () => import('../../tvmanager/tvlist') },
+      { path: 'chnyears', component: () => import('../../chnyears/ChnYears') },
 
 
       // { path: 'golf', component: () => import('../../golf/GolfHome') },
