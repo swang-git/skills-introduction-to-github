@@ -81,8 +81,8 @@ const compUrl = computed({
     statement.date = compDate.value
     let url = null
     console.log(`-CP-compUrl compDate=${compDate.value} statement.date=${statement.date} statement.bank=${statement.bank} from compUrl`)
-    if (statement.bank === 'FidelCC') url = 'docs/fidelity_credit_card/' + compDate.value + '.pdf'
-    else if (statement.bank === 'BOA') url = 'docs/BOA/' + yyyymm + '_savings.pdf'
+    if (statement.bank === 'FidelCC') url = '/docs/fidelity_credit_card/' + compDate.value + '.pdf'
+    else if (statement.bank === 'BOA') url = '/docs/BOA/' + yyyymm + '_savings.pdf'
     else if (statement.bank === 'Chase') url = '/docs/Chase/' + yyyymm + '.pdf'
     else if (statement.bank === 'ChaseBkg') url = '/docs/Chase/' + yyyymm + '_bkg.pdf'
     else if (statement.bank === 'Fidelity') url = '/docs/Fidelity/' + yyyymm + '_roth.pdf'
