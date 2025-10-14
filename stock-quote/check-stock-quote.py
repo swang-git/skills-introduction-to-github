@@ -36,10 +36,9 @@ def get_last_2_set_stock_quotes(start):
 
 def get_shares(): return {'T': 287, 'WBD': 69, 'CHTR':20, 'DELL':36, 'CSCO':640, 'MSFT':400}
 
-def print_rows(rows, diff=None):
+def print_rows_prior_day(rows):
     symbols = ['T', 'WBD', 'CHTR', 'DELL', 'CSCO', 'MSFT']
     sp = ""
-    spc = " "
     shares = get_shares()
     num_of_stocks = len(symbols)
     for chunk in chunked(rows, num_of_stocks):
@@ -57,21 +56,38 @@ def print_rows(rows, diff=None):
         totalValue = f"{totalValue:,.2f}"
         load_time = rows[5].load_time
         dday = load_time.strftime('%Y-%m-%d (%a)')
-        if (diff==None): printTailer(sp, totalValue, f'Date: {dday}', padsp(sp, 58) + f'{database}.stock_quotes')
-        else: 
-            toplen = 53
-            sdiff = f"{diff:,.2f}"  #currency format like 2,550.45
-            spgap = (toplen - len(str(sdiff)))*spc
-            if diff == 0: diff='0.00'; cdiff = ef.bold + fg.yellow + str(sdiff) + fg.rs + rs.bold_dim
-            elif diff > 0: cdiff = ef.bold + fg.green + str(sdiff) + fg.rs + rs.bold_dim
+        printTailer(sp, totalValue, f'Date: {dday}', padsp(sp, 58) + f'{database}.stock_quotes')
+
+def print_rows(rows, cdiff, spgap):
+    symbols = ['T', 'WBD', 'CHTR', 'DELL', 'CSCO', 'MSFT']
+    sp = ""
+    shares = get_shares()
+    num_of_stocks = len(symbols)
+    for chunk in chunked(rows, num_of_stocks):
+        totalValue = 0
+        printHeader(sp)
+        for row in chunk:
+            quantity = shares[row.symbol]
+            portfolio = Portfolio(row, quantity)
+            displaySec(portfolio, sp)
+            if row.symbol == 'BEKE':
+                continue
             else:
-                toplen = 54
-                diff = str(sdiff)[1:]
-                cdiff =  ef.bold + fg.red + str(sdiff)[1:] + fg.rs + rs.bold_dim
-                spgap = (toplen - len(str(sdiff)))*spc
-                # print("diff=%s cdiff=%s sdiff=%s"%(diff, cdiff, sdiff))
-            printTailer(sp, totalValue, f"Date: {dday} G/L={cdiff}", spgap + f'{database}.stock_quotes')
-        
+                totalValue += float(portfolio.values)
+        totalValue = f"{totalValue:,.2f}"
+        load_time = rows[5].load_time
+        dday = load_time.strftime('%Y-%m-%d (%a)')
+        printTailer(sp, totalValue, f"Date: {dday} G/L={cdiff}", spgap + f'{database}.stock_quotes')
+
+def get_formated_data(diff):
+    sdiff = f"{diff:,.2f}"  #currency format like 2,550.45
+    difflen = len(str(sdiff))
+    sdiffstr = str(sdiff)
+    fgcolor = fg.red if diff < 0 else (fg.yellow if diff == 0 else fg.green)
+    if diff < 0: sdiffstr = str(sdiff)[1:]; difflen -= 1
+    cdiff =  ef.bold + fgcolor + sdiffstr + fg.rs + rs.bold_dim
+    return cdiff, difflen
+    
 if __name__=="__main__":
     rowsyst, rowstdy = get_last_2_set_stock_quotes(sub_days)
     # for row in rowsyst: print(row.load_time, (row.load_time).strftime('%a'), row.symbol)
@@ -83,8 +99,16 @@ if __name__=="__main__":
 
     totaly = sum(row.price * shares[row.symbol] for row in rowsy)
     totalt = sum(row.price * shares[row.symbol] for row in rowst)
-    diff = totalt - totaly
-    print_rows(rowsy)
-    print_rows(rowst, diff)
+    diff1 = totalt - totaly # totalValue of current day - totalValue of prior day
+    diff2 = sum(row.price_change * shares[row.symbol] for row in rowst) # based on current day
+    print_rows_prior_day(rowsy)
+    
+    cdiff1, difflen1 = get_formated_data(diff1)
+    cdiff2, difflen2 = get_formated_data(diff2)
+    cdiff = cdiff1 + '=diff w/ prvday ~ ' + cdiff2 + '=w/ curday pchange'
+    spc = ' '    
+    tlen = 17
+    spgap = (tlen - difflen1 - difflen2)*spc
+    print_rows(rowst, cdiff, spgap)
     print(' ╚' + 128*'═' + '╝')
     sys.exit(0)
