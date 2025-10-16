@@ -1,6 +1,7 @@
 <template>
-<div v-if="bank=='Chase'" :style="{ display:opened }" style="margin:-33px 0 0 0">
-  <table v-if="showData[0]">
+<div v-if="bank=='Chase'" class="bg-teal-10" :style="{ display:opened }" style="margin:-10px 0 0 0">
+  <div v-if="showData[0]">
+    <div class="text-center text-cyan-3">CHASE ASSETS INFORMATION</div>
     <q-tr><td class="text-right q-px-md">Bank Name</td><td>{{ assets.bank }}</td></q-tr>
     <q-tr><td class="text-right q-px-md">Year</td><td>{{ assets.year }}</td></q-tr>
     <q-tr><td class="text-right q-px-md">Month</td><td>{{ assets.month }}</td></q-tr>
@@ -11,11 +12,12 @@
     <q-tr><td class="text-right q-px-md">End Balance</td><td>{{ assets.end_balance }}</td></q-tr>
     <q-tr><td class="text-right q-px-md">Primary Account</td><td>{{ assets.primary_account }}</td></q-tr>
     <q-tr><td class="text-right q-px-md">Transaction Count</td><td>{{ assets.tran_cnt }}</td></q-tr>
-  </table>
+  </div>
   <div v-if="showData[1]">
-    <div class="text-center q-pl-sm text-amber-10">CHECKING ACCOUNT INFORMATION</div>
+    <div class="text-center text-lime">CHECKING ACCOUNT INFORMATION</div>
     <q-tr><td class="text-right q-px-sm">Begin Balance</td><td>{{ chk.begin_balance }}</td></q-tr>
-    <!-- <q-tr><td class="text-right q-px-sm">Withdrawals</td><td>{{ chk.withdrawals }}</td></q-tr> -->
+    <q-tr v-if="chk.deposits!=null"><td class="text-right q-px-sm">Deposits and Additions</td><td>{{ chk.deposits }}</td></q-tr>
+    <q-tr v-if="chk.withdrawals!=null"><td class="text-right q-px-sm">Electronic Withdrawals</td><td class="text-red">{{ chk.withdrawals }}</td></q-tr>
     <q-tr><td class="text-right q-px-sm">End Balance</td><td>{{ chk.end_balance }}</td></q-tr>
     <q-tr><td class="text-right q-px-sm">Account Number</td><td>{{ assets.primary_account }}</td></q-tr>
     <div class="text-h5 text-amber q-pl-md">Checking Account Activity</div>
@@ -27,8 +29,10 @@
     </q-tr>
   </div>
   <div v-if="showData[2]">
-    <div class="text-center q-pl-sm text-amber-10">SAVINGS ACCOUNT INFORMATION</div>
+    <div class="text-center text-green">SAVINGS ACCOUNT INFORMATION</div>
     <q-tr><td class="text-right q-px-sm">Begin Balance</td><td>{{ sav.begin_balance }}</td></q-tr>
+    <q-tr v-if="sav.deposits!=null"><td class="text-right q-px-sm">Deposits and Additions</td><td>{{ sav.deposits }}</td></q-tr>
+    <q-tr v-if="sav.withdrawals!=null"><td class="text-right q-px-sm">Electronic Withdrawals</td><td class="text-red">{{ sav.withdrawals }}</td></q-tr>
     <q-tr><td class="text-right q-px-sm">End Balance</td><td>{{ sav.end_balance }}</td></q-tr>
     <q-tr><td class="text-right q-px-sm">Account Number</td><td>{{ sav.account }}</td></q-tr>
     <div v-if="sav.act.length>0">
@@ -43,7 +47,7 @@
   </div>
   <div v-if="showData[3]">
     <div v-if="sav.nos.length>0">
-      <div class="text-h5 text-amber q-pl-md">Statement Notes</div>
+      <div class="text-center text-amber-3">Statement Notes</div>
       <q-tr class="q-pl-sm" v-for="(act) in sav.nos" :key="act">
         <td class="q-pl-sm">{{ act[0] }}</td>
         <td class="q-pl-sm text-right">{{ act[1] }}</td>
@@ -184,7 +188,8 @@ function loadStmt (da) {
       title: 'The PDF File Not Exists, Get File in First',
       message: da.info + ' will try privous month'
     })
-    return reLoadDataTryNewYmon()
+    //return reLoadDataTryNewYmon()
+    return
   }
   assets.value = da.assets
   console.log(`-CK-loasStmt`, [assets.value.begin_date, assets.value.end_date])

@@ -185,11 +185,11 @@ trait PDFTrait {
     return $lines;
     // return $this->processLines($lines);
   }
-  protected function XX_OLD_parsePDF($pdfFile) { // this one mis order the PDF table order
+  protected function parsePDF_Spatie($pdfFile) { // this one mis order the PDF table order
     if (!file_exists($pdfFile)) return "$pdfFile";
-    // $text = (new Pdf())->setPdf($pdfFile)->setOptions(['layout', 'r 96'])->text();
+    $text = (new Pdf())->setPdf($pdfFile)->setOptions(['layout', 'r 96'])->text();
     // $text = (new Pdf())->setPdf($pdfFile)->text();
-    $text = Pdf::getText($pdfFile);
+    // $text = Pdf::getText($pdfFile);
     // Log::info("txtPDF=[$text]"); // exit(-100);
     // $x = preg_split('/\n|\r|\f|\t|\0/', $text);
     $x = preg_split('/\n/', $text);
@@ -203,6 +203,24 @@ trait PDFTrait {
     }
     return $lines;
   }
+  // protected function parsePDF_Spatie($pdfFile) { // this one mis order the PDF table order
+  //   if (!file_exists($pdfFile)) return "$pdfFile";
+  //   // $text = (new Pdf())->setPdf($pdfFile)->setOptions(['layout', 'r 96'])->text();
+  //   // $text = (new Pdf())->setPdf($pdfFile)->text();
+  //   $text = Pdf::getText($pdfFile);
+  //   // Log::info("txtPDF=[$text]"); // exit(-100);
+  //   // $x = preg_split('/\n|\r|\f|\t|\0/', $text);
+  //   $x = preg_split('/\n/', $text);
+  //   $lines = [];
+  //   foreach ($x as $line) {
+  //     if (ctype_print($line)) {
+  //       // $line = preg_replace('/\s+/', ' ', $line);
+  //       $line = trim($line);
+  //       $lines[] = $line;
+  //     }
+  //   }
+  //   return $lines;
+  // }
   protected function writeToTempFile($filename, $lines) {
     // $ccfile = "/sites/tmp/$filename";
     // $ccfile = config('constants.USER_SITE') . "/tmp/$filename";
