@@ -54,7 +54,7 @@ let rows = ref([])
 function getMarginTop () {
   if (cIdx.value % 25 < 17) return '-10px'
   let expH = props.record.height * 42 + 140 + (25 - cIdx.value % 25) * 2
-  console.log(`-CK-getMarginTop nLine=${props.record.height} expH=${expH}`, props.record)
+  // console.log(`-CK-getMarginTop nLine=${props.record.height} expH=${expH}`, props.record)
   return -expH + 'px'
 }
 function getTitle () {
@@ -105,7 +105,7 @@ function showDetails () {
     { const cnum = { colname:'GCN', details: p.gcardNum + ' (Gift Card Number)'}; rows.value.push(cnum) }
     { const pval = { colname:'PVB', details: '$' + p.prevbal + ' (Previous Balance of the Card) = ' + p.gcardVal + ' + ' + p.cost }; rows.value.push(pval) }
   }
-  console.log(`%c-CK-showDetails p.height=${p.height} p.date=${p.date}`, 'color: red')
+  // console.log(`%c-CK-showDetails p.height=${p.height} p.date=${p.date}`, 'color: red')
   // if (isIM) p.inFullscreen = true
 }
 const compIdx = computed(() => { return props.idx })

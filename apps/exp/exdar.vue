@@ -86,7 +86,7 @@ import { Calendar } from '../holiday/Calendar'
 
 const { isIM, isDesk } = libFunctions()
 const { gaxios, paxios } = axiosFunctions()
-const { addDays, addMonthsKeepDay } = dayFunctions()
+const { addDays, addMonthsKeepDay, currentYmdHMS } = dayFunctions()
 
 //== data
 const showPostDate = ref(false)
@@ -188,6 +188,10 @@ function selectedOption (cspId, model, opt) {
   } else if (model === 'Select Subcategory') {
     row.value.subcId = opt.value
     row.value.subc = opt.label
+    // row.value.cost = (/Refund|Trade in/.test(row.value.subc)) ? -1*Math.abs(parseFloat(row.value.cost)) : Math.abs(row.value.cost)
+    // if (row.value.subc === 'Refund')  row.value.cost = -1*Math.abs(parseFloat(row.value.cost))
+    // if (/Refund/.test(row.value.subc))  row.value.cost = -1*Math.abs(parseFloat(row.value.cost))
+    console.log(`%c-CK-cost=${row.value.cost}`, 'font-size:20px;color:lime')
     // cspModel = 'Subcategory'
     // emitter.emit('get-paye-opt', opt.value)
     getPayeOpt(opt.value)
@@ -380,7 +384,8 @@ function setSubcat (da) {
 emitter.on('exp-getPayee', (x) => setPayee(x))
 emitter.on('exp-getCourseList', (x) => setPayee(x))
 function getPayeOpt (subcId) {
-  console.log(`-CK-fn-getPayeOpt subcId=${subcId}`, row.value)
+  console.log(`-CK-fn-getPayeOpt subcId=${subcId} row=`)
+  // row.value.cost = (/Refund|Trade in/.test(row.value.subc)) ? -1*Math.abs(row.value.cost) : Math.abs(row.value.cost)
   if (subcId === -1) return addNewSubcat()
   if (isGolfPlayRelated()) {
     const path = process.env.API + '/exp/getCourseList'
@@ -550,7 +555,6 @@ function openIt (rw, act) {
   // console.table(row)
   // console.log(`-fn-openIt-exdar-trimedUnip=${row.value.unip}`)
   showPostDate.value = false
-  // row = row
   const mage = (row.value.mile / row.value.quan).toFixed(2)
   mileage.value = mage > 0 ? mage : null
   if (row.value.cats === 'Auto' && row.value.subc === 'Gasoline') tit.value = 'Gas Mileage: ' + mileage.value
@@ -562,12 +566,16 @@ function openIt (rw, act) {
   row.value.note = row.value.note === null ? '' : row.value.note
   row.value.mile = row.value.mile === 0 ? null : row.value.mile
   row.value.purchasedon = row.value.date
+  if (act === 'add') row.value.purchasedon = currentYmdHMS()
   row.value.disableGC = true
   isaDeleted.value = row.value.del
   isaUpdated.value = row.value.upd
   isaCreated.value = row.value.add
   // user_id.value = row.value.user_id
   // this.$parent.getPurchasedList(row.value.purchasedon.substring(0, 10), row.value.payeId)
+  // console.log(`subc=${row.value.subc}`)
+  // row.value.cost = (/Refund|Trade in/.test(row.value.subc)) ? -1*Math.abs(row.value.cost) : Math.abs(row.value.cost)
+  // else row.value.cost = Math.abs(row.value.cost)
   opened.value = true
   if (catsOptions.value.length > 0) {
     return

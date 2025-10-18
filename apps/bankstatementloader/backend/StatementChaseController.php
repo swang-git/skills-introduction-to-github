@@ -209,7 +209,7 @@ class StatementChaseController extends Controller {
     }
     try {
       $lines = $this->parsePDF_Spatie($fullpath);
-      // $lines = $this->parsePDF($fullpath);
+      // $lines = $this->parsePDF($fullpath); // ERROR: Secured pdf file are currently not supported.
       // $lines = $this->parseFidelityStatememt($fullpath);
       if (is_string($lines)) return ['info' => $lines, 'status' => 'NO_FILE'];
     } catch(Excption $e) {

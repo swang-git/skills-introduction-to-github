@@ -24,7 +24,9 @@
         <q-tr :props="p" class="cursor-pointer" :class="!showAUD || p.rowIndex>23 ? null : {'bg-cyan-8':p.row.upd,'bg-lime-9':p.row.add,'bg-indigo-9':p.row.del,'bg-indigo-10':p.expand}">
           <q-td v-for="col in p.cols" :key=col class="text-no-wrap ellipsis" @click="showRow(col, p)" :style="getStyle(col.name)">
             <span v-if="col.name==='subc' && col.value==='Play'">{{ col.value }} ({{ p.cols[0].value.chwk3() }})</span>
+            <!-- <span v-if="col.name==='subc' && col.value==='Refund'" class="text-red">{{ col.value }}</span> -->
             <span v-else-if="col.name==='date' && yearReg.test(col.value) && isIM">{{ col.value.substring(5, 16) }}</span>
+            <span v-else-if="col.value<0" class="text-amber-10">{{ -col.value }}</span>
             <span v-else>{{ col.value }}</span>
           </q-td>
         </q-tr>

@@ -320,7 +320,7 @@ class ExpenseController extends Controller {
 		$pyeOptions[] = $obj;
 		return ['lst' => $pyeOptions, 'status' => "OK"];
 	}
-	private function col_map($nd, $d) { //Log::info('add input', $d->toArray());
+	private function col_map($nd, $d) { //Log::info('-fn- col_map input', $d->toArray());
 		$subc = $d->subc;
 		$nd['user_id'] = Auth::user()->id;
 		$nd['purchasedon'] = $d['purchasedon'];
@@ -329,12 +329,13 @@ class ExpenseController extends Controller {
 		$nd['subcat_id'] = $d['subcId'];
 		$nd['payee_id'] = $d['payeId'];
 		$nd['paymethod_id'] = $d['paymId'];
-		$nd['totalpaid'] = $subc == 'Refund' ? -$d->cost : $d->cost;
+		$nd['totalpaid'] = preg_match('/Refund|Trade in/', $subc) ? -abs($d->cost) : abs($d->cost);
 		$nd['unitprice'] = $d['unip'];
 		$nd['quantity'] = $d['quan'];
 		$nd['miles'] = $d['mile'];
 		$nd['notes'] = $d['note'];
 		$nd['link'] = $d['link'];
+    Log::info("-CK-subc=$subc cost=$nd->totalpaid");
 		return $nd;
 	}
 	private function getModel($d, $action) {
