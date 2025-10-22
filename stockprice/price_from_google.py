@@ -73,30 +73,79 @@ def get_stock_quote_txt(date, stock):
             check_number('wk52_low', wk52_low, stock, line)
     
     return [stock, price, pchange, day_low, day_high, wk52_low, wk52_high]
-        
+
+import requests, sys, json, re
+from bs4 import BeautifulSoup
+def get_stock_quote_via_google_finance(date, stock):
+    raw = requests.get(f"https://finance.google.com/finance?q={stock}&output=json").text
+    # print(raw)
+    # sys.exit(1)
+    # soup = BeautifulSoup(raw, 'lxml')
+    raw = BeautifulSoup(raw, 'html.parser')
+    soup = raw.select_one('div.T4LgNb')
+    # soup = raw.select_one('div[aria-labelledby="market-rundown-heading"]')
+    # soup = raw.find('div', {'aria-labelledby': 'market-rundown-heading'})
+    print(soup.prettify());sys.exit(1)
+
+    # for dv in soup.find_all('div'): print(dv)
+    # for pv in soup.find('div', class_='YMlKec fxKbKc'): print(pv)
+    # for dv in soup.select('div.P6K39c'): print(dv.text)
+
+    price = soup.find('div', class_='YMlKec fxKbKc').text.replace('$', '')
+    # print("price=[%s]"%price)
+    check_number('price', price, stock, '')
+
+    dyranges=soup.select('div.P6K39c')
+    prevprice = dyranges[0].text.replace('$', '')
+    # print("pprice=[%s]"%prevprice)
+    # print("price_change=[%s]"%price_change)
+    price_change = f"{float(price) - float(prevprice):,.2f}"
+    check_number('price_change', price_change, stock, '')
+
+    dayrange = dyranges[1].text.replace('$', '')
+    # print("dayrange=[%s]"%dayrange)
+    day_low, day_high = map(float, dayrange.split(" - "))
+    day_low = "{:,.2f}".format(day_low)
+    day_high = "{:,.2f}".format(day_high)
+    check_number('day_low', day_low, stock, '')
+    check_number('day_high', day_high, stock, '')
+    yearrange = dyranges[2].text.replace('$', '')
+    # print("yearrange=[%s]"%yearrange)
+    wk52_low, wk52_high = map(float, yearrange.split(" - "))
+    wk52_low = "{:,.2f}".format(wk52_low)
+    wk52_high = "{:,.2f}".format(wk52_high)
+    # print("wk52_low=[%s]"%wk52_low)
+    # print("wk52_high=[%s]"%wk52_high)
+    check_number('wk52_low', wk52_low, stock, '')
+    check_number('wk52_high', wk52_high, stock, '')
+    stock = stock.replace('NYSE:', '')
+    return [stock, price, price_change, day_low, day_high, wk52_low, wk52_high]
+
 #=========== main ============
 
 if __name__=="__main__": print('')
 database = my_argparse().database
 
 date = datetime.now().strftime("%Y%m%d")
-stocks = ['T', 'WBD', 'CHTR', 'DELL', 'CSCO', 'MSFT']
-# stocks = ['MSFT']
+stocks = ['T', 'WBD', 'CHTR', 'NYSE:DELL', 'CSCO', 'MSFT']
+stocks = ['MSFT']
 # stocks = ['T']
 pdata = None
 for stock in stocks:
     # print("processing stock=%s"%stock)
     try:
-        pdata = get_stock_quote_txt(date, stock)
-        print(pdata)
+        # pdata = get_stock_quote_txt(date, stock)
+        pdata = get_stock_quote_via_google_finance(date, stock)
     except Exception as ex:
         print("get_stock_quote(date=[%s], stock=[%s]) failed, error=%s"%(date, stock, ex))
     # finally: print(pdata)
     if pdata == None:
         print("get_stock_quote FAILED, exiting...")
         sys.exit(-1)
+    print(pdata)
     
+    stock = stock.replace('NYSE:', '')
     quote = StockQuote(stock)
     if quote.isQuoteAlreadyInDBforToday(database): continue
     quote.setData(pdata)
-    quote.saveToDB(database)
+    # quote.saveToDB(database)
