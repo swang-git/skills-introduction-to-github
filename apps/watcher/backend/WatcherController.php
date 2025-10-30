@@ -44,7 +44,7 @@ class WatcherController extends Controller {
         $fname = config('constants.DOC_DIR') . "/Portfolio/snapshot_$yyyymmdd.csv";
         if (!file_exists($fname)) {
             Log::info("$fname not exists");
-            return [ 'status' => "${fname} not exists" ];
+            return [ 'status' => "{$fname} not exists" ];
         }
         Log::info("WatcherController/Loading positions $fname");
         $lines = file($fname, FILE_SKIP_EMPTY_LINES|FILE_IGNORE_NEW_LINES);

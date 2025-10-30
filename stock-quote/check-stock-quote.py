@@ -77,7 +77,7 @@ def print_rows(rows, cdiff, spgap):
         totalValue = f"{totalValue:,.2f}"
         load_time = rows[5].load_time
         dday = load_time.strftime('%Y-%m-%d (%a)')
-        printTailer(sp, totalValue, f"Date: {dday} G/L={cdiff}", spgap + f'{database}.stock_quotes')
+        printTailer(sp, totalValue, f"Date: {dday} G/L: {cdiff}", spgap + f'{database}.stock_quotes')
 
 def get_formated_data(diff):
     sdiff = f"{diff:,.2f}"  #currency format like 2,550.45
@@ -105,9 +105,9 @@ if __name__=="__main__":
     
     cdiff1, difflen1 = get_formated_data(diff1)
     cdiff2, difflen2 = get_formated_data(diff2)
-    cdiff = cdiff1 + '=diff w/ prvday ~ ' + cdiff2 + '=w/ curday pchange'
+    cdiff = cdiff1 + ' diff w/ prvday ~ ' + cdiff2 + ' w/ curday pchange'
     spc = ' '    
-    tlen = 17
+    tlen = 16
     spgap = (tlen - difflen1 - difflen2)*spc
     print_rows(rowst, cdiff, spgap)
     print(' ╚' + 128*'═' + '╝')

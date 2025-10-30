@@ -201,9 +201,9 @@ class ArtsController extends Controller
  	public function search($cat, $txt)
     {
         $arts = DailyDat::fromQuery('CALL MyWeb.art_search(?,?)', [$cat, "%$txt%"]);   // dd($arts);
-		$pagetit = "搜索作者含有“${txt}”的文章";
-		if ($cat == 'tit') $pagetit = "搜索题目含有“${txt}”的文章";
-		else if ($cat == 'txt') $pagetit = "搜索文章内容含有“${txt}”的文章";
+		$pagetit = "搜索作者含有“{$txt}”的文章";
+		if ($cat == 'tit') $pagetit = "搜索题目含有“{$txt}”的文章";
+		else if ($cat == 'txt') $pagetit = "搜索文章内容含有“{$txt}”的文章";
 		$dats = $this->get_art_list($arts, $pagetit);
 		$dats['key'] = "/" . $cat . "/" . $txt;       // use as url as well
 		// $dats['key'] = "/search/" . $cat . "/" . $txt;       // use as url as well
@@ -376,9 +376,9 @@ class ArtsController extends Controller
     public function artSearch($cat, $txt)
     {
         $arts = DailyDat::fromQuery('CALL MyWeb.art_search(?,?)', [$cat, "%$txt%"]);   // dd($arts);
-		$pagetit = "搜索作者含有“${txt}”的文章";
-		if ($cat == 'tit') $pageTitle = "搜索题目含有“${txt}”的文章";
-		else if ($cat == 'txt') $pageTitle = "搜索文章内容含有“${txt}”的文章";
+		$pagetit = "搜索作者含有“{$txt}”的文章";
+		if ($cat == 'tit') $pageTitle = "搜索题目含有“{$txt}”的文章";
+		else if ($cat == 'txt') $pageTitle = "搜索文章内容含有“{$txt}”的文章";
 		$pagetit = "<span class='art-page-tit'>$pagetit</span> <span class='art-infox'>(". count($arts) ."篇)</span>";
 		return $this->get_art_list($arts, $pagetit, 'Search');
     }
@@ -456,7 +456,7 @@ class ArtsController extends Controller
         $art_flw[0] = $art;
         $art_flw[0]->txt = $txt;
 
-        $flwfile = "$rootdir/$tag/$year/$yxd/${qid}_flw.txt";
+        $flwfile = "$rootdir/$tag/$year/$yxd/{$qid}_flw.txt";
         if (file_exists($flwfile)) {
             $lines = file($flwfile);
             while (count($lines) > 0) {
@@ -600,7 +600,7 @@ class ArtsController extends Controller
 			$arts = DailyData::where('tag', $tag)->orderBy('idx')->get();		//dd($artlist);
 		}
 		// $pagetit = "<span class='art-page-tit'>$pagetit </span><span class='art-infox'>(${cnt}篇)</span>";
-		$pagetit = $pagetit . "(${cnt}篇)";
+		$pagetit = $pagetit . "({$cnt}篇)";
 		return $this->get_art_list($arts, $pagetit, 'Collections');
 		//
         // foreach($arts as $a) {

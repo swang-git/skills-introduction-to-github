@@ -76,20 +76,22 @@ def get_stock_quote_txt(date, stock):
 
 import requests, sys, json, re
 from bs4 import BeautifulSoup
+def is_market_open(soup, stock):
+    # market_open_check = soup.select('div.gyFHrc')
+    # if len(market_open_check) < 13: print("ticker=[%s]: Market not open yet, exist..."%stock);sys.exit(1)
+
+    wtexts = [div.text for div in soup.find_all("div", {"aria-describedby": True}) if re.fullmatch(r"i\d{2}", div["aria-describedby"])]
+    # print(wtexts)
+    return wtexts.count('Day range') == 1
+
 def get_stock_quote_via_google_finance(date, stock):
     raw = requests.get(f"https://finance.google.com/finance?q={stock}&output=json").text
-    # print(raw)
-    # sys.exit(1)
     # soup = BeautifulSoup(raw, 'lxml')
     raw = BeautifulSoup(raw, 'html.parser')
     soup = raw.select_one('div.T4LgNb')
-    # soup = raw.select_one('div[aria-labelledby="market-rundown-heading"]')
-    # soup = raw.find('div', {'aria-labelledby': 'market-rundown-heading'})
-    print(soup.prettify());sys.exit(1)
+    # print(soup.prettify());sys.exit(1)
 
-    # for dv in soup.find_all('div'): print(dv)
-    # for pv in soup.find('div', class_='YMlKec fxKbKc'): print(pv)
-    # for dv in soup.select('div.P6K39c'): print(dv.text)
+    if (not is_market_open(soup, stock)): print("ticker=[%s]: Market not open yet, exist..."%stock); sys.exit(1)
 
     price = soup.find('div', class_='YMlKec fxKbKc').text.replace('$', '')
     # print("price=[%s]"%price)
@@ -121,14 +123,35 @@ def get_stock_quote_via_google_finance(date, stock):
     stock = stock.replace('NYSE:', '')
     return [stock, price, price_change, day_low, day_high, wk52_low, wk52_high]
 
+def is_weekend(d: datetime.date | None = None) -> bool:
+    """Return True if *d* (default today) is Saturday or Sunday."""
+    # d = d or datetime.date.today()
+    d = d or datetime.today()
+    # print('week_date=[%s]'%d.weekday())
+    return d.weekday() >= 5
+
+def is_holiday(d: datetime.now() | None = None) -> bool:
+    """Return True if *d* (default today) is a Holiday."""
+    # d = d or datetime.date.today()
+    d = d or datetime.now().strftime('%Y-%m-%d')
+    # print('now=[%s]'%d)
+    with open('/home/swang/.holidays.txt') as f: holidays = [line.rstrip('\n') for line in f]
+    return any(d in day for day in holidays)
+
 #=========== main ============
+d = datetime.date
+if is_weekend(): print(f"{datetime.now():%Y-%m-%d %H:%M:%S}  –  It’s the weekend 🎉 - market closed. exit ..."); sys.exit(0)
+if is_holiday(): print(f"{datetime.now():%Y-%m-%d %H:%M:%S}  –  It’s the holiday 🎉 - market closed. exit ..."); sys.exit(0)
+print('getting stock prices from "https://finance.google.com/finance?q={stock}&output=json" ...')
+# sys.exit(0)
 
 if __name__=="__main__": print('')
+
 database = my_argparse().database
 
 date = datetime.now().strftime("%Y%m%d")
 stocks = ['T', 'WBD', 'CHTR', 'NYSE:DELL', 'CSCO', 'MSFT']
-stocks = ['MSFT']
+# stocks = ['MSFT']
 # stocks = ['T']
 pdata = None
 for stock in stocks:
@@ -148,4 +171,4 @@ for stock in stocks:
     quote = StockQuote(stock)
     if quote.isQuoteAlreadyInDBforToday(database): continue
     quote.setData(pdata)
-    # quote.saveToDB(database)
+    quote.saveToDB(database)
