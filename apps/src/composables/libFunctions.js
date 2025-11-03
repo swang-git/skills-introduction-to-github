@@ -51,7 +51,8 @@ export function libFunctions() {
   // function ScreenHeight () { return  Math.min(screen_height, 708) }
   // function ScreenWidth () { return  Math.min(screen_width, 414) }
 
-  function iphone13 () { return  screen_width == 390 && screen_height == 659}
+  function iphone13 () { return  screen_width == 390 && screen_height == 659 }
+  function iphone17 () { return  screen_width == 393 && screen_height == 852 }
 
   // const isDesk = computed(() => { return desk() || iPad() })
   // const isFone = computed(() => { return fone() })
@@ -59,9 +60,11 @@ export function libFunctions() {
   const opened = ref(false)
   const isDesk = desk() || iPad()
   const isIM = !isDesk
+  // const isIM = $q.screen.width < 500
   const isFone = fone()
   const iPhone = IPhone()
   const iPhone13 = iphone13()
+  const iPhone17 = iphone17()
 
   const firstOnPage = computed(() => { return (curPage.value - 1) * itemsPerPage.value })
   emitter.on('dats', (x) => dats.value = x)
@@ -203,6 +206,7 @@ export function libFunctions() {
     screenheight,
     iPhone,
     iPhone13,
+    iPhone17,
     AppAdmin,
     isDesk,
     isIM,

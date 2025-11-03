@@ -1,6 +1,6 @@
 <template>
 <q-dialog v-model="opened" transition-show="slide-right" persistent>
-  <q-layout container class="bg-teal-10 fixed-center" :style="{ height:isDesk ? '240px' : '600px', width:isDesk ? '510px' : '' }">
+  <q-layout container class="bg-teal-10 fixed-center" :style="{ height:isDesk ? '240px' : '400px', width:isDesk ? '510px' : '' }">
     <LayoutHeader tit="Update/Create/Delete memo" @do-action="doAction" />
     <LayoutFooter :act=action tit="NOTE_LINK" @do-action="doAction" />
     <q-page-container class="">

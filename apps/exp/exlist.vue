@@ -1,5 +1,5 @@
 <template>
-<div class="q-px-xs" :class="{ fixed : clickedIdx < 9}" style="width:800px">
+<div class="q-px-xs" :class="{ fixed : (clickedIdx < 9 || isIM) }" style="width:800px">
   <div v-if="isDesk" class="row text-h6 no-wrap" style="height:36px;margin:0 1px 0 0;border:1px solid cyan">
     <div style="width:28%" class="text-yellow-9 q-pl-sm">总支出: {{ totalSpend }}</div>
     <div style="width:28%" class="text-yellow-8 text-center">年支出: {{ yearSpend }}</div>
@@ -8,58 +8,39 @@
     <div style="width:15%" class="text-yellow-3 text-right">比赛: <b :class="gWL>=0 ? 'text-green' : 'text-red'">${{ gWLval }}</b></div>
   </div>
   <div :style="isIM ? { margin:'-4px 0 0 0' } : { margin:'8px 1px 0 0', border:'2px solid cyan' }">
-    <q-table v-if="isDesk" class="bg-teal-10" dark v-model:rows="palist" :columns="columns" dense
-      :card-class="isIM ? 'bg-teal-10' : null" :card-style="isIM ? 'width:344px;margin:0 0 0 40px;font-size:30px' : null"
-      :grid=isIM :visible-columns="isIM ? visibleColumnsFone : visibleColumnsDesk"
-      :style="isIM ? { height:'screenheight', margin:'-3px 0 0 1.5px' } : { marginTop:'-1px' }" style="width:100%;border-top:1px solid cyan"
-      row-key="id" separator="cell" wrap-cells :hide-pagination="true" :pagination="isIM ? { rowsPerPage:rowsPerPageIM } : { rowsPerPage: rowsPerPageDesk }"
+    <q-table class="bg-teal-10" v-model:rows="palist"
+      dark dense wrap-cells
+      style="width:100%;border-top:1px solid cyan"
+      row-key="id" separator="cell"
+      :columns="columns"
+      :visible-columns="isIM ? visibleColumnsFone : visibleColumnsDesk"
+      :style="isIM ? { height:screenheight+'px', margin:'-3px 0 0 1.5px', width:screenwidth+'px'} : { marginTop:'-8px' }" 
+      :hide-pagination="true" 
+      :pagination="isIM ? { rowsPerPage:rowsPerPageIM } : { rowsPerPage: rowsPerPageDesk }"
     >
-      <template v-slot:header="props">
-        <q-tr :props="props">
-          <q-th v-for="col in props.cols" :key="col.name" :props="props" class="text-yellow text-center">{{ col.label }}</q-th>
+      <template v-slot:body="p">
+        <q-tr v-if="isIM" :props="p" class="cursor-pointer" :class="!showAUD || p.rowIndex>rowsPerPageIM ? null : getAudClass(p)">
+          <q-td v-for="col in p.cols" :key=col class="text-no-wrap ellipsis" @click="showRow(col, p)" :style="getStyle(col.name)">
+            <span v-if="col.name==='date'">{{ col.value.substring(0, 10) }}</span>
+            <span v-else-if="col.name==='cats'"  @click="openExdarIM('upd', p.row)">{{ col.value }}</span>
+            <span v-else-if="col.name==='cost'" @click="openExdarIM('add', p.row)">{{ col.value }}</span>
+          </q-td>
         </q-tr>
-      </template>
-
-      <template v-if="isDesk" v-slot:body="p">
-        <q-tr :props="p" class="cursor-pointer" :class="!showAUD || p.rowIndex>23 ? null : getAudClass(p)">
+        <q-tr v-else :props="p" class="cursor-pointer" :class="!showAUD || p.rowIndex>rowsPerPageDesk ? null : getAudClass(p)">
           <q-td v-for="col in p.cols" :key=col class="text-no-wrap ellipsis" @click="showRow(col, p)" :style="getStyle(col.name)">
             <span v-if="col.name==='subc' && col.value==='Play'">{{ col.value }} ({{ p.cols[0].value.chwk3() }})</span>
-            <span v-else-if="col.name==='date' && yearReg.test(col.value) && isIM">{{ col.value.substring(5, 16) }}</span>
-            <span v-else-if="col.value<0" class="text-amber-10">{{ -col.value }}</span>
+            <!-- <span v-else-if="col.name==='date' && yearReg.test(col.value)">{{ col.value.substring(5, 16) }}</span> -->
+            <span v-else-if="col.value<0" class="text-amber-10 text-bold">{{ -col.value }}</span>
             <span v-else>{{ col.value }}</span>
           </q-td>
         </q-tr>
-        <q-tr v-show="p.expand" :props="p">
+        <q-tr v-if="isDesk" v-show="p.expand" :props="p">
           <q-td colspan="100%">
             <ExpDetails :record="clickedRow" :hasPurchases="purchaselst.length>0" :isReconcileC="isReconcile()" :hasGolfScore="scoreId>0"
               :expColor="p.row.upd ? 'bg-cyan-10' : 'bg-teal-10'"
               :idx="clickedIdx" @open-dar="openExdar" @open-plist="openPlst" @open-recon="openRecon" @open-score="getScore" />
           </q-td>
         </q-tr>
-      </template>
-    </q-table>
-    <q-table v-if="isIM" class="bg-teal-10" dark v-model:rows="palist" :columns="columns"
-        style="border:1px solid cyan;font-size:17.63px"
-        :grid=isIM :visible-columns="visibleColumnsFone"
-        row-key="id" :hide-pagination="true" :pagination="{ rowsPerPage:rowsPerPageIM }"
-    >
-      <template v-slot:item="p">
-        <q-card dark square class="text-cyan-1" style="margin:0 0 0px 0;width:379px;border:0px solid gold">
-          <q-card-section :class="{ 'bg-teal-10':p.rowIndex%2==0, 'bg-cyan-10':p.rowIndex%2==1 }">
-            <q-btn glossy round icon="toc" color="indigo-10" class="float-right" @click="showDetails(p)" />
-            <div>{{ p.cols[0].value }} ({{ p.cols[0].value.chwk3() }})</div>
-            <div>{{ p.cols[1].value }} / {{ p.cols[2].value }}</div>
-            <div>{{ p.cols[3].value }}</div>
-            <div>${{ p.cols[4].value }}</div>
-          </q-card-section>
-        </q-card>
-        <tr v-show="p.expand" :props="p" height="0">
-          <td>
-            <ExpDetails :record="clickedRow" :hasPurchases="purchaselst.length>0" :isReconcileC="isReconcile()" :hasGolfScore="scoreId>0"
-              :expColor="p.row.upd ? 'bg-amber-10' : p.row.del ? 'bg-cyan-10' : 'bg-green-10'" :idx="clickedIdx"
-              @open-dar="openExdar" @open-plist="openPlst" @open-recon="openRecon" @open-score="getScore" />
-          </td>
-        </tr>
       </template>
     </q-table>
   </div>
@@ -95,7 +76,7 @@ import { axiosFunctions } from '../src/composables/axiosFunctions'
 import { dayFunctions } from '../src/composables/dayFunctions'
 
 //== data
-const { isIM, isDesk, isFone, buildApp, fmtcy, dalist, palist, $q } = libFunctions()
+const { isIM, isDesk, isFone, buildApp, fmtcy, dalist, palist, $q, screenheight, screenwidth, iPhone17 } = libFunctions()
 const { gaxios, paxios } = axiosFunctions()
 const { today, getFutureDate } = dayFunctions()
 
@@ -121,15 +102,16 @@ var ccardPayment = null
 var ccardDueDay = null
 var betweenDays = null
 const rowsPerPageDesk = 23
-const rowsPerPageIM = 4
+const rowsPerPageIM = 14
 const visibleColumnsDesk = ref([col(1).name,col(2).name,col(3).name,col(4).name,col(5).name])
-const visibleColumnsFone = ref([col(1).name,col(2).name,col(3).name,col(4).name,col(5).name])
+// const visibleColumnsFone = ref([col(1).name,col(2).name,col(3).name,col(4).name,col(5).name])
 // const visibleColumnsFone = ref([col(1).name,col(2).name,col(3).name,col(5).name])
+const visibleColumnsFone = ref([col(1).name,col(2).name,col(5).name])
 const columns = ref([col(0), col(1), col(2), col(3), col(4), col(5)])
 const baseHeight = 6
 // const domHeight = ref(baseHeight)
 
-console.log(`-ST-exlist`)
+console.log(`-ST-exlist screenheight=${screenheight} screewidth=${screenwidth} iPhone17`)
 // console.log(`-ST-exlist isIPad=${isIPad} isIM=${isIM} isDesk=${isDesk}`, chkspeed)
 
 //== emitter.on
@@ -203,11 +185,11 @@ function testDB () {
 function col(idx) {
   const cols = [
     { name: 'id', field: 'id' },
-    { required: false, label: '采购时间', align: 'left', name: 'date', field: 'date', sortable: true, headerStyle:'font-size:20px', headerClasses: 'text-yellow' },
-    { required: false, label: '类别', align: 'left', name: 'cats', field: 'cats', sortable: true, headerStyle:'font-size:20px', headerClasses: 'text-yellow' },
+    { required: false, label: '采购时间', align: 'center', name: 'date', field: 'date', sortable: true, headerStyle:'font-size:20px', headerClasses: 'text-lime' },
+    { required: false, label: '类别', align: 'center', name: 'cats', field: 'cats', sortable: true, headerStyle:'font-size:20px', headerClasses: 'text-yellow' },
     { required: false, label: '具体类别', align: 'left', name: 'subc', field: 'subc', sortable: true, headerStyle:'font-size:20px', headerClasses: 'text-yellow' },
     { required: false, label: '购买自 / 支付给', align: 'left', name: 'paye', field: 'paye', sortable: true, headerStyle:'font-size:20px', headerClasses: 'text-yellow' },
-    { required: false, label: '支付', align: 'right', name: 'cost', field: 'cost', sortable: true, headerStyle:'font-size:20px', headerClasses:'text-amber-9 text-no-wrap' }
+    { required: false, label: '支付', align: 'right', name: 'cost', field: 'cost', sortable: true, headerStyle:'font-size:20px', headerClasses:'text-amber text-no-wrap' }
   ]
   return cols[idx]
 }
@@ -220,7 +202,8 @@ function col(idx) {
 // }
 function getClickedIdx (rowId) {
   // console.log(`-CK-fn-getClickedIdx row.id=${rowId}`)
-  return dalist.value.map(p => p.id).indexOf(rowId) % 25
+  // return dalist.value.map(p => p.id).indexOf(rowId) % 25
+  return dalist.value.map(p => p.id).indexOf(rowId) % (isDesk ? rowsPerPageDesk : rowsPerPageIM)
 }
 function showRow (col, p) {
   if (col.name === 'date') {
@@ -230,18 +213,23 @@ function showRow (col, p) {
   } else showDetails(p)
 }
 function getStyle (coln) {
-  // console.log('-fn-getStyle', coln)
-  const fz = 'font-size:18.3px;'
-  if (isDesk) {
-    if (coln === col(1).name)      return 'cursor:grab;min-width:169px;max-width:169px;' + fz
-    else if (coln === col(2).name) return 'min-width:110px;max-width:110px;' + fz
-    else if (coln === col(3).name) return 'min-width:160px;max-width:160px;' + fz
-    else if (coln === col(4).name) return 'min-width:250px;max-width:250px;' + fz
-    else if (coln === col(5).name) return fz + 'text-align:right'
-  } else {
-    if (coln === col(1).name)      return 'min-width:30%;max-width:30%;' + fz
-    else if (coln === col(2).name) return 'min-width:30%;max-width:30%;' + fz
-    else if (coln === col(5).name) return 'min-width:40%;max-width:40%;text-align:right;' + fz
+  // console.log(`-fn-getStyle screenwidth=${screenwidth} coln=${coln} col1=${col(1).name} col2=${col(2).name} col5=${col(5).name} isIM=${isIM}`)
+  const dfz = 'font-size:18.3px;'
+  const ffz = 'font-size:20.3px;'
+  if (isIM) {
+    // if (coln === col(1).name)      return 'min-width:10%;max-width:10%;' + ffz
+    if (coln === col(1).name)      return 'width:35%;text-align:center;' + ffz
+    else if (coln === col(2).name) return 'width:36%;text-align:center;' + ffz
+    else if (coln === col(5).name) return 'width:29%;text-align:right;' + ffz
+    // if (coln === col(1).name)      return 'min-width:30%;max-width:30%;' + fz
+    // else if (coln === col(2).name) return 'min-width:30%;max-width:30%;' + fz
+    // else if (coln === col(5).name) return 'min-width:40%;max-width:40%;text-align:right;' + fz
+  } else if (isDesk) {
+    if (coln === col(1).name)      return 'cursor:grab;min-width:169px;max-width:169px;' + dfz
+    else if (coln === col(2).name) return 'min-width:110px;max-width:110px;' + dfz
+    else if (coln === col(3).name) return 'min-width:160px;max-width:160px;' + dfz
+    else if (coln === col(4).name) return 'min-width:250px;max-width:250px;' + dfz
+    else if (coln === col(5).name) return dfz + 'text-align:right'
   }
 }
 function getRowIdx (date) {
@@ -352,9 +340,9 @@ function showDetails(p) {
     const data = { courseId: row.payeId, playerId: row.user_id, teetime: row.date }
     paxios(path, data)
   }
-  if (!p.expand) clickedIdx.value = 0 // to make it fixed
+  if (!p.expand && isDesk) clickedIdx.value = 0 // to make it fixed
   // console.log('-fn-showDetails lastClicked Row B', lastClicked, p.row.add, p.row.hasOwnProperty('upd'))
-  console.log(`%c-fn-showDetails clickedIdx=${clickedIdx.value} numProperties=${Object.values(row).length}`, 'color: red', row)
+  console.log(`%c-fn-showDetails clickedIdx=${clickedIdx.value} numProperties=${Object.values(row).length}`, 'color: red')
   emitter.emit('clicked-idx', clickedIdx)
 }
 function getScore() {
@@ -421,8 +409,14 @@ function openPlst () {
   const plst = purchaselst.value
   emitter.emit('open-PurchasedList', date, plst, paye, payeId)
 }
+function openExdarIM (act, row) {
+  console.log(`-CK-fn-openExdarIM act=${act} row.date=${row.date}`)
+  const crow = JSON.parse(JSON.stringify(row))
+  // const cidx = getClickedIdx(crow.id)
+  emitter.emit('open-exdar', crow, act)
+}
 function openExdar (act) {
-  console.log(`-CK-fn-openExdar act=${act}`, clickedRow)
+  console.log(`-CK-fn-openExdar act=${act} clickedRow.date=${clickedRow.date}`)
   const crow = JSON.parse(JSON.stringify(clickedRow))
   // const cidx = getClickedIdx(crow.id)
   emitter.emit('open-exdar', crow, act)

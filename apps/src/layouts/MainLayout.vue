@@ -56,8 +56,8 @@
       </q-toolbar>
     </q-header>
 
-    <div v-if="curApp!='arts' && curApp!=='golf' && isDesk">
-      <q-drawer v-model="drawer" :mini="isDesk ? true : !drawer || miniState" :width="230" :breakpoint="400" show-if-above class="bg-teal-9">
+    <div v-if="curApp!='arts' && curApp!=='golf' && isDesk && !isIM">
+      <q-drawer v-model="drawer" :mini="isDesk ? true : !drawer || miniState" :width="230" :breakpoint="392" show-if-above class="bg-teal-9">
         <q-scroll-area class="fit" style="font-family:youyuan">
           <q-list padding>
             <AppItem appl="日 常 消 费" colr="purple-9" iclr="yellow" size="27px" styl="margin: 0 0 0 1.5px" icon="monetization_on" appn="exlist" />

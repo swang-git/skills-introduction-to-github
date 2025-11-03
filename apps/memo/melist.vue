@@ -20,10 +20,10 @@
     <q-tr v-show="p.expand" :props="p">
       <q-td class="bg-cyan-8" :colspan="isDesk ? 3 : 2">
         <table :style="isDesk ? {margin:'-4px 0 -5px -17px'} : {margin:'-4px 0px 0 -17px' }" style="width:109%">
-          <tr v-if="ishow(p.row,2)">
-            <td class="bg-teal-10 text-center" colspan="2"><b style="font-size:32px">{{ getVal(p.row,6)}}</b>
-              <q-fab v-model="fabOpen" direction="down" class="q-ml-md">
-                <q-btn round glossy icon="delete"     size="16px" color="red-10"    @click="showDar(p.row, 'del')" />
+          <tr v-if="ishow(p.row,2)" class="align-evenly">
+            <td class="bg-teal-10 text-center" colspan="2"><b class="q-pt-lg" style="font-size:30px">{{ getVal(p.row,6)}}</b>
+              <q-fab v-model="fabOpen" direction="down" class="q-ql-md" style="margin-top:-9px">
+                <!-- <q-btn round glossy icon="delete"     size="16px" color="red-10"    @click="showDar(p.row, 'del')" /> -->
                 <q-btn round glossy icon="update"     size="16px" color="indigo-10" @click="showDar(p.row, 'upd')" />
                 <q-btn round glossy icon="add_circle" size="16px" color="green-10"  @click="showDar(p.row, 'add')" />
               </q-fab>

@@ -1,7 +1,7 @@
 <template>
 <!-- <div> -->
 <q-dialog v-model="opened" transition-show="slide-right" persistent>
-  <q-layout container class="bg-teal-10 fixed-center" :style="{ height:isDesk ? '300px' : '600px', width:isDesk ? '488px' : '' }">
+  <q-layout container class="bg-teal-10 fixed-center" :style="{ height:isDesk ? '300px' : '400px', width:isDesk ? '488px' : '' }">
     <layout-header tit="Update/Create/Delete Reminder" @do-action="doAction" />
     <layout-footer :act="action" tit="NOTE_LINK" @do-action="doAction" />
     <q-page-container v-if="isDesk" class="">

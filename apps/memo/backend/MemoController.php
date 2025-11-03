@@ -32,7 +32,7 @@ class MemoController extends Controller
   private function fmtLink($link, $swProp) {
     $lnk = '';
     $doc_dir = config('global.doc_dir');
-    $docs = explode('@', $link); //Log::info([$d->filename, $docs]);
+    $docs = explode('@', $link); Log::info(count($docs), [$link, $docs]);
     if (count($docs) == 1) {
       $doc = $docs[0];
       $dname = substr(preg_replace('/_|-/', ' ', $doc), 0, $swProp);

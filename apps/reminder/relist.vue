@@ -1,10 +1,11 @@
 <template>
 <div class="q-px-xs" :class="{ fixed: clickedIdx < 8 }">
-<q-table class="sh-sticky-header-table" v-model:rows="palist" :columns="columns"
+<q-table class="sh-sticky-header-table" v-model:rows="palist" :columns="columns" dense
   :grid=false :visible-columns="isDesk ? visibleColumnsDesk : visibleColumnsFone" :style="{height:isIM ? '565px':''}"
-  row-key="id" :separator="separator" :showCol="showCol" wrap-cells hide-pagination :pagination="isDesk ? { rowsPerPage: 23 } : { rowsPerPage: 13 }"
+  :pagination="isDesk ? { rowsPerPage: rowsPerPageDesk } : { rowsPerPage: rowsPerPageIM }"
+  row-key="id" :separator="separator" :showCol="showCol" wrap-cells hide-pagination 
 >
-  <template v-slot:top="props">
+  <!-- <template v-slot:top="props">
     <q-select v-if="isIM"
       v-model="visibleColumnsDesk" multiple borderless dense options-dense
       emit-value map-options
@@ -13,7 +14,7 @@
       :options="columns"
     />
     <q-btn v-if="isIM" flat round dense color="accent" :icon="props.inFullscreen ? 'fullscreen_exit' : 'fullscreen'" @click="props.toggleFullscreen" class="q-pr-xs" />
-  </template>
+  </template> -->
 
   <template v-slot:header="props">
     <q-tr :props="props">
@@ -24,26 +25,17 @@
   <template v-slot:body="p">
     <q-tr :props="p">
       <q-td v-for="col in p.cols" :key="col" @click="expandRow(p, col.name)" :style="getStyle(col.name)" :class="getClass(col, p.row)">
-        <!-- <span v-if="col.name=='due_date'">{{ col.value.substring(5) }}</span><span v-else>{{ col.value }}</span> -->
-        {{ col.value }}
+        <span v-if="col.name=='due_date' && isIM">{{ col.value.substring(0, 10) }}</span><span v-else>{{ col.value }}</span>
       </q-td>
     </q-tr>
     <q-tr v-show="p.expand" :props="p">
       <q-td class="bg-cyan-8" :colspan="isDesk ? 4 : 3">
         <table style="margin:-7px 0 -6px -16px;width:105%">
           <q-tr><td style="min-width:52px">{{ cols[2].label }}</td>
-            <td v-if="/今|明|后/.test(getVal(p.row,2))" class="bg-teal-10">
-              <b class="vertical-center text-h5 q-px-xs text-bold">就 是</b>
+            <td v-if="/今|明|后/.test(getVal(p.row,2)) && !/PXW/.test(p.row.tag)" class="bg-teal-10">
+              <b v-if="isDesk" class="vertical-center text-h5 q-px-xs text-bold">就 是</b>
               <b class="text-red text-h4 text-bold">{{getVal(p.row,2)}}</b>
-              <b class="vertical-center q-pl-sm text-bold text-h5">马 上 到 期</b>
-              <!-- <q-btn v-if="!/PX|(QG|WX|WW)|Play at/.test(p.row.tag) && !p.row.memo" round glossy icon="edit" @click="showDar(p.row)" class="float-right" /> -->
-              <div v-if="p.row.memo==null && p.row.golf==null">
-                <q-fab  v-model="fabOpen" flat hide-icon direction="left" color="cyan-2">
-                  <q-btn round glossy icon="add_circle" color="green-10" size="16px" @click="showDar(p.row, 'add')" class="q-mr-md" />
-                  <q-btn round glossy icon="update"     color="indigo"   size="16px" @click="showDar(p.row, 'upd')" class="q-mr-md" />
-                  <q-btn round glossy icon="delete"     color="red-10"   size="16px" @click="delRow(p.row)" class="q-mr-md" />
-                </q-fab>
-              </div>
+              <b class="vertical-top q-pl-sm text-bold text-h5"> ~ 马 上 到 期</b>
             </td>
             <td v-else-if="/过/.test(getVal(p.row,2))" class="bg-teal-10">
               <b class="vertical-top text-h5 q-px-xs text-bold">已 经</b>
@@ -55,14 +47,15 @@
                 <q-btn round glossy icon="add_circle" size="16px" color="green-10"  @click="showDar(p.row, 'add')" class="q-mr-md" />
               </q-fab>
             </td>
-            <td v-else class="bg-teal-10"><b class="vertical-center text-h5 q-px-xs text-bold">还 有</b>
+            <td v-else class="bg-teal-10">
+              <b v-show="!/^PX/.test(p.row.tag)" class="vertical-center text-h5 q-px-xs text-bold">还 有</b>
               <b class="text-amber text-h4 text-bold">{{getVal(p.row,2).replace(/^0/,'')}}</b>
-              <b class="vertical-center q-pl-xs text-bold text-h5">到 期</b>
-              <div v-if="p.row.memo==null && p.row.golf==null" class="float-right">
+              <b v-show="!/^PX/.test(p.row.tag)" class="vertical-center q-pl-xs text-bold text-h5">到 期</b>
+              <div v-if="p.row.memo==null && p.row.golf==null && !/^PX/.test(p.row.tag)" class="float-right">
                 <q-fab  v-model="fabOpen" flat hide-icon direction="left" color="cyan-2">
-                  <q-btn round glossy icon="delete"     size="16px" color="red-10"    @click="delRow(p.row)" class="q-mx-md" />
-                  <q-btn round glossy icon="update"     size="16px" color="indigo-10" @click="showDar(p.row, 'upd')" class="q-mr-md" />
                   <q-btn round glossy icon="add_circle" size="16px" color="green-10"  @click="showDar(p.row, 'add')" class="q-mr-md" />
+                  <q-btn round glossy icon="update"     size="16px" color="indigo-10" @click="showDar(p.row, 'upd')" class="q-mr-md" />
+                  <!-- <q-btn round glossy icon="delete"     size="16px" color="red-10"    @click="delRow(p.row)" class="q-mx-md" /> -->
                 </q-fab>
               </div>
             </td>
@@ -123,6 +116,10 @@ import redar from './redar.vue'
 import InfoDisplay from '../src/components/InfoDisplay'
 
 // const cols = ref(['ID'])
+
+const rowsPerPageDesk = 23
+const rowsPerPageIM = 13
+
 var lastClickedP = { key:0, pageIndex: 0 }
 var clickedRow = { id:0 }
 var clickedIdx = ref(0)
@@ -132,7 +129,7 @@ const showCol = ref(null)
 const fabOpen = ref(true)
 const cols = [
   { required: false, label: '身份', align: 'left', name: 'id', field: 'id', sortable: true, headerClasses: 'text-white text-no-wrap' },
-  { required: true,  label: '时间', align: 'left', name: 'due_date', field: 'due_date', sortable: true, headerStyle: 'max-width:50px', headerClasses: 'text-no-wrap' },
+  { required: true,  label: '时间', align: 'right', name: 'due_date', field: 'due_date', sortable: true, headerStyle: 'max-width:50px', headerClasses: 'text-no-wrap' },
   { required: false, label: '期限', align: 'left', name: 'due_in', field: 'due_in', sortable: true, headerStyle:'max-width:50px', headerClasses:'text-no-wrap text-center' },
   { required: false, label: '内容', align: 'left', name: 'tag', field: 'tag', sortable: true, headerClasses: 'text-no-wrap ellipsis' },
   { required: false, label: '信息', align: 'left', name: 'message',  field: row => row.message, sortable: false },
@@ -146,7 +143,7 @@ const columns = [cols[0], cols[1], cols[2], cols[3], cols[4], cols[5], cols[6], 
 
 console.log('-ST-relist')
 buildApp('温馨提示', 'reminder')
-emitter.emit('items-per-page', isIM ? 12 : 18)
+emitter.emit('items-per-page', isIM ? rowsPerPageIM : rowsPerPageDesk)
 getList()
 
 //== function section
@@ -189,7 +186,7 @@ function deledRow () {
   dats.value.splice(getRowIdx(), 1)
 }
 function getStyle (col) {
-  if (col === cols[1].name)      return isDesk ? 'min-width:150px;max-width:150px' : 'min-width:53px;max-width:53px'
+  if (col === cols[1].name)      return isDesk ? 'min-width:150px;max-width:150px' : 'min-width:30px;max-width:30px'
   else if (col === cols[2].name) return isDesk ? 'min-width:72px;max-width:72px'   : 'min-width:105x;max-width:105px'
   else if (col === cols[3].name) return isDesk ? 'min-width:283px;max-width:283px;font-size:16px' : 'min-width:113px;max-width:113px'
   else if (col === cols[4].name) return 'cursor:grab;' + (isDesk ? 'max-width:285px;min-width:285px;font-size:18px' : 'max-width:160px;min-width:160px')
@@ -216,6 +213,19 @@ function getClass (col, row) {
   }
 }
 function expandRow (p, col) {
+  console.log(`-fn-expendRow col=${col}`, p.row)
+  // if (isIM && !/^PX/.test(p.row.tag)) {
+  if (isIM && !/^PX/.test(p.row.tag) && !p.row.memo) {
+  // if (isIM && !/^PX/.test(p.row.tag)) {
+  // if (isIM) {
+    console.log(`-fn-expendRow col=${col}`, p.row.memo)
+    if (col === 'tag') {
+      showDar(p.row, 'add')
+    } else {
+      showDar(p.row, 'upd')
+    }
+    return
+  }
   console.log(`-CK-fn-expandRow colname=${col}`, p.row, p.cols)
   if (col === 'message' && /PX(QG|WW|WX)/.test(p.row.tag)) {
     let tag = p.row.tag.split(' ')[0]

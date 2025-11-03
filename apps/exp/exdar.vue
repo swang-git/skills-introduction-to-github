@@ -1,7 +1,6 @@
 <template>
-  <q-dialog v-model="opened" transition-show="slide-right" persistent>
+  <q-dialog v-model="opened" :transition-show="action=='add' ? 'slide-right' : 'rotate'" :maximized="isIM">
     <q-layout container class="bg-teal-10" :style="{ height:compHeight }">
-    <!-- <q-layout container class="bg-teal-10"> -->
       <LayoutHeader :tit="getTitle()" @do-action="doAction" :rbtn="iicon" />
       <LayoutFooter :tit="getFoote()" icon="link" :act="action" @do-action="doAction" />
       <q-page-container>

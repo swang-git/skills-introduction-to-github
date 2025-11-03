@@ -171,4 +171,4 @@ for stock in stocks:
     quote = StockQuote(stock)
     if quote.isQuoteAlreadyInDBforToday(database): continue
     quote.setData(pdata)
-    # quote.saveToDB(database)
+    quote.saveToDB(database)
