@@ -101,7 +101,7 @@ const clickedIdx = ref(0)
 var ccardPayment = null
 var ccardDueDay = null
 var betweenDays = null
-const rowsPerPageDesk = 23
+const rowsPerPageDesk = 24
 const rowsPerPageIM = 14
 const visibleColumnsDesk = ref([col(1).name,col(2).name,col(3).name,col(4).name,col(5).name])
 // const visibleColumnsFone = ref([col(1).name,col(2).name,col(3).name,col(4).name,col(5).name])
@@ -214,7 +214,7 @@ function showRow (col, p) {
 }
 function getStyle (coln) {
   // console.log(`-fn-getStyle screenwidth=${screenwidth} coln=${coln} col1=${col(1).name} col2=${col(2).name} col5=${col(5).name} isIM=${isIM}`)
-  const dfz = 'font-size:18.3px;'
+  const dfz = 'font-size:18.9px;'
   const ffz = 'font-size:20.3px;'
   if (isIM) {
     // if (coln === col(1).name)      return 'min-width:10%;max-width:10%;' + ffz

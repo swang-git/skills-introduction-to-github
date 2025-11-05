@@ -92,7 +92,8 @@ function openIt (rw, act) {
   row.value = rw
   if (act == 'del') return del()
   // date.value = (new Date()).yyyymmdd()
-  if (/add|upd/.test(act)) date.value = null
+  if (/add/.test(act)) date.value = null
+  if (/upd/.test(act)) date.value = row.value.date
   opened.value = true
 }
 // function getMask () {

@@ -4,7 +4,7 @@
 <!-- <div style="margin:-23px 0 0 0;display:grid;place-items:center;height:99vh">"> -->
   <div v-for="(e, i) in palist" :key=e.id>
     <div :style="getLineBackground(i)" :class="{ 'bg-purple-10':!e.hideIt }" class="q-px-xs">
-      <div class="row cursor-pointer;q-qx-sm" style="font-size:20px">
+      <div class="row cursor-pointer;q-qx-sm" style="font-size:20.1px">
         <div v-if="isDesk" class="q-pl-sm" @click="e.hideIt=true"><a :href="getDocLinkStr(e.date)" target="_blank" class="alnkclass">{{ e.date }}</a></div>
         <div v-if="isDesk" class="q-pl-md" @click="e.hideIt=true;getPositions(e)">({{ e.date.chwk2() }})</div>
         <div v-if="e.dowjones>0 && isDesk" class="q-px-md text-right" @click="showIt(i)"> {{ formatCurrency(e.dowjones) }}
@@ -12,8 +12,8 @@
         </div>
         <div v-else class="q-pl-md text-right" @click="showIt(i)">{{ formatCurrency(e.portfolio - invested(e)) }}</div>
         <div class="q-pl-xs text-right"  @click="showIt(i)">{{ ((e.portfolio/invested(e) - 1) * 100).toFixed(2) }}%</div>
-        <div class="q-pl-md text-center" @click="showIt(i)">{{ getWeight(e) }} / {{ getBMI(e) }}</div>
-        <div class="q-px-xs text-right" :class="{ 'text-green-3':e.dif>0, 'text-pink-2':e.dif<0 }" style="width:113px" @click="showIt(i)"> {{ e.difs }} </div>
+        <div class="q-pl-md text-center" @click="showDar(e, 'upd')">{{ getWeight(e) }} / {{ getBMI(e) }}</div>
+        <div class="q-px-xs text-right" :class="{ 'text-green-3':e.dif>0, 'text-pink-2':e.dif<0 }" style="width:113px" @click="showDar(e, 'upd')"> {{ e.difs }} </div>
         <div class="q-plx-xs text-right cursor-pointer" style="width:133px" @click="showDar(e, 'add')">{{ formatCurrency(e.portfolio) }}</div>
         <div class="q-pl-md text-right"><q-icon :name="getIcon(i)" @click="showDar(e, 'add')" /></div>
       </div>
@@ -42,7 +42,7 @@
           <q-btn round glossy icon="note" @click="showPNote(e)">
             <q-tooltip class="text-h6 bg-green-9">Daily Note - Optional(e.g. buy/sell/convert/pending)</q-tooltip>
           </q-btn>
-          <q-btn round glossy color="red-10"    @click="showDar(e, 'del')" size="16px" icon="delete" />
+          <!-- <q-btn round glossy color="red-10"    @click="showDar(e, 'del')" size="16px" icon="delete" /> -->
           <q-btn round glossy color="indigo-10" @click="showDar(e, 'upd')" size="16px" icon="update" />
           <q-btn round glossy color="green-10"  @click="showDar(e, 'add')" size="16px" icon="add_circle" />
         </q-fab>
@@ -122,7 +122,7 @@ const pagination = ref({
   page: 1,
   rowsPerPage: 0
 })
-const itemsPerPage = 28
+const itemsPerPage = 29
 console.log('-ST-Watcher4Desk')
 emitter.on('show-watcher-chart', () => { showChart() })
 emitter.on('watcher-add', () => getList())
