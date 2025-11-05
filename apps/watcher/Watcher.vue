@@ -1,5 +1,5 @@
 <template>
-<div class="q-pa-xs">
+<div class="q-pa-xs" style="width:795px;height:90vh;border:cyan 1px solid">
 <!-- <div class="q-pa-xs" :class="{ fixed: clickedIdx < 1}"> -->
 <!-- <div style="margin:-23px 0 0 0;display:grid;place-items:center;height:99vh">"> -->
   <div v-for="(e, i) in palist" :key=e.id>

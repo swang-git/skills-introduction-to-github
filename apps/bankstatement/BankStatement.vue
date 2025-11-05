@@ -1,7 +1,7 @@
 <template>
 <div style="display:grid;place-items:center">
-  <div style="margin:-3px 0 0 5px;width:802px;border:cyan solid 1px">
-    <div class="q-pa-xs row text-h6 text-grey-1 bg-teal-10" style="width:800px">
+  <div style="margin:-3px 0 0 5px;width:786px;border:cyan solid 1px">
+    <div class="q-pa-xs row text-h6 text-grey-1 bg-teal-10">
       <div class="q-pl-xs text-no-wrap text-left" style="width:86px">{{ month }}月份</div>
       <div class="q-pl-xs text-no-wrap" style="width:175px">股票: {{ fmtcy(stocksVal) }}</div>
       <div class="q-pl-xs text-no-wrap" style="width:175px">现金: {{ compCash }}</div>
@@ -25,9 +25,9 @@
           <!-- <div v-else-if="isDesk && bank=='NAC'" class="q-pl-sm text-white" style="font-size:17px">{{ e.end_date }}</div> -->
           <div v-if="isDesk" style="width:20px" class="q-pl-md q-pt-xs text-grey text-right text-body1">{{ e.tran_cnt }}</div>
           <div v-if="isDesk" style="width:144px" class="text-right">{{ fmtcy(e.begin_balance) }}</div>
-          <div style="width:144px" class="text-right">{{ fmtcy(e.end_balance) }}</div>
-          <div style="width:118px" class="text-right" :class="getEdiffClass(e)">{{ fmtcy(e.diff>0 ? e.diff : -e.diff) }}</div>
-          <div v-if="isDesk" style="width:10px"><q-btn size="12px" :icon="getIcon(i)" flat /></div>
+          <div style="width:140px" class="text-right">{{ fmtcy(e.end_balance) }}</div>
+          <div style="width:110px" class="text-right" :class="getEdiffClass(e)">{{ fmtcy(e.diff>0 ? e.diff : -e.diff) }}</div>
+          <div v-if="isDesk" style="width:10px"><q-btn size="11px" :icon="getIcon(i)" flat /></div>
         </div>
       </div>
       <div :class="{ hidden: e.hideIt }" class="q-px-xs text-cyan-1">
