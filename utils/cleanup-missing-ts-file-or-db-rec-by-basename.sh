@@ -42,6 +42,7 @@ if [ $fileEx = "Not" ]; then
   exit
 else
   echo $fileExist
+  # echo "And  *.png file is ${FILE}.png"
   # echo "checking record in recorded table"
   record=$(mysql -pYbsjll11 -b mythconverg --batch -N -e "select COUNT(*) from recorded where basename = '$basen'")
   if [ "$record" -gt 0 ]; then
@@ -55,6 +56,7 @@ else
   else
     echo "No record in recoded table"
     echo "delete $FILE ...."
-    sudo rm $FILE
+    echo "delete ${FILE}.png ...."
+    sudo rm $FILE ${FILE}.png
   fi
 fi
