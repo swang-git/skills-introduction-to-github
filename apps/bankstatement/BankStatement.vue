@@ -439,6 +439,7 @@ function setList(da) {
   console.log(`-fn-setList currFidelPortfo=${da.curr_fidel_fortfo}, last_bkg_pdf=${da.last_bkg_pdf}, fidel_cash=${da.fidel_cash} bkg_cash=${da.bkg_cash} bkg_stockss=${da.bkg_stocks}`, da.dats)
   intraday.value = da.intraday
   last_bkg_pdf.value = da.last_bkg_pdf
+  // dats.value = [...da.dats.slice(0, 2), ...da.dats.slice(14)]
   dats.value = da.dats
   let chartda = JSON.stringify(da.dats)   // clone dats
   chartda = JSON.parse(chartda).reverse()
