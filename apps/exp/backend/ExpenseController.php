@@ -91,13 +91,14 @@ class ExpenseController extends Controller {
 	public function getCreditCardSpendings($startDay, $endDay, $dueDay) { Log::info("-CK-fn-getCreditCardSpendings($startDay, $endDay, $dueDay)", [__LINE__]);
 		$userId = Auth::user()->id;
 		$ccStatementId = Spend::where([['status', 'A'], ['purchasedon', $dueDay]])->value('id');
-		Log::info("getCreditCardSpending startDay=$startDay endDay=$endDay dueDay=$dueDay ccStatementId=$ccStatementId LINE=".__LINE__);
+		Log::info("getCreditCardSpendings startDay=$startDay endDay=$endDay dueDay=$dueDay ccStatementId=$ccStatementId LINE=".__LINE__);
 		$dm = Spend::find($ccStatementId);
 		$dm->notes = $startDay . ' ~ ' . $endDay;
 		$dm->link = "fidelity_credit_card/$dueDay.pdf";
 		$dm->save();
-		Log::info("getCreditCardSpending Id=$ccStatementId");
+		Log::info("getCreditCardSpendings Id=$ccStatementId");
 		$ccdata = DB::select('CALL get_credit_card_spendings(?, ?, ?, ?)', [$userId, $startDay, $endDay, $dueDay]);
+    // Log::info("getCreditCardSpendings", $ccdata);
 		return ['ccdata' => $ccdata, 'status' => "OK"];
 	}
 	public function setReconcile(Request $da) {
@@ -329,7 +330,7 @@ class ExpenseController extends Controller {
 		$nd['subcat_id'] = $d['subcId'];
 		$nd['payee_id'] = $d['payeId'];
 		$nd['paymethod_id'] = $d['paymId'];
-		$nd['totalpaid'] = preg_match('/Refund|Trade in/', $subc) ? -abs($d->cost) : abs($d->cost);
+		$nd['totalpaid'] = preg_match('/Refund|Trade in|Credit/', $subc) ? -abs($d->cost) : abs($d->cost);
 		$nd['unitprice'] = $d['unip'];
 		$nd['quantity'] = $d['quan'];
 		$nd['miles'] = $d['mile'];

@@ -8,7 +8,7 @@
     </div>
     <div v-for="(o) in options" :key="o">
       <!-- <q-radio class="q-px-md" size="lg" keep-color :key="o" v-model="statement.bank" :val="o.value" :label="o.label" :color="o.color" @click="setStatementLink()"/> -->
-      <q-radio class="q-px-md" size="lg" keep-color :key="o" v-model="statement.bank" :val="o.value" :label="o.label" :color="o.color" @click="storeBank()" />
+      <q-radio v-if="!loading" class="q-px-md" size="lg" keep-color :key="o" v-model="statement.bank" :val="o.value" :label="o.label" :color="o.color" @click="storeBank()" />
     </div>
     <q-card-actions align="between">
       <DatePicker :date="compDate" txsz="text-h6" @upd-date="updDate" style="width:240px" />
@@ -41,6 +41,7 @@ import emitter from 'tiny-emitter/instance'
 import { libFunctions } from '../src/composables/libFunctions'
 const { isDesk, buildApp, $q } = libFunctions()
 const today = new Date().yyyymmdd()
+const loading = ref(false)
 // const initDate = ref(null)
 
 const intraday = ref(null)
@@ -225,7 +226,9 @@ function updDate(x) {
   console.log(`-CK-fn-updDate from Loader.vue statement.date=${statement.date}`)
 }
 function loadStateements() {
-  $q.notify('Loading Statement ' + statement.bank)
+  // loading.value = false ? loading.value : !loading.value
+  loading.value = true
+  // $q.notify('Loading Statement ' + statement.bank)
   if (statement.bank === 'FidelCC')  {
     emitter.emit('open-ReconFidelityCC', statement)
     emitter.emit('close-MonthlyStatementChase')

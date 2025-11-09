@@ -59,15 +59,16 @@
     <tr v-if="totalspend>0" class="bg-cyan-9">
       <td style="width:150px" class="q-pl-xs text-left">{{ cspends.length + credits.length }} Spendings</td>
       <td colspan="2" style="width:560px" class="text-right">Total Credit Card Spending {{data.open}} ~ {{data.clos}}</td>
-      <td style="width:90px" class="text-right q-px-sm">{{ totalspend }}</td>
+      <td style="width:90px" class="text-right text-lime q-px-sm cursor-pointer"@click="whichCreditIncluded">{{ totalspend }}</td>
     </tr>
     <tr v-if="totalspend>0" class="bg-cyan-9">
       <td class="q-pl-sm q-pt-"><q-btn glossy round color="amber-10" icon="sort" @click="doSorting" /></td>
       <td class="q-pl-sm q-pt-"><q-btn glossy round color="amber-10" icon="checklist_rtl" @click="getCreditCardSpendings" /></td>
       <td class="q-pl-sm q-pt-"><q-btn glossy round color="amber-10" icon="verified" @click="doMatchStatementAndExpenseRecords" /></td>
       <td style="width:710px" class="text-right">Total Amount Due on {{ dueDate }}</td>
-      <td v-if="spendAndCredits>0" style="width:90px" class="text-right q-px-sm">{{ spendAndCredits }}</td>
-      <td v-else style="width:90px" class="text-right q-px-sm">{{ totalspend }}</td>
+      <!-- <td v-if="spendAndCredits>0" style="width:90px" class="text-right q-px-sm">{{ spendAndCredits }}</td> -->
+      <td v-if="credits == undefined" style="width:90px" class="text-right q-px-sm">{{ spendAndCredits }}</td>
+      <td v-else style="width:90px" class="text-right q-px-sm">{{ data.balc.replace('$', '').replace(',', '') }}</td>
     </tr>
   </div>
 </div>
@@ -87,6 +88,7 @@ import CCardReconcileSheet from '../exp/CCardReconcileSheet'
 import InfoDisplay from '../src/components/InfoDisplay'
 const { gaxios, paxios } = axiosFunctions()
 const { $q } = libFunctions()
+// const mapping = {"$": "X", ",": "Y"}
 
 const opened = ref('')
 const bank = ref(null)
@@ -125,6 +127,26 @@ emitter.on('bankstatementloader-getMatchedSpends', (da) => setMatchedSpends(da))
 // emitter.on('user-confirmed', (act) => setPostDate(act))
 
 //== function sections
+function whichCreditIncluded () {
+  console.log(`%c-fn-whichCreditIncluded totalspan=${totalspend.value}`, 'color:lime', credits)
+  let checks = []
+  credits.forEach((p, i) => {
+    console.log(`totalspend - credit${i} = ${totalspend.value} - ${p[4]} = ${totalspend.value - p[4]}`)
+    checks[i] = {credit:p[4], xspend: totalspend.value - p[4]} 
+  })
+  let tit = 'Which Credit included in Totalspend'
+  let msg = ''
+  let currBalance = data.value.balc.replace(/\$/, '').replace(/,/, '')
+  checks.forEach(p => {
+    if (p.xspend == currBalance) {
+      msg = '<div class="text-center">totalspend includes credit: ' + p.credit + '</div>'
+    }
+  })
+  // let msg = '<div class="text-center">' + checks[0].xspend + ' == ' + currBalance
+  msg += '<div class="text-center">' + totalspend.value + ' - ' + checks[1].credit + ' == ' + currBalance + '</div>'
+  emitter.emit('open-InfoDisplay', tit, msg)
+  console.log(`checks`, checks)
+}
 function calcTotalSpendCurrBal (totspend, currbal) {
   let tspt = totspend.replace(/[$|,]/g, '')
   let cbal = currbal.replace(/[$|,]/g, '')
@@ -209,6 +231,7 @@ function setPostTranDate () {
   }
 }
 function getMatchedSpends (lookupspend) {
+
   lookingupSpend = lookupspend
   setPostTranDate()
   // let bedate = openDate.value
@@ -262,9 +285,9 @@ function setPaymentCreditsSpends () {
   prevPayDate = payment[0] + '/' + oYear
   // credits = pdata.filter(p => /RETURN|REVERSAL OF RETURNED PAYMENT FEE/i.test(p[3]))
   credits = pdata.filter(p => /RETURN|RETURNED PAYMENT FEE/i.test(p[3]))
-  cspends.value = pdata.filter(p => p[2] !== 'MTC' && !/RETURN|PAYMENT\s+REVERSAL\s+DEBIT\s+ADJUSTMENT/i.test(p[3]))
+  cspends.value = pdata.filter(p => p[2] !== 'MTC' && p[2] != p[1] && !/RETURN|PAYMENT\s+REVERSAL\s+DEBIT\s+ADJUSTMENT/i.test(p[3]))
   totalspend.value = cspends.value.reduce((total, next) => total + parseFloat(next[4]), 0).toFixed(2)
-  console.log(`-CK-prevPayDate=${prevPayDate}`, data.value)
+  console.log(`-%cCK-prevPayDate=${prevPayDate} totalspend=${totalspend.value}`, 'color:lime', pdata)
   console.log('-CK-returns', credits)
   // console.log('-CK-cspends', cspends.value)
 }
@@ -282,6 +305,7 @@ function doSorting () {
   data.value.sort === 'spend' ? sortByPostDate() : sortBySpending()
 }
 function openIt (stmt) {
+  console.log('-fn-openIt')
   if (stmt.bank !== 'FidelCC') {
     opened.value = 'none'
     return
@@ -369,7 +393,7 @@ function creditsDistr() {
   credit4next.value = credit4next.value.toFixed(2)
 }
 function getCreditCardData() {
-  // console.log("-fn-getData");
+  console.log(`%c-fn-getCreditCardData`, 'color:lime');
   const path = process.env.API + "/bankstatementloader/getCreditCardData/" + dueDate.value + "/" + bank.value
   gaxios(path)
 }
@@ -380,18 +404,18 @@ function getStyle (i) {
   else if (i === 3) return "width:480px";
   else if (i === 4) return "width:90px; text-align:right";
 }
-function setDueDate(x) {
-  dueDate.value = x;
-  // console.log("-fn-setDueDate", x);
-  const dx = parseInt(x.split("-")[2]);
-  if (dx !== 3) {
-    $q.dialog({
-      title: "The due date must be on the third date(i.e. 03) of the month",
-    })
-    return
-  }
-  getCreditCardData()
-}
+// function XXsetDueDate(x) {
+//   dueDate.value = x;
+//   // console.log("-fn-setDueDate", x);
+//   const dx = parseInt(x.split("-")[2]);
+//   if (dx !== 3) {
+//     $q.dialog({
+//       title: "The due date must be on the third date(i.e. 03) of the month",
+//     })
+//     return
+//   }
+//   getCreditCardData()
+// }
 function the3rdDayOfMonth() {
   // const thedate = statement.value.date
   const thedate = dueDate.value
@@ -458,7 +482,8 @@ function nextDueDate() {
   fCCardSpendings = []
 }
 function getTotalSpendAndCredits () {
-  if (data.value.crDates == undefined) return totalspend
+  // return totalspend.value
+  if (data.value.crDates == undefined) return totalspend.value
   let totalspendAndCredits = totalspend.value
   data.value.crDates.forEach((d, i) => { if (d >= prevPayDate) totalspendAndCredits -= data.value.credits[i] })
   return Math.abs(totalspendAndCredits).toFixed(2)

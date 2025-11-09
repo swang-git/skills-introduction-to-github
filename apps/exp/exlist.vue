@@ -214,12 +214,12 @@ function showRow (col, p) {
 }
 function getStyle (coln) {
   // console.log(`-fn-getStyle screenwidth=${screenwidth} coln=${coln} col1=${col(1).name} col2=${col(2).name} col5=${col(5).name} isIM=${isIM}`)
-  const dfz = 'font-size:18.9px;'
+  const dfz = 'font-size:18.7px;'
   const ffz = 'font-size:20.3px;'
   if (isIM) {
     // if (coln === col(1).name)      return 'min-width:10%;max-width:10%;' + ffz
     if (coln === col(1).name)      return 'width:35%;text-align:center;' + ffz
-    else if (coln === col(2).name) return 'width:36%;text-align:center;' + ffz
+    else if (coln === col(2).name) return 'max-width:30%;text-align:center;' + ffz
     else if (coln === col(5).name) return 'width:29%;text-align:right;' + ffz
     // if (coln === col(1).name)      return 'min-width:30%;max-width:30%;' + fz
     // else if (coln === col(2).name) return 'min-width:30%;max-width:30%;' + fz
@@ -390,8 +390,14 @@ function setCreditCardSpendings (x) {
 }
 function getCreditCardSpendings () {
   const e = clickedRow
-  const bdays = e.note.replace(/(\d\d)\/(\d\d)\/(\d{4}) - (\d\d)\/(\d\d)\/(\d{4})(.*)/, '$3-$1-$2 ~ $6-$4-$5')
-  console.log('-fn-getCreditCardSpendings', bdays, e.unip, e)
+  let note = e.note
+  let bdays = note.replace(/(\d\d)\/(\d\d)\/(\d{4})(.*)(\d\d)\/(\d\d)\/(\d{4})\s*(.*)/, '$3-$1-$2 ~ $7-$5-$6')
+  console.log(`%cnote=${note} bdays=${bdays}`, 'color:red')
+  if (bdays === note) {
+    bdays = note.replace(/(\d{4})-(\d\d)-(\d\d)(.*)(\d{4})-(\d\d)-(\d\d)\s*(.*)/, '$1-$2-$3 ~ $5-$6-$7')
+    console.log(`%cnote=${note} bdays=${bdays}`, 'color:lime')
+    console.log(`-fn-getCreditCardSpendings bdays=${bdays}`, e.unip, e)
+  }
   betweenDays = bdays.split(' ~ ')
   const startDay = bdays.split(' ~ ')[0]
   const endDay = bdays.split(' ~ ')[1]

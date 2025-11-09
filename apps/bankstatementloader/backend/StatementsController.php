@@ -490,9 +490,25 @@ class StatementsController extends Controller {
                 $desc .= ' ' .  $lines[$i + $j];
               }
             }
+            if (preg_match('/RETURN/', $desc)) {
+              $credits[] = $cost;
+              $crDates[] = $trandate;
+            }
             array_push($data['purchases'], Array($postdate, $trandate, $ref, $desc, $cost));
 
+        } else if (preg_match('/\d\d\/\d\d/', $line) and preg_match('/CREDIT\s+ADJUSTMENT/', $lines[$i + 2])) { // credit adjust line
+          $postdate = $line;
+          $trandate = $line;
+          // $ref      = $lines[$i + 1];
+          $ref      = $line;
+          $desc     = $lines[$i + 2] . ' RETURN';
+          // $desc     = $lines[$i + 2];
+          $cost = $this->cleanMoney($lines[$i + 3]);
+          $credits[] = $cost;
+          $crDates[] = $line;
+          array_push($data['purchases'], Array($postdate, $trandate, $ref, $desc, $cost));
 
+        }
         // } else if (preg_match('/\d\d\/\d\d/', $line) and preg_match('/\d{1,}/', $lines[$i + 1]) and preg_match('/CREDIT\s+ADJUSTMENT/', $lines[$i + 2])) { // credit adjust line
         //   $postdate = $line;
         //   $trandate = $line;
@@ -509,7 +525,6 @@ class StatementsController extends Controller {
         //   // Log::info("cost=[$cost]");
         //   array_push($data['purchases'], Array($postdate, $trandate, $ref, $desc, $cost));
       }
-    }
     if (count($credits) > 0) {
       Log::debug("credits:", $credits);
       Log::debug("crDates:", $crDates);

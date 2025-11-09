@@ -1,21 +1,23 @@
 <template>
-<div class="q-pa-xs" style="width:795px;height:90vh;border:cyan 1px solid">
-<!-- <div class="q-pa-xs" :class="{ fixed: clickedIdx < 1}"> -->
-<!-- <div style="margin:-23px 0 0 0;display:grid;place-items:center;height:99vh">"> -->
+<div class="bg-cyan-10 fixed" :class="iPhone ? 'q-pl-sm' : 'q-pl-xs'">
+<!-- <div class="bg-cyan-10 fixed q-pl-sm"> -->
+<div :style="isDesk ? {'width':'73.4vh','height':'90vh', 'border':'cyan 1px solid'} : {'width':'390px','height':'970px'}">
   <div v-for="(e, i) in palist" :key=e.id>
     <div :style="getLineBackground(i)" :class="{ 'bg-purple-10':!e.hideIt }" class="q-px-xs">
       <div class="row cursor-pointer;q-qx-sm" style="font-size:20.1px">
         <div v-if="isDesk" class="q-pl-sm" @click="e.hideIt=true"><a :href="getDocLinkStr(e.date)" target="_blank" class="alnkclass">{{ e.date }}</a></div>
         <div v-if="isDesk" class="q-pl-md" @click="e.hideIt=true;getPositions(e)">({{ e.date.chwk2() }})</div>
-        <div v-if="e.dowjones>0 && isDesk" class="q-px-md text-right" @click="showIt(i)"> {{ formatCurrency(e.dowjones) }}
+        <div v-if="isDesk && e.dowjones>0" class="q-px-md text-right" @click="showIt(i)"> {{ formatCurrency(e.dowjones) }}
           <q-tooltip class="text-h6 bg-accent">Dow Jones on {{ e.date }}</q-tooltip>
         </div>
-        <div v-else class="q-pl-md text-right" @click="showIt(i)">{{ formatCurrency(e.portfolio - invested(e)) }}</div>
-        <div class="q-pl-xs text-right"  @click="showIt(i)">{{ ((e.portfolio/invested(e) - 1) * 100).toFixed(2) }}%</div>
-        <div class="q-pl-md text-center" @click="showDar(e, 'upd')">{{ getWeight(e) }} / {{ getBMI(e) }}</div>
-        <div class="q-px-xs text-right" :class="{ 'text-green-3':e.dif>0, 'text-pink-2':e.dif<0 }" style="width:113px" @click="showDar(e, 'upd')"> {{ e.difs }} </div>
-        <div class="q-plx-xs text-right cursor-pointer" style="width:133px" @click="showDar(e, 'add')">{{ formatCurrency(e.portfolio) }}</div>
-        <div class="q-pl-md text-right"><q-icon :name="getIcon(i)" @click="showDar(e, 'add')" /></div>
+        <div v-if="isDesk" class="q-pl-xs text-right"  @click="showIt(i)">{{ ((e.portfolio/invested(e) - 1) * 100).toFixed(2) }}%</div>
+        <div v-if="isDesk" class="q-pl-md text-right" style="width:124px" @click="showDar(e, 'upd')">{{ getWeight(e) }} / {{ getBMI(e) }}</div>
+        <div v-else class="text-left"style="width:111px" @click="showDar(e, 'upd')">{{ e.date }}</div>
+        <div v-if="isDesk" class="q-px-sm text-right" :class="{ 'text-green-3':e.dif>0, 'text-pink-2':e.dif<0 }" style="width:115px" @click="showDar(e, 'upd')"> {{ e.difs }} </div>
+        <div v-else class="q-px-sm text-right" :class="{ 'text-green-3':e.dif>0, 'text-pink-2':e.dif<0 }" style="width:110px" @click="showDar(e, 'upd')"> {{ e.difs }} </div>
+        <div v-if="isDesk" class="q-pl-sm text-center cursor-pointer" style="width:140px" @click="showDar(e, 'add')">{{ formatCurrency(e.portfolio) }}</div>
+        <div v-else class="q-pl-sm text-right cursor-pointer" style="width:130px" @click="showDar(e, 'add')">{{ formatCurrency(e.portfolio) }}</div>
+        <div class="q-pl-sm text-right"><q-icon :name="getIcon(i)" @click="showDar(e, 'add')" /></div>
       </div>
     </div>
     <div :class="{ hidden: e.hideIt }" class="row q-pa-sm" style="color:yellow;font-size:18px">
@@ -60,7 +62,9 @@
       </div>
     </div>
   </div>
+  </div>
   <UserInput />
+  <UserInputIM />
   <PortfolioDisplay />
   <PortfolioNote  />
   <PortfolioPositions />
@@ -78,13 +82,14 @@ import { axiosFunctions } from 'src/composables/axiosFunctions'
 
 import PortfolioPositions from './PortfolioPositions'
 import UserInput from './UserInput'
+import UserInputIM from './UserInputIM'
 import PortfolioNote from './PortfolioNote'
 import PortfolioDisplay from './PortfolioDisplay'
 import ChartsProxy from '../src/components/ChartsProxy'
 import InfoDisplay from '../src/components/InfoDisplay'
 
 const fabOpen = true
-const { dalist, palist, buildApp, getLineBackground, formatCurrency, isDesk, $q } = libFunctions()
+const { dalist, palist, buildApp, getLineBackground, formatCurrency, isDesk, iPhone, $q } = libFunctions()
 const { gaxios } = axiosFunctions()
 const { getDay2 } = dayFunctions()
 
@@ -122,8 +127,8 @@ const pagination = ref({
   page: 1,
   rowsPerPage: 0
 })
-const itemsPerPage = 29
-console.log('-ST-Watcher4Desk')
+const itemsPerPage = isDesk ? 29 : 17
+console.log(`%c-ST-Watcher iPhone=${iPhone}`, 'color:red;font-size:16px')
 emitter.on('show-watcher-chart', () => { showChart() })
 emitter.on('watcher-add', () => getList())
 emitter.on('watcher-upd', () => getList())
@@ -214,6 +219,7 @@ function getWeight (e) {
   return wt
 }
 function getBMI (e) {
+  getWeight(e)
   if (e.kilo == null) return null
   return (e.kilo / 1.73 / 1.73).toFixed(1)
 }
@@ -230,10 +236,12 @@ function getIcon (i) {
 function getPondx (e) { return (e.kilo * 2.2046244202).toFixed(1) }
 function getPct (e) { return (e.portfolio / invested(e) - 1) * 100 }
 function showDar (row, act) {
-  console.log(`-fn-showDar act=${act}`, type.value, row.weight, row.kilo, row)
+  getWeight(row)
+  console.log(`-fn-showDar act=${act} isDesk=${isDesk}`, 'color:lime', type.value, row.weight, row.kilo, row)
   clickedRow.value = row
   const clone = JSON.parse(JSON.stringify(row))
-  emitter.emit('open-UserInput4Desk', clone, act)
+  if (isDesk) emitter.emit('open-UserInputDesk', clone, act)
+  else emitter.emit('open-UserInputIM', clone, act)
 }
 function showIt (i) {
   clickedIdx.value = i

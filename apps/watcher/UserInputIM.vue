@@ -1,17 +1,20 @@
 <template>
 <q-dialog v-model="opened" persistent>
-  <q-layout container style="height:388px;max-width:555px;margin-top:150px" class="bg-teal-10" >
+  <q-layout container style="height:620px;width:555px;margin-top:30px" class="bg-teal-10">
     <LayoutHeader tit="今日体重 / 退休金市价" @do-action="doAction" />
     <LayoutFooter :act="action" tit="NOTE_LINK" @do-action="doAction" />
     <q-page-container>
       <q-page>
         <div class="q-pa-xs">
-          <div class="row">
-            <dap style="width:50%" :date="date" @upd-date="updDate" label="Watching Date" txsz="text-h6" />
-            <num style="width:50%" :obj="row" label="Portfolio" mask="#######.##" icon="monetization_on" iColor="orange" :rightIcon="true" :showRight="true" />
+          <div>
+            <dap style="width:99%" :date="date" @upd-date="updDate" label="Watching Date" txsz="text-h6" />
+          </div><div>
+            <num style="width:99%" :obj="row" label="Portfolio" mask="#######.##" icon="monetization_on" iColor="orange" :rightIcon="true" :showRight="true" />
           </div>
           <div class="row">
-            <num style="width:45%" :obj="row" label="FTSE 100" mask="######.##" iconSize="35" icon="FT" iColor="green" :rightIcon="true" :showRight="true" prefix="" />
+            <div style="width:81%">
+              <num :wtype="type" :obj="row" label="Weight" mask="#.#" icon="重" iconSize="35" iColor="green" :suffix="ctype" :rightIcon="true" :showRight="true" />
+            </div>
             <div class="q-pt-xs q-pr-sm" style="max-width:10%">
               <q-fab icon="keyboard_arrow_down" color="grey" direction="down">
                 <q-fab-action class="text-h6" color="primary"   @click="changeType('kilo')" icon="alarm"  label="公斤" v-if="type!='kilo'" />
@@ -19,19 +22,13 @@
                 <q-fab-action class="text-h6" color="amber-10"  @click="changeType('jing')" icon="alarm"  label="市斤" v-if="type!='jing'" />
               </q-fab>
             </div>
-            <div style="width:45%">
-              <num :wtype="type" :obj="row" label="Weight" mask="#.#" icon="重" iconSize="35" iColor="green" prefix="" :suffix="ctype" :rightIcon="true" :showRight="true" />
-              <!-- <num :wtype="type" :obj="row" label="Weight" :mask="getMask()" icon="重" iconSize="35" iColor="green" prefix="" :suffix="ctype" :rightIcon="true" :showRight="true" /> -->
-              <!-- <num :wtype="type" :obj="row" label="Weight" :mask="getMask()" :icon="ctype" iconSize="35" iColor="green" prefix="" :rightIcon="true" :showRight="true" /> -->
-            </div>
           </div>
-          <div class="row">
-            <num style="width:50%" :obj="row" label="Dow Jones" mask="#######.##" iconSize="35" icon="DJ" iColor="amber" :rightIcon="true" :showRight="true" prefix="" />
-            <num style="width:50%" :obj="row" label="Nasdaq"    mask="#######.##" iconSize="35" icon="NQ" iColor="blue"  :rightIcon="true" :showRight="true" prefix="" />
-          </div>
-          <div class="row">
-            <num style="width:50%" :obj="row" label="S&P 500" mask="#######.##" iconSize="35" icon="SP" iColor="green" :rightIcon="true" :showRight="true" prefix="" />
-            <num style="width:50%" :obj="row" label="NIKKEI"  mask="#######.##" iconSize="35" icon="NK" iColor="red" :rightIcon="true" :showRight="true" prefix="" />
+          <div>
+            <num style="width:99%" :obj="row" label="Dow Jones" mask="#######.##" iconSize="35" icon="DJ" iColor="amber" :rightIcon="true" :showRight="true" />
+            <num style="width:99%" :obj="row" label="Nasdaq"    mask="#######.##" iconSize="35" icon="NQ" iColor="blue"  :rightIcon="true" :showRight="true" />
+            <num style="width:99%" :obj="row" label="S&P 500"   mask="#######.##" iconSize="35" icon="SP" iColor="lime"  :rightIcon="true" :showRight="true" />
+            <num style="width:99%" :obj="row" label="FTSE 100"  mask="#######.##" iconSize="35" icon="FT" iColor="green" :rightIcon="true" :showRight="true" />
+            <num style="width:99%" :obj="row" label="NIKKEI"    mask="#######.##" iconSize="35" icon="NK" iColor="lime"  :rightIcon="true" :showRight="true" />
           </div>
         </div>
       </q-page>
@@ -52,7 +49,7 @@ import NotePad from '../src/components/NotePad'
 import LnkInput from '../src/components/LnkInput'
 import { axiosFunctions } from 'src/composables/axiosFunctions'
 import { dayFunctions } from 'src/composables/dayFunctions'
-const { yyyymmdd } = dayFunctions()
+// const { yyyymmdd } = dayFunctions()
 const { paxios } = axiosFunctions()
 import { libFunctions } from 'src/composables/libFunctions'
 const { $q } = libFunctions()
@@ -64,8 +61,8 @@ const action = ref(null)
 const dense = ref(false)
 const date = ref('0000-00-00')
 const row = ref({})
-console.log('-ST-UserInput')
-emitter.on('open-UserInputDesk', (rw, act) => openIt(rw, act))
+console.log('-ST-UserInputIM')
+emitter.on('open-UserInputIM', (rw, act) => openIt(rw, act))
 emitter.on('user-confirmed', (x) => userConfirmed(x))
 const emit = defineEmits(['user-confirmed'])
 
@@ -88,7 +85,7 @@ function openIt (rw, act) {
   action.value = act
   type.value = $q.localStorage.getItem('weightUnit')
   ctype.value = type.value == 'pond' ? '磅' : type.value == 'kilo' ? '公斤' : type.value == 'jing' ? '市斤' : '磅'
-  // console.log(`-fn-openIt type=${type.value}`, r.weight, r.kilo, r)
+  console.log(`-fn-openIt type=${type.value}`, rw)
   row.value = rw
   if (act == 'del') return del()
   // date.value = (new Date()).yyyymmdd()
