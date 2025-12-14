@@ -85,6 +85,15 @@ Route::group (
   }
 );
 Route::group (
+  array('prefix' => 'pfcheck'), function() {
+    Route::view('list',   'pfcheck');              //->middleware('auth');
+    Route::get('getList/{screenwidthD13}', 'PFController@getList'); //->middleware('auth');
+    Route::post('add',    'PFController@add');
+    Route::post('upd',    'PFController@upd');
+    Route::get('del/{id}','PFController@del');
+  }
+);
+Route::group (
   array('prefix' => 'dictionary'), function() {
     Route::view('list', 'dictionary');
     Route::get ('getList', 'DictionaryController@getList')->middleware('auth');
@@ -449,6 +458,7 @@ Route::group (  // set up here to show login page
     Route::view('yalipics', 'apps');
     Route::view('tvmanager', 'apps');
     Route::view('chnyears', 'apps');
+    Route::view('pfcheck', 'apps');
   }
 );
 

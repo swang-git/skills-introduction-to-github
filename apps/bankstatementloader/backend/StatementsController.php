@@ -228,8 +228,10 @@ class StatementsController extends Controller {
     $dataRoth = $this->getRothHoldings($dataRoth, $lines, $accountSepLine, count($lines));
     if ($hsaHoldingsStart > 0) $dataHsa = $this->getHsaHoldings($dataHsa, $lines, $hsaHoldingsStart, count($lines));
     $dataRoth = $this->getIndRothActivity($dataRoth, $lines, 0, $accountSepLine);
-    $dataRoth = $this->getRothActivity($dataRoth, $lines, $accountSepLine, 1170);
-    if ($hsaActivityStart > 0) $dataHsa = $this->getHsaActivity($dataHsa, $lines, $hsaActivityStart, count($lines));
+    // $dataRoth = $this->getRothActivity($dataRoth, $lines, $accountSepLine, 1170);
+    $dataRoth = $this->getRothActivity($dataRoth, $lines, $accountSepLine, 900);
+    // if ($hsaActivityStart > 0) $dataHsa = $this->getHsaActivity($dataHsa, $lines, $hsaActivityStart, count($lines));
+    if ($hsaActivityStart > 0) $dataHsa = $this->getHsaActivity($dataHsa, $lines, 901, 1059);
 
     return ['dataIra' => $dataIra, 'dataRoth' => $dataRoth, 'dataHsa' => $dataHsa, 'dataAnn' => $dataAnn, 'status' => 'OK'];
   }

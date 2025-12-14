@@ -155,9 +155,9 @@ if __name__=="__main__": print('')
 database = my_argparse().database
 
 date = datetime.now().strftime("%Y%m%d")
-stocks = ['T', 'WBD', 'CHTR', 'DELL', 'CSCO', 'MSFT']
+# stocks = ['T', 'WBD', 'CHTR', 'DELL', 'CSCO', 'MSFT']
 # stocks = ['MSFT']
-# stocks = ['T']
+stocks = ['T']
 for stock in stocks:
     # print("processing stock=%s"%stock)
     try:

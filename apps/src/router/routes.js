@@ -42,6 +42,7 @@ const routes = [
       { path: 'yalipics', component: () => import('../../yalipics/PicList') },
       { path: 'tvmanager', component: () => import('../../tvmanager/tvlist') },
       { path: 'chnyears', component: () => import('../../chnyears/ChnYears') },
+      { path: 'pfcheck', component: () => import('../../pancreaticfluid/pflist') },
 
 
       // { path: 'golf', component: () => import('../../golf/GolfHome') },

@@ -94,7 +94,8 @@ def get_stock_quote_via_google_finance(date, stock):
     if (not is_market_open(soup, stock)): print("ticker=[%s]: Market not open yet, exist..."%stock); sys.exit(1)
 
     price = soup.find('div', class_='YMlKec fxKbKc').text.replace('$', '')
-    # print("price=[%s]"%price)
+    # price = soup.find('div', class_='YMlKec').text.replace('$', '')
+    print("price=[%s]"%price)
     check_number('price', price, stock, '')
 
     dyranges=soup.select('div.P6K39c')
@@ -150,15 +151,16 @@ if __name__=="__main__": print('')
 database = my_argparse().database
 
 date = datetime.now().strftime("%Y%m%d")
-stocks = ['T', 'WBD', 'CHTR', 'NYSE:DELL', 'CSCO', 'MSFT']
+# stocks = ['T', 'WBD', 'CHTR', 'NYSE:DELL', 'CSCO', 'MSFT']
+stocks = ['T', 'WBD', 'CHTR', 'DELL', 'CSCO', 'MSFT']
 # stocks = ['MSFT']
 # stocks = ['T']
 pdata = None
 for stock in stocks:
     # print("processing stock=%s"%stock)
     try:
-        # pdata = get_stock_quote_txt(date, stock)
-        pdata = get_stock_quote_via_google_finance(date, stock)
+        pdata = get_stock_quote_txt(date, stock)
+        ## pdata = get_stock_quote_via_google_finance(date, stock)
     except Exception as ex:
         print("get_stock_quote(date=[%s], stock=[%s]) failed, error=%s"%(date, stock, ex))
     # finally: print(pdata)

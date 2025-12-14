@@ -349,51 +349,48 @@ trait RothActivityTrait {
           $balc,
         ];
         $activity[] = $x;
+      } else if (self::$actvFlag == 'Dividends Int' and preg_match('/^\d\d\/\d\d$/', $line)) {
+        // Log::info("Roth Actv Dividends Int dd/dd line $line");
+        [$ni, $secs] = $this->getSecurity($lines, $i);
+        // $security = $this->shortName($securityName);
+        $date = $line;
+        $desc = $lines[$ni + 1];
+        $quan = '-';
+        if ($desc == 'Reinvestment') {
+          if (preg_match('/$/', $quan)) {
+            // if (preg_match('/^[+-]?\d+(\.\d+)?$/', $quan) !== 1) { // check if contains something other than numbers
+              Log::debug("-CK-str_contains $ start=$start quan=$quan", [__line__, __file__]);
+            $q = explode('$', $quan);
+            if (count($q) == 2) {
+              $quan = $q[0];
+              $pric = array_pop($q);
+              $amnt = $this->cleanMoney($lines[$ni + 3]);
+            } else {
+              $pric = $lines[$ni + 3];
+              $amnt = $this->cleanMoney($lines[$ni + 4]);
+            }
+          }
+        } else if ($desc == 'Dividend' && $lines[$ni + 2] == 'Received') {
+          $desc .= ' Received';
+          $quan = '-';
+          $pric = '-';
+          $amnt = $this->cleanMoney($lines[$ni + 5]);
+        } else {
+          $desc = substr($lines[$ni], 9);  // 'somecusip Interest Earned'
+          $quan = $lines[$ni + 1];
+          $pric = $lines[$ni + 2];
+          $amnt = $this->cleanMoney($lines[$ni + 3]);
+        }
+        $x = [
+          $date,
+          $secs,
+          $desc,
+          $quan,
+          $pric,
+          $amnt,
+        ];
+        $activity[] = $x;
       }
-
-      // // if (preg_match('/Fees/', self::$actvFlag)) Log::debug("=CK=actvFlag=" . self::$actvFlag);
-      // // if (self::$actvFlag == "Fees and Charges") Log::debug("=CK=actvFlag=" . self::$actvFlag . $line);
-      // if (self::$actvFlag == 'Dividends Int' and preg_match('/^\d\d\/\d\d$/', $line)) {
-      //   // Log::info("Roth Actv Dividends Int dd/dd line $line");
-      //   [$ni, $secs] = $this->getSecurity($lines, $i);
-      //   // $security = $this->shortName($securityName);
-      //   $date = $line;
-      //   $desc = $lines[$ni + 1];
-      //   $quan = '-';
-      //   if ($desc == 'Reinvestment') {
-      //     if (preg_match('/$/', $quan)) {
-      //       // if (preg_match('/^[+-]?\d+(\.\d+)?$/', $quan) !== 1) { // check if contains something other than numbers
-      //         Log::debug("-CK-str_contains $ start=$start quan=$quan", [__line__, __file__]);
-      //       $q = explode('$', $quan);
-      //       if (count($q) == 2) {
-      //         $quan = $q[0];
-      //         $pric = array_pop($q);
-      //         $amnt = $this->cleanMoney($lines[$ni + 3]);
-      //       } else {
-      //         $pric = $lines[$ni + 3];
-      //         $amnt = $this->cleanMoney($lines[$ni + 4]);
-      //       }
-      //     }
-      //   } else if ($desc == 'Dividend' && $lines[$ni + 2] == 'Received') {
-      //     $desc .= ' Received';
-      //     $quan = '-';
-      //     $pric = '-';
-      //     $amnt = $this->cleanMoney($lines[$ni + 5]);
-      //   } else {
-      //     $desc = substr($lines[$ni], 9);  // 'somecusip Interest Earned'
-      //     $quan = $lines[$ni + 1];
-      //     $pric = $lines[$ni + 2];
-      //     $amnt = $this->cleanMoney($lines[$ni + 3]);
-      //   }
-      //   $x = [
-      //     $date,
-      //     $secs,
-      //     $desc,
-      //     $quan,
-      //     $pric,
-      //     $amnt,
-      //   ];
-      //   $activity[] = $x;
       //   // if (preg_match('/FDIC INSURED DEPOSIT/', $securityName)) $desc .= ' ' . $securityName;
       //   // $quantity = $lines[$i + 4];
       //   // $price = $lines[$i + 5];

@@ -21,9 +21,9 @@
       <template v-slot:body="p">
         <q-tr v-if="isIM" :props="p" class="cursor-pointer" :class="!showAUD || p.rowIndex>rowsPerPageIM ? null : getAudClass(p)">
           <q-td v-for="col in p.cols" :key=col class="text-no-wrap ellipsis" @click="showRow(col, p)" :style="getStyle(col.name)">
-            <span v-if="col.name==='date'">{{ col.value.substring(0, 10) }}</span>
-            <span v-else-if="col.name==='cats'"  @click="openExdarIM('upd', p.row)">{{ col.value }}</span>
-            <span v-else-if="col.name==='cost'" @click="openExdarIM('add', p.row)">{{ col.value }}</span>
+            <div v-if="col.name==='date'">{{ col.value.substring(0, 10) }}</div>
+            <div v-else-if="col.name==='cats'" @click="openExdarIM('upd', p.row)" class="text-no-wrap ellipsis" style="width:170px">{{ col.value }}</div>
+            <div v-else-if="col.name==='cost'" @click="openExdarIM('add', p.row)">{{ col.value }}</div>
           </q-td>
         </q-tr>
         <q-tr v-else :props="p" class="cursor-pointer" :class="!showAUD || p.rowIndex>rowsPerPageDesk ? null : getAudClass(p)">
@@ -219,7 +219,7 @@ function getStyle (coln) {
   if (isIM) {
     // if (coln === col(1).name)      return 'min-width:10%;max-width:10%;' + ffz
     if (coln === col(1).name)      return 'width:35%;text-align:center;' + ffz
-    else if (coln === col(2).name) return 'max-width:30%;text-align:center;' + ffz
+    else if (coln === col(2).name) return 'max-width:10%;text-align:center;' + ffz
     else if (coln === col(5).name) return 'width:29%;text-align:right;' + ffz
     // if (coln === col(1).name)      return 'min-width:30%;max-width:30%;' + fz
     // else if (coln === col(2).name) return 'min-width:30%;max-width:30%;' + fz

@@ -1,6 +1,6 @@
 <template>
-<q-dialog v-model="opened" transition-show="rotate" persistent>
-  <q-layout container class="bg-teal-10" :style="isDesk ? { 'min-width':'700px', 'height':'600px' } : { 'min-width':'455px', 'height':'620px' } ">
+<q-dialog v-model="opened" :transition-show="action=='upd' ? 'rotate' : 'slide-right'" persistent fullWidth :maximized="isIM">
+  <q-layout container class="bg-teal-10" :style="isDesk ? { 'height':'600px' } : { 'height':'670px' }">
     <LayoutHeader tit="Glucose Daily Check" @do-action="doAction" />
     <LayoutFooter :act=action tit="TIT_GLUCOSE" @do-action="doAction" class="q-pb-"/>
     <q-page-container v-if="isDesk">
@@ -31,22 +31,39 @@
     </q-page-container>
     <!-- Phone session -->
     <q-page-container v-else class="q-ma-xs">
+      <div v-if="isDesk">
+        <DateTimePicker style="width:40.4%" class="q-pt-sm" label="Created Date and Time" :date-time="row.datetime" @upd-dt="updDateTime" txsz="text-h6" />
+      </div> 
+      <div v-else>
+        <DateTimeIMPicker class="q-pa-xs" label="Match Starting Date Time" txsz="text-h6" :dateTime="row.datetime" @upd-dt="setDateTime" />
+      </div> 
+      <!-- <div class="row">
+        <DateTimePicker style="width:99.3%" class="q-px-sm" label="Created Date and Time" :date-time="row.datetime" @upd-dt="updDateTime" txsz="text-h6" />
+      </div> -->
       <div class="row">
-        <DateTimePicker style="width:68.8%" class="q-px-sm" label="Created Date and Time" :date-time="row.datetime" @upd-dt="updDateTime" txsz="text-h6" />
-        <NumInput style="width:31.2%" :obj="row" label="Weight" icon="重" icon-size="24px" iColor="yellow" mask="#.#"/>
+        <NumInput style="width:36%" :obj="row" label="Blood Glucose Level" icon="bloodtype" iColor="red" @click="openNumPad()" />
+        <div style="width:18%"><q-chip class="text-h6 text-cyan-2 bg-teal-10 q-mt-sm">{{ (row.glucose/18).toFixed(1) }}</q-chip></div>
+        <NumInput style="width:44.3%" :obj="row" label="Weight" icon="重" icon-size="24px" iColor="yellow" mask="#.#"/>
       </div>
       <div class="row">
-        <TxtInput style="width:50%" :obj="row" label="Blood Pressure" icon="tire_repair" iColor="pink-3" @click="openNumPad('BP')" />
-        <div style="width:18%"><q-chip class="text-h6 text-cyan-2 bg-teal-10 q-mt-sm">{{ (row.glucose/18).toFixed(1) }}</q-chip></div>
-        <NumInput style="width:32%" :obj="row" label="Blood Glucose Level" icon="bloodtype" iColor="red" @click="openNumPad()" />
+        <TxtInput style="width:55%" :obj="row" label="Blood Pressure" icon="tire_repair" iColor="pink-3" @click="openNumPad('BP')" />
+        <TxtInput style="width:44.3%" :obj="row" label="Check Type" icon="bloodtype" iColor="lime" @click="openSelection('bloodtype', 'Check Type', tyOpt)" />
       </div>
       <TxtInput v-if="row.food.length>0" :obj="row" label="Food" icon="ramen_dining" iColor="green" :rightIcon="true" />
-      <TxtInput :obj="row" label="Drink" icon="local_bar" iColor="yellow" :rightIcon="true" />
-      <TxtInput :obj="row" label="Fruit" icon="apple" iColor="cyan-3" :rightIcon="true" />
-      <TxaInput :obj="row" label="昨 日 餐 饮" icon="description" iColor="cyan-3" />
-      <q-chip v-if="action=='add'" class="q-ma-sm text-body1" color="cyan-2">
-        the above is the <b class="q-px-sm text-h6"> {{ row.datetimeOrig }}</b>data
-      </q-chip>
+      <TxtInput class="col-12" :obj="row" label="Exercise" icon="run_circle" iColor="pink-4" :rightIcon="true" @click="openSelection('sports_golf', 'Exercise', exOpt)" />
+      <TxtInput class="col-12" :obj="row" label="Breakfast" icon="egg" iColor="brown-6" :rightIcon="true" @click="openSelection('egg', 'Breakfast', brOpt)" />
+      <TxtInput class="col-12" :obj="row" label="Lunch" icon="lunch_dining" iColor="yellow-9" :rightIcon="true" @click="openSelection('lunch_dining', 'Lunch', luOpt)" />
+      <TxtInput class="col-12" :obj="row" label="Dinner" icon="dinner_dining" iColor="indigo-3" :rightIcon="true" @click="openSelection('dinner_dining', 'Dinner', diOpt)" />
+      <div class="row">
+        <TxtInput class="col-6" :obj="row" label="Drink" icon="local_bar" iColor="green" :rightIcon="true" @click="openSelection('local_bar', 'Drink', drOpt)" />
+        <TxtInput class="col-6" :obj="row" label="Fruit" icon="apple" iColor="green-3" :rightIcon="true" @click="openSelection('apple', 'Fruit', frOpt)" />
+      </div>
+      <!-- <TxtInput :obj="row" label="Drink" icon="local_bar" iColor="yellow" :rightIcon="true" />
+      <TxtInput :obj="row" label="Fruit" icon="apple" iColor="cyan-3" :rightIcon="true" /> -->
+      <!-- <TxaInput :obj="row" label="昨 日 餐 饮" icon="description" iColor="cyan-3" /> -->
+      <!-- <q-chip v-if="action=='add'" class="q-ma-sm text-body1" color="cyan-2"> -->
+        <!-- the above is the <b class="q-px-sm text-h6"> {{ row.datetimeOrig }}</b>data -->
+      <!-- </q-chip> -->
     </q-page-container>
   </q-layout>
 </q-dialog>
@@ -67,6 +84,7 @@ import NumInput from '../src/components/NumInput'
 import LayoutHeader from '../src/components/LayoutHeader'
 import LayoutFooter from '../src/components/LayoutFooter'
 import DateTimePicker from '../src/components/DateTimePicker'
+import DateTimeIMPicker from '../src/components/DateTimeIMPicker'
 import NumPadAuto from '../src/components/NumPadAuto'
 import NumPad from '../src/components/NumPad'
 import SelRevOption from '../src/components/SelRevOption'
@@ -78,10 +96,11 @@ const { gaxios, paxios } = axiosFunctions()
 import { dayFunctions } from '../src/composables/dayFunctions'
 const { yyyymmddHHMM, yyyymmdd } = dayFunctions()
 import { libFunctions } from '../src/composables/libFunctions'
-const { isDesk } = libFunctions()
+const { isDesk, isIM } = libFunctions()
 
 const opened = ref(false)
 const action = ref(null)
+const dtTimeDone = ref(false)
 const row = ref({ datetime: null })
 const emit = defineEmits(['close-expand'])
 var rowOrig = {}
@@ -104,6 +123,16 @@ emitter.on('open-gludar', (rw, act, exOpt, brOpt, luOpt, diOpt, drOpt, frOpt, fo
 //   console.log(`setBloodPressure=${x}`)
 //   row.value.bloodPressure = x
 // }
+
+function setDateTime (dt) {
+  row.value.datetime = dt
+  dtTimeDone.value = true
+  // if (isLocal()) return
+  const date = dt.substring(0, 10)
+  console.log(`dt time=${row.value.purchasedon}, check if there are other appointments on the date=${date}`)
+  // const path = process.env.API + '/golf/checkReminder/' + date
+  // gaxios(path)
+}
 
 function setNum (flg, n) {
   console.log(`-fn-setNum flag=${flg} n=${n}`)

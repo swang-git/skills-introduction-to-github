@@ -83,6 +83,7 @@ function saveDetails () {
   opened.value = false
 }
 function openIt (det) {
+  console.log(`-fn-NotePad.openIt details=${det}`)
   opened.value = true
   if (det == null) details.value = 'No details for this reminder'
   else details.value = det

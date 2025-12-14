@@ -7,7 +7,8 @@
     <q-btn v-if="/NOTE_LINK/.test(tit)" icon="link"      round @click="lnk" color="cyan-10" glossy size="16px"  />
     <q-btn v-else-if="/Miles/.test(tit)" outline rounded :label="tit" no-caps no-wrap readonly />
     <q-btn v-else-if="tit==='NO_TIT'" flat />
-    <q-btn v-else-if="tit==='TIT_GLUCOSE'" rounded glossy icon="edit" icon-right="add_circle" label="notes" @click="note" />
+    <q-btn v-if="tit==='TIT_GLUCOSE'" rounded glossy icon="info" color="cyan" icon-right="info" label="info" @click="info" />
+    <q-btn v-if="tit==='TIT_GLUCOSE'" rounded glossy icon="edit" color="primary" icon-right="add_circle" label="notes" @click="note" />
     <q-btn v-if="act=='add'" icon-right="add_circle" @click="add" color="green-9" rounded glossy label="Create" />
     <q-btn v-if="act=='upd'" icon-right="update"     @click="upd" color="indigo-9"  rounded glossy label="update" />
   </div>
@@ -27,7 +28,8 @@
     <q-btn v-if="/NOTE_LINK/.test(tit)" icon="link"      round @click="lnk" color="cyan-10" glossy size="16px" />
     <q-btn v-else-if="/Miles/.test(tit)" outline rounded :label="tit" no-caps no-wrap readonly />
     <q-btn v-else-if="tit==='NO_TIT'" flat />
-    <q-btn v-if="tit=='TIT_GLUCOSE'" icon="info" color="green-10" text-color="cyan-2" @click="info" round glossy size="16px" />
+    <q-btn v-if="tit=='TIT_GLUCOSE'" icon="info" color="cyan-10" text-color="lime-3" @click="info" round glossy size="16px" />
+    <q-btn v-if="tit=='TIT_GLUCOSE'" icon="add_circle" color="teal-10" text-color="cyan-2" @click="note" round glossy size="16px" />
     <q-btn v-if="act=='add'"       icon="add_circle" @click="add" color="green-10"  round glossy size="16px" />
     <q-btn v-else-if="act=='upd'"  icon="update"     @click="upd" color="indigo-10" round glossy size="16px" />
     <q-btn v-else v-close-popup color="cyan-1" rounded outline size="14px" class="q-ml-md" label="data show only and take no actions"/>

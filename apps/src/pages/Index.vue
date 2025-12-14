@@ -15,11 +15,12 @@
     <RoundButton size="22px" icon="translate" clas="q-ma-xs" colr="brown-10"  ttip="英 汉 字 典" @click="openApp('dictionary')" />
     <RoundButton size="22px" icon="card_giftcard" clas="q-ma-xs" colr="red-10"  ttip="联 邦 节 日" @click="showHolidays()" />
     <RoundButton size="22px" icon="palette" clas="q-ma-xs q-pb-x" colr="indigo-10"  ttip="Drawing" @click="openApp('painting')" />
-    <RoundButton size="22px" icon="报" clas="q-ma-xs q-pb-sm" colr="purple-10"  ttip="信 用 卡 花 销" @click="openApp('bankstatementloader')" />
+    <RoundButton size="22px" icon="报" clas="q-ma-xs q-pb-sm" colr="cyan-10"  ttip="信 用 卡 花 销" @click="openApp('bankstatementloader')" />
     <RoundButton size="22px" icon="转" clas="q-ma-xs q-pb-sm" colr="green-10"  ttip="Convert To Text" @click="openApp('totext')" />
     <RoundButton size="22px" icon="娅" clas="q-ma-xs q-pb-sm" colr="indigo-10" iclr="white" ttip="娅 莉 画 展" @click="openApp('yalipics')" />
     <RoundButton size="22px" icon="查" clas="q-ma-xs q-pb-sm" colr="green-10" iclr="cyan-2" ttip="健 康 检 查" @click="openApp('htlist')" />
     <RoundButton size="22px" icon="视" clas="q-ma-xs q-pb-sm" colr="indigo-10" iclr="white" ttip="电 视 列 表" @click="openApp('tvmanager')" />
+    <RoundButton size="22px" icon="胰" clas="q-ma-xs q-pb-sm" colr="purple-10" iclr="white" ttip="胰 流 报 告" @click="openApp('pfcheck')" />
     <RoundButton size="22px" icon="年" clas="q-ma-xs q-pb-sm" colr="teal-10" iclr="white" ttip="中 西 年 列 表" @click="openApp('chnyears')" />
     <RoundButton size="22px" icon="group" clas="q-ma-xs" colr="indigo-10" iclr="amber" ttip="用 户 管 理" @click="refUserList.getUserList()" v-if="AppAdmin" />
     <RoundButton size="22px" icon="logout" clas="q-ma-xs" colr="amber-10" iclr="grey-10" ttip="系 统 Logout" @click="logout()" v-if="AppAdmin" />
