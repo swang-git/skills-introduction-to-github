@@ -1,28 +1,34 @@
 <template>
-<div class="q-px-xs" :class="{ fixed : (clickedIdx < 9 || isIM) }" style="width:800px">
-  <div v-if="isDesk" class="row text-h6 no-wrap" style="height:36px;margin:0 1px 0 0;border:1px solid cyan">
+<!-- <div class="q-px-xs" :class="{ fixed : (clickedIdx < 9 || isIM) }" style="width:800px"> -->
+<div>
+  <div v-if="isDesk" class="row text-h6 no-wrap" style="height:36px;margin:0 3.6px 0 0;border:1px solid cyan;border-bottom:0">
     <div style="width:28%" class="text-yellow-9 q-pl-sm">总支出: {{ totalSpend }}</div>
     <div style="width:28%" class="text-yellow-8 text-center">年支出: {{ yearSpend }}</div>
     <div style="width:25%" class="text-yellow-6 text-center">月支出: {{ monthSpend }}</div>
     <div style="width:4%"  class="text-teal-4 text-center" v-if="loadingTime>0">{{ loadingTime }}</div>
     <div style="width:15%" class="text-yellow-3 text-right">比赛: <b :class="gWL>=0 ? 'text-green' : 'text-red'">${{ gWLval }}</b></div>
   </div>
-  <div :style="isIM ? { margin:'-4px 0 0 0' } : { margin:'8px 1px 0 0', border:'2px solid cyan' }">
-    <q-table class="bg-teal-10" v-model:rows="palist"
-      dark dense wrap-cells
-      style="width:100%;border-top:1px solid cyan"
+  <!-- <div :style="isIM ? { margin:'-4px 0 0 0' } : { margin:'8px 1px 0 0', border:'2px solid cyan' }"> -->
+  <div>
+    <q-table class="bg-teal-10" v-model:rows="palist" dark dense wrap-cells
       row-key="id" separator="cell"
       :columns="columns"
       :visible-columns="isIM ? visibleColumnsFone : visibleColumnsDesk"
-      :style="isIM ? { height:screenheight+'px', margin:'-3px 0 0 1.5px', width:screenwidth+'px'} : { marginTop:'-8px' }" 
-      :hide-pagination="true" 
+      style="width:99.6%;border:1px solid cyan"
+      hide-pagination
       :pagination="isIM ? { rowsPerPage:rowsPerPageIM } : { rowsPerPage: rowsPerPageDesk }"
     >
+      <template v-slot:header="props">
+        <q-tr v-if="isDesk" :props="props">
+          <q-th v-for="col in props.cols" :key="col.name" :props="props" class="text-lime text-center">{{ col.label }}</q-th>
+        </q-tr>
+      </template>
+
       <template v-slot:body="p">
         <q-tr v-if="isIM" :props="p" class="cursor-pointer" :class="!showAUD || p.rowIndex>rowsPerPageIM ? null : getAudClass(p)">
           <q-td v-for="col in p.cols" :key=col class="text-no-wrap ellipsis" @click="showRow(col, p)" :style="getStyle(col.name)">
             <div v-if="col.name==='date'">{{ col.value.substring(0, 10) }}</div>
-            <div v-else-if="col.name==='cats'" @click="openExdarIM('upd', p.row)" class="text-no-wrap ellipsis" style="width:170px">{{ col.value }}</div>
+            <div v-else-if="col.name==='cats'" @click="openExdarIM('upd', p.row)" class="text-no-wrap ellipsis" style="width:160px">{{ col.value }}</div>
             <div v-else-if="col.name==='cost'" @click="openExdarIM('add', p.row)">{{ col.value }}</div>
           </q-td>
         </q-tr>
@@ -102,7 +108,7 @@ var ccardPayment = null
 var ccardDueDay = null
 var betweenDays = null
 const rowsPerPageDesk = 24
-const rowsPerPageIM = 14
+const rowsPerPageIM = 15
 const visibleColumnsDesk = ref([col(1).name,col(2).name,col(3).name,col(4).name,col(5).name])
 // const visibleColumnsFone = ref([col(1).name,col(2).name,col(3).name,col(4).name,col(5).name])
 // const visibleColumnsFone = ref([col(1).name,col(2).name,col(3).name,col(5).name])
@@ -136,7 +142,7 @@ emitter.on('check-gc-balance', () => { openGiftCardBalanceSheet() })
 buildApp('消费记录', 'Expense')
 getList()
 
-emitter.emit('items-per-page',  isIM ? rowsPerPageIM : rowsPerPageDesk)
+emitter.emit('items-per-page', isIM ? rowsPerPageIM : rowsPerPageDesk)
 yearReg.value = new RegExp(year.value + '-')
 
 // const compClickedIdx = computed(() => { return clickedIdx.value })

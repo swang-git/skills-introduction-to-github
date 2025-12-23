@@ -29,6 +29,7 @@
               <q-btn v-if="/glucoseche/i.test(curApp)" round glossy color="teal-9" icon="空" class="chicon-pos" @click="showClvlChart" />
               <q-btn v-if="/bankstatem/i.test(curApp)" round glossy color="teal-9" icon="图" class="chicon-pos" @click="emitter.emit('show-charts')" />
               <q-btn v-if="/healthtest/i.test(curApp)" round glossy color="teal-9" icon="图" class="chicon-pos" @click="showHealthTestChart" />
+              <div v-if="/PancreaticFluid/i.test(curApp)" class="q-pl-md q-pb-sm"><q-btn round glossy size="11px" color="indigo" icon="add" @click="togglePFSum" /></div>
               <div v-if="/tvmanager/i.test(curApp)" class="q-mb-sm q-mx-sm">
                 <q-fab color="brown-9" padding="xs sm sm" label="Upcoming Recordings" direction="right" icon="history" >
                   <q-fab-action v-for="hr in [3, 5, 8, 10, 12, 24]" :key="hr" color="primary" @click="getTvShows(hr)" icon="history" :label="hr" class="text-h6" />
@@ -100,9 +101,9 @@
           <router-view />
         </q-page>
       </q-page-container>
-      <!-- <q-footer class="bg-teal-9" v-if="['memo','reminder','expense','watcher','bankstatement', 'bank'].indexOf(curApp)>=0"> -->
-      <q-footer class="bg-teal-10" v-if="/memo|reminder|expense|watcher|bankstatement|shopping|bank|dictionary|glucosecheck/i.test(curApp)">
-      <!-- <q-footer class="bg-teal-9" v-if="/memo|reminder|exlist|watcher|bankstatement|bank|dictionary|shopping|glucosecheck|todox/i.test(curApp)"> -->
+      <!-- <q-footer class="bg-teal-9" v-if="['glucosecheck','memo','reminder','expense','watcher','bankstatement', 'bank'].indexOf(curApp)>=0"> -->
+        <!-- <q-footer class="bg-teal-9" v-if="/memo|reminder|exlist|watcher|bankstatement|bank|dictionary|shopping|glucosecheck|todox/i.test(curApp)"> -->
+        <q-footer class="bg-teal-10" v-if="/memo|reminder|expense|watcher|bankstatement|shopping|bank|dictionary|glucosecheck|PancreaticFluid/i.test(curApp)">
         <q-toolbar>
           <Pagination :pNumPages="compNumPages" :pItemsPerPage="itemsPerPage" />
         </q-toolbar>
@@ -166,7 +167,7 @@ emitter.on('cur-app', (capp, from) => curApp.value = capp)
 emitter.on('num-items', (x) => numItems.value = x)
 // emitter.on('cur-app', (capp, from) => { curApp.value = capp; console.log(`emitter.on curApp=${curApp.value} from=${from}`) })
 // emitter.on('num-items', (x) => { numItems.value = x; console.log(`emitter.on numItems.value=${x} curApp=${curApp.value}`) })
-emitter.on('items-per-page', (x) => { itemsPerPage.value = x })
+emitter.on('items-per-page', (x) => { itemsPerPage.value = x ; console.log(`-CK-itemsPerPage=${itemsPerPage.value}`) })
 emitter.on('win-lost', (x) => { flipShow(x) })
 emitter.on('weight-unit', (x) => { wunit.value = x })
 
@@ -245,6 +246,9 @@ function XXopenApp (app, appTitle) {
     window.location.href = app // this navigates to app and also trigger to loading. otherwise <canvas> not working
   }
   router.replace({ path: app })  // this is just navigating no loading
+}
+function togglePFSum () {
+  emitter.emit('toggle-pf-sum')
 }
 function showWatcherChart () {
   emitter.emit('show-watcher-chart')

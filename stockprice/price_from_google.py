@@ -41,7 +41,7 @@ def get_txt_lines(date, stock):
 def get_stock_quote_txt(date, stock):
     lines = get_txt_lines(date, stock)
 
-    price=None; pchange=''; day_low=None; day_high=None; wk52_low=None; wk52_high=None
+    price=None; pchange=None; day_low=None; day_high=None; wk52_low=None; wk52_high=None
 
     for idx, line in enumerate(lines):
         line = lines[idx]
@@ -50,8 +50,13 @@ def get_stock_quote_txt(date, stock):
             # print('-CK- line=[%s]'%price)
             check_number('price', price, stock, line)
 
-        elif re.match(r'^[+|−]\d+.\d(.*)today', line):
-            pchange = line.split(' ')[0]
+        # elif re.match(r'^[+|−]\d+.\d(.*)today', line):
+        #     pchange = line.split(' ')[0]
+        #     pchange = pchange.replace('+', '')
+        #     if re.match(r'−', pchange): pchange = pchange.replace('−', '-')
+        #     check_number('pchange', pchange, stock, line)
+        elif re.match(r'^today', line):
+            pchange = lines[idx - 1]
             pchange = pchange.replace('+', '')
             if re.match(r'−', pchange): pchange = pchange.replace('−', '-')
             check_number('pchange', pchange, stock, line)

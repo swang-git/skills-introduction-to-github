@@ -1,16 +1,15 @@
 <template>
   <!-- <div style="display:grid;place-items:center;height:100vh;width:800px;margin:-5px 0 0 0"> -->
-<div style="width:800px">
-  <q-table class="sh-sticky-header-table" :rows="palist" :columns="columns" dense dark hide-pagination :grid=false
-    :visible-columns="isIM ? visibleColumnsFone : visibleColumnsDesk" wrap-cells 
-    :fullscreen="isIM ? true : false" table-style="isIM ? {width:'373px'} : {}"
-    row-key="datetime" :pagination="isIM ? {rowsPerPage:itemsPerPageIM} : {rowsPerPage:itemsPerPageDesk}"
-    :style="isIM ? { height:'screenheight', margin:'-3px 0 0 1.5px' } : { margin:'-1px 2px 0 4px' }" 
-    style="width:99%;border:2px solid cyan"
-    :separator="separator" :faVal="faVal">
-
-    <!-- <template v-slot:top="props"> -->
-    <template>
+<div style="width:800px" class="fixed">
+  <q-table class="sh-sticky-header-table" 
+    v-model:rows="palist" dark dense wrap-cells
+    :columns="columns" :visible-columns="isIM ? visibleColumnsFone : visibleColumnsDesk"
+    row-key="datetime" 
+    :style="isIM ? { width:'402px' } : { }" style="border:1px solid cyan"
+    :pagination="isIM ? { rowsPerPage:rowsPerPageIM } : { rowsPerPage:rowsPerPageDesk }" hide-pagination
+    :separator="separator" :faVal="faVal"
+  >
+  <template>
     <div v-if="isDesk" class="row">
       <div v-if="$q.screen.gt.xs" class="col text-bold">
         <q-toggle v-model="visibleColumnsDesk" val="datetime" label="时间" />
@@ -154,8 +153,8 @@ const gluSections = ref([])
 const gludata = ref([])
 const lastClickedRow = ref({row:{id:0}})
 const clickedIdx = ref(0)
-const itemsPerPageDesk = 23
-const itemsPerPageIM = 15
+const rowsPerPageDesk = 23
+const rowsPerPageIM = 13
 const dats = ref([])
 const exOpt = ref([])
 const brOpt = ref([])
@@ -191,7 +190,7 @@ emitter.on('glucosecheck-del', (x) => setList(x))
 emitter.on('search', (searchQuery) => { searchQuery = searchQuery })
 emitter.on('show-clv-chart', () => { showAllCharts() })
 buildApp('血糖控制', 'glucosecheck')
-emitter.emit('items-per-page', isIM ? itemsPerPageIM : itemsPerPageDesk)
+emitter.emit('items-per-page', isIM ? rowsPerPageIM : rowsPerPageDesk)
 getList()
 
 //== function section
@@ -451,7 +450,7 @@ function showExpendDesk (col, p) {
   }
   lastClickedRow.value.expand = false
   lastClickedRow.value = p
-  // clickedIdx.value = dats.value.map(x => x.id).indexOf(p.row.id) % itemsPerPageDesk
+  // clickedIdx.value = dats.value.map(x => x.id).indexOf(p.row.id) % rowsPerPageDesk
   clickedIdx.value = p.pageIndex
   // console.log('-CK-clickedIdx', clickedIdx.value)
   p.expand=!p.expand

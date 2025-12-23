@@ -1,10 +1,12 @@
 <template>
 <!-- <div class="q-px-xs" :class="{ fixed: clickedIdx < 8 }"> -->
-<div class="q-px-xs" :class="{ fixed: clickedIdx>0 && dalist[clickedIdx].details.length<99 }">
-  <q-table class="sh-sticky-header-table" v-model:rows="dalist" :columns="columns" dense :hide-header="isIM"
-    :grid=false :visible-columns="isDesk ? visibleColumnsDesk : visibleColumnsFone" :style="{ width:(screenwidth-4)+'px' }" 
-    row-key="id" :separator="separator" wrap-cells :hide-pagination="false" 
-    :pagination="isDesk ? { rowsPerPage: 23 } : { rowsPerPage: 13 }"
+<!-- <div class="q-px-xs" :class="{ fixed: clickedIdx>0 && dalist[clickedIdx].details.length<99 }"> -->
+<div style="width:800px">
+  <q-table class="sh-sticky-header-table" v-model:rows="palist" :columns="columns" dense :hide-header="isIM"
+    :visible-columns="isDesk ? visibleColumnsDesk : visibleColumnsFone" 
+    :style="isIM ? { width:'402px' } : {}" style="border:1px solid cyan"
+    row-key="id" :separator="separator" wrap-cells 
+    :pagination="isIM ? { rowsPerPage: rowsPerPageIM } : { rowsPerPage: rowsPerPageDesk }" hide-pagination
   >
   <!-- <template v-slot:header="props">
     <q-tr :props="props">
@@ -23,7 +25,7 @@
   <InfoDisplay />
   <ImgDisplay />
 </div>
-<div v-if="daysum" class="q-px-md float-right"><q-btn round icon="edit" color="red" glossy @click="setDaySum"/></div>
+<!-- <div v-if="daysum" class="q-px-md float-right"><q-btn round icon="edit" color="red" glossy @click="toggleDaySum"/></div> -->
 </template>
 <script setup>
 import { ref, computed } from 'vue'
@@ -45,44 +47,51 @@ var clickedRow = {}
 const clickedIdx = ref(0)
 var separator = 'cell'
 // var showCol = false
-const visibleColumnsDesk = [col(1).name, col(2).name, col(3).name, col(4).name]
-const visibleColumnsFone = [col(1).name, col(2).name, col(3).name, col(4).name]
+const visibleColumnsDesk = [col(1).name, col(2).name, col(3).name]
+const visibleColumnsFone = [col(1).name, col(2).name, col(3).name]
 // const visibleColumnsFone = [col(3).name]
 const columns = ref([col(0), col(1), col(2), col(3)])
 // const columns = ref([ col(1), col(2) ])
 const fabOpen = ref(false)
-const daylst = ref([])
+const dayxlst = ref([])
 const dayslst = ref([])
 const daysum = ref(true)
+const rowsPerPageDesk = 23
+const rowsPerPageIM = 14
 
 const compDaySum = computed(() => { return daysum.value })
 
 //== main
 console.log('-ST-pflist')
-buildApp ('胰流报告(Pancreatic Fluid CC)')
+buildApp ('胰流报告', 'PancreaticFluid')
 getList(screenwidth/13)
-emitter.emit('items-per-page', isIM ? 13 : 22)
+emitter.emit('items-per-page', isIM ? rowsPerPageIM : rowsPerPageDesk)
 
 emitter.on('search', (searchQuery) => { searchQuery = searchQuery })
 emitter.on('pfcheck-getList', (da) => setList(da))
 emitter.on('pfcheck-add', (x) => addedRow(x.row))
 emitter.on('pfcheck-upd', (x) => updedRow(x.row))
 emitter.on('pfcheck-del', () => deledRow())
+emitter.on('toggle-pf-sum', () => { daysum.value = !daysum.value; toggleDaySum() })
 
-function setDaySum () {
-  console.log(`-fn-setDaySum daysum=${daysum.value}`)
-  daysum.value = !daysum.value
-  if (compDaySum.value) emitter.emit('dats', daylst.value)
-  else emitter.emit('dats', dayslst.value)
+function toggleDaySum () {
+  console.log(`-fn-toggleDaySum daysum=${daysum.value}`)
+  if (compDaySum.value) {
+    emitter.emit('dats', dayxlst.value)
+  } else {
+    emitter.emit('dats', dayslst.value)
+    // daysum.value = !daysum.value
+  }
 }
+
 function col (idx) {
   const cols = [
-    { required: false, label: '身份', align: 'left', name: 'id', field: 'id', sortable: true, headerClasses: 'text-white text-no-wrap' },
-    { required: false, label: 'Check Time', align: 'center', name: 'datetime', field: 'datetime', headerStyle: 'width:1%', headerClasses: 'text-right text-no-wrap' },
-    { required: false, label: 'Count', align: 'center', name: 'cnt', field: 'cnt', headerStyle: 'width:4%' },
-    { required: true, label: 'Volumn', align: 'right', name: 'vol', field: 'vol', headerStyle: 'width:5%' },
-    { required: false, label: 'Week', align: 'center', name: 'week', field: 'week', headerStyle: 'width:4%' },
-    { required: false, label: 'note', align: 'left', name: 'note', field: 'note' },
+    { required: false, name: 'id', field: 'id' },
+    { required: true, label: 'Check Time', align: 'center', name: 'datetime', field: 'datetime', headerClasses: 'text-center text-no-wrap' },
+    { required: true, label: 'Count', align: 'center', name: 'cnt', field: 'cnt' },
+    { required: true, label: 'Volumn', align: 'center', name: 'vol', field: 'vol' },
+    // { required: false, label: 'Week', align: 'center', name: 'week', field: 'week', headerStyle: 'width:4%' },
+    // { required: false, label: 'note', align: 'left', name: 'note', field: 'note' },
     // { required: false, label: '链接', align: 'left', name: 'lnk', field: 'lnk', sortable: true },
     // { required: false, label: '日期', align: 'left', name: 'dtwk', field: 'dtwk', headerStyle: 'max-width:370px' },
   ]
@@ -95,21 +104,6 @@ function getVal (row, idx) {
   // if (idx === 4) console.log(`%c-CK-fn-getVal name=${row[col(idx).name]} clkIdx=${clickedIdx.value}`, 'color:red; font-size:16px')
   // console.log(`%c-CK-fn-getVal name=${row[col(idx).name]}`, 'color:red; font-size:16px')
   return row[col(idx).name]
-}
-function ishow (row, idx) {
-  // if (idx === 4) console.log(`%c-CK-fn-getVal name=${palist.value[clickedIdx.value].details} clkIdx=${clickedIdx.value}`, 'color:red; font-size:16px')
-  const cont = getVal(row, idx)
-  if (/<img/.test(cont)) return 'img'
-  else return cont != null && cont != ''
-}
-function openImg (row, idx) {
-  // const imgstr = '<img src="http://devx/docs/fishing/SaltwaterRegistry.nj.gov.png" class="q-pt-xl rotate-90" style="margin:50px 0 0 -55px">'
-  const imgx = getVal(row,idx)
-  console.log(`-fn-getVal idx=${idx}`, imgx)
-  // const imgstr = '<img src="http://devx/docs/fishing/SaltwaterRegistry.nj.gov.png" class="rotate-90" style="margin:80px 0 0 -80px">'
-  const imgstr = imgx + ':class="{ \'rotate-90\':is90 }" style="margin:80px 0 0 -80px">'
-  const isMax = true
-  return emitter.emit('open-ImgDisplay', 'Saltwater Registry', imgstr, isMax)
 }
 function addedRow (row) {
   console.log(`-fn-addedRow row.datetime=${row.datetime}`, row)
@@ -135,7 +129,8 @@ function deledRow () {
 }
 function getStyle (coln) {
   // console.log(`-fn-getStyle coln=${coln}`)
-  if (coln === col(1).name)      return 'min-width:120px;max-width:120px'
+  // if (coln === col(1).name)      return 'min-width:145px;max-width:145px'
+  if (coln === col(1).name)      return 'width:145px'
   else if (coln === col(2).name) return 'min-width:70px;max-width:70px'
   else if (coln === col(3).name) return 'min-width:50px;max-width:50px'
   else if (coln === col(4).name) return 'min-width:70px;max-width:70px'
@@ -153,23 +148,6 @@ function getClass (coln, row) {
 function getClickedBG (row) { 
   return (row.id === clickedRow.id ? ' bg-purple text-yellow-2' : '')
 }
-function expandRow (p) {
-  if (lastClickedP.key === p.key) {
-    p.expand = !p.expand
-    return
-  } else if (lastClickedP.key > 0) {
-    lastClickedP.expand = false
-  }
-  lastClickedP = p
-  p.expand = !p.expand
-  clickedRow = p.row
-  // console.log(`-fn-getRowIdx from dats for row.id=${clickedRow.id}`)
-  const id = clickedRow.id
-  // const ids = dalist.value.map(p => { return p == undefined ? 0 : p.id })
-  // clickedIdx.value = ids.indexOf(id)
-  clickedIdx.value = p.pageIndex
-  console.log(`-fn-expendRow clickedIdx=${lastClickedP.pageIndex}`, p)
-}
 function showDar (coln, row) {
   const clone = JSON.parse(JSON.stringify(row))
   let act = coln == 'vol' ? 'add' : 'upd'
@@ -186,28 +164,33 @@ function getList (swProp) {
 }
 function setList (da) {
   console.log(`-fn-setList numchecks=${da.lst.length}`, da)
-  da.lst.forEach(p => { p.week = '(' + p.datetime.chwk1() + ')'; p.cnt = 1 })
+  da.lst.forEach(p => { p.datetime += ' (' + p.datetime.chwk1() + ')'; p.cnt = 1 })
+  // da.lst.forEach(p => { p.week = '(' + p.datetime.chwk1() + ')'; p.cnt = 1 })
   // da.lst.forEach(p => { p.dtwk = p.date + (' (' + isDesk ? p.date.chwk3() : pdate.chwk1() + ')') })
   // da.lst.forEach(p => { p.dtwk = isDesk ? p.datetime + ' (' + p.datetime.chwk3() + ')' : p.datetime  + ' (' + p.datetime.chwk1() + ')' })
 
-  let pplst = da.lst.filter(p => p.vol % 5 == 1)
+  // let pplst = da.lst.filter(p => p.vol % 5 == 1)
+  let pplst = structuredClone(da.lst)
   console.log('pplst', pplst)
   let x = pplst.shift()
-  let daylst = [{ id: x.id, datetime:x.datetime, week:x.week, cnt: x.cnt, vol: x.vol }]
+  x.cnt = 1
+  // let daylst = [{ id: x.id, datetime:x.datetime + ' (' + x.datetime.chwk1() + ')', week:x.week, cnt: x.cnt, vol: x.vol }]
+  let dxlst = [{ id: x.id, datetime:x.datetime, cnt: x.cnt, vol: x.vol }]
   pplst.forEach(p => {
-  //   if (daylst.length === 0) daylst.push({ datetime:p.datetime, week:p.week, vol:p.vol })
-    let lastelm = daylst[daylst.length - 1]
+  //   if (dxlst.length === 0) dxlst.push({ datetime:p.datetime, week:p.week, vol:p.vol })
+    let lastelm = dxlst[dxlst.length - 1]
     if (p.datetime.substring(0, 10) == lastelm.datetime.substring(0, 10)) {
       lastelm.vol += p.vol
       lastelm.cnt += 1
     } else {
-      daylst.push({ id: p.id, datetime: p.datetime, week:p.week, cnt: 1, vol: p.vol })
+      // dxlst.push({ id: p.id, datetime: p.datetime + ' (' + p.datetime.chwk1() + ')', week:p.week, cnt: 1, vol: p.vol })
+      dxlst.push({ id: p.id, datetime: p.datetime, cnt: 1, vol: p.vol })
     }
   })
-  daylst.value = daylst
+  dayxlst.value = dxlst
   dayslst.value = da.lst
-  if (compDaySum.value) emitter.emit('dats', daylst)
-  else emitter.emit('dats', da.lst)
+  if (compDaySum.value) emitter.emit('dats', dayxlst.value)
+  else emitter.emit('dats', dayslst.value)
   // emitter.emit('dats', da.lst)
   // console.log(`palist:`, palist.value)
   // console.log(`dalist:`, dalist.value)

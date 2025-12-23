@@ -1,8 +1,9 @@
 <template>
 <q-dialog v-model="opened" :transition-show="action==='add' ? 'slide-right' : 'rotate'" persistent>
-  <q-layout container class="bg-teal-10 fixed-center" style="height:250px;width:310px">
-    <LayoutHeader tit="Upd / Addd / Del" @do-action="doAction" />
-    <LayoutFooter :act=action tit="NOTE_LINK" @do-action="doAction" />
+  <q-layout container class="bg-teal-10 fixed-center" style="height:250px;width:300px">
+    <!-- <LayoutHeader tit="Upd / Addd / Del" @do-action="doAction" /> -->
+    <LayoutHeader tit="Pan Fluid" @do-action="doAction" />
+    <LayoutFooter :act=action tit="Pan Fluid" @do-action="doAction" />
     <q-page-container>
       <q-page>
         <DateTimePicker style="width:300px" label="TODO Date" :dateTime="row.datetime" @upd-dt="updDate" txsz="text-h6" />
@@ -100,6 +101,7 @@ function add () {
   opened.value = false
 }
 function upd () {
+  // row.value.datetime = row.value.datetime.substring(0, 10)
   console.log('-fn-upd', row.value)
   const path = process.env.API + '/pfcheck/upd'
   const data = {}
