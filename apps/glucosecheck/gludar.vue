@@ -26,20 +26,11 @@
           <TxtInput class="col-6" :obj="row" label="Drink" icon="local_bar" iColor="green" :rightIcon="true" @click="openSelection('local_bar', 'Drink', drOpt)" />
           <TxtInput class="col-6" :obj="row" label="Fruit" icon="apple" iColor="green-3" :rightIcon="true" @click="openSelection('apple', 'Fruit', frOpt)" />
         </div>
-        <!-- <TxaInput class="col-12 q-pa-xs" :obj="row" label="notes" icon="description" iColor="white" /> -->
       </q-page>
     </q-page-container>
     <!-- Phone session -->
     <q-page-container v-else class="q-ma-xs">
-      <div v-if="isDesk">
-        <DateTimePicker style="width:40.4%" class="q-pt-sm" label="Created Date and Time" :date-time="row.datetime" @upd-dt="updDateTime" txsz="text-h6" />
-      </div> 
-      <div v-else>
-        <DateTimeIMPicker class="q-pa-xs" label="Match Starting Date Time" txsz="text-h6" :dateTime="row.datetime" @upd-dt="setDateTime" />
-      </div> 
-      <!-- <div class="row">
-        <DateTimePicker style="width:99.3%" class="q-px-sm" label="Created Date and Time" :date-time="row.datetime" @upd-dt="updDateTime" txsz="text-h6" />
-      </div> -->
+      <DateTimeIMPicker class="q-pa-xs" label="Match Starting Date Time" txsz="text-h6" :dateTime="row.datetime" @upd-dt="setDateTime" />
       <div class="row">
         <NumInput style="width:36%" :obj="row" label="Blood Glucose Level" icon="bloodtype" iColor="red" @click="openNumPad()" />
         <div style="width:18%"><q-chip class="text-h6 text-cyan-2 bg-teal-10 q-mt-sm">{{ (row.glucose/18).toFixed(1) }}</q-chip></div>
@@ -58,12 +49,6 @@
         <TxtInput class="col-6" :obj="row" label="Drink" icon="local_bar" iColor="green" :rightIcon="true" @click="openSelection('local_bar', 'Drink', drOpt)" />
         <TxtInput class="col-6" :obj="row" label="Fruit" icon="apple" iColor="green-3" :rightIcon="true" @click="openSelection('apple', 'Fruit', frOpt)" />
       </div>
-      <!-- <TxtInput :obj="row" label="Drink" icon="local_bar" iColor="yellow" :rightIcon="true" />
-      <TxtInput :obj="row" label="Fruit" icon="apple" iColor="cyan-3" :rightIcon="true" /> -->
-      <!-- <TxaInput :obj="row" label="昨 日 餐 饮" icon="description" iColor="cyan-3" /> -->
-      <!-- <q-chip v-if="action=='add'" class="q-ma-sm text-body1" color="cyan-2"> -->
-        <!-- the above is the <b class="q-px-sm text-h6"> {{ row.datetimeOrig }}</b>data -->
-      <!-- </q-chip> -->
     </q-page-container>
   </q-layout>
 </q-dialog>
