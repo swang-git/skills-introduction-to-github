@@ -1,18 +1,25 @@
 <template>
-<q-dialog v-model="opened" transition-show="slide-right" persistent>
-  <q-layout container class="bg-teal-10 fixed-center" :style="{ height:isDesk ? '240px' : '400px', width:isDesk ? '510px' : '' }">
+<!-- <q-dialog v-model="opened" transition-show="slide-right" persistent> -->
+<q-dialog v-model="opened" :transition-show="action=='upd' ? 'rotate' : 'slide-right'" persistent>
+  <q-layout container class="bg-teal-10 fixed-center" :style="{ height:isDesk ? '240px' : '240px', width:isDesk ? '510px' : '' }">
     <LayoutHeader tit="Update/Create/Delete memo" @do-action="doAction" />
     <LayoutFooter :act=action tit="NOTE_LINK" @do-action="doAction" />
     <q-page-container class="">
       <q-page>
         <div class="row">
-          <DateTimePicker style="width:300px" label="TODO Date" :dateTime="row.date" @upd-dt="updDate" txsz="text-h6" />
-          <div v-if="row.reminder" class="text-h6 text-cyan-2 q-pt-md q-pl-xs"><span v-if="isDesk">for Reminder</span></div>
-          <div v-else class="text-h6 text-teal-9 q-pt-md q-pl-xs">for Reminder</div>
+            <!-- <DateTimePicker style="width:40.4%" class="q-pt-sm" label="Created Date and Time" :date-time="row.datetime" @upd-dt="updDateTime" txsz="text-h6" /> -->
+            <!-- <DateTimePicker style="width:83%" label="TODO Date" :dateTime="row.date" @upd-dt="updDate" txsz="text-h6" /> -->
+            <DateTimePicker v-if="isDesk" style="width:60%" label="Match Starting Date Time" :dateTime="row.date" @upd-dt="updDate" txsz="text-h6" />
+            <DateTimeIMPicker v-else style="width:72%" label="Match Starting Date Time" txsz="text-h6" :dateTime="row.date" @upd-dt="updDate" />
+          <div v-if="row.reminder" class="text-h6 text-cyan-2 q-pt-md q-pl-xs">
+            <span v-if="isDesk">for Reminder</span>
+            <span v-else>RD</span>
+          </div>
+          <div v-else class="text-h6 text-teal-9 q-pt-md q-pl-xs"></div>
           <q-item clickable @click="row.reminder=!row.reminder">
-            <q-item-section class="q-pl-xs">
+            <q-item-section class="q-pl-">
               <q-btn round color="cyan-9" class="text-yellow" glossy>
-                <q-icon name="schedule" color="yellow-9" size="32px" style="padding:0 1.5px 2.5px 0"/>
+                <q-icon name="schedule" color="lime" size="32px" style="padding:0 1.5px 2.5px 0" />
               </q-btn>
             </q-item-section>
           </q-item>
@@ -37,7 +44,7 @@ import TxtInput from '../src/components/TxtInput'
 import LnkInput from '../src/components/LnkInput'
 import NotePad from '../src/components/NotePad'
 import DateTimePicker from '../src/components/DateTimePicker'
-// import DateTimeIMPicker from '../src/components/DateTimeIMPicker'
+import DateTimeIMPicker from '../src/components/DateTimeIMPicker'
 import LayoutHeader from '../src/components/LayoutHeader'
 // import LayoutFooter from '../src/components/LayoutFooter'
 import LayoutFooter from '../src/components/LayoutFooter'
