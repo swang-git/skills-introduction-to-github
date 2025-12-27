@@ -177,9 +177,10 @@ function setBankStatementDate() {
   const bank = statement.bank
   var d = new Date()
   let month = d.getMonth() + 1
+  let year = d.getFullYear()
   // if (bank === 'Chase' || bank === 'BOA') month += 1
   let date = d.getDate()
-  if (date >= 5 && bank === 'Fidelity') month -= 1 // do last month if in the first 4 days of the month
+  if (date >= 5 && bank === 'Fidelity') month += 0 // do last month if in the first 4 days of the month
   else if (date < 5 && bank === 'Fidelity') month -= 1 // do last month if in the first 4 days of the month
   // else if (date >= 20 && bank === 'BOA') month -= 1 // do last month if in the first 4 days of the month
   // else if (date < 20 && bank === 'BOA') month -= 1 // do last last month if in the first 4 days of the month
@@ -190,7 +191,13 @@ function setBankStatementDate() {
   // else if (date <  16 && bank === 'Chase') month -= 2 // do last last month if in the first 4 days of the month
   // else if (date <  7 && bank === 'FidelCC') month -= 1 // do last last month if in the first 4 days of the month
   // else if (date >= 7 && bank === 'FidelCC') month -= 0 // do last last month if in the first 4 days of the month
-  else if (date >= 7 && bank === 'FidelCC') month += 1 // do last last month if in the first 4 days of the month
+  else if (date >= 7 && bank === 'FidelCC') {
+    month += 1 // do last last month if in the first 4 days of the month
+    if (month === 13) {
+      month = 1
+      year += 1
+    }
+  }
   // else if (bank === 'NAC') { month = 7; date = 21 } // yearly statement
 
   // else if (date >= 7 && bank === 'FidelCC') month -= 7 // do last last month if in the first 4 days of the month
@@ -198,14 +205,12 @@ function setBankStatementDate() {
 
   if (bank === 'FidelCC') {
     date = '03'
-  // } else if (bank === 'NAC') {
-  //   month = '07'
   //   date = '20'
   } else {
     date = '01'
     // month -= 2 // for development
   }
-  let year = d.getFullYear()
+  // let year = d.getFullYear()
   if (month == 0) {
     month = 12
     year -= 1
