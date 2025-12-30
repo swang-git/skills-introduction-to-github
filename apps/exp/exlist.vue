@@ -26,8 +26,9 @@
 
       <template v-slot:body="p">
         <q-tr v-if="isIM" :props="p" class="cursor-pointer" :class="!showAUD || p.rowIndex>rowsPerPageIM ? null : getAudClass(p)">
-          <q-td v-for="col in p.cols" :key=col class="text-no-wrap ellipsis" @click="showRow(col, p)" :style="getStyle(col.name)">
-            <div v-if="col.name==='date'">{{ col.value.substring(0, 10) }}</div>
+          <!-- <q-td v-for="col in p.cols" :key=col class="text-no-wrap ellipsis" @click="showRow(col, p)" :style="getStyle(col.name)"> -->
+          <q-td v-for="col in p.cols" :key=col class="text-no-wrap ellipsis" :style="getStyle(col.name)">
+            <div v-if="col.name==='date'" @click="showRow(col, p)">{{ col.value.substring(0, 10) }}</div>
             <div v-else-if="col.name==='cats'" @click="openExdarIM('upd', p.row)" class="text-no-wrap ellipsis" style="width:160px">{{ col.value }}</div>
             <div v-else-if="col.name==='cost'" @click="openExdarIM('add', p.row)">{{ col.value }}</div>
           </q-td>
@@ -40,7 +41,8 @@
             <span v-else>{{ col.value }}</span>
           </q-td>
         </q-tr>
-        <q-tr v-if="isDesk" v-show="p.expand" :props="p">
+        <!-- <q-tr v-if="isDesk" v-show="p.expand" :props="p"> -->
+        <q-tr v-show="p.expand" :props="p">
           <q-td colspan="100%">
             <ExpDetails :record="clickedRow" :hasPurchases="purchaselst.length>0" :isReconcileC="isReconcile()" :hasGolfScore="scoreId>0"
               :expColor="p.row.upd ? 'bg-cyan-10' : 'bg-teal-10'"
@@ -212,9 +214,10 @@ function getClickedIdx (rowId) {
   return dalist.value.map(p => p.id).indexOf(rowId) % (isDesk ? rowsPerPageDesk : rowsPerPageIM)
 }
 function showRow (col, p) {
-  if (col.name === 'date') {
+  if (isIM && col.name === 'date') {
     clickedIdx.value = getClickedIdx(p.row.id)
-    // console.log(`-fn-showRow clickedIdx=${clickedIdx}, col.name=${col.name}`, p)
+    console.log(`-fn-showRow clickedIdx=${clickedIdx}, col.name=${col.name}`, p)
+    showDetails(p)
     // emitter.emit('open-exdar', p.row)
   } else showDetails(p)
 }

@@ -7,7 +7,7 @@
     <q-page-container>
       <q-page>
         <DateTimePicker style="width:300px" label="TODO Date" :dateTime="row.datetime" @upd-dt="updDate" txsz="text-h6" />
-        <NumInput :obj="row" label="Volume" icon="V" iconSize="28px" iColor="lime" rightIcon showRight />
+        <NumInput :obj="row" label="Volume" icon="V" iconSize="28px" iColor="lime" mask="##.#" rightIcon showRight />
       </q-page>
     </q-page-container>
   </q-layout>
