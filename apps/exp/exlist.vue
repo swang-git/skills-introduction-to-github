@@ -219,7 +219,14 @@ function showRow (col, p) {
     console.log(`-fn-showRow clickedIdx=${clickedIdx}, col.name=${col.name}`, p)
     showDetails(p)
     // emitter.emit('open-exdar', p.row)
-  } else showDetails(p)
+  } else if (isDesk) {
+    clickedIdx.value = getClickedIdx(p.row.id)
+    clickedRow = p.row
+    console.log(`-CK-showRow clickedIdx=${clickedIdx.value}, col.name=${col.name}`, p.row)
+    if (col.name === 'paye') openExdar('upd')
+    else if (col.name === 'cost') openExdar('add')
+    else showDetails(p)
+  }
 }
 function getStyle (coln) {
   // console.log(`-fn-getStyle screenwidth=${screenwidth} coln=${coln} col1=${col(1).name} col2=${col(2).name} col5=${col(5).name} isIM=${isIM}`)
