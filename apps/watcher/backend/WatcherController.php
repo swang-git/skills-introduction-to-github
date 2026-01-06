@@ -28,7 +28,7 @@ class WatcherController extends Controller {
     public function getPositions($date) { //Log::info("WatcherController/getpositions $date");
         $x = explode('-', $date);
         $ccSta3 = $x[0].'-'.$x[1].'-1';
-        $ccEnd3 = $x[0].'-'.($x[1]+1).'-3'; Log::info("WatcherController/getpositions $date start=$ccSta3 end=$ccEnd3");
+        $ccEnd3 = $x[0].'-'.($x[1]+1).'-3'; Log::info("-CK-WatcherController/getpositions $date start=$ccSta3 end=$ccEnd3");
         $ccBalance = Spend::where([['status', 'A'], ['cat_id', 15], ['purchasedon', '>', $ccSta3], ['purchasedon', '<=', $ccEnd3]])->orderByDesc('purchasedon')->limit(1)->value('unitprice');
         $ccDueDate = Spend::where([['status', 'A'], ['cat_id', 15], ['purchasedon', '>', $ccSta3], ['purchasedon', '<=', $ccEnd3]])->max('purchasedon');
         $today_sec_cnt = FidelityPosition::where('date', $date)->count('*');
@@ -38,7 +38,7 @@ class WatcherController extends Controller {
         $pos = DB::select("CALL get_positions(?)", [$date]); // union data from stock_quotes
         return ['positions' => $pos, 'ccBalance' => $ccBalance, 'ccDueDate' => $ccDueDate, 'status' => 'OK'];
     }
-    public function loadPositions($date) { Log::info("WatcherController/Loading positions $date");
+    public function loadPositions($date) { Log::info("-CK-WatcherController/Loading positions $date");
         $yyyymmdd = str_replace("-", "", $date);
         // $fname = "/sites/webdata/docs/Portfolio/snapshot_$yyyymmdd.csv";
         $fname = config('constants.DOC_DIR') . "/Portfolio/snapshot_$yyyymmdd.csv";
@@ -46,11 +46,12 @@ class WatcherController extends Controller {
             Log::info("$fname not exists");
             return [ 'status' => "{$fname} not exists" ];
         }
-        Log::info("WatcherController/Loading positions $fname");
+        Log::info("-CK-WatcherController/Loading positions $fname");
         $lines = file($fname, FILE_SKIP_EMPTY_LINES|FILE_IGNORE_NEW_LINES);
         // $numSecurities = count($lines);
         // Log::info("Number of securities: $numSecurities");
         foreach ($lines as $line) {
+            if (preg_match('/Pending\s+activity/', $line)) continue;
             if (preg_match('/^[Z|X]\d{7}/', $line) or preg_match('/^\d{8}/', $line)) {
                 // Log::info($line);
                 $x = explode(',', $line);
