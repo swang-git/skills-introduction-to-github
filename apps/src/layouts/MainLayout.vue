@@ -27,6 +27,7 @@
               <q-btn v-if="/watcher/i.test(curApp)"    round glossy color="purple" icon="图" class="chicon-pos" @click="showWatcherChart" />
               <q-btn v-if="/glucoseche/i.test(curApp)" round glossy color="blue-9" icon="释" class="chicon-pos" @click="getA1cDefinitions()" />
               <q-btn v-if="/glucoseche/i.test(curApp)" round glossy color="teal-9" icon="空" class="chicon-pos" @click="showClvlChart" />
+              <q-btn v-if="/glucoseche/i.test(curApp)" round glossy color="indigo" icon="E" class="chicon-pos" @click="toggleEngVer" />
               <q-btn v-if="/bankstatem/i.test(curApp)" round glossy color="teal-9" icon="图" class="chicon-pos" @click="emitter.emit('show-charts')" />
               <q-btn v-if="/healthtest/i.test(curApp)" round glossy color="teal-9" icon="图" class="chicon-pos" @click="showHealthTestChart" />
               <div v-if="/PancreaticFluid/i.test(curApp)" class="q-pl-md q-pb-sm"><q-btn round glossy size="11px" color="indigo" icon="add" @click="togglePFSum" /></div>
@@ -284,6 +285,10 @@ function showClvlChart () {
   console.log('showClvlChart')
   // if (curApp.value == 'glucosecheck') emitter.emit('show-clv-chart')
   emitter.emit('show-clv-chart')
+}
+function toggleEngVer () {
+  console.log('-fn-toggleEngVer')
+  emitter.emit('toggle-eng-ver')
 }
 function showHolidays () {
   // console.log('showHolidays for layout in exp')

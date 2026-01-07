@@ -3,7 +3,7 @@
 <div style="width:800px" class="fixed">
   <q-table class="sh-sticky-header-table" 
     v-model:rows="palist" dark dense wrap-cells
-    :columns="columns" :visible-columns="isIM ? visibleColumnsFone : visibleColumnsDesk"
+    :columns="engVer ? columnsE : columnsC" :visible-columns="isIM ? visibleColumnsFone : visibleColumnsDesk"
     row-key="datetime" 
     :style="isIM ? { width:'402px' } : { }" style="border:1px solid cyan"
     :pagination="isIM ? { rowsPerPage:rowsPerPageIM } : { rowsPerPage:rowsPerPageDesk }" hide-pagination
@@ -165,22 +165,33 @@ const frOpt = ref([])
 const foOpt = ref([])
 const separator = ref('cell')
 const faVal = ref(null)
+const engVer = ref(true)
 const visibleColumnsDesk = ref(['datetime', 'week', 'glucose', 'weight', 'BMI', 'food', 'a1cp'])
 const visibleColumnsFone = ref(['datetime', 'glucose', 'weight', 'a1cp'])
-const columns = ref([
-  { required: true, label: '测 试 时 间', align: 'center', name: 'datetime', field: 'datetime', sortable: true, headerStyle:'font-weight:800;font-size:22px' },
-  // { required: false, label: '星期', align: 'center', name: 'week', field: 'week', sortable: true, headerStyle:'max-width:50px;font-weight:800;font-size:22px;white-space:nowrap' },
-  { required: false, label: '周', align: 'center', name: 'week', field: 'week', sortable: true, headerStyle:'max-width:50px;font-weight:800;font-size:22px;white-space:nowrap' },
-  { required: true, label: '血 糖 值', align: 'center', name: 'glucose', field: 'glucose', sortable: true, headerStyle:'max-width:30px;font-weight:800;font-size:22px;white-space:nowrap' },
-  { required: true, label: '类型', align: 'center', name: 'type', field: 'type', sortable: true, headerStyle:'max-width:30px;font-weight:800;font-size:22px;white-space:nowrap' },
-  // { required: false, label: '体 重', align: 'center', name: 'weight', field: 'weight', sortable: false, format:(val, row) => `${parseFloat(val).toFixed(1)}` },
-  { required: false, label: 'BMI', align: 'center', name: 'BMI', field: 'BMI', sortable: false, format:(val, row) => `${parseFloat(val).toFixed(1)}` },
-  { required: false, label: '食入 或 空腹', align: 'center', name: 'food', field: 'food', sortable: false, headerStyle:'font-weight:800;font-size:22px' },
-  { required: false, label: '饮 入', align: 'center', name: 'drink', field: 'drink', sortable: true, headerStyle:'font-weight:800;font-size:22px'},
-  { required: false, label: '水 果', align: 'left', name: 'fruit', field: 'fruit', sortable: true, class: 'text-no-wrap ellipsis' },
-  { required: false, label: '注 释', align: 'left', name: 'note', field: 'note', sortable: true },
-  { required: false, label: '%', align: 'center', name: 'a1cp', field: 'a1cpX', sortable: false }
-])
+const columnsE = [
+    { required: true, label: 'Date Time', align: 'center', name: 'datetime', field: 'datetime', sortable: false, headerStyle:'font-weight:800;font-size:22px' },
+    { required: false, label: 'W', align: 'center', name: 'week', field: 'week', headerStyle:'width:50px;font-weight:800;font-size:22px' },
+    { required: true, label: 'Sugr', align: 'center', name: 'glucose', field: 'glucose', headerStyle:'max-width:30px;font-weight:800;font-size:22px' },
+    { required: true, label: 'Type', align: isDesk ? 'center' : 'right', name: 'type', field: 'type', headerStyle:'max-width:30px;font-weight:800;font-size:22px' },
+    { required: false, label: 'BMI', align: 'center', name: 'BMI', field: 'BMI', sortable: false, format:(val, row) => `${parseFloat(val).toFixed(1)}` },
+    { required: false, label: 'Food or Fasting', align: 'center', name: 'food', field: 'food', sortable: false, headerStyle:'font-weight:800;font-size:22px' },
+    { required: false, label: '饮 入', align: 'center', name: 'drink', field: 'drink', sortable: true, headerStyle:'font-weight:800;font-size:22px'},
+    { required: false, label: '水 果', align: 'left', name: 'fruit', field: 'fruit', sortable: true, class: 'text-no-wrap ellipsis' },
+    { required: false, label: '注 释', align: 'left', name: 'note', field: 'note', sortable: true },
+    { required: false, label: '%', align: 'center', name: 'a1cp', field: 'a1cpX', sortable: false }]
+const columnsC = [
+    { required: true, label: '测 试 时 间', align: 'center', name: 'datetime', field: 'datetime', sortable: true, headerStyle:'font-weight:800;font-size:22px' },
+    { required: false, label: '周', align: 'center', name: 'week', field: 'week', sortable: false, headerStyle:'width:50px;font-weight:800;font-size:22px' },
+    { required: true, label: '血糖', align: 'center', name: 'glucose', field: 'glucose', headerStyle:'width:30px;font-weight:800;font-size:22px;white-space:nowrap' },
+    { required: true, label: '类型', align: isDesk ? 'center' : 'right', name: 'type', field: 'type', headerStyle:'width:30px;font-weight:800;font-size:22px;white-space:nowrap'},
+    { required: false, label: 'BMI', align: 'center', name: 'BMI', field: 'BMI', sortable: false, format:(val, row) => `${parseFloat(val).toFixed(1)}` },
+    { required: false, label: '食入 或 空腹', align: 'center', name: 'food', field: 'food', sortable: false, headerStyle:'font-weight:800;font-size:22px' },
+    { required: false, label: '饮 入', align: 'center', name: 'drink', field: 'drink', sortable: true, headerStyle:'font-weight:800;font-size:22px'},
+    { required: false, label: '水 果', align: 'left', name: 'fruit', field: 'fruit', sortable: true, class: 'text-no-wrap ellipsis' },
+    { required: false, label: '注 释', align: 'left', name: 'note', field: 'note', sortable: true },
+    { required: false, label: '%', align: 'center', name: 'a1cp', field: 'a1cpX', sortable: false }]
+
+const columns = ref(columnsE)
 
 console.log('-ST-glulist')
 emitter.on('glucosecheck-getList', (x) => setList(x))
@@ -189,6 +200,7 @@ emitter.on('glucosecheck-upd', (x) => setList(x))
 emitter.on('glucosecheck-del', (x) => setList(x))
 emitter.on('search', (searchQuery) => { searchQuery = searchQuery })
 emitter.on('show-clv-chart', () => { showAllCharts() })
+emitter.on('toggle-eng-ver', () => { engVer.value = !engVer.value })
 buildApp('血糖控制', 'glucosecheck')
 emitter.emit('items-per-page', isIM ? rowsPerPageIM : rowsPerPageDesk)
 getList()
@@ -366,8 +378,13 @@ function getValue (col, row) {
   calcEAG_A1C_A1Cp(row)
   if (col.name === 'glucose') {
     // return  col.value
-    if (col.value / 18.015 < 10) return  col.value + '~' + (col.value / 18.015).toFixed(1)
-    else return col.value + '~' + (col.value / 18.015).toFixed(0)
+    // if (col.value / 18.015 < 10) return  col.value + '~' + (col.value / 18.015).toFixed(1)
+    // else return col.value + '~' + (col.value / 18.015).toFixed(0)
+    if (!engVer.value) return  (col.value / 18.015).toFixed(1)
+  } else if (col.name === 'type' && engVer.value) {
+    return row.typeE
+  } else if (col.name === 'type' && !engVer.value) {
+    return row.typeC
   } else if (col.name === 'food' && col.value == null) {
     // return row.a1cp + ' / ' + row.a1c + ' / ' + row.eag + ' / ' + (row.eag / 18.015).toFixed(1)
     // return row.a1cp + ' / ' + row.a1c + ' / ' + row.eag + ' / ' + row.glu
@@ -405,14 +422,14 @@ function getClass (col, row) {
   else if (col === 'food') return bgc + 'text-cyan-2 cursor-pointer text-no-wrap ellipsis'
   else if (col === 'food' || col === 'datetime') return bgc + 'text-left text-no-wrap cursor-pointer'
   else if (col === 'drink' || col === 'fruit' || col === 'a1cp') return bgc + 'text-center text-no-wrap'
-  else if (col === 'glucose' && between(row.glucose,   0, 101) && row.type === '空腹') return bgc + 'text-center text-green-9'
-  else if (col === 'glucose' && between(row.glucose, 100, 126) && row.type === '空腹') return bgc + 'text-center text-green-7'
-  else if (col === 'glucose' && between(row.glucose, 125, 141) && row.type === '空腹') return bgc + 'text-center text-green-5'
-  else if (col === 'glucose' && between(row.glucose, 140, 156) && row.type === '空腹') return bgc + 'text-center text-blue'
-  else if (col === 'glucose' && between(row.glucose, 155, 999) && row.type === '空腹') return bgc + 'text-center text-pink-4'
-  else if (col === 'glucose' && between(row.glucose,   0, 141) && row.type.slice(0, 1) === '餐') return bgc + 'text-center text-green'
-  else if (col === 'glucose' && between(row.glucose, 140, 201) && row.type.slice(0, 1) === '餐') return bgc + 'text-center text-amber'
-  else if (col === 'glucose' && between(row.glucose, 200, 999) && row.type.slice(0, 1) === '餐') return bgc + 'text-center text-pink-5'
+  else if (col === 'glucose' && between(row.glucose,   0, 101) && row.typeC === '空腹') return bgc + 'text-center text-green-9'
+  else if (col === 'glucose' && between(row.glucose, 100, 126) && row.typeC === '空腹') return bgc + 'text-center text-green-7'
+  else if (col === 'glucose' && between(row.glucose, 125, 141) && row.typeC === '空腹') return bgc + 'text-center text-green-5'
+  else if (col === 'glucose' && between(row.glucose, 140, 156) && row.typeC === '空腹') return bgc + 'text-center text-blue'
+  else if (col === 'glucose' && between(row.glucose, 155, 999) && row.typeC === '空腹') return bgc + 'text-center text-pink-4'
+  else if (col === 'glucose' && between(row.glucose,   0, 141) && row.typeC.slice(0, 1) === '餐') return bgc + 'text-center text-green'
+  else if (col === 'glucose' && between(row.glucose, 140, 201) && row.typeC.slice(0, 1) === '餐') return bgc + 'text-center text-amber'
+  else if (col === 'glucose' && between(row.glucose, 200, 999) && row.typeC.slice(0, 1) === '餐') return bgc + 'text-center text-pink-5'
   else return 'text-right'
 }
 // function isFasting (row) {
@@ -470,8 +487,18 @@ function getList () {
 function setList (da) {
   // console.log('-fn-setList', da.lst.filter(p => p.fastingSearch==='glucose'), da)
   console.log('-fn-setList', da)
-  da.lst.forEach(p => { if (p.note !== null) p.note = p.note.replace(/\n/g, '<br />'); p.week = '(' + p.datetime.chwk1() + ')'})
   da.lst.forEach(p => { if (p.breakfast == null) p.yestFood = null; else p.yestFood = '早餐：' + p.breakfast + '<br />午餐：' + p.lunch + '<br />晚餐：' + p.dinner; p.clvl = p.glucose / 18.015 })
+  da.lst.forEach(p => { 
+    if (p.note !== null) p.note = p.note.replace(/\n/g, '<br />'); p.week = '(' + p.datetime.chwk1() + ')'
+    p.typeC = p.type
+    p.typeE = p.type == '空腹' ? 'FAST' : p.type == '餐一' ? 'HR-1' : p.type == '餐二' ? 'HR-2' : p.type == '餐三' ? 'HR-3' : 'RDM'
+    if (engVer.value) {
+      p.type = p.typeE
+    } else {
+      // p.type = p.type == 'FST' ? '空腹' : p.type == 'H-1' ? '餐一' : p.type == 'H-2' ? '餐二' : p.type == 'H-3' ? '餐三' : '随机'
+      p.type = p.typeC
+    }
+  })
   dats.value = da.lst
   exOpt.value = da.exOpt.reverse()
   brOpt.value = da.brOpt.reverse()
