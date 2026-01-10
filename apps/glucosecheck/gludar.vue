@@ -40,7 +40,7 @@
         <TxtInput style="width:55%" :obj="row" label="Blood Pressure" icon="tire_repair" iColor="pink-3" @click="openNumPad('BP')" />
         <TxtInput style="width:44.3%" :obj="row" label="Check Type" icon="bloodtype" iColor="lime" @click="openSelection('bloodtype', 'Check Type', tyOpt)" />
       </div>
-      <TxtInput v-if="row.food.length>0" :obj="row" label="Food" icon="ramen_dining" iColor="green" :rightIcon="true" />
+      <TxtInput class="col-12" :obj="row" label="Food" icon="ramen_dining" iColor="green" :rightIcon="true" />
       <TxtInput class="col-12" :obj="row" label="Exercise" icon="run_circle" iColor="pink-4" :rightIcon="true" @click="openSelection('sports_golf', 'Exercise', exOpt)" />
       <TxtInput class="col-12" :obj="row" label="Breakfast" icon="egg" iColor="brown-6" :rightIcon="true" @click="openSelection('egg', 'Breakfast', brOpt)" />
       <TxtInput class="col-12" :obj="row" label="Lunch" icon="lunch_dining" iColor="yellow-9" :rightIcon="true" @click="openSelection('lunch_dining', 'Lunch', luOpt)" />

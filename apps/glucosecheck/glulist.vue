@@ -1,9 +1,10 @@
 <template>
   <!-- <div style="display:grid;place-items:center;height:100vh;width:800px;margin:-5px 0 0 0"> -->
 <div style="width:800px" class="fixed">
-  <q-table class="sh-sticky-header-table" 
+  <q-table class="sh-sticky-header-table-blue" 
     v-model:rows="palist" dark dense wrap-cells
-    :columns="engVer ? columnsE : columnsC" :visible-columns="isIM ? visibleColumnsFone : visibleColumnsDesk"
+    :columns="engVer ? columnsE : columnsC" 
+    :visible-columns="isIM ? visibleColumnsFone : visibleColumnsDesk"
     row-key="datetime" 
     :style="isIM ? { width:'402px' } : { }" style="border:1px solid cyan"
     :pagination="isIM ? { rowsPerPage:rowsPerPageIM } : { rowsPerPage:rowsPerPageDesk }" hide-pagination
@@ -166,8 +167,10 @@ const foOpt = ref([])
 const separator = ref('cell')
 const faVal = ref(null)
 const engVer = ref(true)
-const visibleColumnsDesk = ref(['datetime', 'week', 'glucose', 'weight', 'BMI', 'food', 'a1cp'])
-const visibleColumnsFone = ref(['datetime', 'glucose', 'weight', 'a1cp'])
+const visibleColumnsDesk = ['datetime', 'week', 'glucose', 'weight', 'BMI', 'food', 'a1cp']
+var visibleColumnsFone = ['datetime', "week", 'glucose', 'weight', 'a1cp']
+// if (engVer.value) visibleColumnsFone = ['datetime', 'weekE', 'glucose', 'weight', 'a1cp']
+// else visibleColumnsFone = ['datetime', 'weekC', 'glucose', 'weight', 'a1cp']
 const columnsE = [
     { required: true, label: 'Date Time', align: 'center', name: 'datetime', field: 'datetime', sortable: false, headerStyle:'font-weight:800;font-size:22px' },
     { required: false, label: 'W', align: 'center', name: 'week', field: 'week', headerStyle:'width:50px;font-weight:800;font-size:22px' },
@@ -449,7 +452,7 @@ function showExpend (col, p) {
   } else if (col == 'glucose') {
     lastClickedRow.value.expand = false
     return showDar(p.row, 'upd')
-  } else if (col == 'a1cp') {
+  } else if (col == 'a1cp' || col == 'type') {
     lastClickedRow.value.expand = false
     return showDar(p.row, 'add')
   }
@@ -489,7 +492,10 @@ function setList (da) {
   console.log('-fn-setList', da)
   da.lst.forEach(p => { if (p.breakfast == null) p.yestFood = null; else p.yestFood = '早餐：' + p.breakfast + '<br />午餐：' + p.lunch + '<br />晚餐：' + p.dinner; p.clvl = p.glucose / 18.015 })
   da.lst.forEach(p => { 
-    if (p.note !== null) p.note = p.note.replace(/\n/g, '<br />'); p.week = '(' + p.datetime.chwk1() + ')'
+    // if (p.note !== null) p.note = p.note.replace(/\n/g, '<br />'); p.week = '(' + p.datetime.chwk1() + ')'
+    if (p.note !== null) p.note = p.note.replace(/\n/g, '<br />'); p.week = p.datetime.chwk1()
+    // p.weekC = p.week
+    // p.weekE = p.week=='一' ? 'M' : 'T'
     p.typeC = p.type
     p.typeE = p.type == '空腹' ? 'FAST' : p.type == '餐一' ? 'HR-1' : p.type == '餐二' ? 'HR-2' : p.type == '餐三' ? 'HR-3' : 'RDM'
     if (engVer.value) {

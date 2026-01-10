@@ -11,6 +11,14 @@
   border: 1px solid pink;
 }
 
+.sh-sticky-header-table-blue {
+  @import '_table-blue.sass';
+  /* height or max-height is important */
+  // height: 878px;
+  // height: 972px;
+  border: 1px solid grey
+}
+
 .sh-sticky-header-table {
   @import '_table.sass';
   /* height or max-height is important */
