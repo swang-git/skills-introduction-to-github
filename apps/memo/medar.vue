@@ -24,8 +24,8 @@
             </q-item-section>
           </q-item>
         </div>
-        <TxtInput :obj="row" label="Tag" icon="message" iColor="cyan-2" :rightIcon="true" />
-        <!-- <TxtInput class="col-12" :obj="row" label="Tag" icon="message" iColor="lime" :rightIcon="true" @click="openSelection('message', 'Tag', tagOpt)" /> -->
+        <!-- <TxtInput :obj="row" label="Tag" icon="message" iColor="lime-2" :rightIcon="true" /> -->
+        <TxtInput class="col-12" :obj="row" label="Tag" icon="message" iColor="lime" :rightIcon="true" @click="openSelection('message', 'Tag', tagOpt)" />
       </q-page>
     </q-page-container>
   </q-layout>
@@ -33,6 +33,7 @@
 <LnkInput @upd-link="updLink" />
 <NotePad @save-details="saveDetails" />
 <ConfirmDialog @user-confirmed="delFromDB" />
+<TxtPad @upd-selected-opt="updSelectedOpt" />
 </template>
 <script setup>
 import { ref } from 'vue'
@@ -48,6 +49,7 @@ import DateTimeIMPicker from '../src/components/DateTimeIMPicker'
 import LayoutHeader from '../src/components/LayoutHeader'
 // import LayoutFooter from '../src/components/LayoutFooter'
 import LayoutFooter from '../src/components/LayoutFooter'
+import TxtPad from '../src/components/TxtPad'
 
 //== data
 const { isDesk, screenwidth } = libFunctions()
@@ -57,7 +59,7 @@ const forReminder = ref(false)
 const row = ref(null)
 const action = ref(null)
 var rowOrig = null
-// const tagOpt = ref([])
+const tagOpt = ref([])
 
 //== main ==
 console.log('-ST-medar')
@@ -68,6 +70,15 @@ const emit = defineEmits(['added-row', 'upded-row', 'deled-row'])
 // emitter.on('memo-del', (x) => emit('deled-row', x))
 
 //== function sections
+function updSelectedOpt (model, txt) {
+  console.log(`-fn-updSelectedOpt model=${model} selectedOpt=${txt}`)
+  if (model == 'Tag') row.value.tag = txt
+  // else if (model == 'Breakfast') row.value.breakfast = txt
+}
+function openSelection (icon, model, opts) {
+  console.log(`-fn-openSelection`, opts)
+  emitter.emit('open-SelRevOption', icon, model, opts)
+}
 function updLink (lnks) {
   row.value.link = lnks.join('@')
   console.log(`-fn-updLink link=${row.value.link}`)

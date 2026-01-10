@@ -113,7 +113,7 @@ function clearField () {
   Reflect.set(compObj.value, getPropertyKey(), val)
 }
 function editSelected (label) {
-  console.log(`-fn-editSelected selectedValue=${label}`)
+  console.log(`-fn-editSelected selectedValue=${label} ${props.label} ${compObj.value[label]}`)
   emitter.emit('open-TxtPad', props.label, compObj.value[label], 'Edit ' + props.label)
 }
 // function clearField () {

@@ -171,7 +171,7 @@ function openNumPad (flag) {
   else return emitter.emit('open-num-pad-auto', '血糖测试', 60, 300)
 }
 function openIt (rw, act, exop, brop, luop, diop, drop, frop, foop) {
-  console.log(`-fn-gludar.openIt act=${act}`, luop)
+  console.log(`-fn-gludar.openIt act=${act}`, rw)
   action.value = act
   exOpt.value = exop
   brOpt.value = brop
@@ -237,6 +237,7 @@ function showInfo () {
   // // this.$emit('create', row.value)
 }
 function add () {
+  convType()
   console.log('-fn-add', row.value)
   const path = process.env.API + '/glucosecheck/add'
   const inData = row.value
@@ -245,7 +246,12 @@ function add () {
   opened.value = false
   emit('close-expand')
 }
+function convType () {
+  let ty = row.value.type
+  row.value.type = ty == 'FAST' ? '空腹' : ty == 'HR-1' ? '餐一' : ty == 'HR-2' ? '餐二' : ty == 'HR-3' ? '餐三' : '随机'
+}
 function upd () {
+  convType()
   console.log('-fn-upd', row.value)
   const path = process.env.API + '/glucosecheck/upd'
   if (isDesk) setBloodPressure()
