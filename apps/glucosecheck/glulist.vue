@@ -378,6 +378,7 @@ function prev90date (dt) {
   return dt90
 }
 function getValue (col, row) {
+  console.log(`-fn-getValue col.name=${col.name} col.value=${row.week}`)
   calcEAG_A1C_A1Cp(row)
   if (col.name === 'glucose') {
     // return  col.value
@@ -388,6 +389,10 @@ function getValue (col, row) {
     return row.typeE
   } else if (col.name === 'type' && !engVer.value) {
     return row.typeC
+  } else if (col.name === 'week' && engVer.value) {
+    return row.weekE
+  } else if (col.name === 'week' && !engVer.value) {
+    return row.weekC
   } else if (col.name === 'food' && col.value == null) {
     // return row.a1cp + ' / ' + row.a1c + ' / ' + row.eag + ' / ' + (row.eag / 18.015).toFixed(1)
     // return row.a1cp + ' / ' + row.a1c + ' / ' + row.eag + ' / ' + row.glu
@@ -487,6 +492,10 @@ function getList () {
   const path = process.env.API + '/glucosecheck/getList'
   gaxios(path)
 }
+function convToEngWeek(wk) {
+  // return wk=='一' ? 'M' : wk=='二' ? 'Tu' : wk=='三' ? 'We' : wk=='四' ? 'Th' : wk=='五' ? 'Fr' : wk=='六' ? 'Sa' : 'Su'
+  return wk=='一' ? 'M' : wk=='二' ? 'T' : wk=='三' ? 'W' : wk=='四' ? 'T' : wk=='五' ? 'F' : wk=='六' ? 'S' : 'S'
+}
 function setList (da) {
   // console.log('-fn-setList', da.lst.filter(p => p.fastingSearch==='glucose'), da)
   console.log('-fn-setList', da)
@@ -494,16 +503,10 @@ function setList (da) {
   da.lst.forEach(p => { 
     // if (p.note !== null) p.note = p.note.replace(/\n/g, '<br />'); p.week = '(' + p.datetime.chwk1() + ')'
     if (p.note !== null) p.note = p.note.replace(/\n/g, '<br />'); p.week = p.datetime.chwk1()
-    // p.weekC = p.week
-    // p.weekE = p.week=='一' ? 'M' : 'T'
+    p.weekC = p.week
+    p.weekE = convToEngWeek(p.week)
     p.typeC = p.type
     p.typeE = p.type == '空腹' ? 'FAST' : p.type == '餐一' ? 'HR-1' : p.type == '餐二' ? 'HR-2' : p.type == '餐三' ? 'HR-3' : 'RDM'
-    if (engVer.value) {
-      p.type = p.typeE
-    } else {
-      // p.type = p.type == 'FST' ? '空腹' : p.type == 'H-1' ? '餐一' : p.type == 'H-2' ? '餐二' : p.type == 'H-3' ? '餐三' : '随机'
-      p.type = p.typeC
-    }
   })
   dats.value = da.lst
   exOpt.value = da.exOpt.reverse()
@@ -515,7 +518,7 @@ function setList (da) {
   foOpt.value = da.foOpt.reverse()
 
   emitter.emit('dats', dats.value)
-  console.log('-dalist:', dalist.value)
+  console.log('-CK-dalist:', dalist.value)
   // setGluData()
 }
 function setGluData () {

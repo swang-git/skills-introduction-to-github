@@ -214,17 +214,17 @@ function getClickedIdx (rowId) {
   return dalist.value.map(p => p.id).indexOf(rowId) % (isDesk ? rowsPerPageDesk : rowsPerPageIM)
 }
 function showRow (col, p) {
+  console.log(`-fn-showRow clickedIdx=${clickedIdx.value}, col.name=${col.name}`, p)
   if (isIM && col.name === 'date') {
     clickedIdx.value = getClickedIdx(p.row.id)
-    console.log(`-fn-showRow clickedIdx=${clickedIdx}, col.name=${col.name}`, p)
     showDetails(p)
     // emitter.emit('open-exdar', p.row)
   } else if (isDesk) {
     clickedIdx.value = getClickedIdx(p.row.id)
     clickedRow = p.row
-    console.log(`-CK-showRow clickedIdx=${clickedIdx.value}, col.name=${col.name}`, p.row)
-    if (col.name === 'paye') openExdar('upd')
-    else if (col.name === 'cost') openExdar('add')
+    // console.log(`-CK-showRow clickedIdx=${clickedIdx.value}, col.name=${col.name}`, p.row)
+    if (col.name === 'paye' || col.name === 'cost') openExdar('add')
+    // else if (col.name === 'cost') openExdar('add')
     else showDetails(p)
   }
 }
