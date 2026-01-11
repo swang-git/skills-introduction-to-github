@@ -101,10 +101,12 @@ const yearReg = ref(null)
 const month = ref(today().yyyymm())
 const futureDate = ref(getFutureDate(Constants.PLUS_DAYS))
 const scoreId = ref(0)
-var purchaselst = ref([])
-var dats = ref([])
-var clickedRow = reactive({})
-var lastClicked = reactive({row:{id:0}})
+const purchaselst = ref([])
+const dats = ref([])
+const clickedRow = ref({})
+const lastClicked = ref({row:{id:0}})
+// var clickedRow = reactive({})
+// var lastClicked.value = reactive({row:{id:0}})
 const clickedIdx = ref(0)
 var ccardPayment = null
 var ccardDueDay = null
@@ -177,8 +179,8 @@ function checkBalance () {
   gaxios(path)
 }
 function showGolfSores (rw) {
-  clickedRow = rw
-  console.log(`-FN-showGolfScores`, clickedRow)
+  clickedRow.value = rw
+  console.log(`-FN-showGolfScores`, clickedRow.value)
   const path = process.env.API + '/exp/getScoreId'
   const data = { courseId: rw.payeId, playerId: rw.user_id, teetime: rw.date }
   paxios(path, data)
@@ -221,7 +223,7 @@ function showRow (col, p) {
     // emitter.emit('open-exdar', p.row)
   } else if (isDesk) {
     clickedIdx.value = getClickedIdx(p.row.id)
-    clickedRow = p.row
+    clickedRow.value = p.row
     // console.log(`-CK-showRow clickedIdx=${clickedIdx.value}, col.name=${col.name}`, p.row)
     if (col.name === 'paye' || col.name === 'cost') openExdar('add')
     // else if (col.name === 'cost') openExdar('add')
@@ -278,7 +280,7 @@ function addedRow (row) {
   row.add = true
   // row.day = getDay2(row.date)
   row.day = row.date.chwk3()
-  lastClicked.expand = false
+  lastClicked.value.expand = false
   const cookieKey = 'add_' + row.id
   $q.cookies.set(cookieKey, row.id, cookyExpires)
   var dateIdx = getRowIdx(row.date)
@@ -294,7 +296,7 @@ function updedRow(da) {
   const row = da.row
   clearCookies(row)
   row.upd = true
-  clickedRow = row
+  clickedRow.value = row
   row.day = row.date.chwk3()
   const rowIdx = getRowIdxById(row.id)
   dalist.value.splice(rowIdx, 1, row)
@@ -310,7 +312,7 @@ function cleanCookies(key, rowId) {
   $q.cookies.set(key, Array.from(new Set(xCookies)), cookyExpires)
 }
 function deledRow(row) {
-  // console.log('user confirmed to delete row', row, clickedIdx, clickedRow)
+  // console.log('user confirmed to delete row', row, clickedIdx, clickedRow.value)
   dalist.value.splice(clickedIdx.value, 1)
   row.del = true
   // row.deleted_at = yyyymmddHHMMSS(new Date())
@@ -326,21 +328,22 @@ function deledRow(row) {
   $q.cookies.set(cookieKey, delCookies, cookyExpires)
 }
 function showDetails(p) {
-  if (lastClicked.row.id === p.row.id) {
+  console.log(`%c-AA-fn-showDetails lastClicked.value.row.id=${lastClicked.value.row.id} p.row.id=${p.row.id}`, 'color:lime', p)
+  if (lastClicked.value.row.id === p.row.id) {
     p.expand = !p.expand
     if (!p.expand) clickedIdx.value = 0 // to make it fixed
     return
   } else {
     p.expand = true
-    lastClicked.expand = false
-    lastClicked = p
-    // console.log(`%cA-fn-showDetails clickedIdx=${clickedIdx}`, 'color: red', p)
+    lastClicked.value.expand = false
+    lastClicked.value = p
+    console.log(`%c-BB-fn-showDetails lastClicked.value.row.id=${lastClicked.value.row.id} clickedIdx=${clickedIdx.value} p.row.id=${p.row.id}`, 'color: red', p)
   }
   // p.row.day = isDesk ? getDay2(p.row.date) : null
   // p.row.day = isDesk ? p.row.date.chwk3() : null
   p.row.day = p.row.date.chwk3()
   const row = p.row
-  clickedRow = row
+  clickedRow.value = row
   clickedIdx.value = getRowIdx(row.date)
   purchaselst.value = []
   if (row.cats === 'Shopping' || row.subc === 'Wedge Set' ) {
@@ -357,13 +360,13 @@ function showDetails(p) {
     paxios(path, data)
   }
   if (!p.expand && isDesk) clickedIdx.value = 0 // to make it fixed
-  // console.log('-fn-showDetails lastClicked Row B', lastClicked, p.row.add, p.row.hasOwnProperty('upd'))
-  console.log(`%c-fn-showDetails clickedIdx=${clickedIdx.value} numProperties=${Object.values(row).length}`, 'color: red')
-  emitter.emit('clicked-idx', clickedIdx)
+  // console.log('-fn-showDetails lastClicked.value Row B', lastClicked.value, p.row.add, p.row.hasOwnProperty('upd'))
+  console.log(`%c-CC-fn-showDetails clickedIdx=${clickedIdx.value} numProperties=${Object.values(row).length}`, 'color:yellow')
+  emitter.emit('clicked-idx', clickedIdx.value + 1)
 }
 function getScore() {
   console.log('-fn-getScore', scoreId.value)
-  const row = clickedRow
+  const row = clickedRow.value
   const path = process.env.API + '/exp/getScore'
   const data = { playerId:row.user_id, scoreId:scoreId.value }
   paxios(path, data)
@@ -375,9 +378,9 @@ function setScore(da) {
   emitter.emit('open-ScoreDisplay', playData, tmnt)
 }
 function setScoreId (x) {
-  // console.log(`-CK-fn-setScoreId scoreId=${x}`, clickedRow)
+  // console.log(`-CK-fn-setScoreId scoreId=${x}`, clickedRow.value)
   scoreId.value = x
-  const e = clickedRow
+  const e = clickedRow.value
   if (x == null && e.hasScore) {
     const tit = 'No Scores'
     const msg = `No Scores for your golf play at ${e.paye} on ${e.date}`
@@ -391,8 +394,8 @@ function setScoreId (x) {
   if (e.hasScore && scoreId.value > 0) getScore()
 }
 function isReconcile () {
-  // console.log('-fn-isReconcile', clickedRow)
-  const e = clickedRow
+  // console.log('-fn-isReconcile', clickedRow.value)
+  const e = clickedRow.value
   // return parseFloat(e.unip) > 0 && parseFloat(e.cost) === 0 && e.catsId === 15 && e.subcId === 158 && +(new Date(e.date.substring(0, 10))) > +(new Date(2017, 10, 1))
   return parseFloat(e.unip) > 0 && parseFloat(e.cost) === 0 && e.catsId === 15 && e.subcId === 158 && +(new Date(e.date.yyyymmdd())) > +(new Date(2017, 10, 1))
 }
@@ -405,7 +408,7 @@ function setCreditCardSpendings (x) {
   emitter.emit('open-CCardReconcileSheet', x.ccdata, ccardPayment, ccardDueDay, betweenDays)
 }
 function getCreditCardSpendings () {
-  const e = clickedRow
+  const e = clickedRow.value
   let note = e.note
   let bdays = note.replace(/(\d\d)\/(\d\d)\/(\d{4})(.*)(\d\d)\/(\d\d)\/(\d{4})\s*(.*)/, '$3-$1-$2 ~ $7-$5-$6')
   console.log(`%cnote=${note} bdays=${bdays}`, 'color:red')
@@ -424,10 +427,10 @@ function getCreditCardSpendings () {
   gaxios(path)
 }
 function openPlst () {
-  // console.log('-CK-fn-openPlst', clickedRow)
-  const date = clickedRow.date
-  const paye = clickedRow.paye
-  const payeId = clickedRow.payeId
+  // console.log('-CK-fn-openPlst', clickedRow.value)
+  const date = clickedRow.value.date
+  const paye = clickedRow.value.paye
+  const payeId = clickedRow.value.payeId
   const plst = purchaselst.value
   emitter.emit('open-PurchasedList', date, plst, paye, payeId)
 }
@@ -438,8 +441,8 @@ function openExdarIM (act, row) {
   emitter.emit('open-exdar', crow, act)
 }
 function openExdar (act) {
-  console.log(`-CK-fn-openExdar act=${act} clickedRow.date=${clickedRow.date}`)
-  const crow = JSON.parse(JSON.stringify(clickedRow))
+  console.log(`-CK-fn-openExdar act=${act} clickedRow.value.date=${clickedRow.value.date}`)
+  const crow = JSON.parse(JSON.stringify(clickedRow.value))
   // const cidx = getClickedIdx(crow.id)
   emitter.emit('open-exdar', crow, act)
 }

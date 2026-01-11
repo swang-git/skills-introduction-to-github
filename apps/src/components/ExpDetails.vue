@@ -3,7 +3,14 @@
   <q-table :rows="rows" :columns="columns" :class="expColor" :style="isIM ? { 'width':screenwidth + 'px' } : { }"
     row-key="name" hide-header hide-pagination dark :pagination="{ rowsPerPage:12 }" dense>
 
-    <template v-slot:top-right="p">
+    <template v-slot:body="p">
+      <tr class="bg-cyan-7 text-grey-10">
+        <td style="font-size:18px;width:68px;text-align:left" :class="colColor">{{p.cols[0].value}}</td>
+        <td style="font-size:18px" class="ellipsis" v-html="p.cols[1].value" />
+      </tr>
+    </template>
+
+    <template v-slot:top-right>
       <!-- <q-fab  v-model="fabOpen" flat hide-icon :label="getTitle()" direction="left" color="cyan-2" :style="idx>23 ? { marginTop:'-180px' } : {}"> -->
       <!-- <q-fab  v-model="fabOpen" flat hide-icon :label="isIM ? '' : getTitle()" direction="left" color="cyan-2"> -->
       <q-fab v-if="isDesk" v-model="fabOpen" flat hide-icon :label="isIM ? '' : getTitle()" direction="left" color="cyan-2">
@@ -15,13 +22,6 @@
         <q-btn round glossy class="q-mr-sm" size="16px" icon="delete"     color="red-10"    @click="emitter.emit('del-row', props.record)" />
         <q-btn v-if="isIM" round size="10px" color="pink" @click="p.toggleFullscreen" class="q-pt-sm" />
       </q-fab>
-    </template>
-
-    <template v-slot:body="p">
-      <tr class="bg-cyan-7 text-grey-10">
-        <td style="font-size:18px;width:68px;text-align:left" :class="colColor">{{p.cols[0].value}}</td>
-        <td style="font-size:18px" class="ellipsis" v-html="p.cols[1].value" />
-      </tr>
     </template>
   </q-table>
 </div>
@@ -47,7 +47,7 @@ const props = defineProps({
 })
 const fabOpen = ref(true)
 const cIdx = ref(0)
-emitter.on('clicked-idx', (x) => cIdx.value = x)
+emitter.on('clicked-idx', (x) => { cIdx.value = x; console.log(`-ck-clicked-idx cIdx=${x}`) })
 // console.log('-ST-ExpDetails')
 let bgColor = ref('bg-teal-10')
 let rows = ref([])
@@ -82,7 +82,7 @@ function getTitle () {
   }
 }
 function showDetails () {
-  // console.log(`-fn-showDetails`, props.record)
+  // console.log(`-CK-in-fn-showDetails`, props.record)
   rows.value = []
   const p = props.record
   const isCCard = props.isReconcileC
@@ -110,10 +110,10 @@ function showDetails () {
   // if (isIM) p.inFullscreen = true
 }
 const compIdx = computed(() => { return props.idx })
-watch(compIdx, showDetails) 
+watch(cIdx, showDetails) 
 // watch(cIdx, (newIdx) => {
-//     console.log(`%c-CK-watch cIdx=${cIdx.value} pIdx=${props.idx}`, 'color:red')
-//     // if (cIdx.value >= 0) showDetails()
+//     console.log(`%c-CK-watch cIdx=${cIdx.value} pIdx=${props.idx}`, 'color:pink')
+//     if (cIdx.value >= 0) showDetails()
 //   }
 // )
 </script>
