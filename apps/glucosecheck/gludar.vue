@@ -248,6 +248,7 @@ function add () {
 }
 function convType () {
   let ty = row.value.type
+  if (['空腹','餐一', '餐二', '餐三', '随机'].includes(ty)) return
   row.value.type = ty == 'FAST' ? '空腹' : ty == 'HR-1' ? '餐一' : ty == 'HR-2' ? '餐二' : ty == 'HR-3' ? '餐三' : '随机'
 }
 function upd () {

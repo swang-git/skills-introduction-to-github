@@ -81,7 +81,8 @@ export function libFunctions() {
       words.forEach(word => {
         data = data.filter(row => {
           return Object.keys(row).filter(key => { return ![
-            'id', 'catsId', 'subcId', 'payeId', 'paymId', 'note', 'link', 'post_date', 'created_at', 'updated_at', 'deleted_at'
+            // 'id', 'catsId', 'subcId', 'payeId', 'paymId', 'note', 'link', 'post_date', 'created_at', 'updated_at', 'deleted_at'
+            'id', 'catsId', 'subcId', 'payeId', 'paymId', 'link', 'post_date', 'created_at', 'updated_at', 'deleted_at'
             ].includes(key) }).some(key => {
             return String(row[key]).toLowerCase().indexOf(word) >= 0
           })

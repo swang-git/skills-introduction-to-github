@@ -219,7 +219,7 @@ function showRow (col, p) {
   console.log(`-fn-showRow clickedIdx=${clickedIdx.value}, col.name=${col.name}`, p)
   if (isIM && col.name === 'date') {
     clickedIdx.value = getClickedIdx(p.row.id)
-    showDetails(p)
+    showDetailsInExp(p)
     // emitter.emit('open-exdar', p.row)
   } else if (isDesk) {
     clickedIdx.value = getClickedIdx(p.row.id)
@@ -227,7 +227,7 @@ function showRow (col, p) {
     // console.log(`-CK-showRow clickedIdx=${clickedIdx.value}, col.name=${col.name}`, p.row)
     if (col.name === 'paye' || col.name === 'cost') openExdar('add')
     // else if (col.name === 'cost') openExdar('add')
-    else showDetails(p)
+    else showDetailsInExp(p)
   }
 }
 function getStyle (coln) {
@@ -327,8 +327,8 @@ function deledRow(row) {
   if (!delCookies.map(p => p.id).some(pid => pid === row.id)) delCookies.push(row)
   $q.cookies.set(cookieKey, delCookies, cookyExpires)
 }
-function showDetails(p) {
-  console.log(`%c-AA-fn-showDetails lastClicked.value.row.id=${lastClicked.value.row.id} p.row.id=${p.row.id}`, 'color:lime', p)
+function showDetailsInExp(p) {
+  console.log(`%c-AA-fn-showDetailsInExp lastClicked.value.row.id=${lastClicked.value.row.id} p.row.id=${p.row.id}`, 'color:lime', p)
   if (lastClicked.value.row.id === p.row.id) {
     p.expand = !p.expand
     if (!p.expand) clickedIdx.value = 0 // to make it fixed
@@ -337,7 +337,7 @@ function showDetails(p) {
     p.expand = true
     lastClicked.value.expand = false
     lastClicked.value = p
-    console.log(`%c-BB-fn-showDetails lastClicked.value.row.id=${lastClicked.value.row.id} clickedIdx=${clickedIdx.value} p.row.id=${p.row.id}`, 'color: red', p)
+    console.log(`%c-BB-fn-showDetailsInExp lastClicked.value.row.id=${lastClicked.value.row.id} clickedIdx=${clickedIdx.value} p.row.id=${p.row.id}`, 'color: red', p)
   }
   // p.row.day = isDesk ? getDay2(p.row.date) : null
   // p.row.day = isDesk ? p.row.date.chwk3() : null
@@ -347,7 +347,7 @@ function showDetails(p) {
   clickedIdx.value = getRowIdx(row.date)
   purchaselst.value = []
   if (row.cats === 'Shopping' || row.subc === 'Wedge Set' ) {
-    // console.log(`-fn-showDetails -CK- row.date=${row.date}`, typeof row.date)
+    // console.log(`-fn-showDetailsInExp -CK- row.date=${row.date}`, typeof row.date)
     const date = row.date.yyyymmdd()
     const payeId = row.payeId
     const path = process.env.API + '/exp/getPurchasedList/' + date + '/' + payeId
@@ -360,9 +360,10 @@ function showDetails(p) {
     paxios(path, data)
   }
   if (!p.expand && isDesk) clickedIdx.value = 0 // to make it fixed
-  // console.log('-fn-showDetails lastClicked.value Row B', lastClicked.value, p.row.add, p.row.hasOwnProperty('upd'))
-  console.log(`%c-CC-fn-showDetails clickedIdx=${clickedIdx.value} numProperties=${Object.values(row).length}`, 'color:yellow')
+  // console.log('-fn-showDetailsInExp lastClicked.value Row B', lastClicked.value, p.row.add, p.row.hasOwnProperty('upd'))
+  console.log(`%c-CC-fn-showDetailsInExp clickedIdx=${clickedIdx.value} numProperties=${Object.values(row).length}`, 'color:yellow')
   emitter.emit('clicked-idx', clickedIdx.value + 1)
+  // emitter.emit('clicked-idx', p.row.id)
 }
 function getScore() {
   console.log('-fn-getScore', scoreId.value)

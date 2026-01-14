@@ -30,7 +30,7 @@
 import { ref, watch, computed } from 'vue'
 import emitter from 'tiny-emitter/instance'
 import { libFunctions } from '../composables/libFunctions'
-import Tooltip from './Tooltip.vue'
+// import Tooltip from './Tooltip.vue'
 const { isIM, isDesk, screenwidth } = libFunctions()
 const columns = [
   { name: 'name', required: true, field: 'colname' },
@@ -48,8 +48,8 @@ const props = defineProps({
 const fabOpen = ref(true)
 const cIdx = ref(0)
 emitter.on('clicked-idx', (x) => { cIdx.value = x; console.log(`-ck-clicked-idx cIdx=${x}`) })
-// console.log('-ST-ExpDetails')
-let bgColor = ref('bg-teal-10')
+console.log('-ST-ExpDetails')
+// let bgColor = ref('bg-teal-10')
 let rows = ref([])
 
 function getMarginTop () {
@@ -82,9 +82,14 @@ function getTitle () {
   }
 }
 function showDetails () {
-  // console.log(`-CK-in-fn-showDetails`, props.record)
+  let chkIdx = cIdx.value - 1
+  // console.log(`-CK-in-fn-showDetails chkIdx=${chkIdx} idx=${props.idx}`, props.record)
   rows.value = []
   const p = props.record
+  // if (props.record.id != pid) {
+  if (props.idx != chkIdx) {
+    // return
+  }
   const isCCard = props.isReconcileC
   const isGPlay = p.cats === 'Golf' && p.subc === 'Play'
   const isShopp = p.cats === 'Shopping'
@@ -106,14 +111,14 @@ function showDetails () {
     { const cnum = { colname:'GCN', details: p.gcardNum + ' (Gift Card Number)'}; rows.value.push(cnum) }
     { const pval = { colname:'PVB', details: '$' + p.prevbal + ' (Previous Balance of the Card) = ' + p.gcardVal + ' + ' + p.cost }; rows.value.push(pval) }
   }
-  // console.log(`%c-CK-showDetails p.height=${p.height} p.date=${p.date}`, 'color: red')
+  // console.log(`%c-CK-child showDetails p.height=${p.height} p.date=${p.date}`, 'color:lime')
   // if (isIM) p.inFullscreen = true
 }
-const compIdx = computed(() => { return props.idx })
-watch(cIdx, showDetails) 
+const compIdx = computed(() => { return cIdx.value })
+watch(compIdx, showDetails) 
 // watch(cIdx, (newIdx) => {
 //     console.log(`%c-CK-watch cIdx=${cIdx.value} pIdx=${props.idx}`, 'color:pink')
-//     if (cIdx.value >= 0) showDetails()
+//     if (cIdx.value >= 0) showDetails(cIdx.value)
 //   }
 // )
 </script>
