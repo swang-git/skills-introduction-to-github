@@ -1,6 +1,6 @@
 <template>
   <!-- <div style="display:grid;place-items:center;height:100vh;width:800px;margin:-5px 0 0 0"> -->
-<div style="width:800px" class="fixed">
+<div style="width:99.2%">
   <q-table class="sh-sticky-header-table-blue" 
     v-model:rows="palist" dark dense wrap-cells
     :columns="engVer ? columnsE : columnsC" 
@@ -494,7 +494,7 @@ function getList () {
 }
 function convToEngWeek(wk) {
   // return wk=='一' ? 'M' : wk=='二' ? 'Tu' : wk=='三' ? 'We' : wk=='四' ? 'Th' : wk=='五' ? 'Fr' : wk=='六' ? 'Sa' : 'Su'
-  return wk=='一' ? 'M' : wk=='二' ? 'T' : wk=='三' ? 'W' : wk=='四' ? 'T' : wk=='五' ? 'F' : wk=='六' ? 'S' : 'S'
+  return wk=='一' ? 'M' : wk=='二' ? 'Tu' : wk=='三' ? 'W' : wk=='四' ? 'Th' : wk=='五' ? 'F' : wk=='六' ? 'Sa' : 'Su'
 }
 function setList (da) {
   // console.log('-fn-setList', da.lst.filter(p => p.fastingSearch==='glucose'), da)

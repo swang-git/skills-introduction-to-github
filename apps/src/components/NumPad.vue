@@ -41,7 +41,7 @@ emitter.on('open-num-pad', (x, y) => openIt(x, y))
 //== function sections
 function setNumber (n) {
   keyedIn.value += n
-  if (flag.value == 'GL' && parseInt(keyedIn.value)>=99) {
+  if (flag.value == 'GL' && parseInt(keyedIn.value)>=89) {
     emit('set-num', 'GL', parseInt(keyedIn.value))
     // opened.value = false
   } else if (flag.value == 'WT' && parseInt(keyedIn.value) > 999) {

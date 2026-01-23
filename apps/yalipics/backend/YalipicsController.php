@@ -31,7 +31,6 @@ class YalipicsController extends Controller {
 		// Open a known directory, and proceed to scandir its contents
     $thumbnails = array_diff(scandir($thumbnaildir), ['.', '..']);
 
-
     // Sort by modification time
     usort($thumbnails, function($a, $b) use ($thumbnaildir) {
       return filemtime($thumbnaildir . '/' . $b) - filemtime($thumbnaildir . '/' . $a);
@@ -40,13 +39,23 @@ class YalipicsController extends Controller {
     $picdir = "/sites/webdata/pics/yali";
     $dates = [];
     $ratios = [];
+    // $rat1 = [];
+    // $rat2 = [];
     foreach($thumbnails as $fnm) {
       $dates[] = date('Y.n.j', filemtime($thumbnaildir . '/' . $fnm));
       list($width, $height) = getimagesize($picdir . '/' . preg_replace('/_thumbnail/', '', $fnm));
-      $ratios[] = $width / $height;
+      $ratio = $width / $height;
+      $ratios[] = $ratio;
+      // Log:info("ratio=$ratio width=$width height=$height");
+      // if ($ratio < 1) $rat1[] = $fnm;
+      // else $rat2[] = $fnm; 
     }
     // Log::info("ratios", $ratios);
 
+    // $tlst = array_merge($rat1, $rat2);
+    // $tlst = $rat1 + $rat2;
+
     return ['lst' => $thumbnails, 'dates' => $dates, 'ratios' => $ratios, 'status' => "OK"];
+    // return ['lst' => $tlst, 'dates' => $dates, 'ratios' => $ratios, 'status' => "OK"];
   }
 }

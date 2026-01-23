@@ -1,5 +1,6 @@
 <template>
-<div class="q-px-xs" :class="{ fixed: clickedIdx < 8 }">
+<!-- <div class="q-px-xs" :class="{ fixed: clickedIdx < 8 }"> -->
+<div class="q-px-xs">
 <q-table class="sh-sticky-header-table" v-model:rows="palist" :columns="columns" dense
   :grid=false :visible-columns="isDesk ? visibleColumnsDesk : visibleColumnsFone" :style="{height:isIM ? '565px':''}"
   :pagination="isDesk ? { rowsPerPage: rowsPerPageDesk } : { rowsPerPage: rowsPerPageIM }"

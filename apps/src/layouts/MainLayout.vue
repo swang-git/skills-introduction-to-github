@@ -299,8 +299,10 @@ function search () {
   emitter.emit('search', searchQuery.value)
 }
 function drawerClick () {
-  miniState = !miniState
-  drawer = drawer
+  console.log(`-fn-drawerClick`)
+  window.location.href = "/apps"
+  // miniState = !miniState
+  // drawer = drawer
 }
 </script>
 <style>

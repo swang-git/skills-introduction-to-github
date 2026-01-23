@@ -1,6 +1,6 @@
 <template>
-<q-dialog v-model="opened" maximized :transition-show="picidx%2==0 ? 'slide-right' : 'slide-left'">
-  <q-card class="q-pa-xs bg-cyan-4" style="height:50px">
+<q-dialog v-model="opened" :transition-show="picidx%2==0 ? 'slide-right' : 'slide-left'" maximized>
+  <q-card class="bg-red-4" style="height:45px">
     <q-card-actions align="between">
       <q-btn glossy rounded class="bg-teal" v-close-popup>
         <q-icon left name="cancel" size="md" color="lime" />
@@ -30,10 +30,15 @@
       </q-btn> -->
     </q-card-actions>
   </q-card>
-
-  <div class="bg-grey-4" :transition-show="picidx%2==0 ? 'slide-right' : 'slide-left'">
-    <!-- <img id="imgId" loading="lazy" class="q-pa-xs fixed" :src="getPic()" :height="ratlst[picidx]<1 ? winH : winH / ratlst[picidx]" style="left:50%; top:50%; transform:translate(-50%, -50%);" @click="stopSlideshow()" /> -->
+  <div class="bg-grey-4" :transition-show="picidx%2==0 ? 'rotate' : 'slide-left'">
     <img id="imgId" class="q-pa-xs fixed" :src="getPic()" :width="getWidth()" :height="getHeight()" style="left:50%; top:50%; transform:translate(-50%, -50%);" @click="stopSlideshow()" />
+    <div v-show="showPicInfo" class="q-pt-md q-pl-md text-h6">{{ getPic() }}</div>
+    <!-- <img id="imgId" loading="lazy" class="q-pa-xs fixed" :src="getPic()" :height="ratlst[picidx]<1 ? winH : winH / ratlst[picidx]" style="left:50%; top:50%; transform:translate(-50%, -50%);" @click="stopSlideshow()" /> -->
+    <!-- <img id="imgId" class="q-pa-xs fixed" :src="getPic()" :width="getWidth()" :height="getHeight()"
+    style="left:50%; top:50%; transform:translate(-50%, -50%)"
+    fit="fill"
+    @click="stopSlideshow()" /> -->
+    <!-- <q-img :src="getPic()" @click="stopSlideshow()" /> -->
   </div>
 
   <q-card class="bg-cyan-4 q-px-sm" style="margin:-150px 0 0 0;height:50px">
@@ -48,6 +53,9 @@
         <span class="text-bold text-cyan-1 text-body1" style="margin: 0 4px 0 4px">幻灯片</span>
         <q-icon name="slow_motion_video" size="md" color="yellow-9" />
       </q-btn>
+      <!-- <q-btn glossy rounded class="bg-red-9" @click="showPicInfo=!showPicInfo">
+        <q-icon name="info" size="md" color="yellow-9" />
+      </q-btn> -->
       <q-btn glossy rounded class="bg-teal-9" @click="++picidx>=piclst.length ? picidx=0 : picidx">
         <span class="text-bold text-cyan-2 text-body1" style="margin: 0 4px 0 4px">下一幅</span>
         <q-icon name="arrow_circle_right" size="md" color="lime" />
@@ -66,9 +74,10 @@ const { isIM, isDesk, isIPad } = libFunctions()
 import TxtPad from "../src/components/TxtPad"
 import NumPad from "../src/components/NumPad"
 const opened = ref(false)
+const showPicInfo = ref(false)
 const slideshowing = ref(false)
 const intervalId = ref(-1)
-const intervalDelay = ref(1000)
+const intervalDelay = ref(1500)
 const picidx = ref(-1)
 const piclst = ref([])
 const datlst = ref([])
@@ -91,8 +100,18 @@ function openTxtPad () {
   emitter.emit('open-TxtPad', -9876, piclst.value[picidx.value], 'filename of ' + filenum )
 }
 
-function getWidth ()  { return ratlst.value[picidx.value] < 1 ? null : winW }
-function getHeight () { return ratlst.value[picidx.value] < 1 ? winH : null }
+function getWidth ()  {
+  let wid = ratlst.value[picidx.value] < 1 ? null : winW
+  let ratio = ratlst.value[picidx.value]
+  if (ratio > 1) wid = Math.min(wid / ratio, winW)
+  console.log(`-fn-getWidth ratio=${ratio} wid=${wid} winW=${winW}`)
+  return wid
+}
+function getHeight () { 
+  let hit = ratlst.value[picidx.value] < 1 ? winH : null
+  hit = Math.min(hit, winH)
+  return hit == 0 ? null : hit
+}
 
 function stopSlideshow () {
   slideshowing.value = false
@@ -108,6 +127,7 @@ function slideshow () {
     }, compIntervalDelay.value)
 }
 function getPic () {
+  console.log(`jpgname=${piclst.value[picidx.value]} ratio=${ratlst.value[picidx.value]} wid=${getWidth()} hit=${getHeight()}`)
   return process.env.API + '/pics/yali/' + piclst.value[picidx.value]
 }
 // const getMeta = (url, cb) => {

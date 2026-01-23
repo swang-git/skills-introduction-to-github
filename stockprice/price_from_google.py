@@ -50,16 +50,16 @@ def get_stock_quote_txt(date, stock):
             # print('-CK- line=[%s]'%price)
             check_number('price', price, stock, line)
 
-        # elif re.match(r'^[+|−]\d+.\d(.*)today', line):
-        #     pchange = line.split(' ')[0]
-        #     pchange = pchange.replace('+', '')
-        #     if re.match(r'−', pchange): pchange = pchange.replace('−', '-')
-        #     check_number('pchange', pchange, stock, line)
-        elif re.match(r'^today', line):
-            pchange = lines[idx - 1]
+        elif re.match(r'^[+|−]\d+.\d(.*)today', line):
+            pchange = line.split(' ')[0]
             pchange = pchange.replace('+', '')
             if re.match(r'−', pchange): pchange = pchange.replace('−', '-')
             check_number('pchange', pchange, stock, line)
+        # elif re.match(r'^today', line):
+        #     pchange = lines[idx - 1]
+        #     pchange = pchange.replace('+', '')
+        #     if re.match(r'−', pchange): pchange = pchange.replace('−', '-')
+        #     check_number('pchange', pchange, stock, line)
 
         elif re.match(r'^High', line):
             day_high = lines[idx + 1]
