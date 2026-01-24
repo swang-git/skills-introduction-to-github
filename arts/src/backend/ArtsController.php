@@ -34,7 +34,7 @@ class ArtsController extends Controller
 	public function logClientPlatform(Request $request) {
 		Log::info($request);
 	}
-	public function getList() { Log::info("arts-getList");
+	public function getList() {
 		$artWW = collect(HomePage::where('tag', 'PXWW')->orderBy('ymd', 'desc')->take(2)->get()); //dd($arts);
 		$artQG = collect(HomePage::where('tag', 'PXQG')->orderBy('ymd', 'desc')->take(2)->get());
 		$artWX = collect(HomePage::where('tag', 'PXWX')->orderBy('ymd', 'desc')->take(2)->get()); //dd($arts);
@@ -66,15 +66,16 @@ class ArtsController extends Controller
 		return ['links'=>$links, 'titles'=>$titles, 'updtime'=>$updtime, 'status' => "OK"];
 		// return ['links'=>$links, 'titles'=>$titles, 'subtits'=>$subtits, 'updtime'=>$updtime];
 	}
-	public function getCont($tag, $ymd) { Log::info("arts-getCont");
+	public function getCont($tag, $ymd)
+    {
         $d1 = date_create($ymd);
 		$d2 = date_create('2016-08-15');
-        if ($d1 > $d2) {
-            $arts = DailyDat::where([['tag', $tag], ['ymd', $ymd]])->orderBy('idx')->get(); 			//dd($artlist);
-            $pagetit = HomePage::where([['tag', $tag], ['ymd', $ymd]])->select('tit')->first()->tit; 	//dd($pagetit);
-        } else {
-            $arts = DB::table('daily_data')->where([ ['tag', $tag], ['ymd', $ymd] ])->get();
-            $pagetit = $this->get_cn_tit($tag) . " (" . $this->get_cn_ymd($ymd) . ")";
+		if ($d1 > $d2) {
+			$arts = DailyDat::where([['tag', $tag], ['ymd', $ymd]])->orderBy('tim', 'desc')->get(); 			//dd($artlist);
+			$pagetit = HomePage::where([['tag', $tag], ['ymd', $ymd]])->select('tit')->first()->tit; 	//dd($pagetit);
+		} else {
+			$arts = DB::table('daily_data')->where([ ['tag', $tag], ['ymd', $ymd] ])->get();
+			$pagetit = $this->get_cn_tit($tag) . " (" . $this->get_cn_ymd($ymd) . ")";
 		}
 		// foreach($arts as $a) { unset($a->tag); }
 		$xymd = HomePage::where('tag', $tag)->select('ymd')->orderBy('ymd', 'desc')->take(100)->get();          //dd(Collect($ymds));
@@ -93,21 +94,23 @@ class ArtsController extends Controller
 		// $pagetit = $pagetit . " (". count($arts) . "篇)";
 		// return $this->get_art_list($arts, $pagetit, 'List');
 	}
-	public function getText($tag, $ymd, $qid)
-    {
-        $d1 = date_create($ymd);
+	public function getText($tag, $ymd, $qid) { Log::info("arts-getText()");
+		$d1 = date_create($ymd);
 		$d2 = date_create('2016-08-15');
 		$art = [];
 		$art_flw = [];
 		$artcont = null;
-        if (in_array($tag, $this->pxar) and $d1 > $d2) {
-            $arts = DailyArt::where([ ['tag', $tag], ['qid', $qid] ])->orderBy('idx')->get(); //dd($artcont);
-            $artinfo = DailyDat::where([ ['tag', $tag], ['ymd', $ymd], ['qid', $qid] ])->first(); //dd($artinfo);
-            // $artinfo->tit = proc_tit($artinfo->tit);
-            // $artinfo->tit = proc_line($artinfo>tit);
-        } else {
-            list($arts, $artinfo) = $this->getCollArtCont($tag, $ymd, $qid);
-        }
+		if (in_array($tag, $this->pxar) and $d1 > $d2) {
+			$arts = DailyArt::where([ ['tag', $tag], ['qid', $qid] ])->orderBy('idx')->get(); //dd($artcont);
+			$artinfo = DailyDat::where([ ['tag', $tag], ['ymd', $ymd], ['qid', $qid] ])->first(); //dd($artinfo);
+			// $artinfo->tit = proc_tit($artinfo->tit);
+			// $artinfo->tit = proc_line($artinfo>tit);
+		} else {
+			list($arts, $artinfo) = $this->getCollArtCont($tag, $ymd, $qid);
+		}
+
+		// $qids = DailyDat::where([ ['tag', $tag], ['ymd', $ymd] ])->orderBy('idx')->pluck('qid');
+		// Log::info('qids', $qids->toArray());
 
 		// $art = [];
 		$art['id'] = $artinfo->id;
@@ -119,15 +122,15 @@ class ArtsController extends Controller
 		// $art['tit'] = proc_line(proc_tit($artinfo->tit));
 		$art['sub'] = $this->get_sub($artinfo);
 		$art['lnk'] = $artinfo->lnk;
-
+		
 		$txt = trim($arts[0]->txt); //Log::info($txt);
-
+		
 		// $txt = $this->process_text($txt);
 
 		$txt = nl2br($txt); //Log::info($txt);
 		$txt = str_replace("</tr><br />", "</tr>", $txt); //Log::info($txt);
 		$txt = str_replace("</tbody><br />", "</tbody>", $txt); //Log::info($txt);
-
+		
 		// $txt = preg_replace('@<br /><br />@', '<br />', $txt);
 		$art['txt'] = $txt;
 		// $artinfo->afz = (int)(strlen($txt) / 2 + 0.5);   // more accurate calc afz
@@ -135,6 +138,7 @@ class ArtsController extends Controller
 		// $art['txt'] = proc_line($txt) . "<br />";
 		// $art['txt'] = proc_line($arts[0]->txt);
 		$art['bak'] = "/art/$tag/$ymd";
+		// $art['qids'] = $qids->toArray();
 
 		$flw = [];
 		for ($i=1; $i<count($arts); $i++) {
@@ -157,7 +161,7 @@ class ArtsController extends Controller
 		$userAgent = $this->userAgent;
 		$page = "$tag/$ymd/$qid";
 		//__ ToDo_later $this->saveLog($page);
-		return $artInfo;
+		return ['text' => $artInfo, 'status' => "OK"];
 		// return view('Art.art', compact('pageType', 'pageTitle', 'artInfo', 'userAgent'));
 	}
 	private function process_text($txt) {
@@ -166,7 +170,7 @@ class ArtsController extends Controller
 		// $txt = preg_replace('@pic.twitter.com/(\w+)(.*)@', '<br><a href="https://pic.twitter.com/$1" target="_blank">$2</a><br>', $txt);
 		$txt = preg_replace('@https://t.co/(.*)@', 'https://t.co/ $1', $txt);
 		$txt = preg_replace('@pic.twitter.com/(\w+)(.*)@', 'pic.twitter.com/ $1$2<br>', $txt);
-
+		
 		return $txt;
 	}
 	private function get_flw_prex($lvl) {
@@ -179,8 +183,19 @@ class ArtsController extends Controller
         }
         return $ret;
 	}
-	public function updText(Request $d) {
+	public function updText(Request $d) { Log::info("-fn-updText", [$d->toArray(), __line__, __file__]);
 		// $d = Input::All(); // return $d;
+		$flwIdx = isset($d['flwIdx']) ? $d['flwIdx'] : -1;
+		if ($flwIdx >= 0) {
+			$artId = $d['artId'];
+			if ($artId >= 0) {
+				$txt = $d['txt'];
+				$dm = DailyArt::find($artId);
+				$dm->txt = $txt;
+				$dm->update();
+				return ['status' => "OK"];
+			}
+		}
 		$datId = $d['datId'];
 		if ($datId > 0) {
 			$tit = $d['tit'];
@@ -189,6 +204,7 @@ class ArtsController extends Controller
 			$da->update();
 		}
 		$artId = $d['artId'];
+		Log::info("artId=$artId");
 		if ($artId >= 0) {
 			$txt = $d['txt'];
 			$dm = DailyArt::find($artId);
@@ -196,14 +212,13 @@ class ArtsController extends Controller
 			$dm->txt = $txt;
 			$dm->update();
 		}
-		return "OK";
+		return ['status' => "OK"];
 	}
- 	public function search($cat, $txt)
-    {
+ 	public function search($cat, $txt) {
         $arts = DailyDat::fromQuery('CALL MyWeb.art_search(?,?)', [$cat, "%$txt%"]);   // dd($arts);
-		$pagetit = "搜索作者含有“${txt}”的文章";
-		if ($cat == 'tit') $pagetit = "搜索题目含有“${txt}”的文章";
-		else if ($cat == 'txt') $pagetit = "搜索文章内容含有“${txt}”的文章";
+		$pagetit = "搜索作者含有“{$txt}”的文章";
+		if ($cat == 'tit') $pagetit = "搜索题目含有“{$txt}”的文章";
+		else if ($cat == 'txt') $pagetit = "搜索文章内容含有“{$txt}”的文章";
 		$dats = $this->get_art_list($arts, $pagetit);
 		$dats['key'] = "/" . $cat . "/" . $txt;       // use as url as well
 		// $dats['key'] = "/search/" . $cat . "/" . $txt;       // use as url as well
@@ -376,9 +391,9 @@ class ArtsController extends Controller
     public function artSearch($cat, $txt)
     {
         $arts = DailyDat::fromQuery('CALL MyWeb.art_search(?,?)', [$cat, "%$txt%"]);   // dd($arts);
-		$pagetit = "搜索作者含有“${txt}”的文章";
-		if ($cat == 'tit') $pageTitle = "搜索题目含有“${txt}”的文章";
-		else if ($cat == 'txt') $pageTitle = "搜索文章内容含有“${txt}”的文章";
+		$pagetit = "搜索作者含有“{$txt}”的文章";
+		if ($cat == 'tit') $pageTitle = "搜索题目含有“{$txt}”的文章";
+		else if ($cat == 'txt') $pageTitle = "搜索文章内容含有“{$txt}”的文章";
 		$pagetit = "<span class='art-page-tit'>$pagetit</span> <span class='art-infox'>(". count($arts) ."篇)</span>";
 		return $this->get_art_list($arts, $pagetit, 'Search');
     }
@@ -456,7 +471,7 @@ class ArtsController extends Controller
         $art_flw[0] = $art;
         $art_flw[0]->txt = $txt;
 
-        $flwfile = "$rootdir/$tag/$year/$yxd/${qid}_flw.txt";
+        $flwfile = "$rootdir/$tag/$year/$yxd/{$qid}_flw.txt";
         if (file_exists($flwfile)) {
             $lines = file($flwfile);
             while (count($lines) > 0) {
@@ -599,8 +614,8 @@ class ArtsController extends Controller
 			// $arts = DB::table('daily_data')->where('tag', $tag)->orderBy('idx')->get();		//dd($artlist);
 			$arts = DailyData::where('tag', $tag)->orderBy('idx')->get();		//dd($artlist);
 		}
-		// $pagetit = "<span class='art-page-tit'>$pagetit </span><span class='art-infox'>(${cnt}篇)</span>";
-		$pagetit = $pagetit . "(${cnt}篇)";
+		// $pagetit = "<span class='art-page-tit'>$pagetit </span><span class='art-infox'>({$cnt}篇)</span>";
+		$pagetit = $pagetit . "({$cnt}篇)";
 		return $this->get_art_list($arts, $pagetit, 'Collections');
 		//
         // foreach($arts as $a) {

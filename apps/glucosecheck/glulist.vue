@@ -174,7 +174,7 @@ var visibleColumnsFone = ['datetime', "week", 'glucose', 'weight', 'a1cp']
 const columnsE = [
     { required: true, label: 'Date Time', align: 'center', name: 'datetime', field: 'datetime', sortable: false, headerStyle:'font-weight:800;font-size:22px' },
     { required: false, label: 'W', align: 'center', name: 'week', field: 'week', headerStyle:'width:50px;font-weight:800;font-size:22px' },
-    { required: true, label: 'Sugr', align: 'center', name: 'glucose', field: 'glucose', headerStyle:'max-width:30px;font-weight:800;font-size:22px' },
+    { required: true, label: 'GLU', align: 'center', name: 'glucose', field: 'glucose', headerStyle:'max-width:30px;font-weight:800;font-size:22px' },
     { required: true, label: 'Type', align: isDesk ? 'center' : 'right', name: 'type', field: 'type', headerStyle:'max-width:30px;font-weight:800;font-size:22px' },
     { required: false, label: 'BMI', align: 'center', name: 'BMI', field: 'BMI', sortable: false, format:(val, row) => `${parseFloat(val).toFixed(1)}` },
     { required: false, label: 'Food or Fasting', align: 'center', name: 'food', field: 'food', sortable: false, headerStyle:'font-weight:800;font-size:22px' },
@@ -183,7 +183,7 @@ const columnsE = [
     { required: false, label: '注 释', align: 'left', name: 'note', field: 'note', sortable: true },
     { required: false, label: '%', align: 'center', name: 'a1cp', field: 'a1cpX', sortable: false }]
 const columnsC = [
-    { required: true, label: '测 试 时 间', align: 'center', name: 'datetime', field: 'datetime', sortable: true, headerStyle:'font-weight:800;font-size:22px' },
+    { required: true, label: '测 试 时 间', align: 'center', name: 'datetime', field: 'datetime', sortable: false, headerStyle:'font-weight:800;font-size:22px' },
     { required: false, label: '周', align: 'center', name: 'week', field: 'week', sortable: false, headerStyle:'width:50px;font-weight:800;font-size:22px' },
     { required: true, label: '血糖', align: 'center', name: 'glucose', field: 'glucose', headerStyle:'width:30px;font-weight:800;font-size:22px;white-space:nowrap' },
     { required: true, label: '类型', align: isDesk ? 'center' : 'right', name: 'type', field: 'type', headerStyle:'width:30px;font-weight:800;font-size:22px;white-space:nowrap'},
@@ -493,8 +493,9 @@ function getList () {
   gaxios(path)
 }
 function convToEngWeek(wk) {
-  // return wk=='一' ? 'M' : wk=='二' ? 'Tu' : wk=='三' ? 'We' : wk=='四' ? 'Th' : wk=='五' ? 'Fr' : wk=='六' ? 'Sa' : 'Su'
-  return wk=='一' ? 'M' : wk=='二' ? 'Tu' : wk=='三' ? 'W' : wk=='四' ? 'Th' : wk=='五' ? 'F' : wk=='六' ? 'Sa' : 'Su'
+  // return wk=='一' ? 'M' : wk=='二' ? 'tu' : wk=='三' ? 'W' : wk=='四' ? 'th' : wk=='五' ? 'F' : wk=='六' ? 'sa' : 'su'
+  // return wk=='一' ? 'M' : wk=='二' ? 'T' : wk=='三' ? 'W' : wk=='四' ? 'T' : wk=='五' ? 'F' : wk=='六' ? 'S' : 'S'
+  return wk=='一' ? 'M' : wk=='二' ? 'Tu' : wk=='三' ? 'We' : wk=='四' ? 'Th' : wk=='五' ? 'Fr' : wk=='六' ? 'Sa' : 'Su'
 }
 function setList (da) {
   // console.log('-fn-setList', da.lst.filter(p => p.fastingSearch==='glucose'), da)

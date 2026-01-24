@@ -111,6 +111,7 @@ function setText(da) {
   tag.value = route.params.tag
   ymd.value = route.params.ymd
   qid.value = route.params.qid
+  // art.value.qids = store.clickedCont.links.map(p => p.qid)
   setPrevNextQids()
 }
 
@@ -256,14 +257,16 @@ watch(
 
 function getPrevQid () {
   // console.log('-fn-getPrevQid', art.value.qids)
-  const qids = art.value.qids
+  // const qids = art.value.qids
+  const qids = store.qids
   const idx = qids.findIndex((q) => parseInt(q) == qid.value)
   const pqids = qids.slice(0, idx)
   return pqids.pop()
 }
 function getNextQid () {
   console.log(`-fn-getNextQid qid=${qid.value}`, art.value.qids)
-  const qids = art.value.qids
+  // const qids = art.value.qids
+  const qids = store.qids
   const idx = qids.findIndex((q) => parseInt(q) == qid.value)
   const nqids = qids.slice(idx + 1)
   return nqids.shift()
@@ -311,12 +314,12 @@ function showNext () {
 
 function setPrevNextQids () {
   console.info(`-fn-setPrevNextQids qid=[${qid.value}]`)
-  if (art.value.qids.length <= 0) {
+  if (store.qids.length <= 0) {
     prevQid.value = undefined
     nextQid.value = undefined
     return
   }
-  const qids = art.value.qids
+  const qids = store.qids
   // const qids = [2847364, 2847302, 2847304, 2847314, 2847340, 2847338, 2847362, 2847312, 2847300, 2847310, 2847330, 2847360]
   // const pos = qids.indexOf(qid.value)
   prevTag.value = tag.value
@@ -331,49 +334,74 @@ function setPrevNextQids () {
   // console.log(`qid=${qid.value}`, pqids, nqids)
   console.log(`prevQid=${prevQid.value}`)
   console.log(`nextQid=${nextQid.value}`)
-  // var lnk = store.clickedCont.links
-  // for (var i = 0; i < lnk.length; i++) {
-  //   var qx = lnk[i].qid
-  //   if (qx === parseInt(qid.value)) {
-  //     store.clickedIndex = i
-  //     readArticle.value = i + 1
-  //     prevTag.value = (lnk[i - 1] === undefined) ? lnk[lnk.length - 1].tag : lnk[i - 1].tag
-  //     prevYmd.value = (lnk[i - 1] === undefined) ? lnk[lnk.length - 1].ymd : lnk[i - 1].ymd
-  //     prevQid.value = (lnk[i - 1] === undefined) ? lnk[lnk.length - 1].qid : lnk[i - 1].qid
-  //     nextQid.value = (lnk[i + 1] === undefined) ? lnk[0].qid : lnk[i + 1].qid
-  //     nextYmd.value = (lnk[i + 1] === undefined) ? lnk[0].ymd : lnk[i + 1].ymd
-  //     nextTag.value = (lnk[i + 1] === undefined) ? lnk[0].tag : lnk[i + 1].tag
-  //     break
-  //   }
-  // }
-// function setPrevNextQids () {
-//   console.info('-fn-setPrevNextQids', store.clickedCont)
-//   var lnk = store.clickedCont.links
-//   for (var i = 0; i < lnk.length; i++) {
-//     var qx = lnk[i].qid
-//     if (qx === parseInt(qid.value)) {
-//       store.clickedIndex = i
-//       readArticle.value = i + 1
-//       prevTag.value = (lnk[i - 1] === undefined) ? lnk[lnk.length - 1].tag : lnk[i - 1].tag
-//       prevYmd.value = (lnk[i - 1] === undefined) ? lnk[lnk.length - 1].ymd : lnk[i - 1].ymd
-//       prevQid.value = (lnk[i - 1] === undefined) ? lnk[lnk.length - 1].qid : lnk[i - 1].qid
-//       nextQid.value = (lnk[i + 1] === undefined) ? lnk[0].qid : lnk[i + 1].qid
-//       nextYmd.value = (lnk[i + 1] === undefined) ? lnk[0].ymd : lnk[i + 1].ymd
-//       nextTag.value = (lnk[i + 1] === undefined) ? lnk[0].tag : lnk[i + 1].tag
-//       break
-//     }
-//   }
-
-  // console.info(' == from', msg)
-  // store.state.arts.topTitle = art.value.tit
   store.topTit = art.value.tit
-  // var key = tag.value + ymd.value
-  // var conts = store.conts
-  // if (conts !== undefined && Object.prototype.hasOwnProperty.call(conts, key)) {
-  //   conts[key].clicked = qid.value
-  //   // store.commit('arts/updClicked', qid.value)
-  // document.title = art.value.tit
 }
+
+// function setPrevNextQids () {
+//   console.info(`-fn-setPrevNextQids qid=[${qid.value}]`)
+//   if (art.value.qids.length <= 0) {
+//     prevQid.value = undefined
+//     nextQid.value = undefined
+//     return
+//   }
+//   const qids = art.value.qids
+//   // const qids = [2847364, 2847302, 2847304, 2847314, 2847340, 2847338, 2847362, 2847312, 2847300, 2847310, 2847330, 2847360]
+//   // const pos = qids.indexOf(qid.value)
+//   prevTag.value = tag.value
+//   prevYmd.value = ymd.value
+//   const pos = qids.findIndex((q) => parseInt(q) == parseInt(qid.value))
+//   readArticle.value = pos + 1
+//   const pqids = qids.slice(0, pos)
+//   const nqids = qids.slice(pos + 1)
+//   // console.log(`-CK-pos=${qids.findIndex((q) => parseInt(q) == parseInt(qid.value))}`, pqids, nqids)
+//   prevQid.value = pqids.pop()
+//   nextQid.value = nqids.length > 0 ? nqids.shift() : undefined
+//   // console.log(`qid=${qid.value}`, pqids, nqids)
+//   console.log(`prevQid=${prevQid.value}`)
+//   console.log(`nextQid=${nextQid.value}`)
+//   // var lnk = store.clickedCont.links
+//   // for (var i = 0; i < lnk.length; i++) {
+//   //   var qx = lnk[i].qid
+//   //   if (qx === parseInt(qid.value)) {
+//   //     store.clickedIndex = i
+//   //     readArticle.value = i + 1
+//   //     prevTag.value = (lnk[i - 1] === undefined) ? lnk[lnk.length - 1].tag : lnk[i - 1].tag
+//   //     prevYmd.value = (lnk[i - 1] === undefined) ? lnk[lnk.length - 1].ymd : lnk[i - 1].ymd
+//   //     prevQid.value = (lnk[i - 1] === undefined) ? lnk[lnk.length - 1].qid : lnk[i - 1].qid
+//   //     nextQid.value = (lnk[i + 1] === undefined) ? lnk[0].qid : lnk[i + 1].qid
+//   //     nextYmd.value = (lnk[i + 1] === undefined) ? lnk[0].ymd : lnk[i + 1].ymd
+//   //     nextTag.value = (lnk[i + 1] === undefined) ? lnk[0].tag : lnk[i + 1].tag
+//   //     break
+//   //   }
+//   // }
+// // function setPrevNextQids () {
+// //   console.info('-fn-setPrevNextQids', store.clickedCont)
+// //   var lnk = store.clickedCont.links
+// //   for (var i = 0; i < lnk.length; i++) {
+// //     var qx = lnk[i].qid
+// //     if (qx === parseInt(qid.value)) {
+// //       store.clickedIndex = i
+// //       readArticle.value = i + 1
+// //       prevTag.value = (lnk[i - 1] === undefined) ? lnk[lnk.length - 1].tag : lnk[i - 1].tag
+// //       prevYmd.value = (lnk[i - 1] === undefined) ? lnk[lnk.length - 1].ymd : lnk[i - 1].ymd
+// //       prevQid.value = (lnk[i - 1] === undefined) ? lnk[lnk.length - 1].qid : lnk[i - 1].qid
+// //       nextQid.value = (lnk[i + 1] === undefined) ? lnk[0].qid : lnk[i + 1].qid
+// //       nextYmd.value = (lnk[i + 1] === undefined) ? lnk[0].ymd : lnk[i + 1].ymd
+// //       nextTag.value = (lnk[i + 1] === undefined) ? lnk[0].tag : lnk[i + 1].tag
+// //       break
+// //     }
+// //   }
+
+//   // console.info(' == from', msg)
+//   // store.state.arts.topTitle = art.value.tit
+//   store.topTit = art.value.tit
+//   // var key = tag.value + ymd.value
+//   // var conts = store.conts
+//   // if (conts !== undefined && Object.prototype.hasOwnProperty.call(conts, key)) {
+//   //   conts[key].clicked = qid.value
+//   //   // store.commit('arts/updClicked', qid.value)
+//   // document.title = art.value.tit
+// }
 
 // function restyleImage () {
 //   if (process.env.API === '') return

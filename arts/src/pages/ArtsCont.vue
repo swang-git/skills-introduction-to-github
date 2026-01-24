@@ -64,6 +64,7 @@ function setCont(da) {
   document.title = data.value.topTitle
   // document.title = da.cont.topTitle
   store.clickedCont = da.cont
+  store.qids = da.cont.links.map(p => p.qid)
   store.topTit = da.cont.topTitle
   setPrevNextYmds()
 }
