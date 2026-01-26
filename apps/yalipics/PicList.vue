@@ -21,9 +21,9 @@ import { useRouter } from 'vue-router'
 const router = useRouter()
 import emitter from "tiny-emitter/instance"
 import { axiosFunctions } from "../src/composables/axiosFunctions"
-const { gaxios, paxios } = axiosFunctions();
+const { gaxios } = axiosFunctions();
 import { libFunctions } from "../src/composables/libFunctions"
-const { isIM, isDesk } = libFunctions();
+const { isIM } = libFunctions();
 // import PicScreenFit from './PicScreenFit'
 import PicDialog from './PicDialog'
 const showPiclst = ref(true)
@@ -47,15 +47,16 @@ function showPicScreenFit () {
   router.replace({ path: 'yalipics/slide' })
 }
 function getImg(p) {
-  return process.env.API + '/pics/yali/thumbnails/' + p
+  let picdir = isIM ? '/pics/yaliIM/' : '/pics/yali/'
+  return process.env.API + picdir + 'thumbnails/' + p
 }
 function getList() {
-  console.log("-fn-getList")
-  const path = process.env.API + "/yalipics/getList"
+  console.log(`-fn-getList isIM=${isIM}`)
+  const path = process.env.API + "/yalipics/getList/${isIM}"
   gaxios(path)
 }
 function setList(da) {
-  console.log(`-fn-setList total number of pics=${da.lst.length}`)
+  console.log(`-fn-setList total number of pics=${da.lst.length}`, da.lst)
   pics.value = da.lst
   dates.value = da.dates
   ratios.value = da.ratios

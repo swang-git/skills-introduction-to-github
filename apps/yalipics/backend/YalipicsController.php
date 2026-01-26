@@ -25,9 +25,11 @@ class YalipicsController extends Controller {
 	 * @return [type] [description]
 	 */
 	public function index() { }
-  public function getList() { Log::info("YalipicsController->getList");
+  public function getList($isIM=false) { Log::info("YalipicsController->getList");
+    $picdir = "/sites/webdata/pics/yali";
+    if ($isIM) $picdir = "/sites/webdata/pics/yaliIM";
 		$thumbnails = [];
-		$thumbnaildir = "/sites/webdata/pics/yali/thumbnails";
+		$thumbnaildir = "$picdir/thumbnails";
 		// Open a known directory, and proceed to scandir its contents
     $thumbnails = array_diff(scandir($thumbnaildir), ['.', '..']);
 
@@ -36,16 +38,16 @@ class YalipicsController extends Controller {
       return filemtime($thumbnaildir . '/' . $b) - filemtime($thumbnaildir . '/' . $a);
     });
 
-    $picdir = "/sites/webdata/pics/yali";
     $dates = [];
     $ratios = [];
     // $rat1 = [];
     // $rat2 = [];
     foreach($thumbnails as $fnm) {
       $dates[] = date('Y.n.j', filemtime($thumbnaildir . '/' . $fnm));
-      list($width, $height) = getimagesize($picdir . '/' . preg_replace('/_thumbnail/', '', $fnm));
-      $ratio = $width / $height;
-      $ratios[] = $ratio;
+      // list($width, $height) = getimagesize($picdir . '/' . preg_replace('/_thumbnail/', '', $fnm));
+      // list($width, $height) = getimagesize("$picdir/$fnm");
+      // $ratio = $width / $height;
+      // $ratios[] = $ratio;
       // Log:info("ratio=$ratio width=$width height=$height");
       // if ($ratio < 1) $rat1[] = $fnm;
       // else $rat2[] = $fnm; 

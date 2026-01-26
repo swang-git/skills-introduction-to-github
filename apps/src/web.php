@@ -413,7 +413,7 @@ Route::group (
 Route::group (
   array('prefix' => 'yalipics'), function() {
     Route::view('list', 'yalipics'); 
-    Route::get ('getList', 'YalipicsController@getList'); //->middleware('auth');
+    Route::get ('getList/{isIM}', 'YalipicsController@getList'); //->middleware('auth');
   }
 );
 Route::group (

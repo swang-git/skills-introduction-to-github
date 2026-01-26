@@ -1,6 +1,6 @@
 <template>
 <q-dialog v-model="opened" :transition-show="picidx%2==0 ? 'slide-right' : 'slide-left'" maximized>
-  <q-card class="bg-red-4" style="height:45px">
+  <q-card class="bg-red-4" style="height:45px;z-index:10">
     <q-card-actions align="between">
       <q-btn glossy rounded class="bg-teal" v-close-popup>
         <q-icon left name="cancel" size="md" color="lime" />
@@ -31,17 +31,18 @@
     </q-card-actions>
   </q-card>
   <div class="bg-grey-4" :transition-show="picidx%2==0 ? 'rotate' : 'slide-left'">
-    <img id="imgId" class="q-pa-xs fixed" :src="getPic()" :width="getWidth()" :height="getHeight()" style="left:50%; top:50%; transform:translate(-50%, -50%);" @click="stopSlideshow()" />
+    <img v-if="winW/winH>1" id="imgId" class="q-pa-xs fixed" :src="getPic()" :height="winH" style="left:50%; top:50%; transform:translate(-50%, -50%);" @click="stopSlideshow()" />
+    <img v-else id="imgId" class="q-pa-xs fixed" :src="getPic()" :width="winW" style="left:50%; top:50%; transform:translate(-50%, -50%);" @click="stopSlideshow()" />
     <div v-show="showPicInfo" class="q-pt-md q-pl-md text-h6">{{ getPic() }}</div>
-    <!-- <img id="imgId" loading="lazy" class="q-pa-xs fixed" :src="getPic()" :height="ratlst[picidx]<1 ? winH : winH / ratlst[picidx]" style="left:50%; top:50%; transform:translate(-50%, -50%);" @click="stopSlideshow()" /> -->
+    <!-- <img id="imgId" loading="lazy" class="q-pa-xs fixed" :src="getPic()" :height="ratlst[picidx]<1 ? winH : winH / ratlst[picidx]" style="left:50%; top:50%; transform:translate(-50%, -50%);" @click="toggleSlideshow()" /> -->
     <!-- <img id="imgId" class="q-pa-xs fixed" :src="getPic()" :width="getWidth()" :height="getHeight()"
     style="left:50%; top:50%; transform:translate(-50%, -50%)"
     fit="fill"
-    @click="stopSlideshow()" /> -->
-    <!-- <q-img :src="getPic()" @click="stopSlideshow()" /> -->
+    @click="toggleSlideshow()" /> -->
+    <!-- <q-img :src="getPic()" @click="toggleSlideshow()" /> -->
   </div>
 
-  <q-card class="bg-cyan-4 q-px-sm" style="margin:-150px 0 0 0;height:50px">
+  <q-card class="bg-cyan-4 q-px-" style="margin:-150px 0 0 0;height:50px">
     <q-card-actions align="between">
       <q-btn glossy rounded class="bg-teal-9" @click="--picidx<0 ? picidx=piclst.length-1 : picidx">
         <q-icon left name="arrow_circle_left" size="md" color="lime" />
@@ -114,8 +115,15 @@ function getHeight () {
 }
 
 function stopSlideshow () {
+  console.log(`-fn-stopSlideshow`)
   slideshowing.value = false
   clearInterval(intervalId.value)
+}
+function toggleSlideshow () {
+  console.log(`-fn-toggleSlideshow`)
+  slideshowing.value = !slideshowing.value
+  if (slideshowing.value) slideshow()
+  else clearInterval(intervalId.value)
 }
 function slideshow () {
   if (slideshowing.value) return
@@ -128,7 +136,8 @@ function slideshow () {
 }
 function getPic () {
   console.log(`jpgname=${piclst.value[picidx.value]} ratio=${ratlst.value[picidx.value]} wid=${getWidth()} hit=${getHeight()}`)
-  return process.env.API + '/pics/yali/' + piclst.value[picidx.value]
+  let picdir = isIM ? '/pics/yaliIM/' : '/pics/yali/'
+  return process.env.API + picdir + piclst.value[picidx.value]
 }
 // const getMeta = (url, cb) => {
 //   const img = new Image();
