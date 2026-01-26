@@ -44,10 +44,10 @@ class YalipicsController extends Controller {
     // $rat2 = [];
     foreach($thumbnails as $fnm) {
       $dates[] = date('Y.n.j', filemtime($thumbnaildir . '/' . $fnm));
-      // list($width, $height) = getimagesize($picdir . '/' . preg_replace('/_thumbnail/', '', $fnm));
-      // list($width, $height) = getimagesize("$picdir/$fnm");
-      // $ratio = $width / $height;
-      // $ratios[] = $ratio;
+      list($width, $height) = getimagesize($picdir . '/' . preg_replace('/_thumbnail/', '', $fnm));
+      list($width, $height) = getimagesize("$picdir/$fnm");
+      $ratio = $width / $height;
+      $ratios[] = $ratio;
       // Log:info("ratio=$ratio width=$width height=$height");
       // if ($ratio < 1) $rat1[] = $fnm;
       // else $rat2[] = $fnm; 
