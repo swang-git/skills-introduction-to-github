@@ -23,7 +23,7 @@ import emitter from "tiny-emitter/instance"
 import { axiosFunctions } from "../src/composables/axiosFunctions"
 const { gaxios } = axiosFunctions();
 import { libFunctions } from "../src/composables/libFunctions"
-const { isIM } = libFunctions();
+const { isIM, buildApp } = libFunctions();
 // import PicScreenFit from './PicScreenFit'
 import PicDialog from './PicDialog'
 const showPiclst = ref(true)
@@ -38,6 +38,7 @@ console.log("-ST-yalipics/PicList")
 document.title = '娅莉硬笔画'
 onMounted(() => refPicDialog)
 emitter.on("yalipics-getList", (x) => setList(x))
+buildApp('娅莉硬笔画', 'yalipics')
 getList();
 
 // ---- function section -----

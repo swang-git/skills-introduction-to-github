@@ -32,7 +32,7 @@
   </q-card>
   <div class="bg-grey-4" :transition-show="picidx%2==0 ? 'rotate' : 'slide-left'">
     <img v-if="winW/winH>1" id="imgId" class="q-pa-xs fixed" :src="getPic()" :height="winH" style="left:50%; top:50%; transform:translate(-50%, -50%);" @click="stopSlideshow()" />
-    <img v-else id="imgId" class="q-pa-xs fixed" :src="getPic()" :width="winW" style="left:50%; top:50%; transform:translate(-50%, -50%);" @click="stopSlideshow()" />
+    <img v-else id="imgId" class="q-pa-xs fixed" :src="getPic()" :width="winW-10" style="left:50%; top:50%; transform:translate(-50%, -50%);" @click="stopSlideshow()" />
     <div v-show="showPicInfo" class="q-pt-md q-pl-md text-h6">{{ getPic() }}</div>
     <!-- <img id="imgId" loading="lazy" class="q-pa-xs fixed" :src="getPic()" :height="ratlst[picidx]<1 ? winH : winH / ratlst[picidx]" style="left:50%; top:50%; transform:translate(-50%, -50%);" @click="toggleSlideshow()" /> -->
     <!-- <img id="imgId" class="q-pa-xs fixed" :src="getPic()" :width="getWidth()" :height="getHeight()"
