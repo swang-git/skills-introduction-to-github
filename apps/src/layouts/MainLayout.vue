@@ -27,7 +27,7 @@
               <q-btn v-if="/watcher/i.test(curApp)"    round glossy color="purple" icon="图" class="chicon-pos" @click="showWatcherChart" />
               <q-btn v-if="/glucoseche/i.test(curApp)" round glossy color="blue-9" icon="释" class="chicon-pos" @click="getA1cDefinitions()" />
               <q-btn v-if="/glucoseche/i.test(curApp)" round glossy color="teal-9" icon="空" class="chicon-pos" @click="showClvlChart" />
-              <q-btn v-if="/glucoseche/i.test(curApp)" round glossy color="indigo" icon="E" class="chicon-pos" @click="toggleEngVer" />
+              <q-btn v-if="/glucoseche/i.test(curApp)" round glossy color="indigo" :icon="engVer? '汉' : '英'" class="chicon-pos" @click="toggleEngVer" />
               <q-btn v-if="/bankstatem/i.test(curApp)" round glossy color="teal-9" icon="图" class="chicon-pos" @click="emitter.emit('show-charts')" />
               <q-btn v-if="/healthtest/i.test(curApp)" round glossy color="teal-9" icon="图" class="chicon-pos" @click="showHealthTestChart" />
               <div v-if="/PancreaticFluid/i.test(curApp)" class="q-pl-md q-pb-sm"><q-btn round glossy size="11px" color="indigo" icon="add" @click="togglePFSum" /></div>
@@ -76,8 +76,9 @@
             <AppItem appl="高 尔 夫 球" colr="green-9"  iclr="yellow" size="27px" styl="margin:-1px 0 0 0" icon="golf_course" appn="../golf" />
             <AppItem appl="英 汉 字 典" colr="brown-9"  iclr="yellow" size="25px" styl="margin:-1px 0 0 0" icon="translate" appn="dictionary" />
             <AppItem appl="法 定 假 日" colr="pink-9"   iclr="yellow" size="25px" styl="margin:-1px 0 0 0" icon="card_giftcard" appn="" @click="showHolidays()" />
+            <AppItem appl="娅 莉 字 画" colr="indigo-9" iclr="pink"  size="25px" styl="margin:-6px 0 0 0" icon="娅" appn="yalipics" />
             <AppItem appl="健 康 检 查" colr="indigo-9" iclr="white"  size="25px" styl="margin:-6px 0 0 0" icon="查" appn="htlist" />
-            <AppItem appl="胰 流 报 告" colr="grey-9"   iclr="yellow" size="25px" styl="margin:-5px 0 0 0" icon="胰" appn="pfcheck" />
+            <!-- <AppItem appl="胰 流 报 告" colr="grey-9"   iclr="yellow" size="25px" styl="margin:-5px 0 0 0" icon="胰" appn="pfcheck" /> -->
             <!-- <AppItem appl="电 视 列 表" colr="grey-9"   iclr="yellow" size="25px" styl="margin:-5px 0 0 0" icon="视" appn="tvmanager" /> -->
             <!-- <AppItem appl="跳 转 首 页" colr="amber-9"                size="25px" styl="margin:-9px 0 0 0" icon="🏠" appn="/" /> -->
 
@@ -160,6 +161,7 @@ const oneHour = 1000 * 60 * 60
 var isShowVersion = false
 var flipVal = $q.version
 var audCookies = ref(false)
+var engVer = ref(true)
 var searchQuery = ref('')
 
 //== emitter-on
@@ -288,6 +290,7 @@ function showClvlChart () {
 }
 function toggleEngVer () {
   console.log('-fn-toggleEngVer')
+  engVer.value = !engVer.value
   emitter.emit('toggle-eng-ver')
 }
 function showHolidays () {
