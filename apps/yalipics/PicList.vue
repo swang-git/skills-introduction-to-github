@@ -34,7 +34,7 @@ const ratios = ref([])
 const refPicDialog = ref(null)
 
 // ---- main starts ----------
-console.log("-ST-yalipics/PicList")
+console.log(`-ST-yalipics/PicList isIM=${isIM}`)
 document.title = '娅莉硬笔画'
 onMounted(() => refPicDialog)
 emitter.on("yalipics-getList", (x) => setList(x))
@@ -53,7 +53,7 @@ function getImg(p) {
 }
 function getList() {
   console.log(`-fn-getList isIM=${isIM}`)
-  const path = process.env.API + "/yalipics/getList/${isIM}"
+  const path = process.env.API + '/yalipics/getList/' + (isIM ? '1' : '0')
   gaxios(path)
 }
 function setList(da) {
