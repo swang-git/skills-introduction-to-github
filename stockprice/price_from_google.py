@@ -45,7 +45,7 @@ def get_stock_quote_txt(date, stock):
 
     for idx, line in enumerate(lines):
         line = lines[idx]
-        if re.match(r'^\d+.\d+\s+USD', line):
+        if re.match(r'^\d+.\d+\s+USD$', line):
             price = line.split(' ')[0]
             # print('-CK- line=[%s]'%price)
             check_number('price', price, stock, line)

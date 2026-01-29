@@ -493,9 +493,9 @@ function getList () {
   gaxios(path)
 }
 function convToEngWeek(wk) {
-  return wk=='一' ? 'M' : wk=='二' ? 'tu' : wk=='三' ? 'W' : wk=='四' ? 'th' : wk=='五' ? 'F' : wk=='六' ? 'sa' : 'su'
+  // return wk=='一' ? 'M' : wk=='二' ? 'tu' : wk=='三' ? 'W' : wk=='四' ? 'th' : wk=='五' ? 'F' : wk=='六' ? 'sa' : 'su'
   // return wk=='一' ? 'M' : wk=='二' ? 'T' : wk=='三' ? 'W' : wk=='四' ? 'T' : wk=='五' ? 'F' : wk=='六' ? 'S' : 'S'
-  // return wk=='一' ? 'M' : wk=='二' ? 'Tu' : wk=='三' ? 'We' : wk=='四' ? 'Th' : wk=='五' ? 'Fr' : wk=='六' ? 'Sa' : 'Su'
+  return wk=='一' ? 'M' : wk=='二' ? 'Tu' : wk=='三' ? 'W' : wk=='四' ? 'Th' : wk=='五' ? 'F' : wk=='六' ? 'Sa' : 'Su'
 }
 function setList (da) {
   // console.log('-fn-setList', da.lst.filter(p => p.fastingSearch==='glucose'), da)

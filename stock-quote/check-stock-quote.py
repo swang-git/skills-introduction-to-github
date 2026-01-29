@@ -56,7 +56,7 @@ def print_rows_prior_day(rows):
         totalValue = f"{totalValue:,.2f}"
         load_time = rows[5].load_time
         dday = load_time.strftime('%Y-%m-%d (%a)')
-        printTailer(sp, totalValue, f'Date: {dday}', padsp(sp, 58) + f'{database}.stock_quotes')
+        printTailer(sp, totalValue, f'Date: {dday}', padsp(sp, 60) + f'{database}.stock_quotes')
 
 def print_rows(rows, cdiff, spgap):
     symbols = ['T', 'WBD', 'CHTR', 'DELL', 'CSCO', 'MSFT']
@@ -107,8 +107,10 @@ if __name__=="__main__":
     cdiff2, difflen2 = get_formated_data(diff2)
     cdiff = cdiff1 + ' diff w/ prvday ~ ' + cdiff2 + ' w/ curday pchange'
     spc = ' '    
-    tlen = 16
-    spgap = (tlen - difflen1 - difflen2)*spc
+    tlen = 18
+    sps = tlen - difflen1 - difflen2
+    spgap = sps*spc
+    # print(f"tlen=[{tlen}] difflen1=[{difflen1}] difflen2=[{difflen2}] sps=[{sps}]")
     print_rows(rowst, cdiff, spgap)
     print(' ╚' + 128*'═' + '╝')
     sys.exit(0)
