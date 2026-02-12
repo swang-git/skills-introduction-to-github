@@ -48,7 +48,7 @@ function showPicScreenFit () {
   router.replace({ path: 'yalipics/slide' })
 }
 function getImg(p) {
-  let picdir = isIM ? '/pics/yaliIM/' : '/pics/yali/'
+  let picdir = isIM ? '/pics/yali/' : '/pics/yali/'
   return process.env.API + picdir + 'thumbnails/' + p
 }
 function getList() {

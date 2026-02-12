@@ -32,12 +32,20 @@
   </q-card>
   <div class="bg-grey-4" :transition-show="picidx%2==0 ? 'rotate' : 'slide-left'">
     <div v-if="isIM">
-      <img v-if="winW/winH>1" id="imgId" class="q-pa-xs fixed" :src="getPic()" :height="winH" style="left:50%; top:50%; transform:translate(-50%, -50%);" @click="stopSlideshow()" />
-      <img v-else id="imgId" class="q-pa-xs fixed" :src="getPic()" :width="winW-10" style="left:50%; top:50%; transform:translate(-50%, -50%);" @click="stopSlideshow()" />
+      <div class="row justify-between">
+        <q-btn flat icon="" size="lg" @click="--picidx<0 ? picidx=piclst.length-1 : picidx" style="display:flex;align-items:center;min-height:100vh;z-index:1" />
+        <img v-if="winW/winH>1" id="imgId" class="q-pa-xs fixed" :src="getPic()" :height="winH" style="left:50%; top:50%; transform:translate(-50%, -50%);" @click="stopSlideshow()" />
+        <img v-else id="imgId" class="q-pa-xs fixed" :src="getPic()" :width="winW-10" style="left:50%; top:50%; transform:translate(-50%, -50%);" @click="stopSlideshow()" />
+        <q-btn flat icon="" size="lg" @click="++picidx>=piclst.length ? picidx=0 : picidx" />
+      </div>
     </div>
     <div v-else>
-      <img v-if="ratlst[picidx]>1" id="imgId" class="q-pa-xs fixed" :src="getPic()" :width="winW" style="left:50%; top:50%; transform:translate(-50%, -50%);" @click="stopSlideshow()" />
-      <img v-else id="imgId" class="q-pa-xs fixed" :src="getPic()" :height="winH" style="left:50%; top:50%; transform:translate(-50%, -50%);" @click="stopSlideshow()" />
+      <div class="row justify-between">
+        <q-btn flat icon="" size="lg" @click="--picidx<0 ? picidx=piclst.length-1 : picidx" style="display:flex;align-items:center;min-height:100vh;z-index:1" />
+        <img v-if="ratlst[picidx]>1" id="imgId" class="q-pa-xs fixed" :src="getPic()" :width="winW" style="left:50%; top:50%; transform:translate(-50%, -50%);" @click="stopSlideshow()" />
+        <img v-else id="imgId" class="q-pa-xs fixed" :src="getPic()" :height="winH" style="left:50%; top:50%; transform:translate(-50%, -50%);" @click="stopSlideshow()" />
+        <q-btn flat icon="" size="lg" @click="++picidx>=piclst.length ? picidx=0 : picidx" />
+      </div>
     </div>
     <div v-show="showPicInfo" class="q-pt-md q-pl-md text-h6">{{ getPic() }}</div>
     <!-- <img id="imgId" loading="lazy" class="q-pa-xs fixed" :src="getPic()" :height="ratlst[picidx]<1 ? winH : winH / ratlst[picidx]" style="left:50%; top:50%; transform:translate(-50%, -50%);" @click="toggleSlideshow()" /> -->
@@ -114,7 +122,7 @@ function getWidth ()  {
   console.log(`-fn-getWidth ratio=${ratio} wid=${wid} winW=${winW}`)
   return wid
 }
-function getHeight () { 
+function getHeight () {
   let hit = ratlst.value[picidx.value] < 1 ? winH : null
   hit = Math.min(hit, winH)
   return hit == 0 ? null : hit
@@ -142,7 +150,7 @@ function slideshow () {
 }
 function getPic () {
   console.log(`jpgname=${piclst.value[picidx.value]} ratio=${ratlst.value[picidx.value]} wid=${getWidth()} hit=${getHeight()}`)
-  let picdir = isIM ? '/pics/yaliIM/' : '/pics/yali/'
+  let picdir = isIM ? '/pics/yali/' : '/pics/yali/'
   return process.env.API + picdir + piclst.value[picidx.value]
 }
 // const getMeta = (url, cb) => {

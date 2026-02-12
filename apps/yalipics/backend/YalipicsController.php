@@ -26,8 +26,8 @@ class YalipicsController extends Controller {
 	 */
 	public function index() { }
   public function getList($isIM=0) { Log::info("YalipicsController->getList isIM=$isIM");
-    $picdir = "/sites/webdata/pics/yali";
-    if ($isIM) $picdir = "/sites/webdata/pics/yaliIM";
+    $picdir = "/Users/swang/sites/webdata/pics/yali";
+    //if ($isIM) $picdir = "/sites/webdata/pics/yaliIM";
 		$thumbnails = [];
 		$thumbnaildir = "$picdir/thumbnails";
 		// Open a known directory, and proceed to scandir its contents

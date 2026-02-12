@@ -330,7 +330,7 @@ class ExpenseController extends Controller {
 		$nd['subcat_id'] = $d['subcId'];
 		$nd['payee_id'] = $d['payeId'];
 		$nd['paymethod_id'] = $d['paymId'];
-		$nd['totalpaid'] = preg_match('/Refund|Trade in|Credit/', $subc) ? -abs($d->cost) : abs($d->cost);
+		$nd['totalpaid'] = preg_match('/Refund|Trade in|Credit|Property Tax Relief/', $subc) ? -abs($d->cost) : abs($d->cost);
 		$nd['unitprice'] = $d['unip'];
 		$nd['quantity'] = $d['quan'];
 		$nd['miles'] = $d['mile'];
