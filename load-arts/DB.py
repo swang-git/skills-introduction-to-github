@@ -9,7 +9,7 @@ from Models import HomePage
 from Models import ArtItem
 import sys, os
 
-dbconf = "mysql+pymysql://swang:Ybsjll11@localhost/MyWeb?charset=utf8mb4"
+dbconf = "mysql+pymysql://swang:VVKKll11##@localhost/MyWeb?charset=utf8mb4"
 # engine = create_engine(dbconf, encoding='utf8', echo=False)
 engine = create_engine(dbconf, echo=False)
 
