@@ -18,7 +18,8 @@
 
           <div v-if="isGolfPlayRelated() || isGolfMembership()">
             <div class="row">
-              <NumInput class="col-6" v-if="isCCAutopay(row)" :obj="row" :showRight="true" :rightIcon="true" label="Fidelity CCard Payment" mask="#.##" icon="monetization_on" iColor="orange" @disable-gc="setGcard" />
+              <NumInput class="col-6" v-if="isFCCAutopay(row)" :obj="row" :showRight="true" :rightIcon="true" label="Fidelity CCard Payment" mask="#.##" icon="monetization_on" iColor="orange" @disable-gc="setGcard" />
+              <NumInput class="col-6" v-else-if="isCCCAutopay(row)" :obj="row" :showRight="true" :rightIcon="true" label="Chase CCard Payment" mask="#.##" icon="monetization_on" iColor="orange" @disable-gc="setGcard" />
               <NumInput class="col-6" v-else :obj="row" label="Total Cost" :rightIcon="true" mask="#.##" icon="monetization_on" iColor="orange" @disable-gc="setGcard" />
               <NumInput v-if="isGolfPlay()" class="col-6" :obj="row" :label="isIM ? 'W or L' : 'Won or Lost'" :showRight="true" :rightIcon="true" mask="" icon="paid" iColor="yellow" />
             </div>
@@ -39,8 +40,9 @@
             </div>
           </div>
           <div v-else>
-            <NumInput v-if="!isCCAutopay(row)" :obj="row" label="Total Cost" iconSize="lg" :showRight="true" :rightIcon="true" mask="#.##" icon="paid" iColor="amber" @disable-gc="setGcard" />
-            <NumInput v-else :obj="row" label="Fidelity CCard Payment" iconSize="lg" :showRight="true" :rightIcon="true" mask="#.##" icon="paid" iColor="teal-2" @disable-gc="setGcard" />
+            <NumInput v-if="isFCCAutopay(row)" :obj="row" label="Fidelity CCard Payment" iconSize="lg" :showRight="true" :rightIcon="true" mask="#.##" icon="paid" iColor="amber" @disable-gc="setGcard" />
+            <NumInput v-else-if="isCCCAutopay(row)" :obj="row" label="Chase CCard Payment" iconSize="lg" :showRight="true" :rightIcon="true" mask="#.##" icon="paid" iColor="amber" @disable-gc="setGcard" />
+            <NumInput v-else :obj="row" label="Total Cost" iconSize="lg" :showRight="true" :rightIcon="true" mask="#.##" icon="paid" iColor="teal-2" @disable-gc="setGcard" />
           </div>
           <div v-if="row.paym==='Fidelity Credit Card' && showPostDate">
             <datepicker label="Set Post Date for Payment or Refund" :date="row.post_date" txsz="text-h6" @upd-date="setPostDate" />
@@ -245,7 +247,8 @@ function isGolfMembership () {
   const subc = row.value.subc
   return row.value.cats === 'Golf' && 'Membership' === subc
 }
-function isCCAutopay () { return row.value.subc === 'Monthly Autopay' && row.value.paye === 'Fidelity Credit Card' }
+function isFCCAutopay () { return row.value.subc === 'Monthly Autopay' && row.value.paye === 'Fidelity Credit Card' }
+function isCCCAutopay () { return row.value.subc === 'Monthly Autopay' && row.value.paye === 'Chase Credit Card' }
 function isAutoGaso () { return row.value.cats==='Auto' && row.value.subc==='Gasoline' }
 function saveNote(val) {
   row.value.note = val
@@ -648,11 +651,30 @@ function isRightGolfCourseForGolfPlay () {
 }
 function setNoteAndLink () {
   row.value.link = 'fidelity_credit_card/' + row.value.date.substring(0,10)+'.pdf'
-  let x = row.value.note.split(' ~ ')
-  let beginDay=x[1].addDays(1)
-  let endDay=beginDay.addDays(29)
-  row.value.note = beginDay + ' ~ ' + endDay
-  console.log(`row.value.date=${row.value.date}`)
+  let beginDay = null
+  let endDay = null
+  let regexSeparator = /\s+~|-\s+/
+  let x = row.value.note.split(regexSeparator)
+  let x0 = x[0].trim()
+  let x1 = x[1].trim()
+  // console.log(`-CK-open/close dates=${x[1]}`, x)
+  let datePat = /\d\d\/\d\d\/\d\d/ // US date format MM/DD/YY
+  if (datePat.test(x0) && datePat.test(x1)) {
+    let xx = x0.split('\/')
+    beginDay = '20' + xx[2] + '-' + xx[0] + '-' + xx[1]
+    // console.log(`beginDay=${beginDay}`)
+    let yy = x1.split('\/')
+    endDay = '20' + yy[2] + '-' + yy[0] + '-' + yy[1]
+    console.log(`endDay=${endDay}`)
+    row.value.note = beginDay + ' ~ ' + endDay
+  } else {
+    beginDay=x0 // assuming format yyyy-mm-dd
+    endDay=x1
+    // beginDay=x[1].addDays(1)
+    // endDay=beginDay.addDays(29)
+    row.value.note = beginDay + ' ~ ' + endDay
+  }
+  console.log(`row.value.date=${row.value.date} beginDay=${beginDay} endDay=${endDay}`)
   console.log(`row.value.link=${row.value.link}`)
   console.log(`row.value.note=${row.value.note}`,row.value)
 }

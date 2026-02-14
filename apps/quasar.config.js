@@ -54,6 +54,7 @@ module.exports = function (ctx) { // can be async too
           warnings: false,
           // 删除所有的 `console` 语句，可以兼容ie浏览器
           drop_console: true,
+          // drop_console: false,
           // 内嵌定义了但是只用到一次的变量
           collapse_vars: true,
           // 提取出出现多次但是没有定义成变量去引用的静态值
@@ -79,7 +80,7 @@ module.exports = function (ctx) { // can be async too
     devServer: {
       https: false,
       host: 'devx',
-      // port: ctx.mode.spa ? '8080' : (ctx.mode.pwa ? 9080 : 9090),
+      port: ctx.mode.spa ? '8080' : (ctx.mode.pwa ? 9080 : 9090),
       proxy: [
         {
           context: ['/api'],
