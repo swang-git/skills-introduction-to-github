@@ -121,5 +121,6 @@ trait ParserFlagPDFTrait {
     else if (preg_match('/^Activity Debit Card Summary/', $line)) self::$actvFlag = 'Debit Card Activity';
     else if (preg_match('/^Other\s+Activity\s+Out/', $line)) self::$actvFlag = 'OtherActivityOut';
     else if (preg_match('/^Other\s+Activity\s+In/', $line)) self::$actvFlag = 'OtherActivityIn';
+    else if (preg_match('/^Debit Card Activity/', $line)) self::$actvFlag = 'Hsa Debit Card Activity';
   }
 }

@@ -21,7 +21,7 @@ export function axiosFunctions() {
     
     axios.get(path).then((response) => {
       const da = response.data
-      console.log(`%cGTGT:${target}(${da.status})`, "font-size:10px;font-weight:600;color:yellow")
+      console.log(`%cGTGT:${target}(${da.status})`, "font-size:10px;font-weight:600;color:yellow", da)
       if (da.status === 'FAILED') {
         notifyFunc(path, target, da.errmsg)
       } else {
