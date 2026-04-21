@@ -1,0 +1,2 @@
+n=1;tag=ya_20260418;for f in *.jpg; do echo "$f" "$(printf "${tag}_%02d.jpg" $n)"; ((n++));done
+n=1; for f in *.jpg *.JPG; do mv -n "$f" "$(printf "image_%03d.jpg" $n)"; ((n++)); done

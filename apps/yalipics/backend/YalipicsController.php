@@ -40,14 +40,14 @@ class YalipicsController extends Controller {
       return filemtime($b) - filemtime($a);
     });
 
-    $dates = [];
+    $datetms = [];
     $ratios = [];
     // $rat1 = [];
     // $rat2 = [];
     $filelist = [];
     foreach($thumbnails as $fnm) {
-      // $dates[] = date('Y.n.j', filemtime($thumbnaildir . '/' . $fnm));
-      $dates[] = date('Y.n.j', filemtime($fnm));
+      // $datetms[] = date('Y.n.j', filemtime($thumbnaildir . '/' . $fnm));
+      $datetms[] = date('Y.n.j H:i', filemtime($fnm));
       // list($width, $height) = getimagesize($picdir . '/' . preg_replace('/_thumbnail/', '', $fnm));
       // list($width, $height) = getimagesize("$picdir/$fnm");
       list($width, $height) = getimagesize($fnm);
@@ -55,7 +55,7 @@ class YalipicsController extends Controller {
       $ratios[] = $ratio;
       // Log:info("ratio=$ratio width=$width height=$height");
       // if ($ratio < 1) $rat1[] = $fnm;
-      // else $rat2[] = $fnm; 
+      // else $rat2[] = $fnm;
       $filelist[] = basename($fnm); // $fnm is fullpath
     }
     // Log::info("ratios", $ratios);
@@ -63,8 +63,8 @@ class YalipicsController extends Controller {
     // $tlst = array_merge($rat1, $rat2);
     // $tlst = $rat1 + $rat2;
 
-    // return ['lst' => $thumbnails, 'dates' => $dates, 'ratios' => $ratios, 'status' => "OK"];
-    // return ['lst' => $tlst, 'dates' => $dates, 'ratios' => $ratios, 'status' => "OK"];
-    return ['lst' => $filelist, 'dates' => $dates, 'ratios' => $ratios, 'status' => "OK"];
+    // return ['lst' => $thumbnails, 'datetms' => $datetms, 'ratios' => $ratios, 'status' => "OK"];
+    // return ['lst' => $tlst, 'datetms' => $datetms, 'ratios' => $ratios, 'status' => "OK"];
+    return ['lst' => $filelist, 'datetms' => $datetms, 'ratios' => $ratios, 'status' => "OK"];
   }
 }

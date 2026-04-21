@@ -13,7 +13,7 @@
 Yr=`date +%Y`
 
 ##doc_dir=/run/media/swang/Seagate/BAK/dc
-doc_dir=/Users/swang/linmbak/dc
+doc_dir=/Users/swang/BAK/dc
 tar_file=${doc_dir}/${Yr}.tar
 
 docs_dir=/Users/swang/sites/webdata/docs

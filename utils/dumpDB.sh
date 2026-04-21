@@ -12,7 +12,7 @@ if [ $dd -eq 0 ]; then
   ##echo "new value for dd=$dd"
 fi
 d0=$(($dd%2))
-target_file=/Users/swang/linmbak/db/dump_${d0}_${db}.sql
+target_file=/Users/swang/BAK/db/dump_${d0}_${db}.sql
 
 echo dumping database $target_file $argv
 

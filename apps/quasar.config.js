@@ -80,7 +80,7 @@ module.exports = function (ctx) { // can be async too
     devServer: {
       https: false,
       host: 'devx',
-      port: ctx.mode.spa ? '8080' : (ctx.mode.pwa ? 9080 : 9090),
+      //port: ctx.mode.spa ? '8080' : (ctx.mode.pwa ? 9080 : 9090),
       proxy: [
         {
           context: ['/api'],

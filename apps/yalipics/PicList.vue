@@ -4,7 +4,7 @@
 <q-card class="flex flex-center" style="background:teal">
   <q-card-actions align="between">
     <div v-for="(p, idx) in pics" :key=p class="q-px-xs">
-      <img :src="getImg(p)" :height="isIM ? '171' : '150'" :width="isIM ? '171' : '150'" class="q-pa-xs cursor-pointer" @click="refPicDialog.openIt(idx, pics, dates, ratios)" />
+      <img :src="getImg(p)" :height="isIM ? '171' : '150'" :width="isIM ? '171' : '150'" class="q-pa-xs cursor-pointer" @click="refPicDialog.openIt(idx, pics, datetms, ratios)" />
       <!-- <img :src="getImg(p)" :height="isIM ? '171' : '150'" :width="isIM ? '171' : '150'" class="q-pa-xs cursor-pointer" @click="router.push({ path:'yalipics/slide' })" /> -->
     </div>
   </q-card-actions>
@@ -12,7 +12,7 @@
 <PicDialog ref="refPicDialog" />
 </div>
 <div v-show="showScreenFit">
-<!-- <PicScreenFit :piclst="pics.map(p => p.replace('_thumbnail', ''))" :datlst="dates" :ratlst="ratios" /> -->
+<!-- <PicScreenFit :piclst="pics.map(p => p.replace('_thumbnail', ''))" :datlst="datetms" :ratlst="ratios" /> -->
 </div>
 </template>
 <script setup>
@@ -29,7 +29,7 @@ import PicDialog from './PicDialog'
 const showPiclst = ref(true)
 const showScreenFit = ref(false)
 const pics = ref([])
-const dates = ref([])
+const datetms = ref([])
 const ratios = ref([])
 const refPicDialog = ref(null)
 
@@ -59,7 +59,7 @@ function getList() {
 function setList(da) {
   console.log(`-fn-setList total number of pics=${da.lst.length}`, da.lst)
   pics.value = da.lst
-  dates.value = da.dates
+  datetms.value = da.datetms
   ratios.value = da.ratios
 }
 </script>

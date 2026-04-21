@@ -7,7 +7,8 @@
         <span class="text-bold text-cyan-2 text-body1" style="margin: 0 4px 0 -10px">关闭</span>
       </q-btn>
       <!-- <div class="text-h5">共 {{ piclst.length }} 幅 </div> -->
-      <div class="text-h5" @click="openTxtPad"> {{ datlst[picidx] }} </div>
+      <div class="text-h5" @click="openTxtPad"> {{ datetms[picidx] }} </div>
+      <!-- <div class="text-h5" @click="openTxtPad"> {{ datetms[picidx] }}<span v-if="!isIM" class="text-body1">/{{ piclst[picidx] }}</span> </div> -->
       <q-btn-group glossy rounded>
       <q-btn round color="teal-8" text-color="lime" @click="openNumPad">
         <span class="text-bold text-cyan-2 text-body1" style="margin: 0 4px 0 4px">
@@ -85,7 +86,7 @@
 import { ref, computed } from 'vue'
 import emitter from 'tiny-emitter/instance'
 import { libFunctions } from "../src/composables/libFunctions"
-const { isIM, isDesk, isIPad } = libFunctions()
+const { isIM } = libFunctions()
 import TxtPad from "../src/components/TxtPad"
 import NumPad from "../src/components/NumPad"
 const opened = ref(false)
@@ -95,10 +96,10 @@ const intervalId = ref(-1)
 const intervalDelay = ref(1500)
 const picidx = ref(-1)
 const piclst = ref([])
-const datlst = ref([])
+const datetms = ref([])
 const ratlst = ref([])
-const imgW = ref(0)
-const imgH = ref(0)
+// const imgW = ref(0)
+// const imgH = ref(0)
 const winW = sizes().windowWidth
 const winH = sizes().windowHeight - 100
 defineExpose({ openIt })
@@ -107,7 +108,7 @@ console.log(`-CK-winW=${winW} winH=${winH}`)
 const compIntervalDelay = computed(() => { return intervalDelay.value })
 
 function openNumPad () {
-  const filenum = picidx.value + 1
+  // const filenum = picidx.value + 1
   emitter.emit('open-num-pad', 1, '要看那幅画')
 }
 function openTxtPad () {
@@ -183,11 +184,11 @@ function sizes () {
 //   imgH.value = img.height
 //   console.log(`-fn-open-it idx=${picidx.value} width=${imgW.value} height=${imgH.value}`)
 // }
-function openIt(idx, pics, dates, ratios) {
+function openIt(idx, pics, datms, ratios) {
   // console.log(sizes())
-  console.log(`-fn-openIt idx=${idx}`, dates[0], pics[0])
+  console.log(`-fn-openIt idx=${idx} datetms[idx]=${datms[idx]}`, pics[0])
   piclst.value = pics.map(p => p.replace('_thumbnail', ''))
-  datlst.value = dates
+  datetms.value = datms
   ratlst.value = ratios
   picidx.value = idx
   // getMeta(getPic(), callback)
