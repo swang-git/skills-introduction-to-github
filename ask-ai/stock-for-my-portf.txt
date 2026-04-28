@@ -1,0 +1,15 @@
+1, find latest stock price, price change, 52-week high/low for MSFT, CSCO, DELL, CHTR, WBD, T&AT;
+2. create mysql query to insert into  table my_portfolios and use US eastern time
+where meta data from the following table
++--------+----------+------------+----------------+
+| symbol | quantity | total_cost | cost_per_share |
++--------+----------+------------+----------------+
+| MSFT   |  400.000 |  18000.000 |             45 |
+| WBD    |   69.000 |    690.000 |             10 |
+| DELL   |   36.000 |    900.000 |             25 |
+| T      |  287.000 |   2879.000 |             10 |
+| CSCO   |  640.000 |  12800.000 |             20 |
+| CHTR   |   20.000 |   4000.000 |            200 |
+account='My-stocks'
+account_name='chase account'
+

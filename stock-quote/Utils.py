@@ -5,8 +5,6 @@ from datetime import datetime
 import time, sys
 from sty import ef, rs, FgRegister
 
-DEBUG_LEVEL = 4
-
 def displaySec(sec, sp):
     tag = '+=-'
     if sec.price_change > 0: tag = '+'
@@ -17,11 +15,11 @@ def displaySec(sec, sp):
     colorShow(sp, sec)
 
 def printHeader(sp):
-    print(sp, '╔══════════════════╤═════════╤═══════╤═╤════════╤═════════╤═════════╤═════════╤═════════════╤══════════════╤═════════╤═════════╤════════╤════════╗')
-    print(sp, '║   Loading Time   │ Account │ Symbol│ │ Change │  Price  │ TodayGL │ PCTAcct │   Shares    │ CurrentValue │ 52WK Lo │ 52WK Hi │ PRC-Lo │ Hi-PRC ║')
-    print(sp, '╟──────────────────┼─────────┼───────┼─┼────────┼─────────┼─────────┼─────────┼─────────────┼──────────────┼─────────┼─────────┼────────┼────────╢')
+    print(sp, '╔══════════════════╤═════════╤═══════╤═╤════════╤═════════╤═════════╤═════════╤═══════════╤══════════════╤═════════╤═════════╤════════╤════════╗')
+    print(sp, '║   Loading Time   │ Account │ Symbol│ │ Change │  Price  │ TodayGL │ PCTAcct │   Shares  │ CurrentValue │ 52WK Lo │ 52WK Hi │ PRC-Lo │ Hi-PRC ║')
+    print(sp, '╟──────────────────┼─────────┼───────┼─┼────────┼─────────┼─────────┼─────────┼───────────┼──────────────┼─────────┼─────────┼────────┼────────╢')
 def printTailer(sp, totalValue, dday, tablename):
-    print(sp, '╟──────────────────┴─────────┴───────┴─┴────────┴─────────┴─────────┴─────────┴─────────────┴──────────────┴─────────┴─────────┴────────┴────────╢')
+    print(sp, '╟──────────────────┴─────────┴───────┴─┴────────┴─────────┴─────────┴─────────┴───────────┴──────────────┴─────────┴─────────┴────────┴────────╢')
     print(sp, '║ Market Value:', totalValue, ' ', dday, tablename + sp, '║')
     # print(sp, '╚══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝')
 
@@ -36,22 +34,26 @@ def colorShow(sp, sec):
     price = str(sec.price) # + sec.intradayPrice
     # symbl = fg.cyan + pedsp(sec.symbol, 5) + fg.rs
     daygl = fg.cyan + padsp(sec.today_gl, 8) + fg.rs
-    pctAc = fg.green + padsp(sec.pct_of_account, 8) + fg.rs
+    # pctAc = fg.green + padsp(sec.pct_of_account, 8) + fg.rs
+    pctAc = padsp('', 8) if sec.pct_of_account==None else padsp(str(sec.pct_of_account) + ' %', 8)
     if '-' in sec.tag:
         chnge = fg.red + padsp(chnge, 7) + fg.rs
         price = fg.red + padsp(price, 8) + fg.rs
         symbl = fg.red + pedsp(sec.symbol, 6) + fg.rs
         daygl = fg.red + padsp(sec.today_gl, 8) + fg.rs
+        accnt = fg.red + padsp(sec.account, 8) + fg.rs
     elif '=' in sec.tag:
         chnge = fg.yellow + padsp(chnge, 7) + fg.rs
         price = fg.yellow + padsp(price, 8) + fg.rs
         symbl = fg.yellow + pedsp(sec.symbol, 6) + fg.rs
         daygl = fg.yellow + padsp(sec.today_gl, 8) + fg.rs
+        accnt = fg.yellow + padsp(sec.account, 8) + fg.rs
     else:
         chnge = fg.green + padsp(chnge, 7) + fg.rs
         price = fg.green + padsp(price, 8) + fg.rs
         symbl = fg.green + pedsp(sec.symbol, 6) + fg.rs
         daygl = fg.green + padsp(sec.today_gl, 8) + fg.rs
+        accnt = fg.green + padsp(sec.account, 8) + fg.rs
     
     fprlow = '--' if (prlow == None or prlow == '--') else '{:6.2f}'.format(prlow)
     fhigpr = '--' if (higpr == None or higpr == '--') else '{:6.2f}'.format(higpr)
@@ -78,7 +80,7 @@ def colorShow(sp, sec):
     chnge = boldit(chnge)
     prlow = boldit(prlow)
     price = boldit(price)
-    quant = padsp(str(sec.quantity) + ' ', 13) # Shares
+    quant = padsp(str(sec.quantity) + ' ', 11) # Shares
     value = sec.current_value
     value = padsp(f"{value:,.2f}", 13)
     higpr = boldit(higpr)
@@ -86,7 +88,7 @@ def colorShow(sp, sec):
     hi52w = padsp(sec.high_52_week,8)
     ## don't touch this line below
     ptxt = sp + ' ║ {} │{}│ {}│{}│{} │{} │{} │{} │{}│{} │{} │{} │ {} │ {} ║'\
-        .format(sec.asof_time.strftime("%Y-%m-%d %H:%M"), sec.account, symbl, sec.tag, chnge, price, daygl, pctAc, quant, value, lo52w, hi52w, prlow, higpr)
+        .format(sec.asof_time.strftime("%Y-%m-%d %H:%M"), accnt, symbl, sec.tag, chnge, price, daygl, pctAc, quant, value, lo52w, hi52w, prlow, higpr)
     print(ptxt)
     # sys.stdout.flush()
 

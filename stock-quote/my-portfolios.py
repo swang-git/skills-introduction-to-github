@@ -7,6 +7,7 @@ from more_itertools import chunked
 
 from Utils import printHeader, printTailer, displaySec, padsp
 from Models import dbsession, MyPortfolio
+from constants import COMPAN_LEN 
 from sty import ef, rs, FgRegister
 fg = FgRegister()
 
@@ -86,7 +87,7 @@ def print_rows_prior_day(rows):
             totalValue += float(row.current_value)
         totalValue = f"{totalValue:,.2f}"
         dday = rows[0].asof_time.strftime("%Y-%m-%d")
-        printTailer(sp, totalValue, f'Date: {dday}', padsp(sp, 78) + f'{database}.my_portfolios')
+        printTailer(sp, totalValue, f'Date: {dday}', padsp(sp, 60 + COMPAN_LEN) + f'{database}.my_portfolios')
 
 def print_rows(rows, cdiff, spgap):
     # symbols = ['T', 'WBD', 'CHTR', 'DELL', 'CSCO', 'MSFT']
@@ -150,11 +151,12 @@ if __name__=="__main__":
     cdiff = cdiff1 + ' diff w/ prvday ~ ' + cdiff2 + ' w/ curday pchange'
     spc = ' '    
     tlen = 18
-    sps = tlen - difflen1 - difflen2 + 18
+    # COMPAN_LEN = 18
+    sps = tlen - difflen1 - difflen2 + COMPAN_LEN
     spgap = sps*spc
     # print(f"tlen=[{tlen}] difflen1=[{difflen1}] difflen2=[{difflen2}] sps=[{sps}]")
     print_rows(rowst, cdiff, spgap)
-    print(' ╚' + 144*'═' + '╝')
+    print(' ╚' + (126 + COMPAN_LEN)*'═' + '╝')
     # print("total value %s for prvday"%totaly)
     # print("total value %s for theday"%totalt)
     sys.exit(0)
