@@ -1,0 +1,6 @@
+get data from following pdf file
+set quantity = current_value if it not available (for cash/money market cases)
+set quantity as it is if it is availabel
+set price_change = 0 if it is not available
+find 52 week low/high if available otherwisw set to 0
+generate mysql query to insert to table my_portfolios

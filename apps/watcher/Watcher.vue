@@ -6,13 +6,14 @@
     <div :style="getLineBackground(i)" :class="{ 'bg-purple-10':!e.hideIt }" class="q-px-xs">
       <div class="row cursor-pointer;q-qx-sm" style="font-size:20.1px">
         <div v-if="isDesk" class="q-pl-sm" @click="e.hideIt=true"><a :href="getDocLinkStr(e.date)" target="_blank" class="alnkclass">{{ e.date }}</a></div>
-        <div v-if="isDesk" class="q-pl-md" @click="e.hideIt=true;getPositions(e)">({{ e.date.chwk2() }})</div>
+        <!-- <div v-if="isDesk" class="q-pl-md" @click="e.hideIt=true; getPositions(e)">({{ e.date.chwk2() }})</div> -->
+        <div v-if="isDesk" class="q-pl-md cursor-pointer" @click="e.hideIt=true; getMyPortfolios(e)">({{ e.date.chwk2() }})</div>
         <div v-if="isDesk && e.dowjones>0" class="q-px-md text-right" @click="showIt(i)"> {{ formatCurrency(e.dowjones) }}
           <q-tooltip class="text-h6 bg-accent">Dow Jones on {{ e.date }}</q-tooltip>
         </div>
         <div v-if="isDesk" class="q-pl-xs text-right"  @click="showIt(i)">{{ ((e.portfolio/invested(e) - 1) * 100).toFixed(2) }}%</div>
         <div v-if="isDesk" class="q-pl-md text-right" style="width:124px" @click="showDar(e, 'upd')">{{ getWeight(e) }} / {{ getBMI(e) }}</div>
-        <div v-else class="text-left"style="width:111px" @click="showDar(e, 'upd')">{{ e.date }}</div>
+        <div v-else class="text-left" style="width:111px" @click="showDar(e, 'upd')">{{ e.date }}</div>
         <div v-if="isDesk" class="q-px-sm text-right" :class="{ 'text-green-3':e.dif>0, 'text-pink-2':e.dif<0 }" style="width:115px" @click="showDar(e, 'upd')"> {{ e.difs }} </div>
         <div v-else class="q-px-sm text-right" :class="{ 'text-green-3':e.dif>0, 'text-pink-2':e.dif<0 }" style="width:110px" @click="showDar(e, 'upd')"> {{ e.difs }} </div>
         <div v-if="isDesk" class="q-pl-sm text-center cursor-pointer" style="width:140px" @click="showDar(e, 'add')">{{ formatCurrency(e.portfolio) }}</div>
@@ -67,7 +68,7 @@
   <UserInputIM />
   <PortfolioDisplay />
   <PortfolioNote  />
-  <PortfolioPositions />
+  <PortfolioPositions @upd-weight-portfolio="updWkgPortf" />
   <ChartsProxy :chdata="dalist" :chname="chname" />
   <InfoDisplay ref="refInfoDisplay" />
 </div>
@@ -90,7 +91,7 @@ import InfoDisplay from '../src/components/InfoDisplay'
 
 const fabOpen = true
 const { dalist, palist, buildApp, getLineBackground, formatCurrency, isDesk, iPhone, $q } = libFunctions()
-const { gaxios } = axiosFunctions()
+const { gaxios, paxios } = axiosFunctions()
 const { getDay2 } = dayFunctions()
 
 const annuityDate = '2020-07-10'
@@ -140,6 +141,13 @@ emitter.emit('items-per-page', itemsPerPage)
 // onMounted(() => refInfoDisplay.value)
 onMounted(() => { console.log(`-MT-refInfoDisplay=${refInfoDisplay.value}`) })
 
+function updWkgPortf (wkg, portf) {
+  console.log(`-fn-updWkgPortf wkg=${wkg} portf=${portf} rowId=${clickedRow.value.id}`, clickedRow.value)
+  clickedRow.value.portfolio = portf
+  clickedRow.value.kilo = wkg
+  const path = process.env.API + '/watcher/updWeightPortfolio'
+  paxios(path, clickedRow.value)
+}
 function compTotalValue(date, toalval) {
   console.log(`compTotalValue date=${date} total=${toalval}`)
 }
@@ -165,7 +173,7 @@ emitter.on('watcher-getList', (x) => setList(x))
 function setList (da) {
   dats.value = addPropToChartData(da.dats)
   // console.log(`-fn-setList 1st note=${dats.value[0].note}`)
-  // console.log(`-CK-setList actions`, da.actions)
+  console.log(`-CK-setList dats:`, dats.value)
   stocks.value = da.stocks
   actions.value = da.actions
   accounts.value = da.accnts
@@ -266,6 +274,12 @@ function setPortfolio (da) {
   portfNote.value = da.pnote
   portfData.value = da.portf
 }
+emitter.on('watcher-getMyPortfolios', (x) => setPositions(x))
+function getMyPortfolios (row) {
+  const path = row.date >= '2026-04-24' ? process.env.API + '/watcher/getMyPortfolios/' + row.date : process.env.API + '/watcher/getPositions/' + row.date
+  clickedRow.value = row
+  gaxios(path)
+}
 emitter.on('watcher-getPositions', (x) => setPositions(x))
 function getPositions (row) {
   const path = process.env.API + '/watcher/getPositions/' + row.date
@@ -291,7 +305,8 @@ function setPositions (da) {
     // refInfoDisplay.value.openIt(tit, msg)
     emitter.emit('open-PortfolioPositions', da, clickedRow.value.portfolio)
   } else if (da.status == "OK") {
-    emitter.emit('open-PortfolioPositions', da, clickedRow.value.portfolio)
+    // console.log('-CK-clickedRow', clickedRow.value.weight)
+    emitter.emit('open-PortfolioPositions', da, clickedRow.value.portfolio, clickedRow.value.weight)
   } else {
     $q.dialog({title:'NO DATA FILE FOUND', message:da.status.substring(20)})
   }

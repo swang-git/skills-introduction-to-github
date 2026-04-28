@@ -1,5 +1,5 @@
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column, Integer, DateTime, CHAR, DECIMAL, and_, func
+from sqlalchemy import Column, Integer, DateTime, CHAR, DECIMAL, String, and_, func
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 import requests
@@ -37,6 +37,115 @@ class Portfolio:
         self.intradayPrice = ''  # A for after market
 
 Base = declarative_base()
+class MyPortfolio(Base):
+    __tablename__ = 'my_portfolios'
+    id = Column(Integer, primary_key=True)
+    asof_time = Column(DateTime)
+    account = Column(CHAR(9))
+    account_name = Column(CHAR(16))
+    company = Column(CHAR(32))
+    symbol = Column(CHAR(8))
+    price = Column(DECIMAL(12.3))
+    price_change = Column(DECIMAL(12.3))
+    today_gl = Column(DECIMAL(12.3))
+    today_gl_pct = Column(DECIMAL(12.3))
+    current_value = Column(DECIMAL(12.3))
+    pct_of_account = Column(DECIMAL(12.3))
+    quantity = Column(DECIMAL(12.3))
+    total_cost = Column(DECIMAL(12.3))
+    cost_per_share = Column(DECIMAL(12.3))
+    low_52_week = Column(DECIMAL(12.3))
+    high_52_week = Column(DECIMAL(12.4))
+    status = Column(CHAR(1))
+    def __getattr__(self, key): return None
+    def __init__(self, row):
+    # Copy ALL fields from the 'row' object to your MyPortfolio object
+        super().__init__()
+        self.id = row.id
+        self.asof_time = row.asof_time
+        self.account = row.account
+        self.account_name = row.account_name
+        self.company = row.company
+        self.symbol = row.symbol
+        self.price = row.price
+        self.price_change = row.price_change
+        self.today_gl = row.today_gl
+        self.today_gl_pct = row.today_gl_pct
+        self.current_value = row.current_value
+        self.pct_of_account = row.pct_of_account
+        self.quantity = row.quantity
+        self.total_cost = row.total_cost
+        self.cost_per_share = row.cost_per_share
+        self.low_52_week = row.low_52_week
+        self.high_52_week = row.high_52_week
+        self.status = row.status
+        self.created_at = row.created_at
+        self.updated_at = row.updated_at
+
+    # def __init__(self, sec):
+    #     self.id = sec.id
+    #     self.asof_time = sec.asof_time
+    #     self.account = sec.account
+    #     self.account_name = sec.account_name
+    #     self.company = sec.company
+    #     self.symbol = sec.symbol
+    #     self.price = sec.price
+    #     self.price_change = sec.price_change
+    #     self.today_gl = sec.today_gl
+    #     self.today_gl_pct = sec.today_gl_pct
+    #     self.current_value = sec.current_value
+    #     self.pct_of_account = sec.pct_of_account
+    #     self.quantity = sec.quantity
+    #     self.total_cost = sec.total_cost
+    #     self.cost_per_share = sec.cost_per_share
+    #     self.low_52_week = sec.low_52_week
+    #     self.high_52_week = sec.high_52_week
+    #     self.status = sec.status
+    #     self.created_at = sec.created_at
+    #     self.updated_at = sec.updated_at
+
+    def to_dict(self):
+        return {
+            'asof_time': self.asof_time.strftime("%Y-%m-%d %H:%M"),
+            'account': self.account,
+            'account_name': self.account_name,
+            'company': self.company,
+            'symbol': self.symbol,
+            'price': float(self.price),
+            'price_change': float(self.price_change),
+            'today_gl': float(self.today_gl),
+            'today_gl_pct': float(self.today_gl_pct),
+            'current_value': float(self.current_value),
+            'pct_of_account': float(self.pct_of_account),
+            'quantity': float(self.quantity),
+            'total_cost': float(self.total_cost),
+            'cost_per_share': float(self.cost_per_share),
+            'low_52_week': float(self.low_52_week),
+            'high_52_week': float(self.high_52_week),
+        }
+    def print_pretty(self):
+        """Print all columns on a separate line with clean formatting"""
+        print("=" * 60)
+        print(f"ID:                {self.id}")
+        print(f"Asof Time:         {self.asof_time.strftime('%Y-%m-%d %H:%M') if self.asof_time else None}")
+        print(f"Account:           {self.account}")
+        print(f"Account Name:      {self.account_name}")
+        print(f"Company:           {self.company}")
+        print(f"Symbol:            {self.symbol}")
+        print(f"Price:             {float(self.price)}")
+        print(f"Price Change:      {float(self.price_change)}")
+        print(f"Today GL:          {float(self.today_gl)}")
+        print(f"Today GL %:        {float(self.today_gl_pct)}")
+        print(f"Current Value:     {float(self.current_value)}")
+        print(f"% of Account:      {float(self.pct_of_account)}")
+        print(f"Quantity:          {float(self.quantity)}")
+        print(f"Total Cost:        {float(self.total_cost)}")
+        print(f"Cost Per Share:    {'--' if self.cost_per_share == None else float(self.cost_per_share)}")
+        print(f"52-Week Low:       {'--' if self.low_52_week == None else float(self.low_52_week)}")
+        print(f"52-Week High:      {'--' if self.high_52_week == None else float(self.high_52_week)}")
+        print(f"Status:            {self.status}")
+        print("=" * 60)
+
 class StockQuote(Base):
     __tablename__ = 'stock_quotes'
     id = Column(Integer, primary_key=True)

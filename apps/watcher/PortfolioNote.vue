@@ -32,7 +32,7 @@
             <q-input filled style="font-size:19px" class="col-2" label="Symbol" v-model="pn.symbol" dark @click="showStockList(i, 'stock')" />
             <q-input filled style="font-size:19px" class="col-2" label="Action" v-model="pn.action" dark @click="showActionList(i, 'action')" />
             <q-input filled style="font-size:19px" class="col-2" label="Price" v-model="pn.price" dark />
-            <q-input filled style="font-sizepx" class="col-2" label="Share" v-model="pn.share" dark />
+            <q-input filled style="font-size:10px" class="col-2" label="Share" v-model="pn.share" dark />
             <q-input filled style="font-size:19px" class="col-2" label="To Account" v-model="pn.taccount" dark @click="showOptList(i, 'taccnt')">
               <q-tooltip v-if="pn.taccount != null" class="text-h6 bg-cyan-9">{{ pn.txoltip }}</q-tooltip>
             </q-input>

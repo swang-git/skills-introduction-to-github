@@ -3,6 +3,7 @@ namespace App\Http\Controllers;
 use App\Models\watcher\HealthRecord;
 use App\Models\watcher\StockPrice;
 use App\Models\watcher\Portfolio;
+use App\Models\watcher\MyPortfolio;
 use App\Models\watcher\PortfolioNote;
 use App\Models\watcher\PortfolioAccount;
 use App\Models\watcher\PortfolioStock;
@@ -24,6 +25,19 @@ class WatcherController extends Controller {
     }
     public function index() {
         return view('welcome');
+    }
+    public function getMyPortfolios($date) { Log::info("WatcherController/getMyPortfolios $date");
+        $x = explode('-', $date);
+        $ccSta3 = $x[0].'-'.$x[1].'-1';
+        $ccEnd3 = $x[0].'-'.($x[1]+1).'-3'; Log::info("-CK-WatcherController/getpositions $date start=$ccSta3 end=$ccEnd3");
+        $ccBalance = Spend::where([['status', 'A'], ['cat_id', 15], ['purchasedon', '>', $ccSta3], ['purchasedon', '<=', $ccEnd3]])->orderByDesc('purchasedon')->limit(1)->value('unitprice');
+        $ccDueDate = Spend::where([['status', 'A'], ['cat_id', 15], ['purchasedon', '>', $ccSta3], ['purchasedon', '<=', $ccEnd3]])->max('purchasedon');
+        $today_sec_cnt = MyPortfolio::where('asof_time', $date)->count('*');
+        Log::info("today security count for $date: $today_sec_cnt");
+        // if ($today_sec_cnt == 0) return
+        // $this->loadPositions($date);
+        $pos = DB::select("CALL get_my_portfolios(?)", [$date]); // union data from stock_quotes
+        return ['positions' => $pos, 'ccBalance' => $ccBalance, 'ccDueDate' => $ccDueDate, 'status' => 'OK'];
     }
     public function getPositions($date) { //Log::info("WatcherController/getpositions $date");
         $x = explode('-', $date);
@@ -227,6 +241,13 @@ class WatcherController extends Controller {
         $dm->save();
         // $this->mvPositionFiles();
         return [ 'status' => "OK", 'da' => $dm ];
+    }
+    public function updWeightPortfolio(Request $d) { Log::info("Updating Weight Portfolio data", $d->toArray());
+        $dm = HealthRecord::find($d['id']);
+        $dm->weight = $d['kilo'];
+        $dm->portfolio = $d['portfolio'];
+        $dm->save();
+        return [ 'status' => "OK" ];
     }
     public function upd(Request $d) { Log::info("Updating Watcher data", $d->toArray());
         $dm = HealthRecord::find($d['id']);
