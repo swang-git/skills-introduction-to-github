@@ -1,6 +1,6 @@
 1, find latest stock price, price change, 52-week high/low for MSFT, CSCO, DELL, CHTR, WBD, T&AT;
 2. create mysql query to insert into  table my_portfolios and use US eastern time
-where meta data from the following table
+3. use meta data from the following table to calculate pc_of_account, total_gl, total_gl_pct
 +--------+----------+------------+----------------+
 | symbol | quantity | total_cost | cost_per_share |
 +--------+----------+------------+----------------+

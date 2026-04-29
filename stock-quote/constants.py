@@ -1,5 +1,6 @@
 from typing import Final
-COMPAN_LEN: Final[int] = 16
+COMPAN_LEN: Final[int] = 28
+NUM_PORTFOLIO_SEC: Final[int] = 17
 
 # class Constants:
 #     COMPAN_LEN = 16

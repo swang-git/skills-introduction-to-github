@@ -49,6 +49,8 @@ class MyPortfolio(Base):
     price_change = Column(DECIMAL(12.3))
     today_gl = Column(DECIMAL(12.3))
     today_gl_pct = Column(DECIMAL(12.3))
+    total_gl = Column(DECIMAL(12.3))
+    total_gl_pct = Column(DECIMAL(12.3))
     current_value = Column(DECIMAL(12.3))
     pct_of_account = Column(DECIMAL(12.3))
     quantity = Column(DECIMAL(12.3))

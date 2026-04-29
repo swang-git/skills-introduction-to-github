@@ -1,8 +1,7 @@
-import urllib.request
-import hashlib
-from datetime import date
-from datetime import datetime
-import time, sys
+# import urllib.request
+# import hashlib
+from datetime import date, datetime, timedelta
+# import time, sys
 from sty import ef, rs, FgRegister
 
 def displaySec(sec, sp):
@@ -15,15 +14,16 @@ def displaySec(sec, sp):
     colorShow(sp, sec)
 
 def printHeader(sp):
-    print(sp, '╔══════════════════╤═════════╤═══════╤═╤════════╤═════════╤═════════╤═════════╤═══════════╤══════════════╤═════════╤═════════╤════════╤════════╗')
-    print(sp, '║   Loading Time   │ Account │ Symbol│ │ Change │  Price  │ TodayGL │ PCTAcct │   Shares  │ CurrentValue │ 52WK Lo │ 52WK Hi │ PRC-Lo │ Hi-PRC ║')
-    print(sp, '╟──────────────────┼─────────┼───────┼─┼────────┼─────────┼─────────┼─────────┼───────────┼──────────────┼─────────┼─────────┼────────┼────────╢')
+    print(sp, '╔══════════════════╤═════════╤═══════╤═╤═══════════╤════════╤═════════╤═════════╤═════════╤═══════════╤══════════════╤═════════╤═════════╤════════╤════════╗')
+    print(sp, '║   Loading Time   │ Account │ Symbol│ │  TotalGL  │ Change │  Price  │ TodayGL │ PCTAcct │   Shares  │ CurrentValue │ 52WK Lo │ 52WK Hi │ PRC-Lo │ Hi-PRC ║')
+    print(sp, '╟──────────────────┼─────────┼───────┼─┼───────────┼────────┼─────────┼─────────┼─────────┼───────────┼──────────────┼─────────┼─────────┼────────┼────────╢')
 def printTailer(sp, totalValue, dday, tablename):
-    print(sp, '╟──────────────────┴─────────┴───────┴─┴────────┴─────────┴─────────┴─────────┴───────────┴──────────────┴─────────┴─────────┴────────┴────────╢')
+    print(sp, '╟──────────────────┴─────────┴───────┴─┴───────────┴────────┴─────────┴─────────┴─────────┴───────────┴──────────────┴─────────┴─────────┴────────┴────────╢')
     print(sp, '║ Market Value:', totalValue, ' ', dday, tablename + sp, '║')
     # print(sp, '╚══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝')
 
 def colorShow(sp, sec):
+    # print("total_gl=[%s]"%sec.total_gl)
     fg = FgRegister()
     # print('====sec:', sec.change, sec.price)
     prlow = '--' if sec.low_52_week == 0 or sec.low_52_week == None else float(sec.price) - float(sec.low_52_week)
@@ -34,38 +34,45 @@ def colorShow(sp, sec):
     price = str(sec.price) # + sec.intradayPrice
     # symbl = fg.cyan + pedsp(sec.symbol, 5) + fg.rs
     daygl = fg.cyan + padsp(sec.today_gl, 8) + fg.rs
-    # pctAc = fg.green + padsp(sec.pct_of_account, 8) + fg.rs
-    pctAc = padsp('', 8) if sec.pct_of_account==None else padsp(str(sec.pct_of_account) + ' %', 8)
+    pctac = '' if sec.pct_of_account == None else f"{sec.pct_of_account:,.2f}" + '%'
+    pctAc = padsp(pctac, 8)
+    totalgl = sec.total_gl
+    if totalgl == None: totalGL = '--'
+    else:
+        totalGL = padsp(totalgl, 10) if totalgl>=0 else padsp(-totalgl, 10)
+        if totalgl == 0: totalGL = fg.yellow + totalGL + fg.rs
+        elif totalgl > 0: totalGL = fg.green + totalGL + fg.rs
+        else: totalGL = fg.red + totalGL + fg.rs
+
+    todaygl = sec.today_gl
+    if todaygl == None: todayGL = '--'
+    else:
+        todayGL = padsp(todaygl, 8) if todaygl>=0 else padsp(-todaygl, 8)
+        if todaygl == 0: todayGL = fg.yellow + todayGL + fg.rs
+        elif todaygl > 0: todayGL = fg.green + todayGL + fg.rs
+        else: todayGL = fg.red + todayGL + fg.rs
+
     if '-' in sec.tag:
         chnge = fg.red + padsp(chnge, 7) + fg.rs
         price = fg.red + padsp(price, 8) + fg.rs
         symbl = fg.red + pedsp(sec.symbol, 6) + fg.rs
-        daygl = fg.red + padsp(sec.today_gl, 8) + fg.rs
+        # daygl = fg.red + padsp(sec.today_gl, 8) + fg.rs
         accnt = fg.red + padsp(sec.account, 8) + fg.rs
     elif '=' in sec.tag:
         chnge = fg.yellow + padsp(chnge, 7) + fg.rs
         price = fg.yellow + padsp(price, 8) + fg.rs
         symbl = fg.yellow + pedsp(sec.symbol, 6) + fg.rs
-        daygl = fg.yellow + padsp(sec.today_gl, 8) + fg.rs
+        # daygl = fg.yellow + padsp(sec.today_gl, 8) + fg.rs
         accnt = fg.yellow + padsp(sec.account, 8) + fg.rs
     else:
         chnge = fg.green + padsp(chnge, 7) + fg.rs
         price = fg.green + padsp(price, 8) + fg.rs
         symbl = fg.green + pedsp(sec.symbol, 6) + fg.rs
-        daygl = fg.green + padsp(sec.today_gl, 8) + fg.rs
+        # daygl = fg.green + padsp(sec.today_gl, 8) + fg.rs
         accnt = fg.green + padsp(sec.account, 8) + fg.rs
     
     fprlow = '--' if (prlow == None or prlow == '--') else '{:6.2f}'.format(prlow)
     fhigpr = '--' if (higpr == None or higpr == '--') else '{:6.2f}'.format(higpr)
-    # gprlow = fg.green + fprlow + fg.rs
-    # rprlow = fg.red + fprlow + fg.rs
-    # yprlow = fg.yellow + fprlow + fg.rs
-    # prlow = {prlow > 0:gprlow, prlow < 0:rprlow}.get(True, yprlow)
-    # ghigpr = fg.green + fhigpr + fg.rs
-    # rhigpr = fg.red + fhigpr + fg.rs
-    # yhigpr = fg.yellow + fhigpr + fg.rs
-    # higpr = {higpr > 0:ghigpr, higpr < 0:rhigpr}.get(True, yhigpr)
-    # higpr = {higpr > 0:fg.green + fhigpr + fg.rs, higpr < 0:fg.red + fhigpr + fg.rs}.get(True, fg.yellow + fhigpr + fg.rs)
     if is_number(prlow):
         if prlow == 0: prlow = fg.yellow + fprlow + fg.rs
         elif prlow > 0: prlow = fg.green + fprlow + fg.rs
@@ -77,6 +84,8 @@ def colorShow(sp, sec):
         elif higpr < 0: higpr = fg.red + fhigpr + fg.rs
     else: higpr = padsp(higpr, 6)
 
+    todayGL = boldit(todayGL)
+    totalGL = boldit(totalGL)
     chnge = boldit(chnge)
     prlow = boldit(prlow)
     price = boldit(price)
@@ -87,8 +96,8 @@ def colorShow(sp, sec):
     lo52w = padsp(sec.low_52_week, 8)
     hi52w = padsp(sec.high_52_week,8)
     ## don't touch this line below
-    ptxt = sp + ' ║ {} │{}│ {}│{}│{} │{} │{} │{} │{}│{} │{} │{} │ {} │ {} ║'\
-        .format(sec.asof_time.strftime("%Y-%m-%d %H:%M"), accnt, symbl, sec.tag, chnge, price, daygl, pctAc, quant, value, lo52w, hi52w, prlow, higpr)
+    ptxt = sp + ' ║ {} │{}│ {}│{}│{} │{} │{} │{} │{} │{}│{} │{} │{} │ {} │ {} ║'\
+        .format(sec.asof_time.strftime("%Y-%m-%d %H:%M"), accnt, symbl, sec.tag, totalGL, chnge, price, todayGL, pctAc, quant, value, lo52w, hi52w, prlow, higpr)
     print(ptxt)
     # sys.stdout.flush()
 
@@ -115,3 +124,32 @@ def is_number(value):
         return True
     except (ValueError, TypeError):
         return False
+    
+def prev_business_day(d: date = None) -> date:
+    if d is None:
+        d = date.today()
+    one_day = timedelta(days=1)
+    while True:
+        d -= one_day
+        if d.weekday() < 5:  # 0=周一 … 4=周五，5/6 周末
+            return d
+        
+def get_previous_business_day(date_input=None):
+    # 1. 如果没传值，用今天
+    if date_input is None:
+        d = datetime.today().date()
+    # 2. 如果传的是字符串，自动转成日期
+    elif isinstance(date_input, str):
+        d = datetime.strptime(date_input, "%Y-%m-%d").date()
+    # 3. 如果已经是日期对象
+    else:
+        d = date_input
+
+    one_day = timedelta(days=1)
+
+    # 往前找，直到找到非周末的工作日
+    while True:
+        d -= one_day
+        # 0=周一 ... 4=周五，5=周六，6=周日
+        if d.weekday() < 5:
+            return d.strftime("%Y-%m-%d")  # 直接返回 YYYY-mm-dd 字符串

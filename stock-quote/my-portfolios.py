@@ -7,7 +7,7 @@ from more_itertools import chunked
 
 from Utils import printHeader, printTailer, displaySec, padsp
 from Models import dbsession, MyPortfolio
-from constants import COMPAN_LEN 
+from constants import COMPAN_LEN, NUM_PORTFOLIO_SEC
 from sty import ef, rs, FgRegister
 fg = FgRegister()
 
@@ -22,7 +22,7 @@ if sub_days > 0:
     print("sub_days must negative, %s given, exiting..."%sub_days)
     sys.exit(1)
 database = args.db
-print("sub_days=%d db=%s"%(sub_days, database))
+# print("sub_days=%d db=%s"%(sub_days, database))
 
 def reorder(rows) :
     symbols = ['T', 'WBD', 'CHTR', 'DELL', 'CSCO', 'MSFT']
@@ -30,46 +30,12 @@ def reorder(rows) :
     data_sorted = sorted(rows, key=lambda o: order_map.get(o.symbol, len(symbols)))
     return data_sorted
 
-def prev_business_day(d: date = None) -> date:
-    if d is None:
-        d = date.today()
-    one_day = timedelta(days=1)
-    while True:
-        d -= one_day
-        if d.weekday() < 5:  # 0=周一 … 4=周五，5/6 周末
-            return d
-        
-def get_previous_business_day(date_input=None):
-    # 1. 如果没传值，用今天
-    if date_input is None:
-        d = datetime.today().date()
-    # 2. 如果传的是字符串，自动转成日期
-    elif isinstance(date_input, str):
-        d = datetime.strptime(date_input, "%Y-%m-%d").date()
-    # 3. 如果已经是日期对象
-    else:
-        d = date_input
-
-    one_day = timedelta(days=1)
-
-    # 往前找，直到找到非周末的工作日
-    while True:
-        d -= one_day
-        # 0=周一 ... 4=周五，5=周六，6=周日
-        if d.weekday() < 5:
-            return d.strftime("%Y-%m-%d")  # 直接返回 YYYY-mm-dd 字符串
-
 def get_last_2_set_stock_quotes(start):
-    # rows = dbsession(database).query(MyPortfolio).order_by(func.trim(MyPortfolio.account).desc()).limit(32).all()
-    rows = dbsession(database).query(MyPortfolio).order_by((MyPortfolio.asof_time).desc(), MyPortfolio.account.desc()).limit(34).all()
-    # today = datetime(2026, 4, 27).date()  # 你要的日期
-    # today = '2026-04-27'  # 你要的日期
-    # theday = date.today().strftime("%Y-%m-%d")
-    theday = date.today()
-    rowstdy = [row for row in rows if row.asof_time.strftime('%Y-%m-%d') == theday.strftime("%Y-%m-%d") ]
-    # prvday = get_previous_business_day(theday)
-    prvday = prev_business_day(theday)
-    rowsyst = [row for row in rows if row.asof_time.strftime('%Y-%m-%d') == prvday.strftime("%Y-%m-%d") ]
+    rows = dbsession(database).query(MyPortfolio).order_by((MyPortfolio.asof_time).desc(), MyPortfolio.account.desc())\
+    .limit(2*NUM_PORTFOLIO_SEC).offset(-sub_days*NUM_PORTFOLIO_SEC).all()
+    rowstdy = rows[0:NUM_PORTFOLIO_SEC]
+    rowsyst = rows[NUM_PORTFOLIO_SEC:]
+
 
     return rowsyst, rowstdy
 
@@ -91,6 +57,7 @@ def print_rows_prior_day(rows):
 
 def print_rows(rows, cdiff, spgap):
     # symbols = ['T', 'WBD', 'CHTR', 'DELL', 'CSCO', 'MSFT']
+    # [print("total_gl=[%s]"%x.total_gl) for x in rows]
     sp = ""
     # shares = get_shares()
     # num_of_stocks = len(symbols)
