@@ -12,4 +12,32 @@
 | CHTR   |   20.000 |   4000.000 |            200 |
 account='My-stocks'
 account_name='chase account'
+describe my_portfolios;
++----------------+---------------+------+-----+-------------------+-----------------------------------------------+
+| Field          | Type          | Null | Key | Default           | Extra                                         |
++----------------+---------------+------+-----+-------------------+-----------------------------------------------+
+| id             | int           | NO   | PRI | NULL              | auto_increment                                |
+| asof_time      | datetime      | NO   |     | NULL              |                                               |
+| account        | varchar(9)    | NO   |     | NULL              |                                               |
+| account_name   | varchar(36)   | NO   |     | NULL              |                                               |
+| symbol         | varchar(9)    | NO   |     | NULL              |                                               |
+| company        | varchar(128)  | YES  |     | NULL              |                                               |
+| price          | decimal(12,3) | NO   |     | NULL              |                                               |
+| price_change   | decimal(12,3) | YES  |     | NULL              |                                               |
+| today_gl       | decimal(12,2) | YES  |     | NULL              |                                               |
+| today_gl_pct   | decimal(6,2)  | YES  |     | NULL              |                                               |
+| total_gl       | decimal(12,2) | YES  |     | NULL              |                                               |
+| total_gl_pct   | decimal(6,2)  | YES  |     | NULL              |                                               |
+| current_value  | decimal(12,2) | NO   |     | NULL              |                                               |
+| pct_of_account | float         | YES  |     | NULL              |                                               |
+| quantity       | decimal(12,3) | NO   |     | NULL              |                                               |
+| total_cost     | decimal(12,3) | YES  |     | NULL              |                                               |
+| cost_per_share | decimal(12,3) | YES  |     | NULL              |                                               |
+| low_52_week    | decimal(12,3) | YES  |     | NULL              |                                               |
+| high_52_week   | decimal(12,3) | YES  |     | NULL              |                                               |
+| status         | char(1)       | NO   |     | A                 |                                               |
+| created_at     | timestamp     | NO   |     | CURRENT_TIMESTAMP | DEFAULT_GENERATED on update CURRENT_TIMESTAMP |
+| updated_at     | timestamp     | NO   |     | CURRENT_TIMESTAMP | DEFAULT_GENERATED on update CURRENT_TIMESTAMP |
++----------------+---------------+------+-----+-------------------+-----------------------------------------------+
+22 rows in set (0.01 sec)
 

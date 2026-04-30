@@ -59,30 +59,37 @@ class MyPortfolio(Base):
     low_52_week = Column(DECIMAL(12.3))
     high_52_week = Column(DECIMAL(12.4))
     status = Column(CHAR(1))
-    def __getattr__(self, key): return None
-    def __init__(self, row):
-    # Copy ALL fields from the 'row' object to your MyPortfolio object
-        super().__init__()
-        self.id = row.id
-        self.asof_time = row.asof_time
-        self.account = row.account
-        self.account_name = row.account_name
-        self.company = row.company
-        self.symbol = row.symbol
-        self.price = row.price
-        self.price_change = row.price_change
-        self.today_gl = row.today_gl
-        self.today_gl_pct = row.today_gl_pct
-        self.current_value = row.current_value
-        self.pct_of_account = row.pct_of_account
-        self.quantity = row.quantity
-        self.total_cost = row.total_cost
-        self.cost_per_share = row.cost_per_share
-        self.low_52_week = row.low_52_week
-        self.high_52_week = row.high_52_week
-        self.status = row.status
-        self.created_at = row.created_at
-        self.updated_at = row.updated_at
+
+    def __getitem__(self, index):
+        columns = list(self.__table__.columns)
+        if 0 <= index < len(columns):
+            return getattr(self, columns[index].name)
+        raise IndexError("Column index out of range")
+    
+    # def __getattr__(self, key): return None
+    # def __init__(self, row):
+    # # Copy ALL fields from the 'row' object to your MyPortfolio object
+    #     super().__init__()
+    #     self.id = row.id
+    #     self.asof_time = row.asof_time
+    #     self.account = row.account
+    #     self.account_name = row.account_name
+    #     self.company = row.company
+    #     self.symbol = row.symbol
+    #     self.price = row.price
+    #     self.price_change = row.price_change
+    #     self.today_gl = row.today_gl
+    #     self.today_gl_pct = row.today_gl_pct
+    #     self.current_value = row.current_value
+    #     self.pct_of_account = row.pct_of_account
+    #     self.quantity = row.quantity
+    #     self.total_cost = row.total_cost
+    #     self.cost_per_share = row.cost_per_share
+    #     self.low_52_week = row.low_52_week
+    #     self.high_52_week = row.high_52_week
+    #     self.status = row.status
+    #     self.created_at = row.created_at
+    #     self.updated_at = row.updated_at
 
     # def __init__(self, sec):
     #     self.id = sec.id

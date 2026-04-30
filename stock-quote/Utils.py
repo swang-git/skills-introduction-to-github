@@ -12,6 +12,7 @@ def displaySec(sec, sp):
     sec.tag = tag
     if tag == '-': sec.price_change = -1 * sec.price_change
     colorShow(sp, sec)
+    if tag == '-': sec.price_change = -1 * sec.price_change
 
 def printHeader(sp):
     print(sp, '╔══════════════════╤═════════╤═══════╤═╤═══════════╤════════╤═════════╤═════════╤═════════╤═══════════╤══════════════╤═════════╤═════════╤════════╤════════╗')
@@ -22,9 +23,10 @@ def printTailer(sp, totalValue, dday, tablename):
     print(sp, '║ Market Value:', totalValue, ' ', dday, tablename + sp, '║')
     # print(sp, '╚══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝')
 
+fg = FgRegister()
 def colorShow(sp, sec):
     # print("total_gl=[%s]"%sec.total_gl)
-    fg = FgRegister()
+    # fg = FgRegister()
     # print('====sec:', sec.change, sec.price)
     prlow = '--' if sec.low_52_week == 0 or sec.low_52_week == None else float(sec.price) - float(sec.low_52_week)
     higpr = '--' if sec.high_52_week == 0 or sec.high_52_week == None else float(sec.high_52_week) - float(sec.price)
@@ -33,7 +35,7 @@ def colorShow(sp, sec):
     chnge = str(sec.price_change) # + sec.intradayChange
     price = str(sec.price) # + sec.intradayPrice
     # symbl = fg.cyan + pedsp(sec.symbol, 5) + fg.rs
-    daygl = fg.cyan + padsp(sec.today_gl, 8) + fg.rs
+    # daygl = fg.cyan + padsp(sec.today_gl, 8) + fg.rs
     pctac = '' if sec.pct_of_account == None else f"{sec.pct_of_account:,.2f}" + '%'
     pctAc = padsp(pctac, 8)
     totalgl = sec.total_gl
@@ -84,15 +86,19 @@ def colorShow(sp, sec):
         elif higpr < 0: higpr = fg.red + fhigpr + fg.rs
     else: higpr = padsp(higpr, 6)
 
-    todayGL = boldit(todayGL)
-    totalGL = boldit(totalGL)
-    chnge = boldit(chnge)
-    prlow = boldit(prlow)
-    price = boldit(price)
+    pctAc = boldIt(pctAc)
+    accnt = boldIt(accnt)
+    symbl = boldIt(symbl)
+    todayGL = boldIt(todayGL)
+    totalGL = boldIt(totalGL)
+    chnge = boldIt(chnge)
+    prlow = boldIt(prlow)
+    price = boldIt(price)
     quant = padsp(str(sec.quantity) + ' ', 11) # Shares
     value = sec.current_value
     value = padsp(f"{value:,.2f}", 13)
-    higpr = boldit(higpr)
+    value = boldIt(value)
+    higpr = boldIt(higpr)
     lo52w = padsp(sec.low_52_week, 8)
     hi52w = padsp(sec.high_52_week,8)
     ## don't touch this line below
@@ -101,18 +107,10 @@ def colorShow(sp, sec):
     print(ptxt)
     # sys.stdout.flush()
 
-# fg = lambda text, color: "\33[38;5;" + str(color) + "m" + text + "\33[0m"
-def boldit(str):
-    return ef.bold + str + rs.bold_dim
-
-# def colorit(str, wid):
-#     color = 42
-#     if '-' in str:
-#         color = 160 
-#         str = str.replace('-', '')
-#         str = pedsp(str, wid)
-#         colored_str = fg(str, color)
-#     return pedsp(colored_str, wid)
+def boldIt(str): return ef.bold + str + rs.bold_dim
+def redIt(str): return fg.red + str + fg.rs
+def greenIt(str): return fg.green + str + fg.rs
+def yellowIt(str): return fg.yellow + str + fg.rs
 
 def padsp(s, width): return f"{s or '':>{width}}" # 如果 s 是 None，换成空字符串，再右对齐
 def pedsp(s, width): return f"{s or '--':<{width}}"
@@ -153,3 +151,72 @@ def get_previous_business_day(date_input=None):
         # 0=周一 ... 4=周五，5=周六，6=周日
         if d.weekday() < 5:
             return d.strftime("%Y-%m-%d")  # 直接返回 YYYY-mm-dd 字符串
+
+
+def headerTop(tabw):
+    strtop = ' ╔' 
+    for w in tabw[:-1]: strtop += w * '═' + '╤'
+    strtop += tabw[-1] * '═' + '╗'
+    print(strtop)
+
+def headerHdr(tabw, cxt):
+    strcxt = ' ║'
+    for i, c in enumerate(cxt): strcxt += c.center(tabw[i]) + '│' if i < len(tabw)-1 else ''
+    strcxt += cxt[-1].center(tabw[-1]) + '║'
+    print(strcxt)
+
+def headerBot(tabw):
+    strbot = ' ╟' 
+    for w in tabw[:-1]: strbot += w * '─' + '┼'
+    strbot += tabw[-1] * '─' + '╢'
+    print(strbot)
+
+def dispRow(tabw, row):
+    fg = FgRegister()
+    pg = row.price_change
+    tag = fg.yellow + '=' + fg.rs
+    if pg > 0: tag = fg.green + '+' + fg.rs
+    elif pg < 0: tag = fg.red + '-' + fg.rs
+    tgl = row.total_gl
+    acct = row.account
+    acct = fg.green + acct + fg.rs if tgl > 0 else (acct if tgl == 0 else fg.red + acct + fg.rs)
+    # if tgl > 0: acct = fg.green + acct + fg.rs
+    # elif tgl < 0: acct = fg.red + acct + fg.rs
+
+    idx  = 0; rowstr = ' ║' + row.asof_time.strftime('%Y-%m-%d %H:%M').center(tabw[idx]) + '│'
+    idx += 1; rowstr += acct.center(tabw[idx]) + '│'
+    idx += 1; rowstr += row.symbol.center(tabw[idx]) + '│'
+    idx += 1; rowstr += tag.center(tabw[idx]) + '│'
+    idx += 1; rowstr += procCol(tabw[idx], row.total_gl) + '│'
+    idx += 1; rowstr += procCol(tabw[idx], row.price_change) + '│'
+    idx += 1; rowstr += procCol(tabw[idx], row.price) + '│'
+    idx += 1; rowstr += procCol(tabw[idx], row.today_gl) + '│'
+    idx += 1; rowstr += procCol(tabw[idx], row.pct_of_account) + '│'
+    idx += 1; rowstr += procCol(tabw[idx], row.quantity) + '│'
+    idx += 1; rowstr += boldIt(padsp(f"{row.current_value:,.2f}", tabw[idx]-1)) + ' │'
+    idx += 1; rowstr += padsp(row.low_52_week, tabw[idx]-1) + ' │'
+    idx += 1; rowstr += padsp(row.high_52_week, tabw[idx]-1) + ' │'
+    idx += 1; rowstr += padsp('', tabw[idx]) + '│' if row.low_52_week == 0 else procCol(tabw[idx], row.price - row.low_52_week) + '│'
+    idx += 1; rowstr += padsp('', tabw[idx]) + '║' if row.high_52_week == 0 else procCol(tabw[idx], row.high_52_week - row.price) + '║'
+    print(rowstr)
+
+def closeLine(tabw):
+    clsline = ' ╟' 
+    for w in tabw[:-1]: clsline += w * '─' + '┴'
+    clsline += tabw[-1] * '─' + '╢'
+    print(clsline)
+
+def closeBottom(tabw):
+    clsline = ' ╚' 
+    clsline += (sum(tabw) + len(tabw) - 1) * '═' 
+    clsline += '╝'
+    print(clsline)
+
+def procCol(tw, fl):
+    fg = FgRegister()
+    strfl = '--'
+    strfl = padsp(fl, tw-1) + ' ' if fl>=0 else padsp(-fl, tw-1) + ' ' ##__ append a space
+    if fl == 0: strfl = fg.yellow + strfl + fg.rs
+    elif fl > 0: strfl = fg.green + strfl + fg.rs
+    elif fl < 0: strfl = fg.red + strfl + fg.rs
+    return strfl
