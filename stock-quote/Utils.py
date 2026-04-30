@@ -186,18 +186,18 @@ def dispRow(tabw, row):
     idx  = 0; rowstr = ' ║' + row.asof_time.strftime('%Y-%m-%d %H:%M').center(tabw[idx]) + '│'
     idx += 1; rowstr += acct.center(tabw[idx]) + '│'
     idx += 1; rowstr += row.symbol.center(tabw[idx]) + '│'
-    idx += 1; rowstr += tag.center(tabw[idx]) + '│'
-    idx += 1; rowstr += procCol(tabw[idx], row.total_gl) + '│'
-    idx += 1; rowstr += procCol(tabw[idx], row.price_change) + '│'
-    idx += 1; rowstr += procCol(tabw[idx], row.price) + '│'
-    idx += 1; rowstr += procCol(tabw[idx], row.today_gl) + '│'
-    idx += 1; rowstr += procCol(tabw[idx], row.pct_of_account) + '│'
-    idx += 1; rowstr += procCol(tabw[idx], row.quantity) + '│'
+    idx += 1; rowstr += boldIt(tag.center(tabw[idx])) + '│'
+    idx += 1; rowstr += (tabw[idx]*' ' if row.total_gl == 0 else boldIt(procCol(tabw[idx], row.total_gl))) + '│'
+    idx += 1; rowstr += (tabw[idx]*' ' if row.price_change == 0 else boldIt(procCol(tabw[idx], row.price_change))) + '│'
+    idx += 1; rowstr += boldIt(procCol(tabw[idx], row.price, 3)) + '│'
+    idx += 1; rowstr += (tabw[idx]*' ' if row.today_gl == 0 else boldIt(procCol(tabw[idx], row.today_gl))) + '│'
+    idx += 1; rowstr += (tabw[idx]*' ' if row.pct_of_account == 0 else procCol(tabw[idx], row.pct_of_account)) + '│'
+    idx += 1; rowstr += procCol(tabw[idx], row.quantity, 3) + '│'    ## Shares 
     idx += 1; rowstr += boldIt(padsp(f"{row.current_value:,.2f}", tabw[idx]-1)) + ' │'
     idx += 1; rowstr += padsp(row.low_52_week, tabw[idx]-1) + ' │'
     idx += 1; rowstr += padsp(row.high_52_week, tabw[idx]-1) + ' │'
-    idx += 1; rowstr += padsp('', tabw[idx]) + '│' if row.low_52_week == 0 else procCol(tabw[idx], row.price - row.low_52_week) + '│'
-    idx += 1; rowstr += padsp('', tabw[idx]) + '║' if row.high_52_week == 0 else procCol(tabw[idx], row.high_52_week - row.price) + '║'
+    idx += 1; rowstr += padsp('', tabw[idx]) + '│' if row.low_52_week == 0 else procCol(tabw[idx], row.price - row.low_52_week, 3) + '│'
+    idx += 1; rowstr += padsp('', tabw[idx]) + '║' if row.high_52_week == 0 else procCol(tabw[idx], row.high_52_week - row.price, 3) + '║'
     print(rowstr)
 
 def closeLine(tabw):
@@ -212,10 +212,10 @@ def closeBottom(tabw):
     clsline += '╝'
     print(clsline)
 
-def procCol(tw, fl):
+def procCol(tw, fl, dml=2):
     fg = FgRegister()
     strfl = '--'
-    strfl = padsp(fl, tw-1) + ' ' if fl>=0 else padsp(-fl, tw-1) + ' ' ##__ append a space
+    strfl = padsp(f"{fl:.{dml}f}", tw-1) + ' ' if fl>=0 else padsp(-fl, tw-1) + ' ' ##__ append a space
     if fl == 0: strfl = fg.yellow + strfl + fg.rs
     elif fl > 0: strfl = fg.green + strfl + fg.rs
     elif fl < 0: strfl = fg.red + strfl + fg.rs
