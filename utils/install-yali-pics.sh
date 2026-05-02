@@ -2,7 +2,14 @@
 echo "==== starting install-yali-pics ====="
 yatoday="ya"`date +%Y%m%d`
 ###echo "yatoday=$yatoday"
-[[ -d $HOME/$yatoday ]] || { echo "No directory $yatoday exiting ..."; exit 100; }
+###[[ -d $HOME/$yatoday ]] || { echo "No directory $yatoday exiting ..."; exit 100; }
+if [ ! -d $HOME/$yatoday ]; then
+	echo "create directory $yatoday"
+	mkdir $yatoday
+	echo "now you put you picure files in $yatoday"
+	exit
+fi
+
 # # # [[ ! -z "$(ls -A $HOME/$yatoday)" ]] || { echo "Empty directory $yatoday exit..."; exit 101; }
 # # # [[ -z "$(find $HOME/$yatoday -maxdepth 0 -empty)" ]] || { echo "Empty directory $yatoday exit..."; exit 102; }
 [[ $(ls -A $HOME/$yatoday | wc -l) -gt 0 ]] || { echo "Empty directory $yatoday, exit..."; exit 200; }

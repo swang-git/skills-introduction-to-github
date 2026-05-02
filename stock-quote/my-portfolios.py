@@ -3,10 +3,10 @@ import sys
 import argparse
 # from more_itertools import chunked
 
-from Utils import boldIt, redIt, greenIt, headerTop, headerHdr, headerBot, dispRow, closeLine, closeBottom, padsp
+from Utils import boldIt, redIt, greenIt, drawTopHeader, showHeaderCxt, drawBotHeader, dispRow, drawBotLine, drawBotLineDownTick, drawBotLineUpTick
 from Models import dbsession, MyPortfolio
 from constants import NUM_PORTFOLIO_SEC, tabw, headers
-from sty import ef, rs, FgRegister
+from sty import FgRegister
 fg = FgRegister()
 
 parser = argparse.ArgumentParser()
@@ -28,8 +28,8 @@ def get_formated_data(diff):
     sdiffstr = str(sdiff)
     fgcolor = fg.red if diff < 0 else (fg.yellow if diff == 0 else fg.green)
     if diff < 0: sdiffstr = str(sdiff)[1:]; difflen -= 1
-    cdiff =  boldIt(fgcolor + sdiffstr + fg.rs)
-    return cdiff, difflen
+    cdiffx =  boldIt(fgcolor + sdiffstr + fg.rs)
+    return cdiffx, difflen
     
 if __name__=="__main__":
     rows = dbsession(database).query(MyPortfolio).order_by((MyPortfolio.asof_time).desc(), MyPortfolio.account.desc())\
@@ -45,14 +45,15 @@ if __name__=="__main__":
     
     cdiff1, difflen1 = get_formated_data(diff1)
     cdiff2, difflen2 = get_formated_data(diff2)
-    cdiff = 4*' ' + 'G/L(compare to preday):' + cdiff1 + ' G/L(by price change):' + cdiff2
-
+    cdiff = 3*' ' + 'G/L(compare to preday):' + cdiff1 + ' G/L(by price change):' + cdiff2
+    
     tablename = database + '.MyPortfolio'
-    headerTop(tabw)
-    headerHdr(tabw, headers)
-    headerBot(tabw)
+
+    drawTopHeader(tabw)
+    showHeaderCxt(tabw, headers)
+    drawBotHeader(tabw)
     for row in rowsy: dispRow(tabw, row)
-    closeLine(tabw)
+    drawBotLineUpTick(tabw)
     dday = rowsy[0].asof_time.strftime('%Y-%m-%d')
     totalValy = sum([row.current_value for row in rowsy])
     stockValy = sum([row.current_value for row in rowsy if row.account == 'My-stocks'])
@@ -74,13 +75,19 @@ if __name__=="__main__":
     bline2 = TPdiffExp + ' = ' + TPdiff
     print(bline1 + (sum(tabw) + len(tabw) - len(bline1) - len(bline2) + 19)*' ' + bline2 + ' ║')
 
-    headerTop(tabw)
-    headerHdr(tabw, headers)
-    headerBot(tabw)
+    drawBotLineDownTick(tabw)
+    showHeaderCxt(tabw, headers)
+    drawBotHeader(tabw)
     for row in rowst: dispRow(tabw, row)
-    closeLine(tabw)
+    drawBotLineUpTick(tabw)
     dday = rowst[0].asof_time.strftime('%Y-%m-%d')
-    lline1 = ' ║' + dday + ' Market Value:' + f"{totalValt:,.2f}" + ' Stock Value:' + f"{stockValt:,.2f}" + cdiff
-    lline2 = 'data from ' + tablename + ' ║'
-    print(lline1, (sum(tabw) + len(tabw) - len(bline1) - len(bline2) + 17)*' ', lline2)
-    closeBottom(tabw)
+    lline1 = ' ║ ' + dday + ' Market Value:' + f"{totalValt:,.2f}" + ' Stock Value:' + f"{stockValt:,.2f}" + cdiff
+    lline2 = 'data from ' + tablename
+    print(lline1 + (sum(tabw) + len(tabw) - len(lline1) - len(lline2) + 38)*' ' + lline2 + ' ║')
+    drawBotLine(tabw)
+
+# import unicodedata
+# str = 'ABC'
+# normalized = unicodedata.normalize('NFKC', str)
+# print(str)
+# print(normalized)

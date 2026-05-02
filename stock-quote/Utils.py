@@ -153,19 +153,19 @@ def get_previous_business_day(date_input=None):
             return d.strftime("%Y-%m-%d")  # 直接返回 YYYY-mm-dd 字符串
 
 
-def headerTop(tabw):
+def drawTopHeader(tabw):
     strtop = ' ╔' 
     for w in tabw[:-1]: strtop += w * '═' + '╤'
     strtop += tabw[-1] * '═' + '╗'
     print(strtop)
 
-def headerHdr(tabw, cxt):
+def showHeaderCxt(tabw, cxt):
     strcxt = ' ║'
     for i, c in enumerate(cxt): strcxt += c.center(tabw[i]) + '│' if i < len(tabw)-1 else ''
     strcxt += cxt[-1].center(tabw[-1]) + '║'
     print(strcxt)
 
-def headerBot(tabw):
+def drawBotHeader(tabw):
     strbot = ' ╟' 
     for w in tabw[:-1]: strbot += w * '─' + '┼'
     strbot += tabw[-1] * '─' + '╢'
@@ -184,8 +184,8 @@ def dispRow(tabw, row):
     # elif tgl < 0: acct = fg.red + acct + fg.rs
 
     idx  = 0; rowstr = ' ║' + row.asof_time.strftime('%Y-%m-%d %H:%M').center(tabw[idx]) + '│'
-    idx += 1; rowstr += acct.center(tabw[idx]) + '│'
-    idx += 1; rowstr += row.symbol.center(tabw[idx]) + '│'
+    idx += 1; rowstr += boldIt(acct.center(tabw[idx])) + '│'
+    idx += 1; rowstr += pedsp(" " + row.symbol, tabw[idx]) + '│'
     idx += 1; rowstr += boldIt(tag.center(tabw[idx])) + '│'
     idx += 1; rowstr += (tabw[idx]*' ' if row.total_gl == 0 else boldIt(procCol(tabw[idx], row.total_gl))) + '│'
     idx += 1; rowstr += (tabw[idx]*' ' if row.price_change == 0 else boldIt(procCol(tabw[idx], row.price_change))) + '│'
@@ -194,19 +194,37 @@ def dispRow(tabw, row):
     idx += 1; rowstr += (tabw[idx]*' ' if row.pct_of_account == 0 else procCol(tabw[idx], row.pct_of_account)) + '│'
     idx += 1; rowstr += procCol(tabw[idx], row.quantity, 3) + '│'    ## Shares 
     idx += 1; rowstr += boldIt(padsp(f"{row.current_value:,.2f}", tabw[idx]-1)) + ' │'
-    idx += 1; rowstr += padsp(row.low_52_week, tabw[idx]-1) + ' │'
-    idx += 1; rowstr += padsp(row.high_52_week, tabw[idx]-1) + ' │'
-    idx += 1; rowstr += padsp('', tabw[idx]) + '│' if row.low_52_week == 0 else procCol(tabw[idx], row.price - row.low_52_week, 3) + '│'
-    idx += 1; rowstr += padsp('', tabw[idx]) + '║' if row.high_52_week == 0 else procCol(tabw[idx], row.high_52_week - row.price, 3) + '║'
+    idx += 1; rowstr += boldIt(padsp(row.low_52_week, tabw[idx]-1)) + ' │'
+    idx += 1; rowstr += boldIt(padsp(row.high_52_week, tabw[idx]-1)) + ' │'
+    idx += 1; rowstr += padsp('', tabw[idx]) + '│' if row.low_52_week == 0 else boldIt(procCol(tabw[idx], row.price - row.low_52_week, 3)) + '│'
+    idx += 1; rowstr += padsp('', tabw[idx]) + '║' if row.high_52_week == 0 else boldIt(procCol(tabw[idx], row.high_52_week - row.price, 3)) + '║'
     print(rowstr)
 
-def closeLine(tabw):
-    clsline = ' ╟' 
-    for w in tabw[:-1]: clsline += w * '─' + '┴'
-    clsline += tabw[-1] * '─' + '╢'
-    print(clsline)
+# def drawBotLine(tabw):
+#     clsline = ' ╟' 
+#     for w in tabw[:-1]: clsline += w * '━' + '┷'
+#     clsline += tabw[-1] * '━' + '╢'
+#     print(clsline)
 
-def closeBottom(tabw):
+def drawBotLineDownTick(tabw):
+    sprline = ' ╟' 
+    for w in tabw[:-1]: sprline += w * '━' + '┯'
+    sprline += tabw[-1] * '━' + '╢'
+    print(sprline)
+
+def drawBotLineUpTick(tabw):
+    sprline = ' ╟' 
+    for w in tabw[:-1]: sprline += w * '━' + '┷'
+    sprline += tabw[-1] * '━' + '╢'
+    print(sprline)
+
+def drawBotLineCrossTick(tabw):
+    crsline = ' ╟' 
+    for w in tabw[:-1]: crsline += w * '━' + '┿'
+    crsline += tabw[-1] * '━' + '╢'
+    print(crsline)
+
+def drawBotLine(tabw):
     clsline = ' ╚' 
     clsline += (sum(tabw) + len(tabw) - 1) * '═' 
     clsline += '╝'
@@ -220,3 +238,29 @@ def procCol(tw, fl, dml=2):
     elif fl > 0: strfl = fg.green + strfl + fg.rs
     elif fl < 0: strfl = fg.red + strfl + fg.rs
     return strfl
+
+def center_perfect_NOT_WORKING(string: str, target_length: int) -> str:
+    """
+    Perfectly centers a string to EXACT target length (lx).
+    Uses half-spaces for balanced centering when padding is odd.
+    """
+    HALF_SPACE = "\u200A"  # -width space (visual 0.5 space)
+    HALF_SPACE = "\u2006"  # -width space (visual 0.5 space)
+    HALF_SPACE = "\u2005"  # -width space (visual 0.5 space)
+    str_len = len(string)
+
+    # If string is longer than target, return as-is
+    if str_len >= target_length:
+        return string
+
+    total_pad = target_length - str_len
+    base_pad = total_pad // 2   # Full spaces on each side
+    extra = total_pad % 2       # 0 = even, 1 = odd padding
+
+    # YOUR CORRECT LOGIC 👇
+    if extra == 1:
+        # Odd padding: full spaces + HALF-SPACE on BOTH sides
+        return " " * base_pad + HALF_SPACE + string + HALF_SPACE + " " * base_pad
+    else:
+        # Even padding: normal full spaces
+        return " " * base_pad + string + " " * base_pad
