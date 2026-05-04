@@ -187,12 +187,12 @@ def dispRow(tabw, row):
     idx += 1; rowstr += boldIt(acct.center(tabw[idx])) + '│'
     idx += 1; rowstr += pedsp(" " + row.symbol, tabw[idx]) + '│'
     idx += 1; rowstr += boldIt(tag.center(tabw[idx])) + '│'
-    idx += 1; rowstr += (tabw[idx]*' ' if row.total_gl == 0 else boldIt(procCol(tabw[idx], row.total_gl))) + '│'
-    idx += 1; rowstr += (tabw[idx]*' ' if row.price_change == 0 else boldIt(procCol(tabw[idx], row.price_change))) + '│'
-    idx += 1; rowstr += boldIt(procCol(tabw[idx], row.price, 3)) + '│'
+    idx += 1; rowstr += (tabw[idx]*' ' if row.total_gl == 0 else boldIt(procCol(tabw[idx], row.total_gl, False))) + '│'
+    idx += 1; rowstr += (tabw[idx]*' ' if row.price_change == 0 else boldIt(procCol(tabw[idx], row.price_change, False, 3))) + '│'
+    idx += 1; rowstr += boldIt(procCol(tabw[idx], row.price, True, 3)) + '│'
     idx += 1; rowstr += (tabw[idx]*' ' if row.today_gl == 0 else boldIt(procCol(tabw[idx], row.today_gl))) + '│'
-    idx += 1; rowstr += (tabw[idx]*' ' if row.pct_of_account == 0 else procCol(tabw[idx], row.pct_of_account)) + '│'
-    idx += 1; rowstr += procCol(tabw[idx], row.quantity, 3) + '│'    ## Shares 
+    idx += 1; rowstr += (tabw[idx]*' ' if row.pct_of_account == 0 else procCol(tabw[idx], row.pct_of_account, True, 3)) + '│'
+    idx += 1; rowstr += procCol(tabw[idx], row.quantity, True, 3) + '│'    ## Shares 
     idx += 1; rowstr += boldIt(padsp(f"{row.current_value:,.2f}", tabw[idx]-1)) + ' │'
     idx += 1; rowstr += boldIt(padsp(row.low_52_week, tabw[idx]-1)) + ' │'
     idx += 1; rowstr += boldIt(padsp(row.high_52_week, tabw[idx]-1)) + ' │'
@@ -230,10 +230,11 @@ def drawBotLine(tabw):
     clsline += '╝'
     print(clsline)
 
-def procCol(tw, fl, dml=2):
+def procCol(tw:int, fl:float, no_color=False, dml=2):
     fg = FgRegister()
     strfl = '--'
     strfl = padsp(f"{fl:.{dml}f}", tw-1) + ' ' if fl>=0 else padsp(-fl, tw-1) + ' ' ##__ append a space
+    if no_color: return strfl
     if fl == 0: strfl = fg.yellow + strfl + fg.rs
     elif fl > 0: strfl = fg.green + strfl + fg.rs
     elif fl < 0: strfl = fg.red + strfl + fg.rs

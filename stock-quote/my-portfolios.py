@@ -32,8 +32,12 @@ def get_formated_data(diff):
     return cdiffx, difflen
     
 if __name__=="__main__":
-    rows = dbsession(database).query(MyPortfolio).order_by((MyPortfolio.asof_time).desc(), MyPortfolio.account.desc())\
-    .limit(2*NUM_PORTFOLIO_SEC).offset(-sub_days*NUM_PORTFOLIO_SEC).all()
+    db = dbsession(database)
+    lmt = 2 * NUM_PORTFOLIO_SEC
+    sub = -sub_days * NUM_PORTFOLIO_SEC
+    tab = MyPortfolio
+    rows = db.query(tab).order_by((tab.asof_time).desc(), tab.account.desc()).limit(lmt).offset(sub).all()
+    
     rowst = rows[0:NUM_PORTFOLIO_SEC]
     rowsy = rows[NUM_PORTFOLIO_SEC:]
 
