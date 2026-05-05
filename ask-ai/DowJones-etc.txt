@@ -1,4 +1,4 @@
-1, find latest values for DOW_JONES, NASDAQ, SP500, FTSE100, NIKKEI;
+1, find today's values for DOW_JONES, NASDAQ, SP500, FTSE100, NIKKEI;
 2, create an mysql insert query to the following table
 3. use US eastern time
 mysql> describe health_records;

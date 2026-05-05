@@ -1,4 +1,4 @@
-get data from following csv file
+get data from following pdf file
 set quantity = current_value if it not available (for cash/money market cases)
 set quantity as it is if it is available
 set price_change = 0 if it is not available
