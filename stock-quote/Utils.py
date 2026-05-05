@@ -196,8 +196,8 @@ def dispRow(tabw, row):
     idx += 1; rowstr += boldIt(padsp(f"{row.current_value:,.2f}", tabw[idx]-1)) + ' │'
     idx += 1; rowstr += boldIt(padsp(row.low_52_week, tabw[idx]-1)) + ' │'
     idx += 1; rowstr += boldIt(padsp(row.high_52_week, tabw[idx]-1)) + ' │'
-    idx += 1; rowstr += padsp('', tabw[idx]) + '│' if row.low_52_week == 0 else boldIt(procCol(tabw[idx], row.price - row.low_52_week, 3)) + '│'
-    idx += 1; rowstr += padsp('', tabw[idx]) + '║' if row.high_52_week == 0 else boldIt(procCol(tabw[idx], row.high_52_week - row.price, 3)) + '║'
+    idx += 1; rowstr += padsp('', tabw[idx]) + '│' if row.low_52_week == 0 else boldIt(procCol(tabw[idx], row.price - row.low_52_week, False, 3)) + '│'
+    idx += 1; rowstr += padsp('', tabw[idx]) + '║' if row.high_52_week == 0 else boldIt(procCol(tabw[idx], row.high_52_week - row.price, False, 3)) + '║'
     print(rowstr)
 
 # def drawBotLine(tabw):
