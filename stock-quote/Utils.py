@@ -1,8 +1,6 @@
-# import urllib.request
-# import hashlib
 from datetime import date, datetime, timedelta
-# import time, sys
 from sty import ef, rs, FgRegister
+from mysql.connector import Error
 
 def displaySec(sec, sp):
     tag = '+=-'
@@ -24,9 +22,13 @@ def printTailer(sp, totalValue, dday, tablename):
     # print(sp, '╚══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝')
 
 fg = FgRegister()
+# print("FG", fg.__dict__)
+# print("FG", dir(fg))
+# print(type(fg))
+# import pprint
+# pprint.pprint(fg.__dict__)
 def colorShow(sp, sec):
     # print("total_gl=[%s]"%sec.total_gl)
-    # fg = FgRegister()
     # print('====sec:', sec.change, sec.price)
     prlow = '--' if sec.low_52_week == 0 or sec.low_52_week == None else float(sec.price) - float(sec.low_52_week)
     higpr = '--' if sec.high_52_week == 0 or sec.high_52_week == None else float(sec.high_52_week) - float(sec.price)
@@ -175,29 +177,31 @@ def dispRow(tabw, row):
     fg = FgRegister()
     pg = row.price_change
     tag = fg.yellow + '=' + fg.rs
-    if pg > 0: tag = fg.green + '+' + fg.rs
-    elif pg < 0: tag = fg.red + '-' + fg.rs
-    tgl = row.total_gl
+    if pg!=None and pg>0: tag = fg.green + '+' + fg.rs 
+    # elif pg != None and pg < 0: tag = fg.magenta + '━' + fg.rs
+    # elif pg != None and pg < 0: tag = fg.red + '━' + fg.rs
+    # elif pg != None and pg < 0: tag = fg.red + '━' + fg.rs
+    elif pg != None and pg < 0: tag = fg.red + '═' + fg.rs
+
+    tgl = 0 if row.total_gl == None else row.total_gl
     acct = row.account
     acct = fg.green + acct + fg.rs if tgl > 0 else (acct if tgl == 0 else fg.red + acct + fg.rs)
-    # if tgl > 0: acct = fg.green + acct + fg.rs
-    # elif tgl < 0: acct = fg.red + acct + fg.rs
 
     idx  = 0; rowstr = ' ║' + row.asof_time.strftime('%Y-%m-%d %H:%M').center(tabw[idx]) + '│'
     idx += 1; rowstr += boldIt(acct.center(tabw[idx])) + '│'
     idx += 1; rowstr += pedsp(" " + row.symbol, tabw[idx]) + '│'
     idx += 1; rowstr += boldIt(tag.center(tabw[idx])) + '│'
-    idx += 1; rowstr += (tabw[idx]*' ' if row.total_gl == 0 else boldIt(procCol(tabw[idx], row.total_gl, False))) + '│'
-    idx += 1; rowstr += (tabw[idx]*' ' if row.price_change == 0 else boldIt(procCol(tabw[idx], row.price_change, False, 3))) + '│'
-    idx += 1; rowstr += boldIt(procCol(tabw[idx], row.price, True, 3)) + '│'
-    idx += 1; rowstr += (tabw[idx]*' ' if row.today_gl == 0 else boldIt(procCol(tabw[idx], row.today_gl))) + '│'
+    idx += 1; rowstr += (tabw[idx]*' ' if row.total_gl == None else boldIt(procCol(tabw[idx], row.total_gl, False))) + '│'
+    idx += 1; rowstr += (tabw[idx]*' ' if row.price_change == None else boldIt(procCol(tabw[idx], row.price_change, False, 3))) + '│'
+    idx += 1; rowstr += (tabw[idx]*' ' if row.price == None else boldIt(procCol(tabw[idx], row.price, True, 3))) + '│'
+    idx += 1; rowstr += (tabw[idx]*' ' if row.today_gl == None else boldIt(procCol(tabw[idx], row.today_gl))) + '│'
     idx += 1; rowstr += (tabw[idx]*' ' if row.pct_of_account == 0 else procCol(tabw[idx], row.pct_of_account, True, 3)) + '│'
     idx += 1; rowstr += procCol(tabw[idx], row.quantity, True, 3) + '│'    ## Shares 
     idx += 1; rowstr += boldIt(padsp(f"{row.current_value:,.2f}", tabw[idx]-1)) + ' │'
     idx += 1; rowstr += boldIt(padsp(row.low_52_week, tabw[idx]-1)) + ' │'
     idx += 1; rowstr += boldIt(padsp(row.high_52_week, tabw[idx]-1)) + ' │'
-    idx += 1; rowstr += padsp('', tabw[idx]) + '│' if row.low_52_week == 0 else boldIt(procCol(tabw[idx], row.price - row.low_52_week, False, 3)) + '│'
-    idx += 1; rowstr += padsp('', tabw[idx]) + '║' if row.high_52_week == 0 else boldIt(procCol(tabw[idx], row.high_52_week - row.price, False, 3)) + '║'
+    idx += 1; rowstr += padsp('', tabw[idx]) + '│' if row.low_52_week == None else boldIt(procCol(tabw[idx], row.price - row.low_52_week, False)) + '│'
+    idx += 1; rowstr += padsp('', tabw[idx]) + '║' if row.high_52_week == None else boldIt(procCol(tabw[idx], row.high_52_week - row.price, False)) + '║'
     print(rowstr)
 
 # def drawBotLine(tabw):
@@ -231,6 +235,7 @@ def drawBotLine(tabw):
     print(clsline)
 
 def procCol(tw:int, fl:float, no_color=False, dml=2):
+    if fl == None: fl = 0
     fg = FgRegister()
     strfl = '--'
     strfl = padsp(f"{fl:.{dml}f}", tw-1) + ' ' if fl>=0 else padsp(-fl, tw-1) + ' ' ##__ append a space
@@ -265,3 +270,91 @@ def center_perfect_NOT_WORKING(string: str, target_length: int) -> str:
     else:
         # Even padding: normal full spaces
         return " " * base_pad + string + " " * base_pad
+    
+def get_data_from_table(cur, tabname: str, condition: str = None, limit: int = None):
+    """
+    Query data from a MySQL table (qtable) with optional WHERE condition and LIMIT.
+    
+    Args:
+        qtable: Name of your table (e.g., "my_portfolios", "stocks", "transactions")
+        condition: Optional WHERE clause (e.g., "symbol = 'MSFT'", "status = 'A'")
+        limit: Optional max rows to return
+    
+    Returns:
+        List of dictionaries (each dict = 1 row, column names as keys)
+        Empty list if no data / error
+    """
+    try:
+        # Connect to MySQL
+        # Build safe SQL query
+        query = f"SELECT * FROM {tabname}"
+        
+        # Add WHERE condition if provided
+        if condition:
+            query += f" WHERE {condition}"
+        
+        # Add LIMIT if provided
+        if limit:
+            query += f" LIMIT {limit}"
+
+        # Execute and fetch
+        cur.execute(query)
+        results = cur.fetchall()  # List of dicts
+
+        return results
+
+    except Error as e:
+        print(f"❌ MySQL Query Error: {e}")
+        return []  # Return empty list on failure
+
+    # finally:
+    #     # Always close connection
+    #     if connection.is_connected():
+    #         cursor.close()
+    #         connection.close()
+
+def build_dict(cursor, results):  ## results from get_data_from_table
+    """
+    Convert query results into a dictionary:
+    { 'MSFT': row1, 'CSCO': row2, ... }
+    """
+    # --------------------------
+    # 3. Get column names (critical!)
+    # --------------------------
+    columns = [col[0] for col in cursor.description]
+    
+    result_dict = {}
+    for row in results:
+        # Convert raw tuple row → dictionary {column: value}
+        row_dict = dict(zip(columns, row))
+        # SET YOUR KEY HERE (e.g., key = account column)
+        key = row_dict["symbol"]
+    
+        # Add to final dict
+        result_dict[key] = row_dict
+
+    return result_dict
+
+
+def get_52_week_low(symbol, dict):
+    if symbol == None: return None
+    elif symbol not in dict: return None
+    return dict[symbol]['wk52_low']
+    # ret = retx['wk52_low']
+    # print("ret:[%s]"%retx)
+    # return ret
+def get_52_week_high(symbol, dict):
+    if symbol == None: return None
+    elif symbol not in dict: return None
+    return dict[symbol]['wk52_high']
+
+# def show_dict(dict):
+#     for i, row in enumerate(dict):
+#         # Access values by column name
+#         if len(row['Account Number']) > 15: break
+#         # print("Account:", row['Account Number'], "| Account Name:", row['Account Name'])
+#         print(25*'=', i, 20*'=')
+#         for key, val in row.items():
+#             if key == None: break
+#             # if key != 'Type': continue
+#             print((26-len(key))*' ' + key + ": " + val.strip('+').strip('$|%'))

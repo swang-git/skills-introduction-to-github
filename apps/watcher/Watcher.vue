@@ -11,7 +11,7 @@
         <div v-if="isDesk && e.dowjones>0" class="q-px-md text-right" @click="showIt(i)"> {{ formatCurrency(e.dowjones) }}
           <q-tooltip class="text-h6 bg-accent">Dow Jones on {{ e.date }}</q-tooltip>
         </div>
-        <div v-if="isDesk" class="q-pl-xs text-right"  @click="showIt(i)">{{ ((e.portfolio/invested(e) - 1) * 100).toFixed(2) }}%</div>
+        <div v-if="isDesk" class="q-pl-xs text-right" style="width:70px" @click="showIt(i)">{{ ((e.portfolio/invested(e) - 1) * 100).toFixed(2) }}%</div>
         <div v-if="isDesk" class="q-pl-md text-right" style="width:124px" @click="showDar(e, 'upd')">{{ getWeight(e) }} / {{ getBMI(e) }}</div>
         <div v-else class="text-left" style="width:111px" @click="showDar(e, 'upd')">{{ e.date }}</div>
         <div v-if="isDesk" class="q-px-sm text-right" :class="{ 'text-green-3':e.dif>0, 'text-pink-2':e.dif<0 }" style="width:115px" @click="showDar(e, 'upd')"> {{ e.difs }} </div>

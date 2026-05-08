@@ -42,7 +42,7 @@
 
     <template v-slot:body="p">
       <q-tr :props="p" @click="expandRow(p)" class="cursor-pointer">
-        <q-td v-for="col in p.cols" :key="col" :style="getStyle(col.name)" :class="getClass4Val(col.value)">{{ showVal(col) }}</q-td>
+        <q-td v-for="col in p.cols" :key="col" :style="getStyle(col.name)" class="text-no-wrap" :class="getClass4Val(col.value)">{{ showVal(col) }}</q-td>
       </q-tr>
 
       <q-tr v-show="p.expand" :props="p">
@@ -181,7 +181,7 @@ function showVal (col) {
   if (col.name == 'account') return col.value.substring(0,9)//.toUpperCase()
   else if (col.name == 'account_name') return col.value.substring(0, 5).toUpperCase()
   else if (col.name == 'symbol') return col.value.replace('**', '')
-  else if (col.name == 'holding_time') return isNaN(parseFloat(col.value)) ? 'n/a' : parseFloat(col.value).toFixed(1) + '年'
+  else if (col.name == 'holding_time') return isNaN(parseFloat(col.value)) ? null : parseFloat(col.value).toFixed(1) + '年'
   else if (col.value == 'n/a' || col.value == '--') return col.value
   const val = col.value > 0 ? col.value : -col.value
   if (/^[-]?\d+/.test(val)) return fmtcy(val)
@@ -190,6 +190,7 @@ function showVal (col) {
 function getStyle (colname) {
   if (colname == col(0).name || colname == col(1).name || colname == col(2).name) return 'text-align:center;font-size:19px'
   // else if (colname == 'current_value') return 'text-align:right;font-size:19px;font-family:dejavu sans mono'
+  else if (colname == 'holding_time') return 'text-align:right;font-size:17px'
   else return 'text-align:right;font-size:18px'
 }
 function getClass4Exp (val) {

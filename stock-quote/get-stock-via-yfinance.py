@@ -334,22 +334,20 @@ def insert_to_health_records(conn, cur, data):
         # MySQL INSERT query (matches your columns)
         insert_query = """
         INSERT INTO health_records (
-            date, weight, portfolio, DOW_JONES, NASDAQ, SP500, FTSE100, NIKKEI, note, created_at, updated_at
-        ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+            date, weight, portfolio, DOW_JONES, NASDAQ, SP500, FTSE100, NIKKEI, note
+        ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
         """
         # Tuple of values in ORDER
         values = (
             datetime.now().strftime("%Y-%m-%d"),
             68.8, # weight
-            1976543.21,      ### portfolio
+            ### 1976543.21,      ### portfolio
             data["DOW_JONES"],
             data["NASDAQ"],
             data["SP500"],
             data["FTSE100"],
             data["NIKKEI"],
-            datetime.now().strftime("%Y-%m-%d %H:%M:%S"), ### note
-            datetime.now(),
-            datetime.now()
+            datetime.now().strftime("%Y-%m-%d %H:%M:%S") ### note
         )
 
         cur.execute(insert_query, values)

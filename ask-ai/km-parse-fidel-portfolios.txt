@@ -2,12 +2,13 @@ get data from the .csv file
 set quantity = current_value if it not available (for cash/money market cases)
 set quantity as it is if it is available
 set price_change = 0 if it is not available
-set 52 week low/high for BEKE 14.4/17.46
-set 52 week low/high for FSKAX 153.44/197.76
-set 52 week low/high for FFTWX 13.72/17.72
+set 52 week low/high for BEKE 14.4/20.98
+set 52 week low/high for FSKAX 153.44/199.47
+set 52 week low/high for FFTWX 13.72/17.74
 find 52 week low/high if available otherwisw set to 0
 generate mysql insert query(one statement) to table my_portfolios
-set asof_time = the one on the pdf report (on top-right conner)
+set asof_time of the first record = the one on the pdf report (on top-right conner) and reduce by 1 second for next record and so on ...
+do not populate status column which has default value ('A')
 describe my_portfolios;
 +----------------+---------------+------+-----+-------------------+-----------------------------------------------+
 | Field          | Type          | Null | Key | Default           | Extra                                         |

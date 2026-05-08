@@ -13,7 +13,6 @@ parser = argparse.ArgumentParser()
 parser.add_argument("sub_days", metavar='int', type=int, nargs='?', default='0', help='sub days from today(must be < 0), default 0 for today')
 # optional arguments
 parser.add_argument('-d', '--db', type=str, default='prod', help='check quotes in this database default database: prod')
-# parser.add_argument('-d', '--db', type=str, default='devx', help='check quotes in this database default database: devx')
 args = parser.parse_args()
 sub_days = args.sub_days
 if sub_days > 0:
@@ -44,7 +43,8 @@ if __name__=="__main__":
     totaly = sum(row.current_value for row in rowsy)
     totalt = sum(row.current_value for row in rowst)
     diff1 = totalt - totaly # totalValue of current day - totalValue of prior day
-    diff2 = sum(row.price_change * row.quantity for row in rowst) # based on current day
+    diff2 = sum(row.price_change * row.quantity for row in rowst if row.price_change != None and row.quantity != None) # based on current day
+    # diff2 = sum(row.current_value for row in rowst) # based on current day
     # print_rows_prior_day(rowsy)
     
     cdiff1, difflen1 = get_formated_data(diff1)
@@ -75,7 +75,7 @@ if __name__=="__main__":
         TPdiff = f"{-1*tpdiff}"
         TPdiff = boldIt(redIt(TPdiff))
     TPdiffExp = prtft + ' - ' + prtfy
-    bline1 = ' ║ '+dday+' Market Value:'+f"{totalValy:,.2f}"+' Stock Value:'+f"{stockValy:,.2f}"+'     Prev Portf:'+prtfy+' Today Portf:'+prtft
+    bline1 = ' ║ '+dday+' Market Value:'+f"{totalValy:,.2f}"+' Stock Value:'+f"{stockValy:,.2f}"+'   Prev Portf:'+prtfy+' Today Portf:'+prtft
     bline2 = TPdiffExp + ' = ' + TPdiff
     print(bline1 + (sum(tabw) + len(tabw) - len(bline1) - len(bline2) + 19)*' ' + bline2 + ' ║')
 
@@ -89,9 +89,3 @@ if __name__=="__main__":
     lline2 = 'data from ' + tablename
     print(lline1 + (sum(tabw) + len(tabw) - len(lline1) - len(lline2) + 38)*' ' + lline2 + ' ║')
     drawBotLine(tabw)
-
-# import unicodedata
-# str = 'ABC'
-# normalized = unicodedata.normalize('NFKC', str)
-# print(str)
-# print(normalized)
