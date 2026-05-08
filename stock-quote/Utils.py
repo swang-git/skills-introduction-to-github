@@ -297,6 +297,8 @@ def get_data_from_table(cur, tabname: str, condition: str = None, limit: int = N
         if limit:
             query += f" LIMIT {limit}"
 
+        # print('query[%s]'%query)
+
         # Execute and fetch
         cur.execute(query)
         results = cur.fetchall()  # List of dicts
@@ -306,12 +308,6 @@ def get_data_from_table(cur, tabname: str, condition: str = None, limit: int = N
     except Error as e:
         print(f"❌ MySQL Query Error: {e}")
         return []  # Return empty list on failure
-
-    # finally:
-    #     # Always close connection
-    #     if connection.is_connected():
-    #         cursor.close()
-    #         connection.close()
 
 def build_dict(cursor, results):  ## results from get_data_from_table
     """

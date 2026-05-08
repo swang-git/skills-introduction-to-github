@@ -61,6 +61,7 @@ def get_stock_data_for_portfolio(symbol: str):
         "status": "A"  # your default: A = Active
     }
 
+    data = {}
     try:
         ticker = yf.Ticker(symbol)
         info = ticker.info

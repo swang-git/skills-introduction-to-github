@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine, Column, VARCHAR, DECIMAL, DATETIME, Float, Integer
+from sqlalchemy import create_engine, Column, VARCHAR, DECIMAL, DATE, DATETIME, Float, Integer
 from sqlalchemy.orm import declarative_base, sessionmaker
 
 # =============================================================================
@@ -18,11 +18,24 @@ def get_connection(database):
     SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
     return SessionLocal(), engine.raw_connection()
 
-# def get_sessionLocal(): return SessionLocal
+
+# =============================================================================
+# 1. MYSQL TABLE MODEL: HealthRecord (YOUR EXACT SCHEMA)
+# =============================================================================
+Base = declarative_base()
+class HealthRecord(Base):
+    __tablename__ = "health_records"
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    date = Column(DATE, nullable=False, index=True)
+    DOW_JONES = Column(DECIMAL(12, 3), nullable=False)
+    NASDAQ = Column(DECIMAL(12, 3), nullable=False)
+    SP500 = Column(DECIMAL(12, 3), nullable=False)
+    FTSE100 = Column(DECIMAL(12, 3), nullable=False)
+    NIKKEI = Column(DECIMAL(12, 3), nullable=False)
+
 # =============================================================================
 # 2. MYSQL TABLE MODEL: MyPortfolio (YOUR EXACT SCHEMA)
 # =============================================================================
-Base = declarative_base()
 class MyPortfolio(Base):
     __tablename__ = "my_portfolios"
 

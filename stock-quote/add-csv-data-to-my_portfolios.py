@@ -1,9 +1,9 @@
 #!/Users/swang/myenv/bin/python
 
 import sys, os, csv
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 
-from Utils import get_data_from_table, build_dict, get_52_week_low, get_52_week_high
+from Utils import get_data_from_table, build_dict, get_52_week_low, get_52_week_high, padsp
 from MyPortfolio_Models import get_connection, CSV_TO_DB_MAP, TYPE_CONVERTERS, MyPortfolio
 
 import argparse
@@ -64,8 +64,8 @@ def import_portfolio_csv(db, csv_file_path, dict, asof_time: datetime):
                 # Step 3: Unique key for upsert
                 # --------------------------
                 asof = data.get("asof_time")
-                low = '' if data.get("low_52_week") == None else data.get("low_52_week")
-                high = '' if data.get("high_52_week") == None else data.get("high_52_week")
+                low = padsp('' if data.get("low_52_week") == None else data.get("low_52_week"), 7)
+                high = padsp('' if data.get("high_52_week") == None else data.get("high_52_week"), 7)
                 data["symbol"] = data["symbol"].strip("*")
                 symb = data["symbol"]
 
@@ -82,12 +82,12 @@ def import_portfolio_csv(db, csv_file_path, dict, asof_time: datetime):
                     # Update all fields
                     for key, value in data.items():
                         setattr(existing, key, value)
-                    print(f"🔄 Updated | Account: {account} | As-of: {asof} | 52wk_low/high: {low} / {high}")
+                    print(f"🔄 Updated | Account: {account} | As-of: {asof} | 52wk_low: {low} | 52wk_high: {high}")
                 else:
                     # Create new record (NO __init__ needed!)
                     new_record = MyPortfolio(**data)
                     db.add(new_record)
-                    print(f"✅ Added   | Account: {account} | As-of: {asof} | 52wk_low/high: {low} / {high}")
+                    print(f"✅ Added   | Account: {account} | As-of: {asof} | 52wk_low: {low} | 52wk_high: {high}")
 
         # Save all changes
         db.commit()
@@ -104,24 +104,21 @@ def import_portfolio_csv(db, csv_file_path, dict, asof_time: datetime):
 # =============================================================================
 if __name__ == "__main__":
     rootdir = "/Users/swang/sites/webdata/docs/Portfolio/"
-    today = datetime.now().strftime('%Y%m%d')
-    csvfile = 'snapshot_' + today + '.csv'
+    today = date.today()
+    csvfile = 'snapshot_' + today.strftime('%Y%m%d') + '.csv'
     csv_data_file = rootdir + csvfile
     if os.path.exists(csv_data_file):
         print("✅ [%s] File exists!"%csv_data_file)
     else:
         print("❌ [%s] File not found!"%csv_data_file)
         sys.exit(-1)
-    
     # print('csv_data_file:', csv_data_file); sys.exit(0)
-
-    # conn = engine.raw_connection()
     db, conn = get_connection(database)
     cursor = conn.cursor()
     meta = get_data_from_table(cursor, 'security_metas', 'status="A"')
     dict = build_dict(cursor, meta)
-    # Set YOUR asof_time (e.g., current time or parsed from filename)
-    ASOF_TIME = datetime(2026, 5, 7, 17, 30, 0)
+    ASOF_TIME = datetime(today.year, today.month, today.day, 17, 30, 0)
+    # ASOF_TIME = datetime(2026, 5, 7, 17, 30, 0)
     # Start import
     import_portfolio_csv(db, csv_data_file, dict, ASOF_TIME)
     cursor.close()
