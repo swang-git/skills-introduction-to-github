@@ -189,14 +189,15 @@ def dispRow(tabw, row):
 
     idx  = 0; rowstr = ' ║' + row.asof_time.strftime('%Y-%m-%d %H:%M').center(tabw[idx]) + '│'
     idx += 1; rowstr += boldIt(acct.center(tabw[idx])) + '│'
-    idx += 1; rowstr += pedsp(" " + row.symbol, tabw[idx]) + '│'
-    idx += 1; rowstr += boldIt(tag.center(tabw[idx])) + '│'
     idx += 1; rowstr += (tabw[idx]*' ' if row.total_gl == None else boldIt(procCol(tabw[idx], row.total_gl, False))) + '│'
+    idx += 1; rowstr += (tabw[idx]*' ' if row.total_gl_pct == None else boldIt(procCol(tabw[idx], row.total_gl_pct, False))) + '│'
+    idx += 1; rowstr += padsp(row.symbol, tabw[idx]-1) + ' │'
+    idx += 1; rowstr += boldIt(tag.center(tabw[idx])) + '│'
     idx += 1; rowstr += (tabw[idx]*' ' if row.price_change == None else boldIt(procCol(tabw[idx], row.price_change, False, 3))) + '│'
     idx += 1; rowstr += (tabw[idx]*' ' if row.price == None else boldIt(procCol(tabw[idx], row.price, True, 3))) + '│'
     idx += 1; rowstr += (tabw[idx]*' ' if row.today_gl == None else boldIt(procCol(tabw[idx], row.today_gl))) + '│'
     idx += 1; rowstr += (tabw[idx]*' ' if row.pct_of_account == 0 else procCol(tabw[idx], row.pct_of_account, True, 3)) + '│'
-    idx += 1; rowstr += procCol(tabw[idx], row.quantity, True, 3) + '│'    ## Shares 
+    idx += 1; rowstr += (tabw[idx]*' ' if row.quantity == None else procCol(tabw[idx], row.quantity, True, 3)) + '│'    ## Shares 
     idx += 1; rowstr += boldIt(padsp(f"{row.current_value:,.2f}", tabw[idx]-1)) + ' │'
     idx += 1; rowstr += boldIt(padsp(row.low_52_week, tabw[idx]-1)) + ' │'
     idx += 1; rowstr += boldIt(padsp(row.high_52_week, tabw[idx]-1)) + ' │'
@@ -344,13 +345,25 @@ def get_52_week_high(symbol, dict):
     elif symbol not in dict: return None
     return dict[symbol]['wk52_high']
 
-# def show_dict(dict):
-#     for i, row in enumerate(dict):
-#         # Access values by column name
-#         if len(row['Account Number']) > 15: break
-#         # print("Account:", row['Account Number'], "| Account Name:", row['Account Name'])
-#         print(25*'=', i, 20*'=')
-#         for key, val in row.items():
-#             if key == None: break
-#             # if key != 'Type': continue
-#             print((26-len(key))*' ' + key + ": " + val.strip('+').strip('$|%'))
+def get_meta(cursor):
+    # print('-fn-get_meta[%s]'%symb)
+    metax = get_data_from_table(cursor, 'security_metas', 'status="A"')
+    # print(metax)
+    meta_dict = build_dict(cursor, metax)
+    # print(meta_dict)
+    return meta_dict
+
+def get_quantity(meta_dict, symb):
+    quantity = meta_dict[symb]['quantity']
+    # print("quantity=[%s]"%quantity)
+    return quantity
+
+def get_total_cost(meta_dict, symb):
+    total_cost = meta_dict[symb]['total_cost']
+    # print("total_cost=[%s]"%total_cost)
+    return total_cost
+
+def get_basis_price(meta_dict, symb):
+    basis_price = meta_dict[symb]['basis_price']
+    # print("basis_price=[%s]"%basis_price)
+    return basis_price

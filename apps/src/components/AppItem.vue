@@ -42,7 +42,7 @@ function openApp (app, appTitle) {
   // curApp.value = app
   // for (const key of Object.keys(disableBtn)) disableBtn[key] = false
   // disableBtn[app] = true
-  if (['../golf', '../arts', 'glucosecheck','exlist', 'relist'].includes(app)) { // no need to reload for chart
+  if (['../arts', '../yali', '../golf', 'glucosecheck','exlist', 'relist'].includes(app)) { // no need to reload for chart
     window.location.href = app // this navigates to app and also trigger to loading. otherwise <canvas> not working
   }
   router.replace({ path: app })  // this is just navigating no loading

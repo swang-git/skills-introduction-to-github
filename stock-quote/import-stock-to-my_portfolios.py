@@ -5,15 +5,20 @@ import sys, pprint, time
 from datetime import datetime, date, timedelta
 from decimal import Decimal
 
-from Utils import get_data_from_table, build_dict, get_52_week_low, get_52_week_high, padsp
+from Utils import get_data_from_table, build_dict, padsp, get_meta, get_quantity, get_total_cost, get_basis_price
 from MyPortfolio_Models import get_connection, CSV_TO_DB_MAP, TYPE_CONVERTERS, MyPortfolio, HealthRecord
 
 import argparse
 parser = argparse.ArgumentParser()
-parser.add_argument('-d', '--db', type=str, default='prod', help='check quotes in this database default database: prod')
+parser.add_argument('-t', '--test', action="store_true", help='for testing get data from database(instead of yfinance)')
+# parser.add_argument('-d', '--database', type=str, required=True, default='prod', help='check quotes in this database default database: prod')
+parser.add_argument('-d', '--db', type=str, required=True, help='upsert stock quotes to database DB<devx/prod> table:my_portfolios')
 args = parser.parse_args()
 database = args.db
+testing = args.test
 print("database:", database)
+print('testing...') if testing else None
+# sys.exit(0)
 
 def show_stock_data(row):
     leng = 15
@@ -32,29 +37,6 @@ def get_fake_stock_data(cursor, symb):
     stock_data = dict[symb]
     # show_stock_data(stock_data)
     return stock_data
-
-def get_meta(cursor):
-    # print('-fn-get_meta[%s]'%symb)
-    metax = get_data_from_table(cursor, 'security_metas', 'status="A"')
-    # print(metax)
-    meta_dict = build_dict(cursor, metax)
-    # print(meta_dict)
-    return meta_dict
-
-def get_quantity(meta_dict, symb):
-    quantity = meta_dict[symb]['quantity']
-    # print("quantity=[%s]"%quantity)
-    return quantity
-
-def get_total_cost(meta_dict, symb):
-    total_cost = meta_dict[symb]['total_cost']
-    # print("total_cost=[%s]"%total_cost)
-    return total_cost
-
-def get_basis_price(meta_dict, symb):
-    basis_price = meta_dict[symb]['basis_price']
-    # print("basis_price=[%s]"%basis_price)
-    return basis_price
 
 def get_myp_data(symb, asoftime, stock_data, meta_dict, fake_data=False):
     data = {}
@@ -84,7 +66,7 @@ def show_myp(stocks, datx):
         record = MyPortfolio(**datx[symb])
         pprint.pprint(record.__dict__)
     
-def save_myp_table(db, stocks, datx):
+def save_to_myp_table(db, stocks, datx):
     for num, symb in enumerate(stocks):
         datx[symb]["asof_time"] += timedelta(seconds=num+1)
         asof = datx[symb]["asof_time"]
@@ -114,6 +96,7 @@ def save_myp_table(db, stocks, datx):
     print(f"🎉 myp data added/updated successfully!")
 
 def import_indices(db, date):
+    print("-fn- import_indices -- get data from yf")
     indices = {
         "DOW_JONES": "^DJI",
         "NASDAQ": "^IXIC",
@@ -192,17 +175,19 @@ if __name__ == "__main__":
     ASOF_TIME = datetime(today.year, today.month, today.day, 16, 30, 0)
 
     import_indices(db, today)
-    # sys.exit(0)
 
     meta_dict = get_meta(cursor)
     datx = {}
     stocks = ['MSFT', 'CSCO', 'DELL', 'CHTR', 'WBD', 'T']
     stks = stocks
     for symb in stocks: 
-        # stock_data = get_fake_stock_data(cursor, symb) ## get data from my_portfolios for testing
-        # data = get_myp_data(symb, ASOF_TIME, stock_data, meta_dict)
-        stock_data = get_stock_data(symb) ## get real data from yf
-        data = get_myp_data(symb, ASOF_TIME, stock_data, meta_dict) ## populate data for my_portfolios
+        if testing:
+            stock_data = get_fake_stock_data(cursor, symb) ## get data from my_portfolios for testing
+            data = get_myp_data(symb, ASOF_TIME, stock_data, meta_dict)
+        else:
+            stock_data = get_stock_data(symb) ## get real data from yf
+            data = get_myp_data(symb, ASOF_TIME, stock_data, meta_dict) ## populate data for my_portfolios
+            ## import_indices(db, today)
         datx[symb] = data
 
     total_value = sum(da['current_value'] for da in datx.values())
@@ -211,7 +196,7 @@ if __name__ == "__main__":
         datx[symb]['pct_of_account'] = 100 * datx[symb]['current_value'] / total_value
         # print(symb, ':', datx[symb]['pct_of_account'])
     # show_myp(stocks, datx)
-    save_myp_table(db, stocks, datx)
+    save_to_myp_table(db, stocks, datx)
 
     # Start import
     # add_stock_data(db, csv_data_file, dict, ASOF_TIME)

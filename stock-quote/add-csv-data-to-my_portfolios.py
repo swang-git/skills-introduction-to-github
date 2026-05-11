@@ -10,7 +10,8 @@ import argparse
 parser = argparse.ArgumentParser()
 parser.add_argument("sub_days", metavar='int', type=int, nargs='?', default='0', help='sub days from today(must be < 0), default 0 for today')
 # optional arguments
-parser.add_argument('-d', '--db', type=str, default='prod', help='check quotes in this database default database: prod')
+# parser.add_argument('-d', '--db', type=str, default='prod', help='check quotes in this database default database: prod')
+parser.add_argument('-d', '--db', type=str, required=True, help='upsert csv data to database <devx/prod> table: my_portfolios')
 args = parser.parse_args()
 database = args.db
 print("database:", database)

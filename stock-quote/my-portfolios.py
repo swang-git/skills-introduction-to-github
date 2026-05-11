@@ -8,11 +8,6 @@ from constants import NUM_PORTFOLIO_SEC, headers, tabw
 from sty import FgRegister
 fg = FgRegister()
 
-# tabw = [len(headers)]
-# for idx in range(0, len(headers)):
-#     tabw.append(len(headers[idx]) + 2)
-# tabw[0] = len(headers[0]) + 6
-
 parser = argparse.ArgumentParser()
 parser.add_argument("sub_days", metavar='int', type=int, nargs='?', default='0', help='sub days from today(must be < 0), default 0 for today')
 # optional arguments

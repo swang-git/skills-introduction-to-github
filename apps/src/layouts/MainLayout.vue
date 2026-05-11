@@ -1,101 +1,101 @@
 <template>
-<!-- <div :class="{ flayout:isIM, dlayout:isDesk }"> -->
-<div class="bg-teal-9">
-  <q-layout view="hHh Lpr lFr">
-    <q-header v-if="curApp!='arts'" class="bg-teal-9 inset-shadow-down">
-      <q-toolbar style="margin-left:-5px">
-        <q-btn v-if="isDesk" glossy @click="drawerClick()" round dense icon="img:icons/quasar-logo.svg" size="18px" />
-        <!-- <q-btn v-else to="/" round dense glossy color="blue"><q-icon name="🏠" style="margin:-13px 0 0 0" /></q-btn> -->
-        <q-btn v-else to="/" round dense glossy color="blue"><q-icon :name="compVer" style="margin:-9px 0 0 0" /></q-btn>
-        <q-toolbar-title>
-          <div class="row q-pt-sm no-wrap">
-            <span >{{ appTitle }}</span>
-            <div style="float:right">
-              <q-btn v-if="/Expense/i.test(curApp)" round glossy color="teal-9" @click="showYearChart" style="margin:-8px 10px 0 3px">
-                <q-icon name="donut_small" color="lime" />
-                <q-tooltip class="text-h6 bg-indigo-9 text-yellow">消费分类总览（总支出分类）</q-tooltip>
-              </q-btn>
-              <q-btn v-if="/Expense/i.test(curApp) && audCookies" round glossy color="indigo-9" @click="toggleAUD" style="margin:-8px 10px 0 3px">
-                <q-icon name="track_changes" color="cyan-2" />
-                <q-tooltip class="text-h6 bg-cyan-9">toggle show upd/add/del lines</q-tooltip>
-              </q-btn>
-              <q-btn v-if="/Expense/i.test(curApp)" round glossy color="brown-9" @click="checkGiftCardBalance" style="margin:-8px 10px 0 3px">
-                <q-icon name="balance" color="amber" />
-                <!-- <q-tooltip class="text-h6 bg-cyan-9">check gift card balances</q-tooltip> -->
-              </q-btn>
-              <q-btn v-if="/watcher/i.test(curApp)"    round glossy color="indigo" :icon="weightUnit" class="chicon-pos" @click="selectWeightUnit" />
-              <q-btn v-if="/watcher/i.test(curApp)"    round glossy color="purple" icon="图" class="chicon-pos" @click="showWatcherChart" />
-              <q-btn v-if="/glucoseche/i.test(curApp)" round glossy color="blue-9" icon="释" class="chicon-pos" @click="getA1cDefinitions()" />
-              <q-btn v-if="/glucoseche/i.test(curApp)" round glossy color="teal-9" icon="空" class="chicon-pos" @click="showClvlChart" />
-              <q-btn v-if="/glucoseche/i.test(curApp)" round glossy color="indigo" :icon="engVer? '汉' : '英'" class="chicon-pos" @click="toggleEngVer" />
-              <q-btn v-if="/bankstatem/i.test(curApp)" round glossy color="teal-9" icon="图" class="chicon-pos" @click="emitter.emit('show-charts')" />
-              <q-btn v-if="/healthtest/i.test(curApp)" round glossy color="teal-9" icon="图" class="chicon-pos" @click="showHealthTestChart" />
-              <div v-if="/PancreaticFluid/i.test(curApp)" class="q-pl-md q-pb-sm"><q-btn round glossy size="11px" color="indigo" icon="add" @click="togglePFSum" /></div>
-              <div v-if="/tvmanager/i.test(curApp)" class="q-mb-sm q-mx-sm">
-                <q-fab color="brown-9" padding="xs sm sm" label="Upcoming Recordings" direction="right" icon="history" >
-                  <q-fab-action v-for="hr in [3, 5, 8, 10, 12, 24]" :key="hr" color="primary" @click="getTvShows(hr)" icon="history" :label="hr" class="text-h6" />
-                </q-fab>
+  <div class="bg-teal-9">
+    <q-layout view="hHh Lpr lFr">
+      <q-header v-if="curApp!='arts'" class="bg-teal-9 inset-shadow-down">
+        <q-toolbar style="margin-left:-5px">
+          <q-btn v-if="isDesk" glossy @click="drawerClick()" round dense icon="img:icons/quasar-logo.svg" size="18px" />
+          <!-- <q-btn v-else to="/" round dense glossy color="blue"><q-icon name="🏠" style="margin:-13px 0 0 0" /></q-btn> -->
+          <q-btn v-else to="/" round dense glossy color="blue"><q-icon :name="compVer" style="margin:-9px 0 0 0" /></q-btn>
+          <q-toolbar-title>
+            <div class="row q-pt-sm no-wrap">
+              <span >{{ appTitle }}</span>
+              <div style="float:right">
+                <q-btn v-if="/Expense/i.test(curApp)" round glossy color="teal-9" @click="showYearChart" style="margin:-8px 10px 0 3px">
+                  <q-icon name="donut_small" color="lime" />
+                  <q-tooltip class="text-h6 bg-indigo-9 text-yellow">消费分类总览（总支出分类）</q-tooltip>
+                </q-btn>
+                <q-btn v-if="/Expense/i.test(curApp) && audCookies" round glossy color="indigo-9" @click="toggleAUD" style="margin:-8px 10px 0 3px">
+                  <q-icon name="track_changes" color="cyan-2" />
+                  <q-tooltip class="text-h6 bg-cyan-9">toggle show upd/add/del lines</q-tooltip>
+                </q-btn>
+                <q-btn v-if="/Expense/i.test(curApp)" round glossy color="brown-9" @click="checkGiftCardBalance" style="margin:-8px 10px 0 3px">
+                  <q-icon name="balance" color="amber" />
+                  <!-- <q-tooltip class="text-h6 bg-cyan-9">check gift card balances</q-tooltip> -->
+                </q-btn>
+                <q-btn v-if="/watcher/i.test(curApp)"    round glossy color="indigo" :icon="weightUnit" class="chicon-pos" @click="selectWeightUnit" />
+                <q-btn v-if="/watcher/i.test(curApp)"    round glossy color="purple" icon="图" class="chicon-pos" @click="showWatcherChart" />
+                <q-btn v-if="/glucoseche/i.test(curApp)" round glossy color="blue-9" icon="释" class="chicon-pos" @click="getA1cDefinitions()" />
+                <q-btn v-if="/glucoseche/i.test(curApp)" round glossy color="teal-9" icon="空" class="chicon-pos" @click="showClvlChart" />
+                <q-btn v-if="/glucoseche/i.test(curApp)" round glossy color="indigo" :icon="engVer? '汉' : '英'" class="chicon-pos" @click="toggleEngVer" />
+                <q-btn v-if="/bankstatem/i.test(curApp)" round glossy color="teal-9" icon="图" class="chicon-pos" @click="emitter.emit('show-charts')" />
+                <q-btn v-if="/healthtest/i.test(curApp)" round glossy color="teal-9" icon="图" class="chicon-pos" @click="showHealthTestChart" />
+                <div v-if="/PancreaticFluid/i.test(curApp)" class="q-pl-md q-pb-sm"><q-btn round glossy size="11px" color="indigo" icon="add" @click="togglePFSum" /></div>
+                <div v-if="/tvmanager/i.test(curApp)" class="q-mb-sm q-mx-sm">
+                  <q-fab color="brown-9" padding="xs sm sm" label="Upcoming Recordings" direction="right" icon="history" >
+                    <q-fab-action v-for="hr in [3, 5, 8, 10, 12, 24]" :key="hr" color="primary" @click="getTvShows(hr)" icon="history" :label="hr" class="text-h6" />
+                  </q-fab>
+                </div>
+              </div>
+              <div v-if="isDesk">
+                <q-input dark borderless v-model="searchQuery" :label="curApp=='Expense' ? null : 'Quasar Version: ' + $q.version" input-class="text-right text-h6" class="absolute-bottom-right" dense @keyup="search()">
+                  <template v-slot:append>
+                    <q-icon v-if="searchQuery===''" name="search" />
+                    <q-icon v-else name="clear" class="cursor-pointer" @click.stop.prevent="searchQuery='';search()" />
+                  </template>
+                </q-input>
+              </div>
+              <div v-else>
+                <q-input dark borderless v-model="searchQuery" input-class="text-right text-h6" class="absolute-bottom-right" dense @keyup="search()"  style="width:100px">
+                  <template v-slot:append>
+                    <q-icon v-if="searchQuery===''" name="search" />
+                    <q-icon v-else name="clear" class="cursor-pointer" @click.stop.prevent="searchQuery='';search()" />
+                  </template>
+                </q-input>
               </div>
             </div>
-            <div v-if="isDesk">
-              <q-input dark borderless v-model="searchQuery" :label="curApp=='Expense' ? null : 'Quasar Version: ' + $q.version" input-class="text-right text-h6" class="absolute-bottom-right" dense @keyup="search()">
-                <template v-slot:append>
-                  <q-icon v-if="searchQuery===''" name="search" />
-                  <q-icon v-else name="clear" class="cursor-pointer" @click.stop.prevent="searchQuery='';search()" />
-                </template>
-              </q-input>
-            </div>
-            <div v-else>
-              <q-input dark borderless v-model="searchQuery" input-class="text-right text-h6" class="absolute-bottom-right" dense @keyup="search()"  style="width:100px">
-                <template v-slot:append>
-                  <q-icon v-if="searchQuery===''" name="search" />
-                  <q-icon v-else name="clear" class="cursor-pointer" @click.stop.prevent="searchQuery='';search()" />
-                </template>
-              </q-input>
-            </div>
+          </q-toolbar-title>
+        </q-toolbar>
+      </q-header>
+
+      <!-- <div v-if="curApp!=='arts' && curApp!=='yali' && curApp!=='golf' && isDesk && !isIM"> -->
+      <div v-if="isDesk && !isIM">
+        <q-drawer v-model="drawer" :mini="isDesk ? true : !drawer || miniState" :width="230" :breakpoint="392" show-if-above class="bg-teal-9">
+          <q-scroll-area class="fit" style="font-family:youyuan">
+            <q-list padding>
+              <AppItem appl="日 常 消 费" colr="purple-9" iclr="yellow" size="27px" styl="margin: 0 0 0 1.5px" icon="monetization_on" appn="exlist" />
+              <AppItem appl="采 购 清 单" colr="indigo-9" iclr="white"  size="27px" styl="margin: 3pxpx 0 0 0" icon="add_shopping_cart" appn="shopping" />
+              <AppItem appl="温 馨 提 示" colr="teal-9"   iclr="white"  size="27px" styl="margin: 0 0 0 1.5px" icon="schedule" appn="reminder" />
+              <AppItem appl="备 忘 录 表" colr="grey-9"   iclr="white"  size="27px" styl="margin: 0px 0 0 0" icon="assignment" appn="memo" />
+              <AppItem appl="每 天 看 看" colr="pink-9"   iclr="yellow" size="25px" styl="margin:-5px 0 0 1.5px" icon="健" appn="watcher" />
+              <AppItem appl="银 行 月 报" colr="indigo-9" iclr="yellow" size="28px" styl="margin: 1px 0 0 0" icon="account_balance" appn="bankstatement" />
+              <AppItem appl="月 报 明 细" colr="brown-9"  iclr="white"  size="25px" styl="margin:-6px 0 0 0" icon="析" appn="holdings" />
+              <AppItem appl="血 糖 控 制" colr="pink-7"   iclr="yellow" size="27px" styl="margin:-1px 0 0 0" icon="bloodtype" appn="glucosecheck" />
+              <AppItem appl="月 报 分 析" colr="brown-9"  iclr="white"  size="25px" styl="margin:-6px 0 0 0" icon="报" appn="bankstatementloader" />
+              <AppItem appl="网 上 阅 读" colr="indigo-9" iclr="white"  size="25px" styl="margin:-6px 0 0 0" icon="文" appn="../arts" />
+              <AppItem appl="娅 莉 画 展" colr="red-9"   iclr="yellow" size="25px" styl="margin:-6px 0 0 0" icon="画" appn="../yali" />
+              <AppItem appl="高 尔 夫 球" colr="green-9"  iclr="yellow" size="27px" styl="margin:-1px 0 0 0" icon="golf_course" appn="../golf" />
+              <AppItem appl="跳 转 首 页" colr="blue-9"   iclr="grey"   size="25px" styl="margin:-9px 0 0 0" :icon="compVer" appn="/" />
+              <AppItem appl="英 汉 字 典" colr="brown-9"  iclr="yellow" size="25px" styl="margin:-1px 0 0 0" icon="translate" appn="dictionary" />
+              <AppItem appl="法 定 假 日" colr="pink-9"   iclr="yellow" size="25px" styl="margin:-1px 0 0 0" icon="card_giftcard" appn="" @click="showHolidays()" />
+              <AppItem appl="健 康 检 查" colr="red" iclr="white"  size="25px" styl="margin:-7px 0 0 2px" icon="查" appn="htlist" />
+              <!-- <AppItem appl="胰 流 报 告" colr="grey-9"   iclr="yellow" size="25px" styl="margin:-5px 0 0 0" icon="胰" appn="pfcheck" /> -->
+              <!-- <AppItem appl="电 视 列 表" colr="grey-9"   iclr="yellow" size="25px" styl="margin:-5px 0 0 0" icon="视" appn="tvmanager" /> -->
+              <!-- <AppItem appl="跳 转 首 页" colr="amber-9"                size="25px" styl="margin:-9px 0 0 0" icon="🏠" appn="/" /> -->
+
+              <!-- <q-icon v-if="compVer==null" name="普" class="text-h5" color="teal-4" style="margin-left:20px" />
+              <q-icon v-else :name="compVer" class="text-h5" color="teal-6" style="margin-left:20px"/> -->
+            </q-list>
+          </q-scroll-area>
+
+          <!--
+            in this case, we use a button (can be anything)
+            so that user can switch back
+            to mini-mode
+          -->
+          <div class="q-mini-drawer-hide absolute" style="top: 15px; right: -17px">
+            <q-btn dense round unelevated color="accent" icon="chevron_left" @click="miniState=true" />
           </div>
-        </q-toolbar-title>
-      </q-toolbar>
-    </q-header>
-
-    <div v-if="curApp!='arts' && curApp!=='golf' && isDesk && !isIM">
-      <q-drawer v-model="drawer" :mini="isDesk ? true : !drawer || miniState" :width="230" :breakpoint="392" show-if-above class="bg-teal-9">
-        <q-scroll-area class="fit" style="font-family:youyuan">
-          <q-list padding>
-            <AppItem appl="日 常 消 费" colr="purple-9" iclr="yellow" size="27px" styl="margin: 0 0 0 1.5px" icon="monetization_on" appn="exlist" />
-            <AppItem appl="采 购 清 单" colr="indigo-9" iclr="white"  size="27px" styl="margin: 3pxpx 0 0 0" icon="add_shopping_cart" appn="shopping" />
-            <AppItem appl="温 馨 提 示" colr="teal-9"   iclr="white"  size="27px" styl="margin: 0 0 0 1.5px" icon="schedule" appn="reminder" />
-            <AppItem appl="备 忘 录 表" colr="grey-9"   iclr="white"  size="27px" styl="margin: 0px 0 0 0" icon="assignment" appn="memo" />
-            <AppItem appl="每 天 看 看" colr="pink-9"   iclr="yellow" size="25px" styl="margin:-5px 0 0 1.5px" icon="健" appn="watcher" />
-            <AppItem appl="银 行 月 报" colr="indigo-9" iclr="yellow" size="28px" styl="margin: 1px 0 0 0" icon="account_balance" appn="bankstatement" />
-            <AppItem appl="月 报 明 细" colr="brown-9"  iclr="white"  size="25px" styl="margin:-6px 0 0 0" icon="析" appn="holdings" />
-            <AppItem appl="血 糖 控 制" colr="pink-7"   iclr="yellow" size="27px" styl="margin:-1px 0 0 0" icon="bloodtype" appn="glucosecheck" />
-            <AppItem appl="月 报 分 析" colr="brown-9"  iclr="white"  size="25px" styl="margin:-6px 0 0 0" icon="报" appn="bankstatementloader" />
-            <AppItem appl="娅 莉 画 展" colr="red-10"  iclr="yellow"  size="25px" styl="margin:-6px 0 0 0" icon="画" appn="yalipics" />
-            <AppItem appl="网 上 阅 读" colr="indigo-9" iclr="white"  size="25px" styl="margin:-6px 0 0 0" icon="文" appn="../arts" />
-            <AppItem appl="跳 转 首 页" colr="blue-9"   iclr="grey"   size="25px" styl="margin:-9px 0 0 0" :icon="compVer" appn="/" />
-            <AppItem appl="高 尔 夫 球" colr="green-9"  iclr="yellow" size="27px" styl="margin:-1px 0 0 0" icon="golf_course" appn="../golf" />
-            <AppItem appl="英 汉 字 典" colr="brown-9"  iclr="yellow" size="25px" styl="margin:-1px 0 0 0" icon="translate" appn="dictionary" />
-            <AppItem appl="法 定 假 日" colr="pink-9"   iclr="yellow" size="25px" styl="margin:-1px 0 0 0" icon="card_giftcard" appn="" @click="showHolidays()" />
-            <AppItem appl="健 康 检 查" colr="red" iclr="white"  size="25px" styl="margin:-7px 0 0 2px" icon="查" appn="htlist" />
-            <!-- <AppItem appl="胰 流 报 告" colr="grey-9"   iclr="yellow" size="25px" styl="margin:-5px 0 0 0" icon="胰" appn="pfcheck" /> -->
-            <!-- <AppItem appl="电 视 列 表" colr="grey-9"   iclr="yellow" size="25px" styl="margin:-5px 0 0 0" icon="视" appn="tvmanager" /> -->
-            <!-- <AppItem appl="跳 转 首 页" colr="amber-9"                size="25px" styl="margin:-9px 0 0 0" icon="🏠" appn="/" /> -->
-
-            <!-- <q-icon v-if="compVer==null" name="普" class="text-h5" color="teal-4" style="margin-left:20px" />
-            <q-icon v-else :name="compVer" class="text-h5" color="teal-6" style="margin-left:20px"/> -->
-          </q-list>
-        </q-scroll-area>
-
-        <!--
-          in this case, we use a button (can be anything)
-          so that user can switch back
-          to mini-mode
-        -->
-        <div class="q-mini-drawer-hide absolute" style="top: 15px; right: -17px">
-          <q-btn dense round unelevated color="accent" icon="chevron_left" @click="miniState=true" />
-        </div>
-      </q-drawer>
+        </q-drawer>
       </div>
 
       <q-page-container>
@@ -103,16 +103,14 @@
           <router-view />
         </q-page>
       </q-page-container>
-      <!-- <q-footer class="bg-teal-9" v-if="['glucosecheck','memo','reminder','expense','watcher','bankstatement', 'bank'].indexOf(curApp)>=0"> -->
-        <!-- <q-footer class="bg-teal-9" v-if="/memo|reminder|exlist|watcher|bankstatement|bank|dictionary|shopping|glucosecheck|todox/i.test(curApp)"> -->
-        <q-footer class="bg-teal-10" v-if="/memo|reminder|expense|watcher|bankstatement|shopping|bank|dictionary|glucosecheck|PancreaticFluid/i.test(curApp)">
+      <q-footer class="bg-teal-10" v-if="/memo|reminder|expense|watcher|bankstatement|shopping|bank|dictionary|glucosecheck|PancreaticFluid/i.test(curApp)">
         <q-toolbar>
           <Pagination :pNumPages="compNumPages" :pItemsPerPage="itemsPerPage" />
         </q-toolbar>
       </q-footer>
-  </q-layout>
+    </q-layout>
+  </div>
   <Holidays />
-</div>
 </template>
 <script setup>
 import { ref, computed } from 'vue'
@@ -138,21 +136,22 @@ const itemsPerPage = ref(11)
 // var numPages = 1
 const numItems = ref(12)
 const curApp = ref(null)
-var disableBtn = {
-  expense: false,
-  shopping: false,
-  reminder: false,
-  memo: false,
-  watcher: false,
-  bankstatement: false,
-  holdings: false,
-  bank: false,
-  holidays: false,
-  golf: false,
-  arts: false,
-  calendar: false,
-  todo: false
-}
+// var disableBtn = {
+//   expense: false,
+//   shopping: false,
+//   reminder: false,
+//   memo: false,
+//   watcher: false,
+//   bankstatement: false,
+//   holdings: false,
+//   bank: false,
+//   holidays: false,
+//   arts: false,
+//   yali: false,
+//   golf: false,
+//   calendar: false,
+//   todo: false
+// }
 var appTitle = '家庭应用'
 var drawer = true
 var miniState = false
@@ -166,7 +165,7 @@ var searchQuery = ref('')
 
 //== emitter-on
 emitter.on('cur-tit', (ctit) => { setTitle(ctit); setInterval(setTitle, oneHour, ctit) })
-emitter.on('cur-app', (capp, from) => curApp.value = capp)
+emitter.on('cur-app', (capp, from) => { curApp.value = capp})
 emitter.on('num-items', (x) => numItems.value = x)
 // emitter.on('cur-app', (capp, from) => { curApp.value = capp; console.log(`emitter.on curApp=${curApp.value} from=${from}`) })
 // emitter.on('num-items', (x) => { numItems.value = x; console.log(`emitter.on numItems.value=${x} curApp=${curApp.value}`) })
@@ -175,16 +174,19 @@ emitter.on('win-lost', (x) => { flipShow(x) })
 emitter.on('weight-unit', (x) => { wunit.value = x })
 
 //== main
-console.log('-ST-MainLayout')
-// console.timeStamp('-ST-MainLayout')
+console.log(`-ST-MainLayout curApp=${curApp.value}`)
+// console.timeStamp('-ST-MainLayout curApp=${curApp.value}')
 wunit.value = $q.localStorage.getItem('weightUnit')
 if (isIM) {
   drawer = false
   miniState = true
 }
+/*** redirect -- check components/AppItem.vue to find out */
 // console.log('-dg-document.url:', window.location.pathname)
-if (/arts/.test(window.location.href)) curApp.value = 'arts'
-else if (/golf/.test(window.location.href)) curApp.value = 'golf'
+// alert(`curApp=${curApp.value}`);
+// if (/arts/.test(window.location.href)) curApp.value = 'arts'
+// else if (/yali/.test(window.location.href)) curApp.value = 'yali'
+// else if (/golf/.test(window.location.href)) curApp.value = 'golf'
 
 const allCookies = $q.cookies.getAll()
 const cookieKeys = Object.keys(allCookies)
@@ -239,17 +241,17 @@ function setTitle (tit) {
   if (isDesk) appTitle += ' ' + ymd + ' (' + ymd.chwk3() + ')'
   document.title = tit
 }
-function XXopenApp (app, appTitle) {
-  console.log(`-fn-openApp, appTitle, app=${app},appTitle=${appTitle},drawer=${drawer},numItems=${numItems.value},itemsPerPage=${itemsPerPage.value}`)
-  curApp.value = app
-  for (const key of Object.keys(disableBtn)) disableBtn[key] = false
-  disableBtn[app] = true
-  // if (['../golf', '../arts', 'glucosecheck','exlist', 'relist'].includes(app)) { // no need to reload for chart
-  if (['../golf', '../arts'].includes(app)) { // no need to reload for chart
-    window.location.href = app // this navigates to app and also trigger to loading. otherwise <canvas> not working
-  }
-  router.replace({ path: app })  // this is just navigating no loading
-}
+// function XXopenApp (app, appTitle) {
+//   console.log(`-fn-openApp, appTitle, app=${app},appTitle=${appTitle},drawer=${drawer},numItems=${numItems.value},itemsPerPage=${itemsPerPage.value}`)
+//   curApp.value = app
+//   for (const key of Object.keys(disableBtn)) disableBtn[key] = false
+//   disableBtn[app] = true
+//   // if (['../golf', '../arts', 'glucosecheck','exlist', 'relist'].includes(app)) { // no need to reload for chart
+//   if (['../arts', '../yali', '../golf'].includes(app)) { // no need to reload for chart
+//     window.location.href = app // this navigates to app and also trigger to loading. otherwise <canvas> not working
+//   }
+//   router.replace({ path: app })  // this is just navigating no loading
+// }
 function togglePFSum () {
   emitter.emit('toggle-pf-sum')
 }
