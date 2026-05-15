@@ -74,9 +74,9 @@ if __name__=="__main__":
         TPdiff = f"{-1*tpdiff}"
         TPdiff = boldIt(redIt(TPdiff))
     TPdiffExp = prtft + ' - ' + prtfy
-    bline1 = ' ║ '+dday+' Market Value:'+f"{totalValy:,.2f}"+' Stock Value:'+f"{stockValy:,.2f}"+'   Prev Portf:'+prtfy+' Today Portf:'+prtft
+    bline1 = '║ '+dday+' Market Value:'+f"{totalValy:,.2f}"+' Stock Value:'+f"{stockValy:,.2f}"+'   Prev Portf:'+prtfy+' Today Portf:'+prtft
     bline2 = TPdiffExp + ' = ' + TPdiff
-    print(bline1 + (sum(tabw) + len(tabw) - len(bline1) - len(bline2) + 19)*' ' + bline2 + ' ║')
+    print(bline1 + (sum(tabw) + len(tabw) - len(bline1) - len(bline2) + 19)*' ' + bline2 + '║')
 
     drawBotLineDownTick(tabw)
     showHeaderCxt(tabw, headers)
@@ -84,7 +84,7 @@ if __name__=="__main__":
     for row in rowst: dispRow(tabw, row)
     drawBotLineUpTick(tabw)
     dday = rowst[0].asof_time.strftime('%Y-%m-%d')
-    lline1 = ' ║ ' + dday + ' Market Value:' + f"{totalValt:,.2f}" + ' Stock Value:' + f"{stockValt:,.2f}" + cdiff
+    lline1 = '║ ' + dday + ' Market Value:' + f"{totalValt:,.2f}" + ' Stock Value:' + f"{stockValt:,.2f}" + cdiff
     lline2 = 'data from ' + tablename
-    print(lline1 + (sum(tabw) + len(tabw) - len(lline1) - len(lline2) + 38)*' ' + lline2 + ' ║')
+    print(lline1 + (sum(tabw) + len(tabw) - len(lline1) - len(lline2) + 38)*' ' + lline2 + '║')
     drawBotLine(tabw)

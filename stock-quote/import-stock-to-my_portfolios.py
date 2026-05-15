@@ -5,7 +5,7 @@ import sys, pprint, time
 from datetime import datetime, date, timedelta
 from decimal import Decimal
 
-from Utils import get_data_from_table, build_dict, padsp, get_meta, get_quantity, get_total_cost, get_basis_price
+from Utils import padsp, get_data_from_table, build_dict, get_meta, get_quantity, get_total_cost, get_basis_price
 from MyPortfolio_Models import get_connection, CSV_TO_DB_MAP, TYPE_CONVERTERS, MyPortfolio, HealthRecord
 
 import argparse
@@ -72,8 +72,10 @@ def save_to_myp_table(db, stocks, datx):
         asof = datx[symb]["asof_time"]
         # redx = MyPortfolio(**datx[symb])
         # pprint.pprint(redx.__dict__)
+        price = padsp(datx[symb]['price'], 6)
+        price_change = padsp(datx[symb]['price_change'], 5)
         low = padsp(datx[symb]['low_52_week'], 7)
-        high = padsp(datx[symb]['high_52_week'], 7)
+        high = padsp(datx[symb]['high_52_week'], 6)
         # --------------------------
         # Step 4: UPSERT (Update if exists, else Insert)
         # --------------------------
@@ -84,12 +86,12 @@ def save_to_myp_table(db, stocks, datx):
             # Update all fields
             for key, value in datx[symb].items():
                 setattr(existing, key, value)
-            print(f"🔄 Updated |{adjsp} {symb} | As-of: {asof} | 52wk_low: {low} | 52wk_high: {high}")
+            print(f"🔄 Updated |{adjsp} {symb} | As-of: {asof} | price: {price} | price change: {price_change} | 52wk_low: {low} | 52wk_high: {high}")
         else:
             # Create new record (NO __init__ needed!)
             new_record = MyPortfolio(**datx[symb])
             db.add(new_record)
-            print(f"✅ Added   |{adjsp} {symb} | As-of: {asof} | 52wk_low: {low} | 52wk_high: {high}")
+            print(f"✅ Added   |{adjsp} {symb} | As-of: {asof} | price: {price} | price change: {price_change} | 52wk_low: {low} | 52wk_high: {high}")
 
     # Save all changes
     db.commit()

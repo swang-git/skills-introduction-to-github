@@ -23,7 +23,7 @@ table = args.tab
 
 def get_db_connection():
     """Create and return ONE connection + ONE cursor"""
-    db_config = { "host": "localhost", "database": database, "user": "swang", "password": "VVKKll11##" }
+    db_config = { "host": "localhost", "database": database, "user": "swang", "password": "Ybsjll11" }
     try:
         conn = mysql.connector.connect(**db_config)
         cur = conn.cursor(dictionary=True)  # dictionary for easy access

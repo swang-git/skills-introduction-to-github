@@ -44,8 +44,9 @@ function openApp (app, appTitle) {
   // disableBtn[app] = true
   if (['../arts', '../yali', '../golf', 'glucosecheck','exlist', 'relist'].includes(app)) { // no need to reload for chart
     window.location.href = app // this navigates to app and also trigger to loading. otherwise <canvas> not working
+  } else {
+    router.replace({ path: app })  // this is just navigating no loading
   }
-  router.replace({ path: app })  // this is just navigating no loading
 }
 
 </script>

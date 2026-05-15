@@ -95,6 +95,11 @@
               <span class="q-pl-md">体重: </span><span class="text-white"> {{ p.row.weight }} </span>
             </td>
           </q-tr>
+          <q-tr v-if="p.row.note!=null">
+            <td class="text-left" colspan="5"> 
+              <span>注脚: </span><span class="text-white">{{ p.row.note }} </span>
+            </td>
+          </q-tr>
           <q-tr>
             <td class="bg-cyan-10">项 目</td>
             <td class="bg-cyan-9" style="white-space:nowrap">过 去 90 天 的 血 糖 平 均 值</td>

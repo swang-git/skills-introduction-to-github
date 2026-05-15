@@ -8,7 +8,7 @@ from sqlalchemy.orm import declarative_base, sessionmaker
 
 def get_connection(database):
     MYSQL_USER = "swang"
-    MYSQL_PASSWORD = "VVKKll11##"
+    MYSQL_PASSWORD = "Ybsjll11"
     MYSQL_HOST = "localhost"
     MYSQL_DATABASE = database  # CREATE THIS IN MYSQL FIRST
 
@@ -134,11 +134,11 @@ TYPE_CONVERTERS = {
 # import sys
 
 # def dbsession (database):
-#     if platform.system() == 'Darwin': dbconf="mysql+pymysql://swang:VVKKll11##@localhost/" + database + "?charset=utf8mb4" ## on Mac
+#     if platform.system() == 'Darwin': dbconf="mysql+pymysql://swang:Ybsjll11@localhost/" + database + "?charset=utf8mb4" ## on Mac
 #     elif platform.system() == 'Linux': dbconf="mysql://swang:Ybsjll11@localhost/" + database + "?charset=utf8mb4"
 
 #     engine = create_engine(dbconf, echo=False)
-#     # engine = create_engine('mysql+pymysql://swang:VVKKll11##@localhost:3306/devx')
+#     # engine = create_engine('mysql+pymysql://swang:Ybsjll11@localhost:3306/devx')
 #     Session = sessionmaker(bind=engine)
 #     session = Session()
 #     return session

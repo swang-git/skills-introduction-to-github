@@ -8,12 +8,13 @@ from MyPortfolio_Models import get_connection, CSV_TO_DB_MAP, TYPE_CONVERTERS, M
 
 import argparse
 parser = argparse.ArgumentParser()
-parser.add_argument("sub_days", metavar='int', type=int, nargs='?', default='0', help='sub days from today(must be < 0), default 0 for today')
+parser.add_argument('-s', '--sub_days', metavar='int', type=int, nargs='?', default='0', help='sub days from today(must be < 0), default 0 for today')
 # optional arguments
 # parser.add_argument('-d', '--db', type=str, default='prod', help='check quotes in this database default database: prod')
 parser.add_argument('-d', '--db', type=str, required=True, help='upsert csv data to database <devx/prod> table: my_portfolios')
 args = parser.parse_args()
 database = args.db
+subdays = args.sub_days
 print("database:", database)
 
 # =============================================================================
@@ -107,6 +108,8 @@ if __name__ == "__main__":
     rootdir = "/Users/swang/sites/webdata/docs/Portfolio/"
     today = date.today()
     csvfile = 'snapshot_' + today.strftime('%Y%m%d') + '.csv'
+    print('--subdays=[%d]'%subdays)
+    if subdays < 0: csvfile = 'snapshot_' + (today - timedelta(days=-subdays)).strftime('%Y%m%d') + '.csv'
     csv_data_file = rootdir + csvfile
     if os.path.exists(csv_data_file):
         print("✅ [%s] File exists!"%csv_data_file)

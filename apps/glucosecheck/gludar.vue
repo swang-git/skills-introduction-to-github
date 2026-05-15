@@ -1,6 +1,6 @@
 <template>
 <q-dialog v-model="opened" :transition-show="action=='upd' ? 'rotate' : 'slide-right'" persistent fullWidth :maximized="isIM">
-  <q-layout container class="bg-teal-10" :style="isDesk ? { 'height':'600px' } : { 'height':'670px' }">
+  <q-layout container class="bg-teal-10" :style="isDesk ? { 'height':'660px' } : { 'height':'670px' }">
     <LayoutHeader tit="Glucose Daily Check" @do-action="doAction" />
     <LayoutFooter :act=action tit="TIT_GLUCOSE" @do-action="doAction" class="q-pb-"/>
     <q-page-container v-if="isDesk">
@@ -22,6 +22,7 @@
         <TxtInput class="col-12" :obj="row" label="Breakfast" icon="egg" iColor="brown-6" :rightIcon="true" @click="openSelection('egg', 'Breakfast', brOpt)" />
         <TxtInput class="col-12" :obj="row" label="Lunch" icon="lunch_dining" iColor="yellow-9" :rightIcon="true" @click="openSelection('lunch_dining', 'Lunch', luOpt)" />
         <TxtInput class="col-12" :obj="row" label="Dinner" icon="dinner_dining" iColor="indigo-3" :rightIcon="true" @click="openSelection('dinner_dining', 'Dinner', diOpt)" />
+        <TxtInput class="col-12" :obj="row" label="Notes" icon="note" iColor="cyan-3" :rightIcon="true" @click="openSelection('note', 'Notes', diOpt)" />
         <div class="row">
           <TxtInput class="col-6" :obj="row" label="Drink" icon="local_bar" iColor="green" :rightIcon="true" @click="openSelection('local_bar', 'Drink', drOpt)" />
           <TxtInput class="col-6" :obj="row" label="Fruit" icon="apple" iColor="green-3" :rightIcon="true" @click="openSelection('apple', 'Fruit', frOpt)" />
@@ -45,6 +46,7 @@
       <TxtInput class="col-12" :obj="row" label="Breakfast" icon="egg" iColor="brown-6" :rightIcon="true" @click="openSelection('egg', 'Breakfast', brOpt)" />
       <TxtInput class="col-12" :obj="row" label="Lunch" icon="lunch_dining" iColor="yellow-9" :rightIcon="true" @click="openSelection('lunch_dining', 'Lunch', luOpt)" />
       <TxtInput class="col-12" :obj="row" label="Dinner" icon="dinner_dining" iColor="indigo-3" :rightIcon="true" @click="openSelection('dinner_dining', 'Dinner', diOpt)" />
+      <TxtInput class="col-12" :obj="row" label="Notes" icon="notes" iColor="cyan-3" :rightIcon="true" @click="openSelection('notes', 'Notes', diOpt)" />
       <div class="row">
         <TxtInput class="col-6" :obj="row" label="Drink" icon="local_bar" iColor="green" :rightIcon="true" @click="openSelection('local_bar', 'Drink', drOpt)" />
         <TxtInput class="col-6" :obj="row" label="Fruit" icon="apple" iColor="green-3" :rightIcon="true" @click="openSelection('apple', 'Fruit', frOpt)" />
@@ -138,7 +140,7 @@ function updSelectedOpt (model, txt) {
   else if (model == 'Drink') row.value.drink = txt
   else if (model == 'Fruit') row.value.fruit = txt
   else if (model == 'Food') row.value.food = txt
-  else if (model == 'Note') row.value.note = txt
+  else if (model == 'Notes') row.value.note = txt
 }
 function setSelectedOpt (model, opt) {
   console.log(`-fn-setSelectedOpt model=${model} selectedOpt=${opt.label}`)
@@ -150,6 +152,7 @@ function setSelectedOpt (model, opt) {
   else if (model == 'Fruit') row.value.fruit = opt.label
   else if (model == 'Check Type') row.value.type = opt.label
   else if (model == 'Food') row.value.food = opt.label
+  else if (model == 'Notes') row.value.note = opt.label
 }
 function openSelection (icon, model, opts) {
   console.log(`-fn-openSelection`, opts)

@@ -2,6 +2,8 @@ from datetime import date, datetime, timedelta
 from sty import ef, rs, FgRegister
 from mysql.connector import Error
 
+from constants import spx
+
 def displaySec(sec, sp):
     tag = '+=-'
     if sec.price_change > 0: tag = '+'
@@ -156,19 +158,19 @@ def get_previous_business_day(date_input=None):
 
 
 def drawTopHeader(tabw):
-    strtop = ' ╔' 
+    strtop = spx + '╔' 
     for w in tabw[:-1]: strtop += w * '═' + '╤'
     strtop += tabw[-1] * '═' + '╗'
     print(strtop)
 
 def showHeaderCxt(tabw, cxt):
-    strcxt = ' ║'
+    strcxt = spx + '║'
     for i, c in enumerate(cxt): strcxt += c.center(tabw[i]) + '│' if i < len(tabw)-1 else ''
     strcxt += cxt[-1].center(tabw[-1]) + '║'
     print(strcxt)
 
 def drawBotHeader(tabw):
-    strbot = ' ╟' 
+    strbot = spx + '╟' 
     for w in tabw[:-1]: strbot += w * '─' + '┼'
     strbot += tabw[-1] * '─' + '╢'
     print(strbot)
@@ -187,20 +189,20 @@ def dispRow(tabw, row):
     acct = row.account
     acct = fg.green + acct + fg.rs if tgl > 0 else (acct if tgl == 0 else fg.red + acct + fg.rs)
 
-    idx  = 0; rowstr = ' ║' + row.asof_time.strftime('%Y-%m-%d %H:%M').center(tabw[idx]) + '│'
+    idx  = 0; rowstr = spx + '║' + row.asof_time.strftime('%Y-%m-%d %H:%M').center(tabw[idx]) + '│'
     idx += 1; rowstr += boldIt(acct.center(tabw[idx])) + '│'
     idx += 1; rowstr += (tabw[idx]*' ' if row.total_gl == None else boldIt(procCol(tabw[idx], row.total_gl, False))) + '│'
     idx += 1; rowstr += (tabw[idx]*' ' if row.total_gl_pct == None else boldIt(procCol(tabw[idx], row.total_gl_pct, False))) + '│'
-    idx += 1; rowstr += padsp(row.symbol, tabw[idx]-1) + ' │'
+    idx += 1; rowstr += padsp(row.symbol, tabw[idx]-1) + spx + ' │'
     idx += 1; rowstr += boldIt(tag.center(tabw[idx])) + '│'
     idx += 1; rowstr += (tabw[idx]*' ' if row.price_change == None else boldIt(procCol(tabw[idx], row.price_change, False, 3))) + '│'
     idx += 1; rowstr += (tabw[idx]*' ' if row.price == None else boldIt(procCol(tabw[idx], row.price, True, 3))) + '│'
     idx += 1; rowstr += (tabw[idx]*' ' if row.today_gl == None else boldIt(procCol(tabw[idx], row.today_gl))) + '│'
     idx += 1; rowstr += (tabw[idx]*' ' if row.pct_of_account == 0 else procCol(tabw[idx], row.pct_of_account, True, 3)) + '│'
     idx += 1; rowstr += (tabw[idx]*' ' if row.quantity == None else procCol(tabw[idx], row.quantity, True, 3)) + '│'    ## Shares 
-    idx += 1; rowstr += boldIt(padsp(f"{row.current_value:,.2f}", tabw[idx]-1)) + ' │'
-    idx += 1; rowstr += boldIt(padsp(row.low_52_week, tabw[idx]-1)) + ' │'
-    idx += 1; rowstr += boldIt(padsp(row.high_52_week, tabw[idx]-1)) + ' │'
+    idx += 1; rowstr += boldIt(padsp(f"{row.current_value:,.2f}", tabw[idx]-1)) +  spx + ' │'
+    idx += 1; rowstr += boldIt(padsp(row.low_52_week, tabw[idx]-1)) + spx + ' │'
+    idx += 1; rowstr += boldIt(padsp(row.high_52_week, tabw[idx]-1)) + spx + ' │'
     idx += 1; rowstr += padsp('', tabw[idx]) + '│' if row.low_52_week == None else boldIt(procCol(tabw[idx], row.price - row.low_52_week, False)) + '│'
     idx += 1; rowstr += padsp('', tabw[idx]) + '║' if row.high_52_week == None else boldIt(procCol(tabw[idx], row.high_52_week - row.price, False)) + '║'
     print(rowstr)
@@ -212,25 +214,25 @@ def dispRow(tabw, row):
 #     print(clsline)
 
 def drawBotLineDownTick(tabw):
-    sprline = ' ╟' 
+    sprline = spx + '╟' 
     for w in tabw[:-1]: sprline += w * '━' + '┯'
     sprline += tabw[-1] * '━' + '╢'
     print(sprline)
 
 def drawBotLineUpTick(tabw):
-    sprline = ' ╟' 
+    sprline = spx + '╟' 
     for w in tabw[:-1]: sprline += w * '━' + '┷'
     sprline += tabw[-1] * '━' + '╢'
     print(sprline)
 
 def drawBotLineCrossTick(tabw):
-    crsline = ' ╟' 
+    crsline = spx + '╟' 
     for w in tabw[:-1]: crsline += w * '━' + '┿'
     crsline += tabw[-1] * '━' + '╢'
     print(crsline)
 
 def drawBotLine(tabw):
-    clsline = ' ╚' 
+    clsline = spx + '╚' 
     clsline += (sum(tabw) + len(tabw) - 1) * '═' 
     clsline += '╝'
     print(clsline)

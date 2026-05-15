@@ -16,4 +16,4 @@ target_file=/Users/swang/BAK/db/dump_${d0}_${db}.sql
 
 echo dumping database $target_file $argv
 
-mysqldump -uswang -pVVKKll11## -B $db --routines > $target_file &
+mysqldump -uswang -pYbsjll11 -B $db --routines > $target_file &
