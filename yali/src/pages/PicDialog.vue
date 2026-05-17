@@ -1,18 +1,12 @@
 <template>
-  <q-dialog
-    v-model="opened"
-    :transition-show="picidx % 2 == 0 ? 'slide-right' : 'slide-left'"
-    maximized
-  >
+  <q-dialog v-model="opened" :transition-show="picidx % 2 == 0 ? 'slide-right' : 'slide-left'" maximized>
     <q-card class="bg-red-4" style="height: 45px; z-index: 10">
       <q-card-actions align="between">
         <q-btn glossy rounded class="bg-teal" v-close-popup>
           <q-icon left name="cancel" size="md" color="lime" />
           <span class="text-bold text-cyan-2 text-body1" style="margin: 0 4px 0 -10px">关闭</span>
         </q-btn>
-        <!-- <div class="text-h5">共 {{ piclst.length }} 幅 </div> -->
         <div class="text-h5 cursor-pointer" @click="openTxtPad">{{ datetms[picidx] }}</div>
-        <!-- <div class="text-h5" @click="openTxtPad"> {{ datetms[picidx] }}<span v-if="!isIM" class="text-body1">/{{ piclst[picidx] }}</span> </div> -->
         <q-btn-group glossy rounded>
           <q-btn round color="teal-8" text-color="lime" @click="openNumPad">
             <span class="text-bold text-cyan-2 text-body1" style="margin: 0 4px 0 4px">
@@ -21,122 +15,36 @@
               <span v-else>{{ picidx + 1 }}</span>
             </span>
           </q-btn>
-          <q-btn
-            round
-            color="teal-9"
-            @click="picidx > 0 ? (picidx = 0) : (picidx = piclst.length - 1)"
-          >
-            <q-icon
-              :name="
-                picidx == 0
-                  ? 'toggle_off'
-                  : picidx == piclst.length - 1
-                    ? 'toggle_on'
-                    : 'radio_button_checked'
-              "
-              size="md"
-              color="lime"
-            />
+          <q-btn round color="teal-9" @click="picidx > 0 ? (picidx = 0) : (picidx = piclst.length - 1)" >
+            <q-icon :name=" picidx == 0 ? 'toggle_off' : picidx == piclst.length - 1 ? 'toggle_on' : 'radio_button_checked' " size="md" color="lime" />
           </q-btn>
         </q-btn-group>
-        <!-- <q-btn glossy rounded class="bg-teal-9" @click="picidx>0 ? picidx=0 : picidx=piclst.length-1">
-        <span class="text-bold text-cyan-2 text-body1" style="margin: 0 4px 0 4px">
-          <span v-if="picidx==0">第一</span>
-          <span v-else-if="picidx==piclst.length-1">最后</span>
-          <span v-else>{{ picidx + 1 }}</span>
-          </span>
-        <q-icon :name="picidx==0 ? 'toggle_off' : picidx==piclst.length-1 ? 'toggle_on' : 'radio_button_checked'" size="md" color="lime" />
-      </q-btn> -->
       </q-card-actions>
     </q-card>
     <div class="bg-grey-4" :transition-show="picidx % 2 == 0 ? 'rotate' : 'slide-left'">
       <div v-if="isIM">
         <div class="row justify-between">
-          <q-btn
-            flat
-            icon=""
-            size="lg"
-            @click="--picidx < 0 ? (picidx = piclst.length - 1) : picidx"
-            style="display: flex; align-items: center; min-height: 100vh; z-index: 1"
-          />
+          <q-btn flat icon="" size="lg" @click="--picidx < 0 ? (picidx = piclst.length - 1) : picidx" style="display: flex; align-items: center; min-height: 100vh; z-index: 1" />
           <!-- <img v-if="winW/winH>1" id="imgId" class="q-pa-xs fixed" :src="getPic()" :height="winH" style="left:50%; top:50%; transform:translate(-50%, -50%);" @click="stopSlideshow()" /> -->
-          <img
-            v-if="winW / winH > 1"
-            id="imgId"
-            class="q-pa-lg"
-            :src="getPic()"
-            @click="stopSlideshow()"
-          />
-          <img
-            v-else
-            id="imgId"
-            class="q-pa-xs fixed"
-            :src="getPic()"
-            :width="winW - 10"
-            style="left: 50%; top: 50%; transform: translate(-50%, -50%)"
-            @click="stopSlideshow()"
-          />
-          <q-btn
-            flat
-            icon=""
-            size="lg"
-            @click="++picidx >= piclst.length ? (picidx = 0) : picidx"
-          />
+          <img v-if="winW / winH > 1" id="imgId" class="q-pa-lg" :src="getPic()" @click="stopSlideshow()" />
+          <img v-else id="imgId" class="q-pa-xs fixed" :src="getPic()" :width="winW - 10" style="left: 50%; top: 50%; transform: translate(-50%, -50%)" @click="stopSlideshow()" />
+          <q-btn flat icon="" size="lg" @click="++picidx >= piclst.length ? (picidx = 0) : picidx" />
         </div>
       </div>
       <div v-else>
         <div class="row justify-between">
-          <q-btn
-            flat
-            icon=""
-            size="lg"
-            @click="--picidx < 0 ? (picidx = piclst.length - 1) : picidx"
-            style="display: flex; align-items: center; min-height: 100vh; z-index: 1"
-          />
-          <!-- <img v-if="ratlst[picidx]>1" id="imgId" class="q-pa-xs w-full" :src="getPic()" @click="stopSlideshow()" />
-        <img v-else id="imgId" class="q-pa-xs w-ful" :src="getPic()" @click="stopSlideshow()" /> -->
-          <img
-            v-if="ratlst[picidx] > 1"
-            id="imgId"
-            class="q-pa-xs w-full fixed"
-            :src="getPic()"
-            style="left: 50%; top: 50%; transform: translate(-50%, -50%)"
-            @click="stopSlideshow()"
-          />
-          <img
-            v-else
-            id="imgId"
-            class="q-pa-xs w-ful fixed"
-            :src="getPic()"
-            style="left: 50%; top: 50%; transform: translate(-50%, -50%)"
-            @click="stopSlideshow()"
-          />
-          <q-btn
-            flat
-            icon=""
-            size="lg"
-            @click="++picidx >= piclst.length ? (picidx = 0) : picidx"
-          />
+          <q-btn flat icon="" size="lg" @click="--picidx < 0 ? (picidx = piclst.length - 1) : picidx" style="display: flex; align-items: center; min-height: 100vh; z-index: 1" />
+          <img v-if="ratlst[picidx] > 1" id="imgId" class="q-pa-xs w-full fixed" :src="getPic()" style="left: 50%; top: 50%; transform: translate(-50%, -50%)" @click="stopSlideshow()" />
+          <img v-else id="imgId" class="q-pa-xs w-ful fixed" :src="getPic()" style="left: 50%; top: 50%; transform: translate(-50%, -50%)" @click="stopSlideshow()" />
+          <q-btn flat icon="" size="lg" @click="++picidx >= piclst.length ? (picidx = 0) : picidx" />
         </div>
       </div>
       <div v-show="showPicInfo" class="q-pt-md q-pl-md text-h6">{{ getPic() }}</div>
-      <!-- <img id="imgId" loading="lazy" class="q-pa-xs fixed" :src="getPic()" :height="ratlst[picidx]<1 ? winH : winH / ratlst[picidx]" style="left:50%; top:50%; transform:translate(-50%, -50%);" @click="toggleSlideshow()" /> -->
-      <!-- <img id="imgId" class="q-pa-xs fixed" :src="getPic()" :width="getWidth()" :height="getHeight()"
-    style="left:50%; top:50%; transform:translate(-50%, -50%)"
-    fit="fill"
-    @click="toggleSlideshow()" /> -->
-      <!-- <q-img :src="getPic()" @click="toggleSlideshow()" /> -->
     </div>
 
     <q-card class="bg-cyan-4 q-px-" style="margin: -150px 0 0 0; height: 50px">
       <q-card-actions align="between">
-        <q-btn
-          glossy
-          rounded
-          class="bg-teal-9"
-          @click="--picidx < 0 ? (picidx = piclst.length - 1) : picidx"
-        >
-          <q-icon left name="arrow_circle_left" size="md" color="lime" />
+        <q-btn glossy rounded class="bg-teal-9" @click="--picidx < 0 ? (picidx = piclst.length - 1) : picidx" > <q-icon left name="arrow_circle_left" size="md" color="lime" />
           <span class="text-bold text-cyan-2 text-body1" style="margin: 0 4px 0 -10px">上一幅</span>
         </q-btn>
         <!-- <div class="text-h5" @click="slideshow()">第 {{ picidx + 1 }} 幅</div> -->
@@ -145,26 +53,14 @@
           <span class="text-bold text-cyan-1 text-body1" style="margin: 0 4px 0 4px">幻灯片</span>
           <q-icon name="slow_motion_video" size="md" color="yellow-9" />
         </q-btn>
-        <!-- <q-btn glossy rounded class="bg-red-9" @click="showPicInfo=!showPicInfo">
-        <q-icon name="info" size="md" color="yellow-9" />
-      </q-btn> -->
-        <q-btn
-          glossy
-          rounded
-          class="bg-teal-9"
-          @click="++picidx >= piclst.length ? (picidx = 0) : picidx"
-        >
+        <q-btn glossy rounded class="bg-teal-9" @click="++picidx >= piclst.length ? (picidx = 0) : picidx" >
           <span class="text-bold text-cyan-2 text-body1" style="margin: 0 4px 0 4px">下一幅</span>
           <q-icon name="arrow_circle_right" size="md" color="lime" />
         </q-btn>
       </q-card-actions>
     </q-card>
   </q-dialog>
-  <!-- <TxtPad /> -->
-  <NumPad
-    @set-pic-idx="(pix) => (picidx = pix % piclst.length)"
-    @set-interval-delay="(x) => (intervalDelay = x)"
-  />
+  <NumPad @set-pic-idx="(pix) => (picidx = pix % piclst.length)" @set-interval-delay="(x) => (intervalDelay = x)" />
   <TxtPad />
 </template>
 <script setup>
@@ -196,7 +92,8 @@ const compIntervalDelay = computed(() => {
 
 function openNumPad() {
   // const filenum = picidx.value + 1
-  emitter.emit('open-num-pad', 1, '要看那幅画')
+  console.log(`-fn-openNumPad totalPix=${piclst.value.length}`)
+  emitter.emit('open-num-pad', 'YALI', '要看那幅画', piclst.value.length)
 }
 function openTxtPad() {
   const filenum = picidx.value + 1

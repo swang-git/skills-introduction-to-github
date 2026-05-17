@@ -39,7 +39,6 @@ def import_portfolio_csv(db, csv_file_path, dict, asof_time: datetime):
                     # Convert types
                     if db_col in TYPE_CONVERTERS:
                         data[db_col] = TYPE_CONVERTERS[db_col](raw_val)
-                        # print("DB_COL:", db_col, 'raw_val:', raw_val)
                     else:
                         data[db_col] = raw_val.strip() if raw_val else None
                         if db_col == 'symbol': 
@@ -54,6 +53,13 @@ def import_portfolio_csv(db, csv_file_path, dict, asof_time: datetime):
                 # SKIP ROW IF: no account OR length > 20
                 if not account or len(str(account)) > 20:
                     # print(f"⚠️ Skipping row {row_num}: Invalid account: {account}")
+                    added_seconds = added_seconds - 1 ## keep original started datetime
+                    continue
+
+                # SKIP ROW IF: no symbo OR length > 8 # skip Pending activity line
+                symbol = data.get("symbol")
+                if not symbol or len(str(symbol)) > 8:
+                    print(f"⚠️ Skipping row {row_num}: Invalid symbol: {symbol}")
                     added_seconds = added_seconds - 1 ## keep original started datetime
                     continue
 
@@ -97,7 +103,7 @@ def import_portfolio_csv(db, csv_file_path, dict, asof_time: datetime):
 
     except Exception as e:
         db.rollback()
-        print(f"\n❌ ERROR importing CSV: {str(e)}")
+        # print(f"\n❌ ERROR importing CSV: {str(e)}")
     finally:
         db.close()
 
@@ -121,7 +127,7 @@ if __name__ == "__main__":
     cursor = conn.cursor()
     meta = get_data_from_table(cursor, 'security_metas', 'status="A"')
     dict = build_dict(cursor, meta)
-    ASOF_TIME = datetime(today.year, today.month, today.day, 17, 30, 0)
+    ASOF_TIME = datetime(today.year, today.month, today.day, 17, 41, 0)
     # ASOF_TIME = datetime(2026, 5, 7, 17, 30, 0)
     # Start import
     import_portfolio_csv(db, csv_data_file, dict, ASOF_TIME)
