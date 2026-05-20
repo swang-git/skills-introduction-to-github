@@ -25,7 +25,26 @@
       <div v-if="isIM">
         <div class="row justify-between">
           <q-btn flat icon="" size="lg" @click="--picidx < 0 ? (picidx = piclst.length - 1) : picidx" style="display: flex; align-items: center; min-height: 100vh; z-index: 1" />
-          <!-- <img v-if="winW/winH>1" id="imgId" class="q-pa-xs fixed" :src="getPic()" :height="winH" style="left:50%; top:50%; transform:translate(-50%, -50%);" @click="stopSlideshow()" /> -->
+          <!-- <img v-if="winW / winH > 1" id="imgId" class="q-pa-lg" :src="getPic()" @click="stopSlideshow()" /> -->
+          <img id="imgId" class="q-pa-xs fixed" :src="getPic()" :width="winW - 10" style="left: 50%; top: 50%; transform: translate(-50%, -50%)" @click="stopSlideshow()" />
+          <q-btn flat icon="" size="lg" @click="++picidx >= piclst.length ? (picidx = 0) : picidx" />
+        </div>
+      </div>
+      <div v-else>
+        <div class="row justify-between">
+          <q-btn flat icon="" size="lg" @click="--picidx < 0 ? (picidx = piclst.length - 1) : picidx" style="display: flex; align-items: center; min-height: 100vh; z-index: 1" />
+          <!-- <img v-if="ratlst[picidx] > 1" id="imgId" class="q-pa-xs w-full fixed" :src="getPic()" style="left: 50%; top: 50%; transform: translate(-50%, -50%)" @click="stopSlideshow()" /> -->
+          <img id="imgId" class="q-pa-xs w-ful fixed" :src="getPic()" style="left: 50%; top: 50%; transform: translate(-50%, -50%)" @click="stopSlideshow()" />
+          <q-btn flat icon="" size="lg" @click="++picidx >= piclst.length ? (picidx = 0) : picidx" />
+        </div>
+      </div>
+      <div v-show="showPicInfo" class="q-pt-md q-pl-md text-h6">{{ getPic() }}</div>
+    </div>
+    <!-- <div class="bg-grey-4" :transition-show="picidx % 2 == 0 ? 'rotate' : 'slide-left'">
+      this is for big pictures
+      <div v-if="isIM">
+        <div class="row justify-between">
+          <q-btn flat icon="" size="lg" @click="--picidx < 0 ? (picidx = piclst.length - 1) : picidx" style="display: flex; align-items: center; min-height: 100vh; z-index: 1" />
           <img v-if="winW / winH > 1" id="imgId" class="q-pa-lg" :src="getPic()" @click="stopSlideshow()" />
           <img v-else id="imgId" class="q-pa-xs fixed" :src="getPic()" :width="winW - 10" style="left: 50%; top: 50%; transform: translate(-50%, -50%)" @click="stopSlideshow()" />
           <q-btn flat icon="" size="lg" @click="++picidx >= piclst.length ? (picidx = 0) : picidx" />
@@ -40,7 +59,7 @@
         </div>
       </div>
       <div v-show="showPicInfo" class="q-pt-md q-pl-md text-h6">{{ getPic() }}</div>
-    </div>
+    </div> -->
 
     <q-card class="bg-cyan-4 q-px-" style="margin: -150px 0 0 0; height: 50px">
       <q-card-actions align="between">
@@ -78,6 +97,7 @@ const intervalDelay = ref(1500)
 const picidx = ref(-1)
 const piclst = ref([])
 const datetms = ref([])
+const fileszs = ref([])
 const ratlst = ref([])
 // const imgW = ref(0)
 // const imgH = ref(0)
@@ -90,6 +110,8 @@ const compIntervalDelay = computed(() => {
   return intervalDelay.value
 })
 
+emitter.on('open-PicDialog', (idx, pics, fileszs, datetms, ratios) => openIt(idx, pics, fileszs, datetms, ratios))
+
 function openNumPad() {
   // const filenum = picidx.value + 1
   console.log(`-fn-openNumPad totalPix=${piclst.value.length}`)
@@ -97,21 +119,21 @@ function openNumPad() {
 }
 function openTxtPad() {
   const filenum = picidx.value + 1
-  emitter.emit('open-TxtPad', -9876, piclst.value[picidx.value], 'filename of ' + filenum)
+  emitter.emit('open-TxtPad', piclst.value[picidx.value], fileszs.value[picidx.value], 'filename of ' + filenum)
 }
 
-function getWidth() {
-  let wid = ratlst.value[picidx.value] < 1 ? null : winW
-  let ratio = ratlst.value[picidx.value]
-  if (ratio > 1) wid = Math.min(wid / ratio, winW)
-  console.log(`-fn-getWidth ratio=${ratio} wid=${wid} winW=${winW}`)
-  return wid
-}
-function getHeight() {
-  let hit = ratlst.value[picidx.value] < 1 ? winH : null
-  hit = Math.min(hit, winH)
-  return hit == 0 ? null : hit
-}
+// function getWidth() {
+//   let wid = ratlst.value[picidx.value] < 1 ? null : winW
+//   let ratio = ratlst.value[picidx.value]
+//   if (ratio > 1) wid = Math.min(wid / ratio, winW)
+//   console.log(`-fn-getWidth ratio=${ratio} wid=${wid} winW=${winW}`)
+//   return wid
+// }
+// function getHeight() {
+//   let hit = ratlst.value[picidx.value] < 1 ? winH : null
+//   hit = Math.min(hit, winH)
+//   return hit == 0 ? null : hit
+// }
 
 function stopSlideshow() {
   console.log(`-fn-stopSlideshow`)
@@ -127,16 +149,21 @@ function stopSlideshow() {
 function slideshow() {
   if (slideshowing.value) return
   slideshowing.value = true
-  // console.log(`-fn-slidshow picidx=${picidx.value}`)
+  console.log(`-fn-slidshow() picidx=${picidx.value}`)
   intervalId.value = setInterval(() => {
-    if (picidx.value > piclst.value.length) picidx.value = 0
-    else picidx.value++
+    if (picidx.value > piclst.value.length - 1) {
+      picidx.value = 0
+    } else {
+      picidx.value++
+      // if (picidx.value > piclst.value.length) picidx.value--
+    }
   }, compIntervalDelay.value)
 }
 function getPic() {
-  console.log(
-    `jpgname=${piclst.value[picidx.value]} ratio=${ratlst.value[picidx.value]} wid=${getWidth()} hit=${getHeight()}`,
-  )
+  // console.log(`jpgname=${piclst.value[picidx.value]} ratio=${ratlst.value[picidx.value]} wid=${getWidth()} hit=${getHeight()}` )
+  // console.log(`jpgname=${piclst.value[picidx.value]} ratio=${ratlst.value[picidx.value]} wid=${getWidth()} hit=${getHeight()}, pixidx=${picidx.value}` )
+  if (picidx.value > piclst.value.length - 1) picidx.value = 0
+  console.log(`-fn-getPic() picidx=${picidx.value}` )
   let picdir = isIM ? '/pics/yali/' : '/pics/yali/'
   return process.env.API + picdir + piclst.value[picidx.value]
 }
@@ -172,11 +199,12 @@ function sizes() {
 //   imgH.value = img.height
 //   console.log(`-fn-open-it idx=${picidx.value} width=${imgW.value} height=${imgH.value}`)
 // }
-function openIt(idx, pics, datms, ratios) {
+function openIt(idx, pics, fszs, datms, ratios) {
   // console.log(sizes())
   console.log(`-fn-openIt idx=${idx} datetms[idx]=${datms[idx]}`, pics[0])
   piclst.value = pics.map((p) => p.replace('_thumbnail', ''))
   datetms.value = datms
+  fileszs.value = fszs
   ratlst.value = ratios
   picidx.value = idx
   // getMeta(getPic(), callback)

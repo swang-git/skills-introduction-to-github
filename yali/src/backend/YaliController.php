@@ -46,6 +46,7 @@ class YaliController extends Controller {
     // $rat1 = [];
     // $rat2 = [];
     $filelist = [];
+    $fileSizes = [];
     foreach($thumbnails as $fnm) {
       // $datetms[] = date('Y.n.j', filemtime($thumbnaildir . '/' . $fnm));
       $datetms[] = date('Y.n.j H:i', filemtime($fnm));
@@ -57,7 +58,14 @@ class YaliController extends Controller {
       // Log:info("ratio=$ratio width=$width height=$height");
       // if ($ratio < 1) $rat1[] = $fnm;
       // else $rat2[] = $fnm;
-      $filelist[] = basename($fnm); // $fnm is fullpath
+      $filename = basename($fnm); // $fnm is fullpath
+      $filelist[] = $filename;
+      $fileFullpath = dirname(dirname($fnm)) ."/". $filename; // get rid of /thumbnails
+      $sizeInByte = filesize($fileFullpath); // in K
+      // $sizeInKiloByte = $sizeInByte / 2014;  // in KB
+      // Log::info("fileFullpath=[$fileFullpath] fileSizeInKiloByte=[$sizeInKiloByte]");
+      // Log::info("fileFullpath=[$fileFullpath] fileSizeInByte=[$sizeInByte]");
+      $fileSizes[] = $sizeInByte;
     }
     // Log::info("ratios", $ratios);
 
@@ -66,6 +74,6 @@ class YaliController extends Controller {
 
     // return ['lst' => $thumbnails, 'datetms' => $datetms, 'ratios' => $ratios, 'status' => "OK"];
     // return ['lst' => $tlst, 'datetms' => $datetms, 'ratios' => $ratios, 'status' => "OK"];
-    return ['lst' => $filelist, 'datetms' => $datetms, 'ratios' => $ratios, 'status' => "OK"];
+    return ['lst' => $filelist, 'fsz' => $fileSizes, 'datetms' => $datetms, 'ratios' => $ratios, 'status' => "OK"];
   }
 }

@@ -1275,7 +1275,7 @@ class GolfController extends Controller {
 		return [ 'usertype' => is_null($user) ? null : $user->usertype, 'status' => "OK" ];
 	}
 	public function getUserType() {
-		$user = Auth::guard('gadmin')->user(); Log::info("getUserType", [$user]);
+		$user = Auth::guard('gadmin')->user(); Log::info("getUserType user=", [$user]);
 		return ['status' => "OK", 'usertype' => is_null($user) ? null : $user->usertype];
 	}
 	private function XXXgetLoginUser() {
@@ -2482,7 +2482,7 @@ class GolfController extends Controller {
 		$info = Collect($info);
 		return view('Golf.signup', compact('tournament', 'info'));
 	}
-	public function getPlayerList() {
+	public function getPlayerList() { Log::info("getPlayerList()");
 		$da = Player::where('status', 'A')->select('id', 'lastname', 'firstname')->orderBy('lastname')->get();
 		$players = [];
 		foreach($da as $d) {

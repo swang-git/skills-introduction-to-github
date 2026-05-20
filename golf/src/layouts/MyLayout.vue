@@ -236,6 +236,7 @@ import RegisterDialog from 'pages/RegisterDialog'
 import emitter from 'tiny-emitter/instance'
 import { axiosFunctions } from '../composables/axiosFunctions'
 import { libFunctions } from '../composables/libFunctions'
+import { dayFunctions } from '../composables/dayFunctions'
 import PlatformDataPad from '../components/PlatformDataPad'
 
 // const app = getCurrentInstance()
@@ -243,7 +244,9 @@ import PlatformDataPad from '../components/PlatformDataPad'
 // import { useStore } from 'vuex'
 // const store = useStore()
 const $q = useQuasar()
-const { store, golfUserType, JZsAdmin, KJsAdmin, ALsAdmin, SysAdmin, isIM, isDesk, PGCsAdmin, doGroup, pagename, userGuidePage } = libFunctions()
+// const { store, golfUserType, JZsAdmin, KJsAdmin, ALsAdmin, SysAdmin, isIM, isDesk, PGCsAdmin, doGroup, pagename, userGuidePage } = libFunctions()
+const { store, JZsAdmin, KJsAdmin, ALsAdmin, SysAdmin, isIM, isDesk, PGCsAdmin, doGroup, pagename, userGuidePage } = libFunctions()
+const { yyyymmdd } = dayFunctions()
 
 const oneHour = 1000 * 60 * 60
 const curApp = ref(null)
