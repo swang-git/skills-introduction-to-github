@@ -1,7 +1,6 @@
 <template>
-<div class="bg-cyan-10" :class="iPhone ? 'q-pl-sm' : 'q-pl-xs'">
-<!-- <div class="bg-cyan-10 fixed q-pl-sm"> -->
-<div :style="isDesk ? {'width':'99.2%','height':'90vh', 'border':'cyan 1px solid'} : {'width':'390px','height':'970px'}">
+<div class="bg-cyan-10" :class="iPhone ? 'q-pl-sm' : 'q-pl-xs'" style="place-items:center">
+<div :style="isDesk ? {'width':'74vw','height':'90vh', 'border':'cyan 1px solid'} : {'width':'390px','height':'970px'}">
   <div v-for="(e, i) in palist" :key=e.id>
     <div :style="getLineBackground(i)" :class="{ 'bg-purple-10':!e.hideIt }" class="q-px-xs">
       <div class="row cursor-pointer;q-qx-sm" style="font-size:20.1px">

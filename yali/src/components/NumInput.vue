@@ -14,7 +14,7 @@
 </template>
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import emitter from 'tiny-emitter/instance';
+// import emitter from 'tiny-emitter/instance';
 import { libFunctions } from '../composables/libFunctions'
 const { isDesk } = libFunctions()
 const nref = ref(null)

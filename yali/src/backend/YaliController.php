@@ -33,18 +33,24 @@ class YaliController extends Controller {
 		// Open a known directory, and proceed to scandir its contents
     // $thumbnails = array_diff(scandir($thumbnaildir), ['.', '..']);
     $thumbnails = glob("$thumbnaildir/*.{jpg,webp,jpeg,png,gif,JPG,JPEG,PNG,GIG}", GLOB_BRACE);
-    // Log::info($thumbnails);
-
     // Sort by modification time
     usort($thumbnails, function($a, $b) use ($thumbnaildir) {
       // return filemtime("$thumbnaildir/$b") - filemtime("$thumbnaildir/$a");
       return filemtime($b) - filemtime($a);
     });
+    // Log::info($thumbnails);
+    $icons = [];
+    $iconURLroot = "/pics/yali/thumbnails/";
+    foreach($thumbnails as $thm) {
+      $icon = [];
+      $icon['name'] = $thm;
+      $icon['URL'] = $thm;
+      $icons[] = $icon;
+    }
+
 
     $datetms = [];
     $ratios = [];
-    // $rat1 = [];
-    // $rat2 = [];
     $filelist = [];
     $fileSizes = [];
     foreach($thumbnails as $fnm) {
@@ -69,11 +75,7 @@ class YaliController extends Controller {
     }
     // Log::info("ratios", $ratios);
 
-    // $tlst = array_merge($rat1, $rat2);
-    // $tlst = $rat1 + $rat2;
-
-    // return ['lst' => $thumbnails, 'datetms' => $datetms, 'ratios' => $ratios, 'status' => "OK"];
-    // return ['lst' => $tlst, 'datetms' => $datetms, 'ratios' => $ratios, 'status' => "OK"];
     return ['lst' => $filelist, 'fsz' => $fileSizes, 'datetms' => $datetms, 'ratios' => $ratios, 'status' => "OK"];
+    // return ['lst' => $icons, 'fsz' => $fileSizes, 'datetms' => $datetms, 'ratios' => $ratios, 'status' => "OK"];
   }
 }

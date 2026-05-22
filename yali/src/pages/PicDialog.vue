@@ -1,7 +1,7 @@
 <template>
   <q-dialog v-model="opened" :transition-show="picidx % 2 == 0 ? 'slide-right' : 'slide-left'" maximized>
-    <q-card class="bg-red-4" style="height: 45px; z-index: 10">
-      <q-card-actions align="between">
+    <q-card class="bg-red-4 overflow-hidden" style="height: 45px; z-index: 10">
+      <q-card-actions align="between" style="margin-top:-8px">
         <q-btn glossy rounded class="bg-teal" v-close-popup>
           <q-icon left name="cancel" size="md" color="lime" />
           <span class="text-bold text-cyan-2 text-body1" style="margin: 0 4px 0 -10px">关闭</span>
@@ -21,52 +21,31 @@
         </q-btn-group>
       </q-card-actions>
     </q-card>
-    <div class="bg-grey-4" :transition-show="picidx % 2 == 0 ? 'rotate' : 'slide-left'">
-      <div v-if="isIM">
+    <div class="bg-green-9" :transition-show="picidx % 2 == 0 ? 'rotate' : 'slide-left'">
+      <div v-if="isDesk">
         <div class="row justify-between">
           <q-btn flat icon="" size="lg" @click="--picidx < 0 ? (picidx = piclst.length - 1) : picidx" style="display: flex; align-items: center; min-height: 100vh; z-index: 1" />
-          <!-- <img v-if="winW / winH > 1" id="imgId" class="q-pa-lg" :src="getPic()" @click="stopSlideshow()" /> -->
-          <img id="imgId" class="q-pa-xs fixed" :src="getPic()" :width="winW - 10" style="left: 50%; top: 50%; transform: translate(-50%, -50%)" @click="stopSlideshow()" />
+          <img id="imgId" class="fixed" :src="getPic()" :style="ratlst[picidx]>1? {'width':winW/ratlst[picidx]+'px'} : {'height':winH+'px'}" style="left: 50%; top: 50%; transform: translate(-50%, -50%)" @click="stopSlideshow()" />
+          <!-- <img id="imgId" class="fixed" :height=winH :src="getPic()" style="left: 50%; top: 50%; transform: translate(-50%, -50%)" @click="stopSlideshow()" /> -->
           <q-btn flat icon="" size="lg" @click="++picidx >= piclst.length ? (picidx = 0) : picidx" />
         </div>
       </div>
       <div v-else>
         <div class="row justify-between">
           <q-btn flat icon="" size="lg" @click="--picidx < 0 ? (picidx = piclst.length - 1) : picidx" style="display: flex; align-items: center; min-height: 100vh; z-index: 1" />
-          <!-- <img v-if="ratlst[picidx] > 1" id="imgId" class="q-pa-xs w-full fixed" :src="getPic()" style="left: 50%; top: 50%; transform: translate(-50%, -50%)" @click="stopSlideshow()" /> -->
-          <img id="imgId" class="q-pa-xs w-ful fixed" :src="getPic()" style="left: 50%; top: 50%; transform: translate(-50%, -50%)" @click="stopSlideshow()" />
+          <!-- <q-img v-if="ratlst[picidx] > 1" id="imgId" class="q-pa-xs fixed" :src="getPic()" style="left: 50%; top: 50%; transform: translate(-50%, -50%)" @click="stopSlideshow()" /> -->
+          <img id="imgId" class="q-pa-xs fixed" :src="getPic()" :width=winW style="left: 50%; top: 50%; transform: translate(-50%, -50%)" @click="stopSlideshow()" />
           <q-btn flat icon="" size="lg" @click="++picidx >= piclst.length ? (picidx = 0) : picidx" />
         </div>
       </div>
-      <div v-show="showPicInfo" class="q-pt-md q-pl-md text-h6">{{ getPic() }}</div>
     </div>
-    <!-- <div class="bg-grey-4" :transition-show="picidx % 2 == 0 ? 'rotate' : 'slide-left'">
-      this is for big pictures
-      <div v-if="isIM">
-        <div class="row justify-between">
-          <q-btn flat icon="" size="lg" @click="--picidx < 0 ? (picidx = piclst.length - 1) : picidx" style="display: flex; align-items: center; min-height: 100vh; z-index: 1" />
-          <img v-if="winW / winH > 1" id="imgId" class="q-pa-lg" :src="getPic()" @click="stopSlideshow()" />
-          <img v-else id="imgId" class="q-pa-xs fixed" :src="getPic()" :width="winW - 10" style="left: 50%; top: 50%; transform: translate(-50%, -50%)" @click="stopSlideshow()" />
-          <q-btn flat icon="" size="lg" @click="++picidx >= piclst.length ? (picidx = 0) : picidx" />
-        </div>
-      </div>
-      <div v-else>
-        <div class="row justify-between">
-          <q-btn flat icon="" size="lg" @click="--picidx < 0 ? (picidx = piclst.length - 1) : picidx" style="display: flex; align-items: center; min-height: 100vh; z-index: 1" />
-          <img v-if="ratlst[picidx] > 1" id="imgId" class="q-pa-xs w-full fixed" :src="getPic()" style="left: 50%; top: 50%; transform: translate(-50%, -50%)" @click="stopSlideshow()" />
-          <img v-else id="imgId" class="q-pa-xs w-ful fixed" :src="getPic()" style="left: 50%; top: 50%; transform: translate(-50%, -50%)" @click="stopSlideshow()" />
-          <q-btn flat icon="" size="lg" @click="++picidx >= piclst.length ? (picidx = 0) : picidx" />
-        </div>
-      </div>
-      <div v-show="showPicInfo" class="q-pt-md q-pl-md text-h6">{{ getPic() }}</div>
-    </div> -->
 
-    <q-card class="bg-cyan-4 q-px-" style="margin: -150px 0 0 0; height: 50px">
+    <q-card class="bg-cyan-4 overflow-hidden" style="margin: -150px 0 0 0; height: 50px">
       <q-card-actions align="between">
-        <q-btn glossy rounded class="bg-teal-9" @click="--picidx < 0 ? (picidx = piclst.length - 1) : picidx" > <q-icon left name="arrow_circle_left" size="md" color="lime" />
+        <q-btn glossy rounded class="bg-teal-9" @click="--picidx < 0 ? (picidx = piclst.length - 1) : picidx" >
+          <q-icon left name="arrow_circle_left" size="md" color="lime" />
           <span class="text-bold text-cyan-2 text-body1" style="margin: 0 4px 0 -10px">上一幅</span>
         </q-btn>
-        <!-- <div class="text-h5" @click="slideshow()">第 {{ picidx + 1 }} 幅</div> -->
         <q-btn glossy rounded class="bg-teal-9" @click="slideshow()">
           <q-icon name="motion_photos_auto" size="md" color="yellow-9" />
           <span class="text-bold text-cyan-1 text-body1" style="margin: 0 4px 0 4px">幻灯片</span>
@@ -86,11 +65,10 @@
 import { ref, computed } from 'vue'
 import emitter from 'tiny-emitter/instance'
 import { libFunctions } from '../composables/libFunctions.js'
-const { isIM } = libFunctions()
+const { isIM, isDesk } = libFunctions()
 import NumPad from '../../src/components/NumPad'
 import TxtPad from '../../src/components/TxtPad'
 const opened = ref(false)
-const showPicInfo = ref(false)
 const slideshowing = ref(false)
 const intervalId = ref(-1)
 const intervalDelay = ref(1500)
@@ -99,18 +77,18 @@ const piclst = ref([])
 const datetms = ref([])
 const fileszs = ref([])
 const ratlst = ref([])
-// const imgW = ref(0)
-// const imgH = ref(0)
-const winW = sizes().windowWidth
-const winH = sizes().windowHeight - 100
+const winW = isIM ? sizes().windowWidth - 10 : sizes().windowWidth - 222
+const winH = sizes().windowHeight - 122
+const winR = winW / winH
 defineExpose({ openIt })
-console.log(`-CK-winW=${winW} winH=${winH}`)
+console.log(`-CK-winW=${winW} winH=${winH} winR=${winR}`)
 
 const compIntervalDelay = computed(() => {
   return intervalDelay.value
 })
 
-emitter.on('open-PicDialog', (idx, pics, fileszs, datetms, ratios) => openIt(idx, pics, fileszs, datetms, ratios))
+// emitter.on('open-PicDialog', (idx, pics, fileszs, datetms, ratios) => openIt(idx, pics, fileszs, datetms, ratios))
+emitter.on('open-PicDialog', (idx, data) => openIt(idx, data))
 
 function openNumPad() {
   // const filenum = picidx.value + 1
@@ -163,7 +141,7 @@ function getPic() {
   // console.log(`jpgname=${piclst.value[picidx.value]} ratio=${ratlst.value[picidx.value]} wid=${getWidth()} hit=${getHeight()}` )
   // console.log(`jpgname=${piclst.value[picidx.value]} ratio=${ratlst.value[picidx.value]} wid=${getWidth()} hit=${getHeight()}, pixidx=${picidx.value}` )
   if (picidx.value > piclst.value.length - 1) picidx.value = 0
-  console.log(`-fn-getPic() picidx=${picidx.value}` )
+  // console.log(`-fn-getPic() picidx=${picidx.value}` )
   let picdir = isIM ? '/pics/yali/' : '/pics/yali/'
   return process.env.API + picdir + piclst.value[picidx.value]
 }
@@ -199,15 +177,26 @@ function sizes() {
 //   imgH.value = img.height
 //   console.log(`-fn-open-it idx=${picidx.value} width=${imgW.value} height=${imgH.value}`)
 // }
-function openIt(idx, pics, fszs, datms, ratios) {
+function openIt(idx, data) {
   // console.log(sizes())
-  console.log(`-fn-openIt idx=${idx} datetms[idx]=${datms[idx]}`, pics[0])
-  piclst.value = pics.map((p) => p.replace('_thumbnail', ''))
-  datetms.value = datms
-  fileszs.value = fszs
-  ratlst.value = ratios
+  // piclst.value = data.map((p) => p.replace('_thumbnail', ''))
+  piclst.value = data.map(p => p.fnm)
+  fileszs.value = data.map(p => p.fsz)
+  datetms.value = data.map(p => p.dtm)
+  ratlst.value = data.map(p => p.whr.width / p.whr.height)
+  console.log(`-fn-openIt idx=${idx} width=${data[idx].whr.width} height=${data[idx].whr.height}`)
   picidx.value = idx
-  // getMeta(getPic(), callback)
   opened.value = true
 }
+// function openIt(idx, pics, fszs, datms, ratios) {
+//   // console.log(sizes())
+//   console.log(`-fn-openIt idx=${idx} datetms[idx]=${datms[idx]}`, pics[0])
+//   piclst.value = pics.map((p) => p.replace('_thumbnail', ''))
+//   datetms.value = datms
+//   fileszs.value = fszs
+//   ratlst.value = ratios
+//   picidx.value = idx
+//   // getMeta(getPic(), callback)
+//   opened.value = true
+// }
 </script>
