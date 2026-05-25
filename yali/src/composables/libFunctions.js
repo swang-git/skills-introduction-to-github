@@ -45,9 +45,18 @@ export function libFunctions() {
   // function checkFone () { alert('is fone ' + fone()) }
   // function checkDesk () { alert('is Desk ' + desk()) }
   function local () {
-    const localhosts = /http:\/\/(prod|devx|divx|192.168.|localhost|127.0.0.1)/gi
+    // const localhosts = /(prod|devx|192.168.|localhost|127.0.0.1)/gi
+    const localhosts = /(devx|192.168.|localhost|127.0.0.1)/gi
+    // const localhosts = /http:\/\/(prod|devx|divx|192.168.|localhost|127.0.0.1)/gi
     // console.log('-lb-local', window.location.href, localhosts.test(window.location.href))
-    return localhosts.test(window.location.href)
+    return localhosts.test(window.location.hostname)
+  }
+  function admin () {
+    const domainName = /http:\/\/vicking.cn.mt\//gi
+    // const domainName = /http:\/\/(prod|192.168.|localhost|127.0.0.1)/gi
+    console.log('-lb-local', window.location.href, domainName.test(window.location.href))
+    return domainName.test(window.location.href)
+    // return false
   }
   function ScreenWidth () { return $q.screen.width }
   function ScreenHeight () { return $q.screen.height }
@@ -68,6 +77,8 @@ export function libFunctions() {
   const iPhone = IPhone()
   const iPhone13 = iphone13()
   const iPhone17 = iphone17()
+  const isLocal = local()
+  const isAdmin = admin()
 
   const firstOnPage = computed(() => { return (curPage.value - 1) * itemsPerPage.value })
   emitter.on('dats', (x) => dats.value = x)
@@ -203,7 +214,8 @@ export function libFunctions() {
   }
   return {
     getLineBackground,formatCurrency,fmtcy,deepClone,decimal2,
-    local,
+    isLocal,
+    isAdmin,
     // isAdmin,userType,
     buildApp,opened,
     // store,

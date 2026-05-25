@@ -19,7 +19,7 @@ class DrawingController extends Controller
      * Scan filesystem and paginate results
      */
     // public function index(Request $request)
-    public function index($page, $perPage) {
+    public function getPages($page, $perPage) {
         // Get all drawing files
         $allFiles = $this->getDrawingFiles();
         $total = count($allFiles);

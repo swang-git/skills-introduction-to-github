@@ -32,7 +32,7 @@ const keyedIn = ref('')
 const keyedNum = ref(0)
 const totalPix = ref(0)
 const flag = ref(null)
-const emit = defineEmits(['pix-pidx', 'set-interval-delay', 'per-page', 'pix-page'])
+const emit = defineEmits(['pix-pidx', 'set-interval-delay', 'per-page', 'jump-to-page'])
 
 // console.log('-ST-NumPad')
 
@@ -59,7 +59,7 @@ function setNumber(n) {
 function setPicIdx() {
   console.log(`-fn-setPicIdx keyedId=${keyedIn.value} flag=${flag.value}`)
   if (flag.value == 'YALI_PIX_PIDX') emit('pix-pidx', parseInt(keyedIn.value) - 1)
-  if (flag.value == 'YALI_PIX_PAGE') emit('pix-page', parseInt(keyedIn.value))
+  if (flag.value == 'YALI_PIX_PAGE') emit('jump-to-page', parseInt(keyedIn.value))
   if (flag.value == 'YALI_PER_PAGE') emit('per-page', parseInt(keyedIn.value))
   opened.value = false
 }
