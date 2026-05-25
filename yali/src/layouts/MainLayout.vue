@@ -1,49 +1,65 @@
 ˜<template>
-  <div class="bg-teal-10" inset-shadow-down>
-    <div class="q-pa-xs text-amber text-center text-h4"> 婭 莉 画 展 <span class="text-h5 text-cyan-3">({{ total }}幅)</span></div>
-    <q-card class="bg-teal" style="margin-top:-5px;height:35px">
+  <q-layout view="lHh Lpr LFf">
+    <q-header>
+      <q-toolbar class="bg-teal-10 glossy">
+        <q-toolbar-title>
+          <div class="row justify-evenly">
+            <div class="text-center cursor-pointer text-yellow q-pt-sm" style="font-size:27px" @click="loadRandomPage">婭 莉 画 展({{ total }}幅)</div>
+            <q-btn v-if="local" class="q-mt-sm" round glossy dense dark size="20px" :label="admin.isOn ? 'A' : 'X'" @click = "admin.isOn = !admin.isOn" />
+            <!-- <q-btn v-if="local" class="q-mt-sm" round glossy dense dark size="20px" label="A" /> -->
+          </div>
+          <q-card class="bg-teal-10" style="margin-top:10px">
+            <q-card-actions align="between">
+              <q-btn glossy dense class="text-h6" label="接下一页"  color="cyan-10" @click="loadPage(0)" />
+              <q-btn glossy dense class="text-h6" :label="currentPage" round color="cyan-10" @click="openNumPad('jump-page')" />
+              <q-btn glossy dense class="text-h6" label="最后一页"  color="cyan-10" @click="loadPage(lastPage)" />
+            </q-card-actions>
+          </q-card>
+        </q-toolbar-title>
+      </q-toolbar>
+    </q-header>
+
+    <div class="q-pt-md"> <!-- prevent from moving up for first time reloading-->
+      <q-card class="flex flex-center bg-cyan-10" style="margin-top:102px">
+        <q-card-actions align="between">
+          <div v-for="(p, idx) in data" :key="p" class="q-px-xs">
+            <img v-if="isIM" :src="getThumbnailURL(p.fnm)" :height=IMiconSZ :width=IMiconSZ class="q-pa-xs cursor-pointer" @click="showFullImage(idx)" loading="lazy" />
+            <img v-else      :src="getThumbnailURL(p.fnm)" :height=DKiconSZ :width=DKiconSZ class="q-pa-xs cursor-pointer" @click="showFullImage(idx)" loading="lazy" />
+          </div>
+        </q-card-actions>
+      </q-card>
+    </div>
+
+    <q-card class="bg-teal-10">
       <q-card-actions align="between">
-        <q-btn glossy dense style="margin-top:-8px" class="text-h6" label="接下一页" color="cyan-10" @click="loadPage(0)" />
-        <div class="row" style="margin-top:-10px">
-          <q-btn glossy dense class="text-h6" label="跳转到第" color="cyan-10" @click="loadPage(thePage)" />
-          <q-input dense v-model="thePage" input-class="text-center" class="bg-cyan-2 q-mx-xs q-mt-xs"  style="font-size: 20px; width:44px; height:30px" />
-          <span class="q-pr-xs text-h6 text-indigo-9 q-mt-sm">页</span>
-        </div>
-        <q-btn glossy dense style="margin-top:-10px" class="text-h6" label="最后一页" color="teal-10" @click="loadPage(lastPage)" />
+        <q-btn glossy dense class="text-h6" label="接下一页"  color="cyan-10" @click="loadPage(0)" />
+        <q-card-actions v-show="admin.isOn">
+          <q-btn glossy dense class="text-h6" label="per page" color="cyan-10" @click="openNumPad('per-page')" />
+        </q-card-actions>
+        <q-btn glossy dense class="text-h6" label="跳" round color="cyan-10" @click="openNumPad('jump-page')" />
+        <q-btn glossy dense class="text-h6" label="最后一页"  color="teal-10" @click="loadPage(lastPage)" />
       </q-card-actions>
     </q-card>
-    <q-card class="flex flex-center" style="background: teal">
-      <q-card-actions align="between">
-        <div v-for="(p, idx) in data" :key="p" class="q-px-xs icon-wrapper">
-          <!-- <img :src="getThumbnailURL(p)" :height="isIM ? IMiconSZ : DKiconSZ" :width="isIM ? IMiconSZ : DKiconSZ" class="q-pa-xs cursor-pointer" @click="showFullImage(idx)" loading="lazy" /> -->
-          <img v-if="isIM" :src="getThumbnailURL(p.fnm)" :height=IMiconSZ :width=IMiconSZ class="q-pa-xs cursor-pointer" @click="showFullImage(idx)" loading="lazy" />
-          <img v-else      :src="getThumbnailURL(p.fnm)" :height=DKiconSZ :width=DKiconSZ class="q-pa-xs cursor-pointer" @click="showFullImage(idx)" loading="lazy" />
-        </div>
-      </q-card-actions>
-    </q-card>
-  </div>
-  <q-card class="bg-teal" style="margin-top:-5px;height:55px">
-    <q-card-actions align="between">
-      <q-btn glossy dense style="margin-top:-8px" class="text-h6" label="接下一页" color="cyan-10" @click="loadPage(0)" />
-      <div class="row" style="margin-top:-10px">
-        <q-btn glossy dense class="text-h6" label="跳转到第" color="cyan-10" @click="loadPage(thePage)" />
-        <q-input dense v-model="thePage" input-class="text-center" class="bg-cyan-2 q-mx-xs q-mt-xs"  style="font-size: 20px; width:44px; height:30px" />
-        <span class="q-pr-xs text-h6 text-indigo-9 q-mt-sm">页</span>
-      </div>
-      <q-btn glossy dense style="margin-top:-10px" class="text-h6" label="最后一页" color="teal-10" @click="loadPage(lastPage)" />
-    </q-card-actions>
-  </q-card>
-  <PicDialog ref="refPicDialog" />
+
+  </q-layout>
+  <PicDialog />
 </template>
 <script setup>
 import { ref } from 'vue'
-
 import emitter from 'tiny-emitter/instance'
 import { axiosFunctions } from '../../src/composables/axiosFunctions.js'
 const { gaxios } = axiosFunctions()
 import { libFunctions } from '../../src/composables/libFunctions.js'
-const { isIM, buildApp } = libFunctions()
+const { isIM, buildApp, local } = libFunctions()
 import PicDialog from '../pages/PicDialog'
+
+import { useNumPadStore } from '../../src/stores/numPadStore'
+const numPadStore = useNumPadStore()
+import { useAdminStore } from '../../src/stores/adminStore'
+const admin = useAdminStore()
+emitter.on('pix-page', (page) => loadPage(page))
+emitter.on('per-page', (prpg) => { perPage.value = 0; perPage.value = prpg; data.value=[]; getList(1, perPage.value) })
+
 const data = ref([])
 const hasMore = ref(true)
 const thePage = ref(null)
@@ -52,21 +68,33 @@ const perPage = ref(30)
 const total = ref(0)
 const lastPage = ref(total.value / perPage.value)
 const loading = ref(false)
-const IMiconSZ = 185
+// const IMiconSZ = 185 // iPhone 2 columns good
+const IMiconSZ = 178 // Mate60 Good for 2 columns
 const DKiconSZ = 150
 
 // ---- main starts ----------
-console.log(`-ST-yali/getList isIM=${isIM}`)
+// console.log(`-ST-yali/getList isIM=${isIM}`)
 document.title = '娅莉硬笔画'
 emitter.on('yali-getList', (x) => setList(x))
 buildApp('娅莉硬笔画', 'yali')
 getList(currentPage.value, perPage.value)
 
 // ---- function section -----
+function openNumPad(flag=null) {
+  console.log(`-fn-openNumPad isIM=${isIM}`)
+  if (flag == 'per-page') numPadStore.open('YALI_PER_PAGE', '输入每页的页数', total.value)
+  else if (flag == 'jump-page') numPadStore.open('YALI_PIX_PAGE', '输入要跳转的页数', lastPage.value)
+}
 /**
  * Load next page and append to existing drawings
  * This is what your "Load More" button calls
  */
+const loadRandomPage = () => {
+  const rpage = Math.floor(Math.random() * 121) + 1;
+  console.log(`-fn-loadRandomPage hasMore=${hasMore.value} loading=${loading.value} rpage=${rpage} lastPage=${lastPage.value} thePage=${thePage.value}`)
+  loadPage(rpage)
+}
+
 const loadPage = (tPage=0) => {
   console.log(`-fn-loadPage hasMore=${hasMore.value} loading=${loading.value} tPage=${tPage} lastPage=${lastPage.value} thePage=${thePage.value}`)
   // if (hasMore.value && !loading.value) {
@@ -100,14 +128,14 @@ function getThumbnailURL(p) {
   return turl
 }
 function getList(cpage, ppage) {
-  console.log(`-fn-getList isIM=${isIM}`)
+  // console.log(`-fn-getList isIM=${isIM}`)
   const path = process.env.API + '/yali/getList/' + cpage + '/' + ppage
   gaxios(path)
 }
 function setList(da) {
-  console.log(`-fn-setList total=${da.total} has_more=${da.has_more} current_page=${da.current_page} last_page=${da.last_page} per_page=${da.per_page}`, da.data[0])
-  console.log(`-fn-setList`, da)
-  data.value = data.value.concat(da.data)
+  // console.log(`-fn-setList total=${da.total} has_more=${da.has_more} current_page=${da.current_page} last_page=${da.last_page} per_page=${da.per_page}`, da.data[0])
+  // console.log(`-fn-setList`, da)
+  data.value = da.data.concat(data.value)
   hasMore.value = da.has_more
   currentPage.value = da.current_page
   lastPage.value = da.last_page

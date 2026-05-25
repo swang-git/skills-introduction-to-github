@@ -28,7 +28,8 @@ const inpref = ref(null)
 
 onMounted(() => inpref)
 
-console.log('-ST-TxtPad')
+// console.log('-ST-TxtPad')
+
 emitter.on('open-TxtPad', (fn, fz, ft) => openIt(fn, fz, ft))
 
 async function copyToClipboard(text) {

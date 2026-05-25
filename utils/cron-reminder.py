@@ -9,7 +9,7 @@ import datetime
 # print('==== cron-reminder.py -- using sqlchemy version', sqlalchemy.__version__)
 
 ##dbconf="mysql://swang:VVKKll11##@localhost/prod?charset=utf8mb4"
-dbconf="mysql+pymysql://swang:VVKKll11##@localhost/prod?charset=utf8mb4"
+dbconf="mysql+pymysql://swang:Ybsjll11@localhost/prod?charset=utf8mb4"
 ##engine = create_engine(dbconf, encoding='utf8', echo=False)
 engine = create_engine(dbconf, echo=False)
 Session = sessionmaker(bind=engine)

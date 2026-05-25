@@ -44,11 +44,11 @@ export function libFunctions() {
   // function checkMate9 () { alert('is Mate9 ' + mate9()) }
   // function checkFone () { alert('is fone ' + fone()) }
   // function checkDesk () { alert('is Desk ' + desk()) }
-  // function local () {
-  //   const localhosts = /http:\/\/(prod|devx|divx|192.168.|localhost|127.0.0.1)/gi
-  //   // console.log('-lb-local', window.location.href, localhosts.test(window.location.href))
-  //   return localhosts.test(window.location.href)
-  // }
+  function local () {
+    const localhosts = /http:\/\/(prod|devx|divx|192.168.|localhost|127.0.0.1)/gi
+    // console.log('-lb-local', window.location.href, localhosts.test(window.location.href))
+    return localhosts.test(window.location.href)
+  }
   function ScreenWidth () { return $q.screen.width }
   function ScreenHeight () { return $q.screen.height }
   // function ScreenHeight () { return  Math.min(screen_height, 708) }
@@ -203,6 +203,7 @@ export function libFunctions() {
   }
   return {
     getLineBackground,formatCurrency,fmtcy,deepClone,decimal2,
+    local,
     // isAdmin,userType,
     buildApp,opened,
     // store,

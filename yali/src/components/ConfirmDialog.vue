@@ -25,23 +25,23 @@ const emit = defineEmits(['user-confirmed'])
 const opened = ref(false)
 var tit = null
 var msg = null
-var action = null
+var action = ref(null)
 
 // console.log('-ST-ConfirmDialog')
 emitter.on('open-ConfirmDialog', (x, y, action) => openIt(x, y, action))
 
 function confirmed () {
   // console.log('-fn-confirmed', tit, msg)
+  // emitter.emit('user-confirmed', action.value)
+  emit('user-confirmed', action.value)
   opened.value = false
-  emitter.emit('user-confirmed', action)
-  emit('user-confirmed', action)
 }
 defineExpose({ openIt })
-function openIt (t, m, act) {
-  console.log(`-fn-openIt title=${t}`)
-  tit = t
-  msg = m
-  action = act
+function openIt (tt, mg, act) {
+  console.log(`-fn-openIt title=${tt} mg=${mg} actle=${act}`)
+  tit = tt
+  msg = mg
+  action.value = act
   opened.value = true
   // console.log(`-fn-openIt open=${opened.value}`, t, m, act)
 }

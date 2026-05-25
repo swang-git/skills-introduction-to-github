@@ -7,7 +7,7 @@
         <q-card-section v-if="msg=='AllSlotsAreFilled'" class="q-pt-none text-h6">
           Click on <q-btn round glossy icon="add_circle" @click="addSelected" /> to add the selected players Or "CLOSE" and re-select
         </q-card-section>
-        <q-card-section v-else-if="fmt==='html'" class="q-pt-none text-h6 justify-between" v-html="msg" />
+        <!-- <q-card-section v-else-if="fmt==='html'" class="q-pt-none text-h6 justify-between" v-html="msg" /> -->
         <q-card-section v-else class="text-h6" style="margin:-16px 0 0 0;border:0px solid cyan">{{ msg }}</q-card-section>
         <q-card-actions align="right" class="bg-cyan-1 text-teal-9"><q-btn flat label="close" @click="closeIt" /> </q-card-actions>
       </q-card>
@@ -15,7 +15,7 @@
   </div>
 </template>
 <script setup>
-import emitter from 'emitter'
+import emitter from 'tiny-emitter/instance'
 import { ref } from 'vue'
 console.log('-ST-InfoDisplay')
 emitter.on('open-InfoDisplay', (tit, msg, html) => openIt(tit, msg, html))

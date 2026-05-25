@@ -6,24 +6,20 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Log;
+// use Illuminate\Support\Facades\File;
 
 class DrawingController extends Controller
 {
-    private string $disk = 'public';
+    // private string $disk = 'public';
     // private string $drawingsPath = 'drawings';
-    private string $drawingsPath = '/Users/swang/webdata/pics/yali/thumbnails';
-    private string $thumbnailsPath = 'thumbnails';
+    // private string $drawingsPath = '/Users/swang/webdata/pics/yali/thumbnails';
+    // private string $thumbnailsPath = 'thumbnails';
     
     /**
      * Scan filesystem and paginate results
      */
     // public function index(Request $request)
-    public function index($page, $perPage)
-    {
-        // $perPage = min($request->input('per_page', 60), 120);
-        // $perPage = min($request->input('per_page', $per_page), 40);
-        // $page = $request->input('page', $page);
-        
+    public function index($page, $perPage) {
         // Get all drawing files
         $allFiles = $this->getDrawingFiles();
         $total = count($allFiles);
@@ -34,19 +30,19 @@ class DrawingController extends Controller
         
         // Build response items
         $items = array_map(function ($file) {
+            $imgFile = str_replace('/thumbnails', '', $file);
             return [
                 'id' => md5($file),           // stable ID from path
                 // 'name' => pathinfo($file, PATHINFO_FILENAME),
-                'fnm' => basename($file),
                 // 'thumbnail_url' => $this->getThumbnailUrl($file),
                 // 'full_url' => Storage::disk($this->disk)->url($file),
                 // 'full_url' => url($file),
                 // 'size' => Storage::disk($this->disk)->size($file),
-                'fsz' => filesize($file),
                 // 'modified' => Storage::disk($this->disk)->lastModified($file),
+                'fsz' => filesize($imgFile),
+                'fnm' => basename($file),
                 'dtm' => date('Y.n.j H:i', filemtime($file)),
-                'whr' => ['width' => getimagesize($file)[0], 'height' => getimagesize($file)[1]],
-                // rat => $width / $height;
+                'whr' => ['width' => getimagesize($imgFile)[0], 'height' => getimagesize($imgFile)[1]],
             ];
         }, $pageFiles);
         
@@ -69,7 +65,43 @@ class DrawingController extends Controller
             'status' => "OK"
         ]);
     }
-    
+
+    /**
+     * move dulicated file to dup_files and dump_files/thumbnails
+     */
+    public function removeDupFile($dupFile) { Log::info("remove duplicate file[$dupFile]\n");
+        $picsDir = '/Users/swang/sites/webdata/pics';
+        $yaliDir = "$picsDir/yali";
+        $dupFilesDir = "$picsDir/dup_files";
+        $thumbnailsDir = "$yaliDir/thumbnails";
+        $mvDupCode = rename("$yaliDir/$dupFile", "$dupFilesDir/$dupFile");
+        $mvThmCode = rename("$thumbnailsDir/$dupFile", "$dupFilesDir/thumbnails/$dupFile");
+        Log::info("rename dup code=$mvDupCode");
+        Log::info("rename thm code=$mvThmCode");
+        if ($mvDupCode == True and $mvThmCode == True) return ['status' => "OK"];
+        return ['status' => "FAILED"];
+    }
+    /**
+     * reverse the "move dulicated file to dup_files and dump_files/thumbnails"
+     */
+    public function undoRemovedDupFile($dupFile) { Log::info("undo removed duplicate file[$dupFile]\n");
+        $picsDir = '/Users/swang/sites/webdata/pics';
+        $yaliDir = "$picsDir/yali";
+        $dupFilesDir = "$picsDir/dup_files";
+        $thumbnailsDir = "$yaliDir/thumbnails";
+        $removedThumbnail = "$dupFilesDir/thumbnails/$dupFile";
+        $removedFile = "$dupFilesDir/$dupFile";
+        if (!(file_exists($removedThumbnail) and file_exists($removedFile) and is_file($removedThumbnail) and is_file($removedFile))) {
+            Log::info("No $removedThumbnail or No $removedFile or not file(s)");
+            return ['status' => $removedFile];
+        }
+        $undoDupCode = rename("$removedFile", "$yaliDir/$dupFile");
+        $undoThmCode = rename("$removedThumbnail", "$thumbnailsDir/$dupFile");
+        Log::info("undo remove dup code=$undoDupCode");
+        Log::info("undo remove thm code=$undoThmCode");
+        if ($undoDupCode == True and $undoThmCode == True) return ['status' => "OK"];
+        return ['status' => "FAILED"];
+    }
     /**
      * Get all drawing files, sorted
      */
@@ -105,7 +137,7 @@ class DrawingController extends Controller
     /**
      * Check if thumbnail exists, return appropriate URL
      */
-    private function getThumbnailUrl(string $drawingPath): string
+    private function XXXgetThumbnailUrl(string $drawingPath): string
     {
         $filename = basename($drawingPath);
         $thumbPath = $this->thumbnailsPath . '/thumb_' . $filename;
