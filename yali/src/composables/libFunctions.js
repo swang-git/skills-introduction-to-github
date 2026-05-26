@@ -54,7 +54,7 @@ export function libFunctions() {
   function admin () {
     const domainName = /http:\/\/vicking.cn.mt\//gi
     // const domainName = /http:\/\/(prod|192.168.|localhost|127.0.0.1)/gi
-    console.log('-lb-local', window.location.href, domainName.test(window.location.href))
+    // console.log('-lb-local', window.location.href, domainName.test(window.location.href))
     return domainName.test(window.location.href)
     // return false
   }

@@ -11,9 +11,9 @@
             <q-card-actions align="between">
               <!-- <q-btn glossy dense class="text-h6" label="接下一页"  color="cyan-10" @click="loadPage(0)" /> -->
               <q-btn glossy dense class="text-h6" label="接下一页"  color="cyan-10" @click="appendPrevPage()" />
-              <q-btn glossy dense class="text-h6" :label="pageListBeginAt" round color="cyan-10" @click="openNumPad('jump-page')" />
-              <q-btn glossy dense class="text-h6" label="加上一页" color="cyan-10" v-if="pageListBeginAt>1" @click="prependNextPage()" />
-              <q-btn glossy dense class="text-h6" label="最后一页"  color="cyan-10" @click="loadPage(lastPage)" />
+              <q-btn dense class="text-h6" flat :label=compLabel color="cyan-3" @click="openNumPad('jump-page')" />
+              <q-btn glossy dense class="text-h6" label="加上一页" color="cyan-10" v-if="pageBegin>1" @click="prependNextPage()" />
+              <q-btn glossy dense class="text-h6" label="最后一页"  color="cyan-10" @click="getLastPage" />
             </q-card-actions>
           </q-card>
         </q-toolbar-title>
@@ -46,7 +46,7 @@
   <PicDialog />
 </template>
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import emitter from 'tiny-emitter/instance'
 import { axiosFunctions } from '../../src/composables/axiosFunctions.js'
 const { gaxios } = axiosFunctions()
@@ -74,7 +74,8 @@ const IMiconSZ = 178 // Mate60 Good for 2 columns
 const DKiconSZ = 150
 const append = ref(true)
 const prepend = ref(false)
-var pageListBeginAt = ref(1)
+const numPages = ref(data.value.length/perPage.value)
+const pageBegin = ref(1)
 // ---- main starts ----------
 // console.log(`-ST-yali window.location.href=${window.location.href} isIM=${isIM}`)
 // console.log(`-ST-yali window.location.hostname=${window.location.hostname} isLocal=${isLocal} isIM=${isIM}`)
@@ -87,25 +88,62 @@ getPages(currentPage.value, perPage.value)
 
 
 // ---- function section -----
-function jumpTo (page) {
-  pageListBeginAt.value = page
+const compNumPages = computed({ get() { return Math.ceil(data.value.length/perPage.value) }, set(val) { numPages.value = val } })
+// const compNumPages = computed(() => { get: () => return Math.ceil(data.value.length/perPage.value); set: (val) =>  })
+function getLastPage () {
+  pageBegin.value = lastPage.value
   data.value = []
+  getPages(lastPage.value, perPage.value)
+}
+
+// const compLabel = computed(() => {
+//   console.log(`-fn-getLabel()`)
+//   const pageEnd = pageBegin.value + Math.ceil(data.value.length / perPage.value) - 1
+//   // let pageEnd = data.value.length / perPage.value
+//   // return pageBegin.value == pageEnd ? pageEnd : '(' + pageListBegin.value + '~' + pageEnd + ')'
+//   return pageBegin.value == pageEnd ? pageEnd : pageListBegin.value + '~' + pageEnd
+//   // return pageBegin.value == pageEnd ? pageEnd : pageListBegin.value + '~' + pageBegin.value + Math.ceil(data.value.length / perPage.value) - 1
+// })
+
+// function getLabel () {
+const compLabel = computed (() => {
+  // const pageEnd = pages.value + Math.ceil(data.value.length / perPage.value)
+  // let pageEnd = data.value.length / perPage.value
+  // return pageBegin.value == pageEnd ? pageEnd : '(' + pageListBegin.value + '~' + pageEnd + ')'
+  // return pageBegin.value == pageEnd ? pageEnd : pageBegin.value + '~' + pageEnd
+  // return pageBegin.value == compNumPages.value == 1 ? pageBegin.value: pageBegin.value + '~' + parseInt(pageBegin.value) + parseInt(compNumPages.value)
+  // let endPage = parseInt(pageBegin.value) + parseInt(compNumPages.value)
+  let endPage = pageBegin.value + compNumPages.value - 1
+  console.log(`-fn-getLabel() compNumPages=${compNumPages.value} pageBegin=${pageBegin.value} endPage=${endPage}`)
+  let ret = pageBegin.value == compNumPages.value <= 1 ? [pageBegin.value]: [pageBegin.value, endPage]
+  // return pageBegin.value == pageEnd ? pageEnd : pageListBegin.value + '~' + pageListBegin.value + Math.ceil(data.value.length / perPage.value) - 1
+  if (ret.length == 1) return ret[0]
+  else if (ret[1] == ret[0]) return ret[0]
+  else return ret[0] + '~' + ret[1]
+})
+
+function jumpTo (page) {
+  // [append.value, prepend.value] = [false, false]
+  pageBegin.value = page
+  data.value = []
+  // compNumPages.value = 1
   getPages(page, perPage.value)
 }
 
 function appendPrevPage () {
   [append.value, prepend.value] = [true, false]
-  let nPage = data.value.length/perPage.value
-  console.log(`-CK-npage=${nPage} currentPage=${currentPage.value}`)
-  getPages(pageListBeginAt.value + nPage, perPage.value)
+  // let nPage = data.value.length/perPage.value
+  // console.log(`-CK-npage=${nPage} currentPage=${currentPage.value}`)
+  // getPages(pageBegin.value + nPage, perPage.value)
+  getPages(pageBegin.value + compNumPages.value, perPage.value)
 }
 
 function prependNextPage () {
   // let currentData = data.value
   // currentPage.value++
   [append.value, prepend.value] = [false, true]
-  pageListBeginAt.value--
-  getPages(pageListBeginAt.value, perPage.value)
+  pageBegin.value--
+  getPages(pageBegin.value, perPage.value)
 }
 
 function openNumPad(flag=null) {
@@ -120,7 +158,7 @@ function openNumPad(flag=null) {
 const loadRandomPage = () => {
   const rpage = Math.floor(Math.random() * 121) + 1;
   // console.log(`-fn-loadRandomPage hasMore=${hasMore.value} loading=${loading.value} rpage=${rpage} lastPage=${lastPage.value} thePage=${thePage.value}`)
-  pageListBeginAt.value = rpage
+  pageBegin.value = rpage
   data.value = []
   getPages(rpage, perPage.value)
 }

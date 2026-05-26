@@ -2,7 +2,7 @@
 import sys
 import argparse
 
-from Utils import boldIt, redIt, greenIt, drawTopHeader, showHeaderCxt, drawBotHeader, dispRow, drawBotLine, drawBotLineDownTick, drawBotLineUpTick
+from Utils import boldIt, redIt, greenIt, yellowIt, drawTopHeader, showHeaderCxt, drawBotHeader, dispRow, drawBotLine, drawBotLineDownTick, drawBotLineUpTick
 from Models import dbsession, MyPortfolio
 from constants import NUM_PORTFOLIO_SEC, headers, tabw
 from sty import FgRegister
@@ -68,15 +68,15 @@ if __name__=="__main__":
     prtfy = f"{portfy:,.2f}"
     prtft = f"{portft:,.2f}"
     TPdiff =  f"{tpdiff}"
-    if tpdiff > 0: 
-        TPdiff = boldIt(greenIt(TPdiff))
-    elif tpdiff < 0:
+    if tpdiff == 0: TPdiff = boldIt(yellowIt(TPdiff))
+    elif tpdiff > 0: TPdiff = boldIt(greenIt(TPdiff))
+    elif pdiff < 0:
         TPdiff = f"{-1*tpdiff}"
         TPdiff = boldIt(redIt(TPdiff))
     TPdiffExp = prtft + ' - ' + prtfy
     bline1 = '║ '+dday+' Market Value:'+f"{totalValy:,.2f}"+' Stock Value:'+f"{stockValy:,.2f}"+'   Prev Portf:'+prtfy+' Today Portf:'+prtft
     bline2 = TPdiffExp + ' = ' + TPdiff
-    print(bline1 + (sum(tabw) + len(tabw) - len(bline1) - len(bline2) + 19)*' ' + bline2 + '║')
+    print(bline1 + (sum(tabw) + len(tabw) - len(bline1) - len(bline2) + 18)*' ' + bline2 + ' ║')
 
     drawBotLineDownTick(tabw)
     showHeaderCxt(tabw, headers)
@@ -86,5 +86,5 @@ if __name__=="__main__":
     dday = rowst[0].asof_time.strftime('%Y-%m-%d')
     lline1 = '║ ' + dday + ' Market Value:' + f"{totalValt:,.2f}" + ' Stock Value:' + f"{stockValt:,.2f}" + cdiff
     lline2 = 'data from ' + tablename
-    print(lline1 + (sum(tabw) + len(tabw) - len(lline1) - len(lline2) + 38)*' ' + lline2 + '║')
+    print(lline1 + (sum(tabw) + len(tabw) - len(lline1) - len(lline2) + 37)*' ' + lline2 + ' ║')
     drawBotLine(tabw)
