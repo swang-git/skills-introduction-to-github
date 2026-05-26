@@ -239,7 +239,8 @@ function getPic() {
   // console.log(`jpgname=${piclst.value[pidx.value]} ratio=${ratlst.value[pidx.value]} wid=${getWidth()} hit=${getHeight()}, pixidx=${pidx.value}` )
   if (pidx.value > piclst.value.length - 1) pidx.value = 0
   // console.log(`-fn-getPic() pidx=${pidx.value}` )
-  let picdir = isDesk ? '/pics/yali/' : '/pics/yaliIM/'
+  // let picdir = isDesk ? '/pics/yali/' : '/pics/yaliIM/'
+  let picdir = isDesk ? '/pics/yali/' : '/pics/yali/'
   return process.env.API + picdir + piclst.value[pidx.value]
 }
 // const getMeta = (url, cb) => {
