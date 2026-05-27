@@ -9,16 +9,11 @@
           </div>
           <q-card class="bg-teal-10" style="margin-top:10px">
             <q-card-actions align="between">
-              <q-btn glossy round class="text-h6 q-pb-sm" icon="头" color="cyan-10" :disable="pageBegin==1" @click="getFirstPage" />
-              <q-btn glossy round class="text-h6" icon="chevron_right" color="cyan-10" :disable="pageEnd==lastPage" @click="appnPrevPage()" />
-              <q-btn flat   round class="text-h6" style="width:80px;justify-content:center" :label=getLabel() color="cyan-3" @click="openNumPad('jump-page')" />
-              <q-btn glossy round class="text-h6" icon="chevron_left"  color="cyan-10"  :disable="pageBegin<=1" @click="prepnNextPage()" />
-              <q-btn glossy round class="text-h6 q-pb-sm" icon="尾" color="cyan-10" :disable="pageBegin>=lastPage" @click="getLastPage" />
-              <!-- <q-btn glossy round class="text-h6 q-pb-sm" icon="头" color="cyan-10" v-if="pageBegin!=1" @click="getFirstPage" /><q-btn round v-else />
-              <q-btn glossy round class="text-h6" icon="chevron_right" color="cyan-10" v-if="pageEnd!=lastPage" @click="appnPrevPage()" /><q-btn round v-else />
-              <q-btn flat   round class="text-h6" style="width:80px;justify-content:center" :label=getLabel() color="cyan-3" @click="openNumPad('jump-page')" />
-              <q-btn glossy round class="text-h6" icon="chevron_left"  color="cyan-10"  v-if="pageBegin>1" @click="prepnNextPage()" /><q-btn round v-else />
-              <q-btn glossy round class="text-h6 q-pb-sm" icon="尾" color="cyan-10" v-if="pageBegin<lastPage" @click="getLastPage" /><q-btn round v-else /> -->
+              <q-btn glossy round size="16px" class="text-h6 q-pb-sm" icon="头" color="cyan-10" :disable="pageBegin==1" @click="getFirstPage" />
+              <q-btn glossy round size="16px" class="text-h6" icon="chevron_right" color="cyan-10" :disable="pageEnd==lastPage" @click="appnPrevPage()" />
+              <q-btn outline dense round class="text-h6" style="width:80px;justify-content:center" :label=getLabel() color="cyan-3" @click="openNumPad('jump-page')" />
+              <q-btn glossy round size="16px" class="text-h6" icon="chevron_left"  color="cyan-10"  :disable="pageBegin<=1" @click="prepnNextPage()" />
+              <q-btn glossy round size="16px" class="text-h6 q-pb-sm" icon="尾" color="cyan-10" :disable="pageBegin>=lastPage" @click="getLastPage" />
             </q-card-actions>
         </q-card>
         </q-toolbar-title>
