@@ -136,22 +136,6 @@ const itemsPerPage = ref(11)
 // var numPages = 1
 const numItems = ref(12)
 const curApp = ref(null)
-// var disableBtn = {
-//   expense: false,
-//   shopping: false,
-//   reminder: false,
-//   memo: false,
-//   watcher: false,
-//   bankstatement: false,
-//   holdings: false,
-//   bank: false,
-//   holidays: false,
-//   arts: false,
-//   yali: false,
-//   golf: false,
-//   calendar: false,
-//   todo: false
-// }
 var appTitle = '家庭应用'
 var drawer = true
 var miniState = false
@@ -174,7 +158,7 @@ emitter.on('win-lost', (x) => { flipShow(x) })
 emitter.on('weight-unit', (x) => { wunit.value = x })
 
 //== main
-console.log(`-ST-MainLayout curApp=${curApp.value}`)
+console.log(`-ST-MainLayout curApp=${curApp.value} window.location.href=${window.location.href}`)
 // console.timeStamp('-ST-MainLayout curApp=${curApp.value}')
 wunit.value = $q.localStorage.getItem('weightUnit')
 if (isIM) {

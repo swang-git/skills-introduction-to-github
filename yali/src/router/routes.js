@@ -4,7 +4,9 @@ const routes = [
     component: () => import('layouts/MainLayout.vue'),
     children: [
       { path: '', component: () => import('pages/PicDialog.vue') },
-      // { path: '', component: () => import('pages/IndexPage.vue') }
+      // { path: '/clean', component: () => import('layouts/MainLayout.vue') }
+      // { path: 'yali/clean', component: () => import('pages/IndexPage.vue') }
+      // { name: '/', path: '/:cleanp', component: () => import('pages/IndexPage.vue') },
     ]
   },
 

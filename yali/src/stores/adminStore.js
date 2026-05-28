@@ -4,7 +4,8 @@ import { defineStore } from 'pinia'
 
 export const useAdminStore = defineStore('admin', {
   state: () => ({
-    isOn: false // GLOBAL visibility state
+    isOn: false, // GLOBAL visibility state
+    isCleanup: false
   }),
   actions: {
     off() { this.isOn = false },

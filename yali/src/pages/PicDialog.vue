@@ -46,7 +46,7 @@
           <q-icon left name="arrow_circle_left" size="md" color="lime" />
           <span class="text-bold text-cyan-2 text-body1" style="margin: 0 4px 0 -10px">上一幅</span>
         </q-btn>
-        <div v-show="admin.isOn">
+        <div v-show="admin.isCleanup">
           <q-btn glossy rounded class="bg-teal" v-close-popup>
             <q-icon left name="cancel" size="md" color="lime" />
             <span class="text-bold text-cyan-2 text-body1" style="margin: 0 4px 0 -10px">关闭</span>
