@@ -21,7 +21,7 @@ use Illuminate\Support\Facades\Log;
 use App\Traits\MyTraits;
 
 class ArtsController extends Controller
-
+{
 	use MyTraits;
 	public $pxar = ['PXQG', 'PXHY', 'PXWW', 'PXWX', 'PXZJ', 'PXJL'];
 	public function __construct() {

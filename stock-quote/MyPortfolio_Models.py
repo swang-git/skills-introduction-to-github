@@ -36,6 +36,26 @@ class HealthRecord(Base):
 # =============================================================================
 # 2. MYSQL TABLE MODEL: MyPortfolio (YOUR EXACT SCHEMA)
 # =============================================================================
+class StockQuote(Base):
+    __tablename__ = "stock_quotes"
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    asof_time = Column(DATETIME, nullable=False, index=True)
+    symbol = Column(VARCHAR(9), nullable=True)
+    # 👇 这些都允许 NULL 了
+    price = Column(DECIMAL(12, 3), nullable=True)
+    price_change = Column(DECIMAL(12, 3), nullable=True)
+    low_52_week = Column(DECIMAL(12, 3), nullable=True)
+    high_52_week = Column(DECIMAL(12, 3), nullable=True)
+    # def __getattr__(self, key): return None
+    def __init__(self, asof, symb, prc, prc_chg, low_52wk, high_52wk):
+        self.asof_time = asof
+        self.symbol = symb
+        self.price = prc
+        self.price_change = prc_chg
+        self.low_52_week = low_52wk
+        self.high_52_week = high_52wk
+
+
 class MyPortfolio(Base):
     __tablename__ = "my_portfolios"
 

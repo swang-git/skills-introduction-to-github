@@ -4,7 +4,7 @@ import sys, os, csv
 from datetime import datetime, timedelta, date
 
 from Utils import get_data_from_table, build_dict, get_52_week_low, get_52_week_high, padsp
-from MyPortfolio_Models import get_connection, CSV_TO_DB_MAP, TYPE_CONVERTERS, MyPortfolio
+from MyPortfolio_Models import get_connection, CSV_TO_DB_MAP, TYPE_CONVERTERS, MyPortfolio, StockQuote
 
 import argparse
 parser = argparse.ArgumentParser()
