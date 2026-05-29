@@ -4,17 +4,17 @@ import yfinance as yf
 import sys, pprint, time
 from datetime import datetime, date, timedelta
 from decimal import Decimal
-from dataclasses import dataclass
+# from dataclasses import dataclass
 
-@dataclass
-class StockQ:
-    pass
-    # asof_time: datetime
-    # symbo: str
-    # price: float
-    # price_change: float
-    # low_52_week: float
-    # high_52_week: float
+# @dataclass
+# class StockQ:
+#     pass
+#     # asof_time: datetime
+#     # symbo: str
+#     # price: float
+#     # price_change: float
+#     # low_52_week: float
+#     # high_52_week: float
 
 # data = {"name": "Bob", "age": 35}
 # obj = User(**data)
@@ -26,8 +26,8 @@ from MyPortfolio_Models import get_connection, CSV_TO_DB_MAP, TYPE_CONVERTERS, M
 import argparse
 parser = argparse.ArgumentParser()
 parser.add_argument('-t', '--test', action="store_true", help='for testing get data from database(instead of yfinance)')
-# parser.add_argument('-d', '--database', type=str, required=True, default='prod', help='check quotes in this database default database: prod')
-parser.add_argument('-d', '--db', type=str, required=True, help='upsert stock quotes to database DB<devx/prod> table:my_portfolios')
+parser.add_argument('-d', '--db', type=str, default='devx', help='upsert stock quotes to table and upsert csv data to my_portfolios')
+# parser.add_argument('-d', '--db', type=str, required=True, help='upsert stock quotes to database DB<devx/prod> table:my_portfolios')
 args = parser.parse_args()
 database = args.db
 testing = args.test
@@ -87,10 +87,10 @@ def save_to_myp_table(db, stocks, datx):
         asof = datx[symb]["asof_time"]
         # redx = MyPortfolio(**datx[symb])
         # pprint.pprint(redx.__dict__)
-        price = padsp(datx[symb]['price'], 6)
-        price_change = padsp(datx[symb]['price_change'], 5)
+        price = padsp(datx[symb]['price'], 7)
+        price_change = padsp(datx[symb]['price_change'], 6)
         low = padsp(datx[symb]['low_52_week'], 7)
-        high = padsp(datx[symb]['high_52_week'], 6)
+        high = padsp(datx[symb]['high_52_week'], 7)
         # --------------------------
         # Step 4: UPSERT (Update if exists, else Insert)
         # --------------------------
@@ -119,10 +119,10 @@ def save_to_stock_quotes_table(db, stocks, datx):
         # redx = MyPortfolio(**datx[symb])
         # pprint.pprint(datx[symb].__dict__)
 
-        price = padsp(datx[symb]['price'], 6)
-        price_change = padsp(datx[symb]['price_change'], 5)
+        price = padsp(datx[symb]['price'], 7)
+        price_change = padsp(datx[symb]['price_change'], 6)
         low = padsp(datx[symb]['low_52_week'], 7)
-        high = padsp(datx[symb]['high_52_week'], 6)
+        high = padsp(datx[symb]['high_52_week'], 7)
         # --------------------------
         # Step 4: UPSERT (Update if exists, else Insert)
         # --------------------------
@@ -137,7 +137,6 @@ def save_to_stock_quotes_table(db, stocks, datx):
         else:
             # Create new record (NO __init__ needed!)
             # new_record = StockQuote(**datx[symb])
-            stkq = StockQ()
             dtsx = datx[symb]
             asof_time = dtsx["asof_time"]
             symbol = dtsx["symbol"]
@@ -145,12 +144,6 @@ def save_to_stock_quotes_table(db, stocks, datx):
             price_change = dtsx["price_change"]
             low_52_week = dtsx["low_52_week"]
             high_52_week = dtsx["high_52_week"]
-            # stkq.asof_time = dtsx["asof_time"]
-            # stkq.symbol = dtsx["symbol"]
-            # stkq.price = dtsx["price"]
-            # stkq.price_change = dtsx["price_change"]
-            # stkq.low_52_week = dtsx["low_52_week"]
-            # stkq.high_52_week = dtsx["high_52_week"]
             new_record = StockQuote(asof_time, symbol, price, price_change, low_52_week, high_52_week)
             db.add(new_record)
             print(f"✅ Added   |{adjsp} {symb} | As-of: {asof} | price: {price} | price change: {price_change} | 52wk_low: {low} | 52wk_high: {high}")
@@ -238,7 +231,7 @@ if __name__ == "__main__":
     today = date.today()
     ASOF_TIME = datetime(today.year, today.month, today.day, 16, 30, 0)
 
-    import_indices(db, today)
+    if not testing: import_indices(db, today)
 
     meta_dict = get_meta(cursor)
     datx = {}
