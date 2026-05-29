@@ -4,9 +4,9 @@
       <q-toolbar class="bg-teal-10 glossy">
         <q-toolbar-title>
           <div class="row justify-evenly q-pt-sm">
-            <RoundButton size="16px" icon="页" clas="q-pb-sm" colr="red-10" iclr="yellow" ttip="跳转到某页" @click="openNumPad('jump-page')" />
-            <div class="text-center cursor-pointer text-yellow q-pt-sm" style="font-size:27px" @click="loadRandomPage">婭 莉 画 展({{ ym }}画作:{{ total }}幅)</div>
-            <RoundButton size="16px" icon="月" clas="q-pb-sm" colr="indigo-10" iclr="yellow" ttip="go to Year Month" @click="openYmPad" />
+            <RoundButton size="10px" icon="页" clas="q-pb-sm" colr="red-10" style="margin-top:5px" iclr="yellow" ttip="跳转到某页" @click="openNumPad('jump-page')" />
+            <div class="text-center cursor-pointer text-yellow q-pt-sm text-h5" @click="loadRandomPage">婭 莉<span class="text-h6">({{ ym==null ? '共' : ym }} {{ total }}幅)</span>画 展</div>
+            <RoundButton size="10px" icon="月" clas="q-pb-sm" colr="indigo-10" style="margin-top:5px" iclr="yellow" ttip="go to Year Month" @click="openYmPad" />
           </div>
           <q-card v-if="yue" class="bg-teal-10" style="margin-top:10px">
             <q-card-actions align="between">
@@ -34,7 +34,7 @@
       <q-card class="flex flex-center bg-cyan-10" style="margin-top:102px">
         <q-card-actions align="between">
           <div v-for="(p, idx) in data" :key="p" class="q-px-xs">
-            <img v-if="isIM" :src="getThumbnailURL(p.fnm)" :height=IMiconSZ :width=IMiconSZ class="q-pa-xs cursor-pointer" @click="showFullImage(idx)" loading="lazy" />
+            <img v-if="isIM" :src="getThumbnailURL(p.fnm)" :height=IMiconSZ :width=IMiconSZ class="q-pt-xs cursor-pointer" @click="showFullImage(idx)" loading="lazy" />
             <img v-else      :src="getThumbnailURL(p.fnm)" :height=DKiconSZ :width=DKiconSZ class="q-pa-xs cursor-pointer" @click="showFullImage(idx)" loading="lazy" />
           </div>
         </q-card-actions>
@@ -46,6 +46,12 @@
         <q-toolbar-title>
           <q-card class="bg-teal-10" style="margin-top:10px">
             <q-card-actions align="between">
+              <RoundButton size="16px" icon="头" clas="q-pb-sm" colr="red-10" iclr="yellow" ttip="just show the first page" @click="getFirstPage" />
+              <RoundButton size="16px" icon="chevron_left"  colr="indigo-10" iclr="yellow" ttip="appending next page(on end)" @click="getPrevYM" />
+              <RoundButton size="16px" icon="chevron_right" colr="indigo-10" iclr="yellow" ttip="preppend the prev page(on top)" @click="getNextYM" />
+              <RoundButton size="16px" icon="尾" clas="q-pb-sm" colr="red-10" iclr="yellow" ttip="just the last page" @click="getLastPage" />
+            </q-card-actions>
+            <!-- <q-card-actions align="between">
               <RoundButton size="16px" icon="头" clas="q-pb-sm" :colr="pageBegin==1 && numPages==1 ? 'pink-3' : 'red-10'" iclr="yellow" ttip="just show the first page" @click="getFirstPage" />
               <RoundButton size="16px" icon="upload" :colr="pageBegin+numPages>lastPage ? 'pink-3' : 'red-10'" iclr="yellow" ttip="appending next page(on end)" @click="appnNextPage" />
               <RoundButton v-if="pageBegin==1 && numPages==1" size="16px" icon="跳" clas="q-pb-sm" colr="indigo-10" iclr="yellow" ttip="跳转到某页" @click="openNumPad('jump-page')" />
@@ -53,31 +59,8 @@
               <RoundButton size="16px" icon="月" colr="green" iclr="yellow" ttip="preppend the prev page(Year Month)" @click="openYmPad" />
               <RoundButton size="16px" icon="download" :colr="pageBegin>1 ? 'red-10' : 'pink-3'" iclr="yellow" ttip="preppend the prev page(on top)" @click="prepnPrevPage" />
               <RoundButton size="16px" icon="尾" clas="q-pb-sm" :colr="pageBegin==lastPage && numPages==1 ? 'pink-3' : 'red-10'" iclr="yellow" ttip="just the last page" @click="getLastPage" />
-              <!-- <q-btn v-if="compVer==null" round outline class="q-pb-sm text-cyan" icon="中" />
-              <q-btn v-else round outline :icon="compVer" class="q-pb-sm text-cyan text-bold" /> -->
-            </q-card-actions>
+            </q-card-actions> -->
           </q-card>
-
-          <!-- <q-card v-if="isDesk" class="bg-teal-10" style="margin-top:10px">
-            <q-card-actions align="between">
-              <q-btn glossy dense class="text-h6" label="看第一页"  color="cyan-10" :style="{ 'visibility': pageBegin==1 ? 'hidden' : 'visible' }"  @click="getFirstPage" />
-              <q-btn v-if="compVer==null" round outline class="q-pb-sm text-cyan" icon="中" />
-              <q-btn v-else round outline :icon="compVer" class="q-pb-sm text-cyan text-bold" />
-              <q-btn glossy dense class="text-h6" label="接下一页" color="cyan-10" :style="{ 'visibility': pageBegin+numPages==lastPage ? 'hidden' : 'visible' }" @click="appnNextPage()" />
-              <q-btn flat   dense class="text-h6" style="width:80px;justify-content:center" :label=getLabel() color="cyan-3" @click="openNumPad('jump-page')" />
-              <q-btn glossy dense class="text-h6" label="加上一页" color="cyan-10"  :style="{ 'visibility': pageBegin<=1 ? 'hidden' : 'visible' }" @click="prepnPrevPage()" />
-              <q-btn glossy dense class="text-h6" label="最后一页" color="cyan-10" :style="{ 'visibility': pageBegin>=lastPage ? 'hidden' : 'visible'}" @click="getLastPage" />
-            </q-card-actions>
-          </q-card>
-          <q-card v-else class="bg-teal-10" style="margin-top:10px">
-            <q-card-actions align="between">
-              <q-btn glossy dense round class="text-h6" icon="头" color="cyan-10" :disable="pageBegin==1" @click="getFirstPage" />
-              <q-btn glossy dense round class="text-h6" icon="chevron_right" color="cyan-10" :disable="pageEnd==lastPage" @click="appnNextPage()" />
-              <q-btn flat   dense round class="text-h6" style="width:80px;justify-content:center" :label=getLabel() color="cyan-3" @click="openNumPad('jump-page')" />
-              <q-btn glossy dense round class="text-h6" icon="chevron_left"  color="cyan-10"  :disable="pageBegin<=1" @click="prepnPrevPage()" />
-              <q-btn glossy dense round class="text-h6" icon="尾" color="cyan-10" :disable="pageBegin>=lastPage" @click="getLastPage" />
-            </q-card-actions>
-          </q-card> -->
         </q-toolbar-title>
       </q-toolbar>
     </q-footer>
@@ -108,7 +91,7 @@ const hasMore = ref(true)
 const perPage = ref(30)
 const total = ref(0)
 const lastPage = ref(total.value / perPage.value)
-const IMiconSZ = 178 // Mate60 Good for 2 columns
+const IMiconSZ = 177.8 // Mate60 Good for 2 columns
 const DKiconSZ = 150
 const append = ref(true)
 const prepend = ref(false)
@@ -134,6 +117,7 @@ emitter.on('yali-getPixByYM', (x) => setPixByYM(x))
 // const compYM = computed(() => { return ym.value }) 
 
 function getPrevYM () {
+  [yex.value, yue.value] = [false, true]
   let pos = yms.indexOf(ym.value)
   console.log(`-fn-getPrevYM ym=${ym.value}`, yms.slice(0, pos))
   let x = yms.slice(0, pos)
@@ -143,6 +127,7 @@ function getPrevYM () {
 }
 
 function getNextYM () {
+  [yex.value, yue.value] = [false, true]
   let pos = yms.indexOf(ym.value)
   let x = yms.slice(pos + 1)
   console.log(`-fn-getNextYM ym=${ym.value} pos=${pos}`, x)
@@ -211,6 +196,7 @@ function getFirstPage () {
 }
 
 function getLastPage () {
+   [yex.value, yue.value] = [true, false]
   if (pageBegin.value + numPages.value == lastPage.value && numPages.value == 1) {
     console.log(`last page already showed pageBegin=${pageBegin.value} numPages=${numPages.value} return`)
     return

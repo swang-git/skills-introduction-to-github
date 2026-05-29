@@ -1,33 +1,32 @@
 <template>
   <q-dialog v-model="opened">
-    <div class="bg-cyan-19 q-pa-xs bg-red-9" style="border-radius:1px">
-      <q-card class="bg-teal-10">
-      <q-card-section>
-        <div class="q-pa-sm bg-teal-10 text-lime text-h5 text-center text-no-wrap">{{ padTit }}</div>
-        <div class="row">
-          <q-card class="text-h6 bg-cyan-6" style="border-radius:1px;width:130px">
-            <q-card-section>
-              <div class="q-pa-md">
-                <q-option-group :options="years" type="radio" v-model="year" dark dense />
-              </div>
-            </q-card-section>
-          </q-card>
-          <q-card class="text-h6 bg-cyan-7" style="border-radius:1px;width:233px">
-            <q-card-actions class="">
-              <!-- <q-input class="q-mx-xs q-pb-xs" v-model="keyedIn" outlined rounded dark dense readonly input-class="text-h6 q-pa-xs text-center" /> -->
-              <q-btn glossy v-for="i in [1,  2, 3]" :key="i" class="q-ma-xs" size="lg" color="teal-9" round @click="month=i">{{ i }}</q-btn>
-              <q-btn glossy v-for="i in [4,  5, 6]" :key="i" class="q-ma-xs" size="lg" color="teal-9" round @click="month=i">{{ i }}</q-btn>
-              <q-btn glossy v-for="i in [7,  8, 9]" :key="i" class="q-ma-xs" size="lg" color="teal-9" round @click="month=i">{{ i }}</q-btn>
-              <q-btn glossy v-for="i in [10,11,12]" :key="i" class="q-ma-xs" size="lg" color="teal-9" round @click="month=i">{{ i }}</q-btn>
-              <q-btn class="q-ma-xs" size="lg" color="teal-9" glossy round @click="opened=false"><q-icon name="cancel" color="lime" /></q-btn>
-              <q-btn outline class="q-ma-xs" size="lg" color="cyan-10" round><span class="text-bold text-red-9 text-h5">{{ month }}</span></q-btn>
-              <q-btn class="q-ma-xs" size="lg" color="teal-9" glossy round @click="setYM"><q-icon name="check_circle" color="blue-4" /></q-btn>
-            </q-card-actions>
-          </q-card>
-        </div>
-      </q-card-section>
+    <div class="bg-cyan-19 q-pa-xs bg-red-9" style="border-radius:0px">
+      <q-card class="bg-teal-10" dense>
+        <q-card-section>
+          <div class="q-pa-sm bg-teal-10 text-lime text-h5 text-center text-no-wrap">{{ padTit }}</div>
+          <div class="row no-wrap">
+            <q-card class="text-h6 bg-cyan-6" style="border-radius:0px;width:100px">
+              <q-card-section>
+                <div class="q-pa-md text-body1" style="margin-left:-20px">
+                  <q-option-group class="q-py-xs" :options="years" type="radio" v-model="year" dark dense />
+                </div>
+              </q-card-section>
+            </q-card>
+            <q-card class="text-h6 bg-cyan-7" style="border-radius:0px;width:200px">
+              <q-card-actions class="q-pt-md">
+                <q-btn glossy v-for="i in [1,  2, 3]" :key="i" class="q-ma-xs" size="16px" color="teal-9" round @click="month=i">{{ i }}</q-btn>
+                <q-btn glossy v-for="i in [4,  5, 6]" :key="i" class="q-ma-xs" size="16px" color="teal-9" round @click="month=i">{{ i }}</q-btn>
+                <q-btn glossy v-for="i in [7,  8, 9]" :key="i" class="q-ma-xs" size="16px" color="teal-9" round @click="month=i">{{ i }}</q-btn>
+                <q-btn glossy v-for="i in [10,11,12]" :key="i" class="q-ma-xs" size="16px" color="teal-9" round @click="month=i">{{ i }}</q-btn>
+                <q-btn class="q-ma-xs" size="16px" color="teal-9" glossy round @click="opened=false"><q-icon name="cancel" color="lime" /></q-btn>
+                <q-btn outline class="q-ma-xs" size="16px" color="cyan-10" round><span class="text-bold text-red-9 text-h5">{{ month }}</span></q-btn>
+                <q-btn class="q-ma-xs" size="16px" color="teal-9" glossy round @click="setYM"><q-icon name="check_circle" color="blue-4" /></q-btn>
+              </q-card-actions>
+            </q-card>
+          </div>
+        </q-card-section>
       </q-card>
-      </div>
+    </div>
   </q-dialog>
   <!-- Only render if GLOBAL state is open -->
   <div v-if="numPadStore.isOpen" class="numpad">
