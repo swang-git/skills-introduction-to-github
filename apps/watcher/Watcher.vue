@@ -1,5 +1,5 @@
 <template>
-<div style="display:grid;place-items:center">
+<div style="display:grid;place-items:center" class="bg-teal-9">
   <div style="margin:-1px 0 0 5px;width:796px;border:cyan solid 1px">
     <div v-for="(e, i) in palist" :key=e.id>
       <div :style="getLineBackground(i)" :class="{ 'bg-purple-10':!e.hideIt }" class="q-px-xs">
