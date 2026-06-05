@@ -48,7 +48,7 @@ if __name__=="__main__":
     
     cdiff1, difflen1 = get_formated_data(diff1)
     cdiff2, difflen2 = get_formated_data(diff2)
-    cdiff = 3*' ' + 'G/L(compare to preday):' + cdiff1 + ' G/L(by price change):' + cdiff2
+    cdiff = 3*' ' + 'G/L(compare to preday): ' + cdiff1 + ' G/L(by price change): ' + cdiff2
     
     tablename = database + '.MyPortfolio'
 
@@ -70,11 +70,11 @@ if __name__=="__main__":
     TPdiff =  f"{tpdiff}"
     if tpdiff == 0: TPdiff = boldIt(yellowIt(TPdiff))
     elif tpdiff > 0: TPdiff = boldIt(greenIt(TPdiff))
-    elif pdiff < 0:
+    elif tpdiff < 0:
         TPdiff = f"{-1*tpdiff}"
         TPdiff = boldIt(redIt(TPdiff))
     TPdiffExp = prtft + ' - ' + prtfy
-    bline1 = '║ '+dday+' Market Value:'+f"{totalValy:,.2f}"+' Stock Value:'+f"{stockValy:,.2f}"+'   Prev Portf:'+prtfy+' Today Portf:'+prtft
+    bline1 = '║ '+dday+' Market Value: '+f"{totalValy:,.2f}"+' Stock Value: '+f"{stockValy:,.2f}"+'   Prev Portf: '+prtfy+' Today Portf: '+prtft
     bline2 = TPdiffExp + ' = ' + TPdiff
     print(bline1 + (sum(tabw) + len(tabw) - len(bline1) - len(bline2) + 18)*' ' + bline2 + ' ║')
 
@@ -84,7 +84,7 @@ if __name__=="__main__":
     for row in rowst: dispRow(tabw, row)
     drawBotLineUpTick(tabw)
     dday = rowst[0].asof_time.strftime('%Y-%m-%d')
-    lline1 = '║ ' + dday + ' Market Value:' + f"{totalValt:,.2f}" + ' Stock Value:' + f"{stockValt:,.2f}" + cdiff
+    lline1 = '║ ' + dday + ' Market Value: ' + f"{totalValt:,.2f}" + ' Stock Value: ' + f"{stockValt:,.2f}" + cdiff
     lline2 = 'data from ' + tablename
     print(lline1 + (sum(tabw) + len(tabw) - len(lline1) - len(lline2) + 37)*' ' + lline2 + ' ║')
     drawBotLine(tabw)

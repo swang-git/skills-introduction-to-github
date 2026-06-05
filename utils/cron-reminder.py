@@ -25,7 +25,7 @@ sql1 = f"SELECT * FROM memos WHERE status = 'A' and date between '{today}' and d
 # result1 = session.execute(text("SELECT * FROM memos WHERE status = 'A' and date between :today and date_add(:today, interval 7 day)"), {'today':today} )
 result1 = session.execute(text(sql1))
 
-# "SELECT * FROM reminders WHERE status = 'A' and due_date between :today and date_add(:today, interval 7 day) and user_id=:userId"), {'today':today, 'userId':1} )
+# 
 sql2 = "SELECT * FROM reminders WHERE status = 'A' and due_date between '{today}' and date_add('{today}', interval 7 day) and user_id=1"
 result2 = session.execute(text(sql2))
 

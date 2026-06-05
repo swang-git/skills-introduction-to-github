@@ -4,18 +4,17 @@ import sys, os, csv
 from datetime import datetime, timedelta, date
 
 from Utils import get_data_from_table, build_dict, get_52_week_low, get_52_week_high, padsp
-from MyPortfolio_Models import get_connection, CSV_TO_DB_MAP, TYPE_CONVERTERS, MyPortfolio, StockQuote
+from MyPortfolio_Models import get_connection, CSV_TO_DB_MAP, TYPE_CONVERTERS, MyPortfolio
 
 import argparse
 parser = argparse.ArgumentParser()
-parser.add_argument('-s', '--sub_days', metavar='int', type=int, nargs='?', default='0', help='sub days from today(must be < 0), default 0 for today')
-# optional arguments
-# parser.add_argument('-d', '--db', type=str, default='prod', help='check quotes in this database default database: prod')
+parser.add_argument('-s', '--sub_days', metavar='int', type=int, nargs='?', default='0', help='for dated csv file: sub days from today(must be < 0), default 0 for today, -1 yesterday, etc')
 parser.add_argument('-d', '--db', type=str, required=True, help='upsert csv data to database <devx/prod> table: my_portfolios')
 args = parser.parse_args()
 database = args.db
 subdays = args.sub_days
-print("database:", database)
+print("database:%s, subdays:%i"%(database,subdays))
+# sys.exit(0)
 
 # =============================================================================
 # 5. CORE FUNCTION: READ CSV → UPSERT TO MYSQL
@@ -44,6 +43,7 @@ def import_portfolio_csv(db, csv_file_path, dict, asof_time: datetime):
                         if db_col == 'symbol': 
                             data["low_52_week"] = get_52_week_low(raw_val, dict)
                             data["high_52_week"] = get_52_week_high(raw_val, dict)
+                            # data["high_52_week"] = 77.77 # for testing updated_at column
 
                 # ==============================
                 # 🔥 CLEANUP / FILTER ROWS HERE
@@ -74,6 +74,8 @@ def import_portfolio_csv(db, csv_file_path, dict, asof_time: datetime):
                 asof = data.get("asof_time")
                 low = padsp('' if data.get("low_52_week") == None else data.get("low_52_week"), 7)
                 high = padsp('' if data.get("high_52_week") == None else data.get("high_52_week"), 7)
+                # created_at = padsp('' if data.get("created_at") == None else data.get("created_at"), 10)
+                updated_at = padsp('' if data.get("updated_at") == None else data.get("updated_at"), 20)
                 data["symbol"] = data["symbol"].strip("*")
                 symb = data["symbol"]
 
@@ -90,7 +92,8 @@ def import_portfolio_csv(db, csv_file_path, dict, asof_time: datetime):
                     # Update all fields
                     for key, value in data.items():
                         setattr(existing, key, value)
-                    print(f"🔄 Updated | Account: {account} | As-of: {asof} | 52wk_low: {low} | 52wk_high: {high}")
+                    # print(f"🔄 Updated | Account: {account} | As-of: {asof} | 52wk_low: {low} | 52wk_high: {high} | created_at: {created_at} | updated_at: {updated_at}")
+                    print(f"🔄 Updated | Account: {account} | As-of: {asof} | 52wk_low: {low} | 52wk_high: {high} | updated_at: {updated_at}")
                 else:
                     # Create new record (NO __init__ needed!)
                     new_record = MyPortfolio(**data)

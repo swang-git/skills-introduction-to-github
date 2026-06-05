@@ -1,5 +1,6 @@
 #!/Users/swang/myenv/bin/python
 
+from sqlalchemy import func
 import yfinance as yf
 import sys, pprint, time
 from datetime import datetime, date, timedelta
@@ -21,11 +22,13 @@ from decimal import Decimal
 # print(obj.name)  # Bob
 
 from Utils import padsp, get_data_from_table, build_dict, get_meta, get_quantity, get_total_cost, get_basis_price
-from MyPortfolio_Models import get_connection, CSV_TO_DB_MAP, TYPE_CONVERTERS, MyPortfolio, HealthRecord, StockQuote
+# from MyPortfolio_Models import get_connection, CSV_TO_DB_MAP, TYPE_CONVERTERS, MyPortfolio, HealthRecord, StockQuote
+from MyPortfolio_Models import get_connection, MyPortfolio, HealthRecord, StockQuote
 
 import argparse
 parser = argparse.ArgumentParser()
 parser.add_argument('-t', '--test', action="store_true", help='for testing get data from database(instead of yfinance)')
+parser.add_argument('-s', '--subd', default="0 = today", help='get the dated csv file - default 0 is today, -1 yestoday, etc')
 parser.add_argument('-d', '--db', type=str, default='devx', help='upsert stock quotes to table and upsert csv data to my_portfolios')
 # parser.add_argument('-d', '--db', type=str, required=True, help='upsert stock quotes to database DB<devx/prod> table:my_portfolios')
 args = parser.parse_args()
@@ -153,7 +156,7 @@ def save_to_stock_quotes_table(db, stocks, datx):
     print(f"🎉 stock_quotes data added/updated successfully!")
 
 def import_indices(db, date):
-    print("-fn- import_indices -- get data from yf")
+    print("-fn- import_indices -- get data from yf, database[%s] date[%s]"%(db, date))
     indices = {
         "DOW_JONES": "^DJI",
         "NASDAQ": "^IXIC",
@@ -163,8 +166,12 @@ def import_indices(db, date):
     }
     dbx = {}
     for name, ticker in indices.items():
-        info = yf.Ticker(ticker).info
-        dbx[name] = info.get("regularMarketPrice")
+        if testing:
+            dbx[name] = 7777.77
+        else:
+            info = yf.Ticker(ticker).info
+            dbx[name] = info.get("regularMarketPrice")
+
     dbx['date'] = date
 
     existing = db.query(HealthRecord).filter(HealthRecord.date == date).first()
@@ -179,6 +186,11 @@ def import_indices(db, date):
         print(f"🔄 Updated | date: {date} | Dow Jones: {dowj} | Nasdaq: {nasd} | SP500: {sp500}")
     else:
         # Create new record (NO __init__ needed!)
+        latest_record = db.query(HealthRecord).order_by(HealthRecord.date.desc()).first()
+        latest_portfolio = latest_record.portfolio # would be from last business day
+        latest_weight = latest_record.portfolio # would be from last business day
+        dbx['portfolio'] = latest_portfolio
+        dbx['weight'] = latest_weight
         new_record = HealthRecord(**dbx)
         db.add(new_record)
         print(f"✅ Added   | date: {date} | Dow Jones: {dowj} | Nasdaq: {nasd} | SP500: {sp500}")
@@ -231,7 +243,8 @@ if __name__ == "__main__":
     today = date.today()
     ASOF_TIME = datetime(today.year, today.month, today.day, 16, 30, 0)
 
-    if not testing: import_indices(db, today)
+    # if not testing: import_indices(db, today)
+    import_indices(db, today)
 
     meta_dict = get_meta(cursor)
     datx = {}

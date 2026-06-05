@@ -32,6 +32,8 @@ class HealthRecord(Base):
     SP500 = Column(DECIMAL(12, 3), nullable=False)
     FTSE100 = Column(DECIMAL(12, 3), nullable=False)
     NIKKEI = Column(DECIMAL(12, 3), nullable=False)
+    weight = Column(DECIMAL(12, 6), nullable=False)
+    portfolio = Column(DECIMAL(12, 3), nullable=False)
 
 # =============================================================================
 # 2. MYSQL TABLE MODEL: MyPortfolio (YOUR EXACT SCHEMA)
