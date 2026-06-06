@@ -188,7 +188,7 @@ def import_indices(db, date):
         # Create new record (NO __init__ needed!)
         latest_record = db.query(HealthRecord).order_by(HealthRecord.date.desc()).first()
         latest_portfolio = latest_record.portfolio # would be from last business day
-        latest_weight = latest_record.portfolio # would be from last business day
+        latest_weight = latest_record.weight # would be from last business day
         dbx['portfolio'] = latest_portfolio
         dbx['weight'] = latest_weight
         new_record = HealthRecord(**dbx)
