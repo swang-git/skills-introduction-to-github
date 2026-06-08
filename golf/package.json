@@ -15,6 +15,7 @@
     "postinstall": "quasar prepare"
   },
   "dependencies": {
+    "@quasar/cli": "^5.0.1",
     "@quasar/extras": "^1.18.0",
     "axios": "^1.2.1",
     "chart.js": "^4.4.8",

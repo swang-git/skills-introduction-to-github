@@ -98,7 +98,7 @@ print(' -- remove ', app_dist_dir)
 if os.path.exists(app_dist_dir): shutil.rmtree(app_dist_dir)
 print(' -- copy dist files to : ', app_dist_dir)
 shutil.copytree(dist_dir, app_dist_dir)
-exit_code = os.WEXITSTATUS(os.system("chcon -Rt httpd_sys_content_rw_t " + app_dist_dir))
+### exit_code = os.WEXITSTATUS(os.system("chcon -Rt httpd_sys_content_rw_t " + app_dist_dir))
 
 ptxt = fgcolor('green', '║') + ' App ' + bgcolor('li_green', fgcolor('da_blue', underline(boldit(appx))))
 if env == 'devx':

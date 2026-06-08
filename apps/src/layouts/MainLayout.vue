@@ -103,7 +103,7 @@
           <router-view />
         </q-page>
       </q-page-container>
-      <q-footer class="bg-teal-10" v-if="/memo|reminder|expense|watcher|bankstatement|shopping|bank|dictionary|glucosecheck|PancreaticFluid/i.test(curApp)">
+      <q-footer class="bg-teal-9" v-if="/memo|reminder|expense|watcher|bankstatement|shopping|bank|dictionary|glucosecheck|PancreaticFluid/i.test(curApp)">
         <q-toolbar>
           <Pagination :pNumPages="compNumPages" :pItemsPerPage="itemsPerPage" />
         </q-toolbar>
