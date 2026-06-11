@@ -72,37 +72,39 @@ def import_portfolio_csv(db, csv_file_path, dict, asof_time: datetime):
                 # Step 3: Unique key for upsert
                 # --------------------------
                 asof = data.get("asof_time")
+                price = padsp('' if data.get('price') == None else f"{data.get('price'):.2f}", 6)
+                # price = padsp(prc,  7)
+                price_change = padsp('' if data.get('price_change') == None else f"{data.get('price_change'):.2f}", 5)
+                # price_change = padsp(prc_chng, 7)
                 low = padsp('' if data.get("low_52_week") == None else data.get("low_52_week"), 7)
                 high = padsp('' if data.get("high_52_week") == None else data.get("high_52_week"), 7)
                 # created_at = padsp('' if data.get("created_at") == None else data.get("created_at"), 10)
-                updated_at = padsp('' if data.get("updated_at") == None else data.get("updated_at"), 20)
+                # updated_at = padsp(data.get("updated_at"), 20)
                 data["symbol"] = data["symbol"].strip("*")
-                symb = data["symbol"]
+                symbl = data["symbol"]
+                symb = padsp(symbl, 6)
 
                 # --------------------------
                 # Step 4: UPSERT (Update if exists, else Insert)
                 # --------------------------
-                existing = db.query(MyPortfolio).filter(
-                    MyPortfolio.asof_time == asof,
-                    MyPortfolio.account == account,
-                    MyPortfolio.symbol == symb
-                ).first()
+                existing = db.query(MyPortfolio).filter( MyPortfolio.asof_time == asof, MyPortfolio.account == account, MyPortfolio.symbol == symbl).first()
 
                 if existing:
                     # Update all fields
                     for key, value in data.items():
                         setattr(existing, key, value)
                     # print(f"🔄 Updated | Account: {account} | As-of: {asof} | 52wk_low: {low} | 52wk_high: {high} | created_at: {created_at} | updated_at: {updated_at}")
-                    print(f"🔄 Updated | Account: {account} | As-of: {asof} | 52wk_low: {low} | 52wk_high: {high} | updated_at: {updated_at}")
+                    # print(f"🔄 Updated | Account: {account} | Asof: {asof} | price: {price} | price_change: {price_change} | 52wk_low: {low} | 52wk_high: {high} | updated_at: {value}")
+                    print(f"🔄 Updated | Account: {account} | Asof: {asof} | {symb}: price: {price} | price_change: {price_change} | 52wk_low: {low} | 52wk_high: {high}")
                 else:
                     # Create new record (NO __init__ needed!)
                     new_record = MyPortfolio(**data)
                     db.add(new_record)
-                    print(f"✅ Added   | Account: {account} | As-of: {asof} | 52wk_low: {low} | 52wk_high: {high}")
+                    print(f"✅ Added   | Account: {account} | Asof: {asof} | {symb}: price: {price} | price_change: {price_change} | 52wk_low: {low} | 52wk_high: {high}")
 
         # Save all changes
         db.commit()
-        print(f"\n🎉 Import completed successfully!")
+        print(f"🎉Import data to my_portfolios table completed successfully!")
 
     except Exception as e:
         db.rollback()

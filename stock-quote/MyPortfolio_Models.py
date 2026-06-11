@@ -63,6 +63,7 @@ class MyPortfolio(Base):
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     asof_time = Column(DATETIME, nullable=False, index=True)
+    updated_at = Column(DATETIME, nullable=False)
     account = Column(VARCHAR(9), nullable=False, index=True)
     
     account_name = Column(VARCHAR(30), nullable=True)  # 允许空

@@ -1,28 +1,12 @@
 #!/Users/swang/myenv/bin/python
 
-from sqlalchemy import func
+# from sqlalchemy import func
 import yfinance as yf
 import sys, pprint, time
 from datetime import datetime, date, timedelta
 from decimal import Decimal
-# from dataclasses import dataclass
-
-# @dataclass
-# class StockQ:
-#     pass
-#     # asof_time: datetime
-#     # symbo: str
-#     # price: float
-#     # price_change: float
-#     # low_52_week: float
-#     # high_52_week: float
-
-# data = {"name": "Bob", "age": 35}
-# obj = User(**data)
-# print(obj.name)  # Bob
 
 from Utils import padsp, get_data_from_table, build_dict, get_meta, get_quantity, get_total_cost, get_basis_price
-# from MyPortfolio_Models import get_connection, CSV_TO_DB_MAP, TYPE_CONVERTERS, MyPortfolio, HealthRecord, StockQuote
 from MyPortfolio_Models import get_connection, MyPortfolio, HealthRecord, StockQuote
 
 import argparse
@@ -34,7 +18,7 @@ parser.add_argument('-d', '--db', type=str, default='devx', help='upsert stock q
 args = parser.parse_args()
 database = args.db
 testing = args.test
-print("database:", database)
+print("database:[%s]"%database)
 print('testing...') if testing else None
 # sys.exit(0)
 
@@ -90,8 +74,8 @@ def save_to_myp_table(db, stocks, datx):
         asof = datx[symb]["asof_time"]
         # redx = MyPortfolio(**datx[symb])
         # pprint.pprint(redx.__dict__)
-        price = padsp(datx[symb]['price'], 7)
-        price_change = padsp(datx[symb]['price_change'], 6)
+        price = padsp(f"{datx[symb]['price']:.2f}", 7)
+        price_change = padsp(f"{datx[symb]['price_change']:.2f}", 6)
         low = padsp(datx[symb]['low_52_week'], 7)
         high = padsp(datx[symb]['high_52_week'], 7)
         # --------------------------
@@ -109,11 +93,13 @@ def save_to_myp_table(db, stocks, datx):
             # Create new record (NO __init__ needed!)
             new_record = MyPortfolio(**datx[symb])
             db.add(new_record)
+            # price = padsp(f"{da_price:.2f}", 7)
+            # price_change = padsp(f"{da_price_change:.2f}", 6)
             print(f"✅ Added   |{adjsp} {symb} | As-of: {asof} | price: {price} | price change: {price_change} | 52wk_low: {low} | 52wk_high: {high}")
 
     # Save all changes
     db.commit()
-    print(f"🎉 myp data added/updated successfully!")
+    print(f"🎉 my_portfolios data added/updated successfully!")
 
 def save_to_stock_quotes_table(db, stocks, datx):
     for num, symb in enumerate(stocks):
@@ -122,8 +108,8 @@ def save_to_stock_quotes_table(db, stocks, datx):
         # redx = MyPortfolio(**datx[symb])
         # pprint.pprint(datx[symb].__dict__)
 
-        price = padsp(datx[symb]['price'], 7)
-        price_change = padsp(datx[symb]['price_change'], 6)
+        price = padsp(f"{datx[symb]['price']:.2f}", 7)
+        price_change = padsp(f"{datx[symb]['price_change']:.2f}", 6)
         low = padsp(datx[symb]['low_52_week'], 7)
         high = padsp(datx[symb]['high_52_week'], 7)
         # --------------------------
@@ -143,12 +129,14 @@ def save_to_stock_quotes_table(db, stocks, datx):
             dtsx = datx[symb]
             asof_time = dtsx["asof_time"]
             symbol = dtsx["symbol"]
-            price = dtsx["price"]
-            price_change = dtsx["price_change"]
+            da_price = dtsx["price"]
+            da_price_change = dtsx["price_change"]
             low_52_week = dtsx["low_52_week"]
             high_52_week = dtsx["high_52_week"]
-            new_record = StockQuote(asof_time, symbol, price, price_change, low_52_week, high_52_week)
+            new_record = StockQuote(asof_time, symbol, da_price, da_price_change, low_52_week, high_52_week)
             db.add(new_record)
+            price = padsp(f"{da_price:.2f}", 7)
+            price_change = padsp(f"{da_price_change:.2f}", 6)
             print(f"✅ Added   |{adjsp} {symb} | As-of: {asof} | price: {price} | price change: {price_change} | 52wk_low: {low} | 52wk_high: {high}")
 
     # Save all changes
@@ -156,7 +144,7 @@ def save_to_stock_quotes_table(db, stocks, datx):
     print(f"🎉 stock_quotes data added/updated successfully!")
 
 def import_indices(db, date):
-    print("-fn- import_indices -- get data from yf, database[%s] date[%s]"%(db, date))
+    print("-fn- import_indices -- get data from yf to database[%s] date[%s]"%(database, date), file=sys.stderr)
     indices = {
         "DOW_JONES": "^DJI",
         "NASDAQ": "^IXIC",
@@ -227,7 +215,7 @@ def get_stock_data(symb):
         # If API fails: keep all missing values as NULL
         pass
 
-    print("sleeping for 2 second")
+    print("sleeping for 2 second", file=sys.stderr)
     time.sleep(2)
     return data
 
@@ -235,7 +223,9 @@ def get_stock_data(symb):
 # RUN THE SCRIPT __mail__
 # =============================================================================
 if __name__ == "__main__":
+    # print('===== Starting import stock data to my_portfolios =====', file=sys.stderr)
     print('===== Starting import stock data to my_portfolios =====')
+    # sys.exit(0)
 
     db, conn = get_connection(database)
     cursor = conn.cursor()

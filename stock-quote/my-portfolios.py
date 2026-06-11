@@ -1,6 +1,7 @@
 #!/Users/swang/myenv/bin/python
 import sys
 import argparse
+import warnings
 
 from Utils import boldIt, redIt, greenIt, yellowIt, drawTopHeader, showHeaderCxt, drawBotHeader, dispRow, drawBotLine, drawBotLineDownTick, drawBotLineUpTick
 from Models import dbsession, MyPortfolio
@@ -17,10 +18,10 @@ args = parser.parse_args()
 sub_days = args.sub_days
 money_format = args.mfmt
 if sub_days > 0:
-    print("sub_days must negative, %s given, exiting..."%sub_days)
+    warnings.warn("sub_days must negative, %s given, exiting..."%sub_days)
     sys.exit(1)
 database = args.db
-print("sub_days=%d db=%s money_format:%s"%(sub_days, database, money_format))
+warnings.warn("sub_days=%d db=%s money_format:%s"%(sub_days, database, money_format))
 # sys.exit(0)
 
 def get_formated_data(diff):

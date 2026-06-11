@@ -464,7 +464,7 @@ class GolfController extends Controller {
 					return "FAILED " + $e;
 				}
 			}
-			public function getPlayerCount() { // Log::info('getPlayerCount', [Auth::user()]);
+			public function getPlayerCount() { Log::info('getPlayerCount', [Auth::user()]);
 				$mcnt = Player::where([['status', 'A'], ['gender', 'M']])->count();
 				$fcnt = Player::where([['status', 'A'], ['gender', 'F']])->count();
 				return ['status' => "OK", 'mcnt' => $mcnt, 'fcnt' => $fcnt];
