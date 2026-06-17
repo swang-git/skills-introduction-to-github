@@ -10,7 +10,7 @@ import Chart from 'chart.js/auto'
 import ChartDataLabels from 'chartjs-plugin-datalabels'
 // import { mybbConfig, actions, backgroundColor, borderColor } from './chart-mybb-config.js'
 import cfg from './chart-mybb-config.js'
-import AllButtons from './AllButtons'
+import AllButtons from './AllButtons.vue'
 Chart.register(ChartDataLabels);
 const props = defineProps({
   data: { type: Array } ,

@@ -14,15 +14,15 @@
 <script setup>
 import { ref } from 'vue'
 import emitter from 'tiny-emitter/instance'
-import { libFunctions } from 'src/composables/libFunctions'
-import { dayFunctions } from 'src/composables/dayFunctions'
-import ChartYear from './ChartYear'
-import ChartMybb from './ChartMybb'
-import ChartCats from './ChartCats'
-import ChartMoyr from './ChartMoyr'
-import ChartYrmo from './ChartYrmo'
-import ChartYmpi from './ChartYmpi'
-import ChartCatA from './ChartCatA'
+import { libFunctions } from '../../src/composables/libFunctions'
+import { dayFunctions } from '../../src/composables/dayFunctions'
+import ChartYear from './ChartYear.vue'
+import ChartMybb from './ChartMybb.vue'
+import ChartCats from './ChartCats.vue'
+import ChartMoyr from './ChartMoyr.vue'
+import ChartYrmo from './ChartYrmo.vue'
+import ChartYmpi from './ChartYmpi.vue'
+import ChartCatA from './ChartCatA.vue'
 const props = defineProps({
   data: { type: Array },
   year: { type: Number },

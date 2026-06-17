@@ -27,12 +27,12 @@
 import { computed, ref } from "vue";
 import { useQuasar } from "quasar";
 import { libFunctions } from "../composables/libFunctions"
-import ShadowBox from "../components/ShadowBox"
-const compVer = computed(() => { return process.env.VER })
+import ShadowBox from "../components/ShadowBox.vue"
+const compVer = computed(() => { return import.meta.env.VITE_BUILD_TAG })
 
 const $q = useQuasar();
 const touch = computed(() => ($q.platform.has.touch ? "has" : "does not have"));
-const { isMate, iPhone, iPhone13, screenwidth, screenheight } = libFunctions()
+const { ENV_DEV } = libFunctions()
 
 const opened = ref(false);
 defineExpose({ openIt });

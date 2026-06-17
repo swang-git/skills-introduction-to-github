@@ -22,14 +22,14 @@ const { buildApp, isIM, isDesk, palist, getLineBackground } = libFunctions()
 import { axiosFunctions } from '../src/composables/axiosFunctions'
 const { gaxios, paxios } = axiosFunctions()
 
-import NotePad from '../src/components/NotePad'
-import LnkInput from '../src/components/LnkInput'
+import NotePad from '../src/components/NotePad.vue'
+import LnkInput from '../src/components/LnkInput.vue'
 
-import DateTimePicker from '../src/components/DateTimePicker'
-import TxtInput from '../src/components/TxtInput'
-import LayoutHeader from '../src/components/LayoutHeader'
-import LayoutFooter from '../src/components/LayoutFooter'
-import ConfirmDialog from '../src/components/ConfirmDialog'
+import DateTimePicker from '../src/components/DateTimePicker.vue'
+import TxtInput from '../src/components/TxtInput.vue'
+import LayoutHeader from '../src/components/LayoutHeader.vue'
+import LayoutFooter from '../src/components/LayoutFooter.vue'
+import ConfirmDialog from '../src/components/ConfirmDialog.vue'
 
 defineExpose({ openIt })
 const emit = defineEmits(['deled-word', 'added-word', 'upded-word'])

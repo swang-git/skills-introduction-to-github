@@ -1,11 +1,12 @@
-import { getCurrentInstance } from 'vue'
+// import { getCurrentInstance } from 'vue'
 import { libFunctions } from './libFunctions'
 import emitter from 'tiny-emitter/instance'
 // import { utilFunctions } from '../composables/utilFunctions'
+import axios from 'axios'
 export function axiosFunctions() {
   const { $q } = libFunctions()
-  const app = getCurrentInstance()
-  const axios = app.appContext.config.globalProperties.$axios
+  // const app = getCurrentInstance()
+  // const axios = app.appContext.config.globalProperties.$axios
   // const $q = app.appContext.config.globalProperties.$q
   function gaxios(path) {
     let target = null

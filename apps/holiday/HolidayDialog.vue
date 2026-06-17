@@ -30,7 +30,7 @@ import { ref, computed } from 'vue'
 import { libFunctions } from '../src/composables/libFunctions'
 const { isDesk, isIM } = libFunctions()
 import { Calendar } from './Calendar'
-import HolidayYearPad from './HolidayYearPad'
+import HolidayYearPad from './HolidayYearPad.vue'
 
 const tit = ref('Holidays of')
 const holidays = ref({})

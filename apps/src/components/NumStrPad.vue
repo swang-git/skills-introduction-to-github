@@ -22,7 +22,7 @@
 <script setup>
 import { ref } from 'vue'
 import emitter from 'tiny-emitter/instance'
-import { libFunctions } from 'src/composables/libFunctions';
+import { libFunctions } from '../composables/libFunctions';
 const { fmtcy } = libFunctions()
 
 const opened = ref(false)

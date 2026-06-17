@@ -36,7 +36,7 @@ function getPropertyKey () {
   else if (props.label === 'Fruit') return 'fruit'
   else if (props.label === 'Glucose Check Notes') return 'note'
   else if (props.label === 'Dictionary Notes') return 'note'
-  else if (props.label === 'Notes') return 'note'
+  // else if (props.label === 'Notes') return 'note'
   else if (props.label === 'Tag') return 'tag'
   else if (props.label === 'Full Name') return 'name'
   else if (props.label === 'username') return 'username'
@@ -109,9 +109,9 @@ const compInput = computed({
 })
 // console.log(`-ST-TxtInput label=${props.label}`)
 
-function clearField () {
-  Reflect.set(compObj.value, getPropertyKey(), val)
-}
+// function clearField () {
+//   Reflect.set(compObj.value, getPropertyKey(), val)
+// }
 function editSelected (label) {
   console.log(`-fn-editSelected selectedValue=${label} ${props.label} ${compObj.value[label]}`)
   emitter.emit('open-TxtPad', props.label, compObj.value[label], 'Edit ' + props.label)

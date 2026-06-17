@@ -1,10 +1,11 @@
 <template>
 <!-- <div class="q-px-xs" :class="{ fixed: clickedIdx < 8 }"> -->
 <div class="q-px-xs">
-<q-table class="sh-sticky-header-table" v-model:rows="palist" :columns="columns" dense
+<q-table class="sh-sticky-header-table bg-teal-10 text-h6" v-model:rows="palist" :columns="columns" dense
   :grid=false :visible-columns="isDesk ? visibleColumnsDesk : visibleColumnsFone" :style="{height:isIM ? '565px':''}"
   :pagination="isDesk ? { rowsPerPage: rowsPerPageDesk } : { rowsPerPage: rowsPerPageIM }"
   row-key="id" :separator="separator" :showCol="showCol" wrap-cells hide-pagination 
+  dark
 >
   <!-- <template v-slot:top="props">
     <q-select v-if="isIM"
@@ -104,19 +105,17 @@
 </div>
 </template>
 <script setup>
-import { ref, computed } from 'vue'
+import { ref } from 'vue'
 import emitter from 'tiny-emitter/instance'
 import { libFunctions } from '../src/composables/libFunctions'
 import { axiosFunctions } from '../src/composables/axiosFunctions'
 import { dayFunctions } from '../src/composables/dayFunctions'
-const { chwk1, chwk2, today } = dayFunctions()
+const { today } = dayFunctions()
 const { gaxios } = axiosFunctions()
-const { isIM, isDesk, buildApp, palist, $q } = libFunctions()
+const { isIM, isDesk, buildApp, palist, ENV_DEV } = libFunctions()
 
 import redar from './redar.vue'
-import InfoDisplay from '../src/components/InfoDisplay'
-
-// const cols = ref(['ID'])
+import InfoDisplay from '../src/components/InfoDisplay.vue'
 
 const rowsPerPageDesk = 23
 const rowsPerPageIM = 13
@@ -145,6 +144,7 @@ const columns = [cols[0], cols[1], cols[2], cols[3], cols[4], cols[5], cols[6], 
 console.log('-ST-relist')
 buildApp('温馨提示', 'reminder')
 emitter.emit('items-per-page', isIM ? rowsPerPageIM : rowsPerPageDesk)
+// const ENV_DEV = import.meta.env.DEV ? '/api' : '' 
 getList()
 
 //== function section
@@ -262,7 +262,9 @@ function showDar (row, act) {
   emitter.emit('open-redar', clone, act)
 }
 function getList () {
-  const path = process.env.API + '/reminder/getList'
+  // const path = process.env.API + '/reminder/getList'
+  // const path = import.meta.env.API + '/reminder/getList'
+  const path = ENV_DEV + '/reminder/getList'
   gaxios(path)
 }
 emitter.on('reminder-getList', (x) => setList(x))

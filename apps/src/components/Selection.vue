@@ -8,7 +8,7 @@
 </template>
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import SelectionList from './SelectionList'
+import SelectionList from './SelectionList.vue'
 const emit = defineEmits(['set-opt'])
 const props = defineProps([
   'iColor',

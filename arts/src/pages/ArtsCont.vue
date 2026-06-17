@@ -37,9 +37,9 @@ const route = useRoute()
 const $router = useRouter()
 import emitter from 'tiny-emitter/instance'
 import { ref, computed, watch } from 'vue'
-import { libFunctions } from 'src/composables/libFunctions'
+import { libFunctions } from '../../src/composables/libFunctions'
 const { store } = libFunctions()
-import { axiosFunctions } from 'src/composables/axiosFunctions'
+import { axiosFunctions } from '../../src/composables/axiosFunctions'
 const { gaxios } = axiosFunctions()
 // import { scroll } from 'quasar'
 // const { getScrollTarget, setVerticalScrollPosition } = scroll
@@ -81,7 +81,8 @@ function getCont () {
   console.log('-fn-getCont', route)
   tag.value = route.params.tag
   ymd.value = route.params.ymd
-  const path = process.env.API + '/arts/getCont/' + tag.value + '/' + ymd.value
+  // const path = process.env.API + '/arts/getCont/' + tag.value + '/' + ymd.value
+  const path = '/arts/getCont/' + tag.value + '/' + ymd.value
   gaxios(path)
 }
 

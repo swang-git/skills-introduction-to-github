@@ -60,8 +60,8 @@
 </template>
 <script setup>
 // import { ref, createApp } from 'vue'
-import ButtonOne from './ButtonOne'
-import ButtonTwo from './ButtonTwo'
+import ButtonOne from './ButtonOne.vue'
+import ButtonTwo from './ButtonTwo.vue'
 const props = defineProps({ chart: { type: String } })
 const emit = defineEmits(['move-chart'])
 // const app = createApp({})

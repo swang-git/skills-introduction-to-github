@@ -14,7 +14,7 @@ args = parser.parse_args()
 verstr = '普林斯顿中美高尔夫俱乐部王胜利'
 # print(args); sys.exit(0)
 env = args.environment
-ver = verstr[randint(0, 14)]
+bldtag = verstr[randint(0, 14)]
 app = args.programName
 # modern = args.modern
 appx = ' ' + app + ' '
@@ -75,7 +75,8 @@ print_header(ptxt)
 # sys.exit(0)
 
 # PRODUCT_NAME will used in quasar.conf.js to inject app.XXXXX.js/css and vendor.XXXXX.js/css etc. into index.template.html for index.html copied to public/PRODUCT_NAME(i.e. golf) folder
-buildstr = "PRODUCT_NAME=" + app + " PRODUCT_VER=" + ver + " quasar build " + build_options
+# buildstr = "PRODUCT_NAME=" + app + " PRODUCT_VER=" + ver + " quasar build " + build_options
+buildstr = "PRODUCT_NAME=" + app + " VITE_BUILD_TAG=" + bldtag + " quasar build " + build_options
 exit_code = os.WEXITSTATUS(os.system(buildstr))
 # exit_code = os.WEXITSTATUS(os.system("PRODUCT_NAME={app} quasar build " + build_options))
 if exit_code != 0:
@@ -102,9 +103,9 @@ shutil.copytree(dist_dir, app_dist_dir)
 
 ptxt = fgcolor('green', '║') + ' App ' + bgcolor('li_green', fgcolor('da_blue', underline(boldit(appx))))
 if env == 'devx':
-    ptxt+= ' built ' + fg.green + 'SUCCESSFULLY in ' + fg.rs + env + ' with OPTIONS' + build_options + ' and Version ' + ver
+    ptxt+= ' built ' + fg.green + 'SUCCESSFULLY in ' + fg.rs + env + ' with OPTIONS' + build_options + ' and Version ' + bldtag
 elif env == 'prod':
-    ptxt+= ' built ' + fg.green + 'SUCCESSFULLY in ' + fg.rs + env + ' with version ' + ver
+    ptxt+= ' built ' + fg.green + 'SUCCESSFULLY in ' + fg.rs + env + ' with version ' + bldtag
 print_tailer(ptxt)
 sys.exit(0)
 

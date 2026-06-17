@@ -104,8 +104,8 @@
 <script setup>
 import { ref } from 'vue'
 import emitter from 'tiny-emitter/instance'
-import { libFunctions } from 'src/composables/libFunctions';
-import NumStrPad from '../src/components/NumStrPad'
+import { libFunctions } from '../src/composables/libFunctions';
+import NumStrPad from '../src/components/NumStrPad.vue'
 
 const { isDesk, isIM, fmtcy } = libFunctions()
 const ccBalance = ref(null)

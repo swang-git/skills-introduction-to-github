@@ -1,10 +1,10 @@
 <template>
 <!-- <div class="q-px-xs" :class="{ fixed: clickedIdx < 8 }"> -->
-<div class="q-px-xs" :class="{ fixed: clickedIdx>0 && palist[clickedIdx].details.length<99 }">
+<div class="q-px-xs text-h6" :class="{ fixed: clickedIdx>0 && palist[clickedIdx].details.length<99 }">
   <q-table class="sh-sticky-header-table" v-model:rows="palist" :columns="columns" dense :hide-header="isIM"
     :grid=false :visible-columns="isDesk ? visibleColumnsDesk : visibleColumnsFone" :style="{ width:(screenwidth-4)+'px' }" 
     row-key="id" :separator="separator" :showCol="showCol" wrap-cells :hide-pagination="true" 
-    :pagination="isDesk ? { rowsPerPage: 23 } : { rowsPerPage: 13 }"
+    :pagination="isDesk ? { rowsPerPage: 23 } : { rowsPerPage: 13 }" dark
   >
   <template v-slot:header="props">
     <q-tr :props="props">
@@ -74,13 +74,13 @@
 <script setup>
 import { ref, computed } from 'vue'
 import emitter from 'tiny-emitter/instance'
-import medar from './medar'
-import InfoDisplay from '../src/components/InfoDisplay'
-import ImgDisplay from '../src/components/ImgDisplay'
-import { libFunctions } from 'src/composables/libFunctions'
-import { axiosFunctions } from 'src/composables/axiosFunctions'
-import { dayFunctions } from 'src/composables/dayFunctions'
-const { isIM, isDesk, buildApp, palist, dalist, screenwidth } = libFunctions()
+import medar from './medar.vue'
+import InfoDisplay from '../src/components/InfoDisplay.vue'
+import ImgDisplay from '../src/components/ImgDisplay.vue'
+import { libFunctions } from '../src/composables/libFunctions'
+import { axiosFunctions } from '../src/composables/axiosFunctions'
+import { dayFunctions } from '../src/composables/dayFunctions'
+const { isIM, isDesk, buildApp, palist, dalist, screenwidth, ENV_DEV } = libFunctions()
 const { chwk1, chwk3 } = dayFunctions()
 const { gaxios } = axiosFunctions()
 
@@ -210,7 +210,7 @@ function showDar (row, act) {
   emitter.emit('open-medar', clone, act)
 }
 function getList (swProp) {
-  const path = process.env.API + `/memo/getList/${swProp}`
+  const path = ENV_DEV + `/memo/getList/${swProp}`
   gaxios(path)
 }
 function setList (da) {

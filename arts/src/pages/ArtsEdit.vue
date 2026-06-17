@@ -25,9 +25,9 @@ import { computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 const route = useRoute()
 const $router = useRouter()
-import { axiosFunctions } from 'src/composables/axiosFunctions'
+import { axiosFunctions } from '../../src/composables/axiosFunctions.js'
 const { paxios } = axiosFunctions()
-import { libFunctions } from 'src/composables/libFunctions'
+import { libFunctions } from '../../src/composables/libFunctions.js'
 const { store, isLocal } = libFunctions()
 // name: 'ArtsEdit'
 
@@ -72,8 +72,9 @@ function saveEdit () {
     inData.tit = tit.value
     inData.txt = txt.value
   }
-  const path = process.env.API + '/arts/updText'
-  console.log('-CK-inData', inData)
+  // const path = process.env.API + '/arts/updText'
+  const path = '/arts/updText'
+  // console.log('-CK-inData', inData)
   paxios(path, inData)
   closeEdit()
 }

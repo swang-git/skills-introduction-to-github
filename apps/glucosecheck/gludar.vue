@@ -64,26 +64,26 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import emitter from 'tiny-emitter/instance'
-import ConfirmDialog from '../src/components/ConfirmDialog'
-import TxtInput from '../src/components/TxtInput'
-import TxaInput from '../src/components/TxaInput'
-import NumInput from '../src/components/NumInput'
-import LayoutHeader from '../src/components/LayoutHeader'
-import LayoutFooter from '../src/components/LayoutFooter'
-import DateTimePicker from '../src/components/DateTimePicker'
-import DateTimeIMPicker from '../src/components/DateTimeIMPicker'
-import NumPadAuto from '../src/components/NumPadAuto'
-import NumPad from '../src/components/NumPad'
-import SelRevOption from '../src/components/SelRevOption'
-import TxtPad from '../src/components/TxtPad'
-import gludarInfo from './gludar_m_info'
+import ConfirmDialog from '../src/components/ConfirmDialog.vue'
+import TxtInput from '../src/components/TxtInput.vue'
+import TxaInput from '../src/components/TxaInput.vue'
+import NumInput from '../src/components/NumInput.vue'
+import LayoutHeader from '../src/components/LayoutHeader.vue'
+import LayoutFooter from '../src/components/LayoutFooter.vue'
+import DateTimePicker from '../src/components/DateTimePicker.vue'
+import DateTimeIMPicker from '../src/components/DateTimeIMPicker.vue'
+import NumPadAuto from '../src/components/NumPadAuto.vue'
+import NumPad from '../src/components/NumPad.vue'
+import SelRevOption from '../src/components/SelRevOption.vue'
+import TxtPad from '../src/components/TxtPad.vue'
+import gludarInfo from './gludar_m_info.vue'
 
 import { axiosFunctions } from '../src/composables/axiosFunctions'
 const { gaxios, paxios } = axiosFunctions()
 import { dayFunctions } from '../src/composables/dayFunctions'
 const { yyyymmddHHMM, yyyymmdd } = dayFunctions()
 import { libFunctions } from '../src/composables/libFunctions'
-const { isDesk, isIM } = libFunctions()
+const { isDesk, isIM, ENV_DEV } = libFunctions()
 
 const opened = ref(false)
 const action = ref(null)
@@ -242,7 +242,7 @@ function showInfo () {
 function add () {
   convType()
   console.log('-fn-add', row.value)
-  const path = process.env.API + '/glucosecheck/add'
+  const path = ENV_DEV + '/glucosecheck/add'
   const inData = row.value
   if (isDesk) setBloodPressure()
   paxios(path, inData)
@@ -257,7 +257,7 @@ function convType () {
 function upd () {
   convType()
   console.log('-fn-upd', row.value)
-  const path = process.env.API + '/glucosecheck/upd'
+  const path = ENV_DEV + '/glucosecheck/upd'
   if (isDesk) setBloodPressure()
   const inData = row.value
   paxios(path, inData)
@@ -273,8 +273,7 @@ function del () {
 }
 function delFromDB () {
 console.log('-fn-del', row.value.id)
-  const path = process.env.API + '/glucosecheck/del'
-  const inData = row.value
+  const path = ENV_DEV + '/glucosecheck/del'
   paxios(path, row.value)
   opened.value = false
 }

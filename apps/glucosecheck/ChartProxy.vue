@@ -15,10 +15,10 @@ import emitter from 'tiny-emitter/instance'
 import { libFunctions } from '../src/composables/libFunctions'
 const { isDesk, isIM } = libFunctions()
 
-import ChartClv from '../glucosecheck/ChartClv'
-import ChartEag from '../glucosecheck/ChartEag'
-import ChartA1c from '../glucosecheck/ChartA1c'
-import ChartA1cxDonut from '../glucosecheck/ChartA1xDonut'
+import ChartClv from '../glucosecheck/ChartClv.vue'
+import ChartEag from '../glucosecheck/ChartEag.vue'
+import ChartA1c from '../glucosecheck/ChartA1c.vue'
+import ChartA1cxDonut from '../glucosecheck/ChartA1xDonut.vue'
 
 const props = defineProps({
   clvs: { type: Array },

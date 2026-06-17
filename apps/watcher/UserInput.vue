@@ -44,17 +44,17 @@
 <script setup>
 import { ref, createApp } from 'vue'
 import emitter from 'tiny-emitter/instance'
-import LayoutHeader from '../src/components/LayoutHeader'
-import LayoutFooter from '../src/components/LayoutFooter'
-import num from '../src/components/NumInput'
-import dap from '../src/components/DatePicker'
-import NotePad from '../src/components/NotePad'
-import LnkInput from '../src/components/LnkInput'
-import { axiosFunctions } from 'src/composables/axiosFunctions'
-import { dayFunctions } from 'src/composables/dayFunctions'
+import LayoutHeader from '../src/components/LayoutHeader.vue'
+import LayoutFooter from '../src/components/LayoutFooter.vue'
+import num from '../src/components/NumInput.vue'
+import dap from '../src/components/DatePicker.vue'
+import NotePad from '../src/components/NotePad.vue'
+import LnkInput from '../src/components/LnkInput.vue'
+import { axiosFunctions } from '../src/composables/axiosFunctions'
+import { dayFunctions } from '../src/composables/dayFunctions'
 const { yyyymmdd } = dayFunctions()
 const { paxios } = axiosFunctions()
-import { libFunctions } from 'src/composables/libFunctions'
+import { libFunctions } from '../src/composables/libFunctions'
 const { $q } = libFunctions()
 
 const type = ref('pond')

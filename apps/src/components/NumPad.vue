@@ -20,7 +20,7 @@
 <script setup>
 import { ref, computed } from 'vue'
 import emitter from 'tiny-emitter/instance'
-import InfoDisplay from './InfoDisplay'
+import InfoDisplay from './InfoDisplay.vue'
 // const emit = defineEmits(['sugar-level', 'blood-pressure'])
 
 const opened = ref(false)

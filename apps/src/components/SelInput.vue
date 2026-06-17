@@ -18,7 +18,7 @@
 import { ref, computed } from 'vue'
 import emitter from 'tiny-emitter/instance'
 // import SelOptionsWithSearch from './SelOptionsWithSearch'
-import DatePad from './DatePad'
+import DatePad from './DatePad.vue'
 const props = defineProps([
   'label',
   'icon',

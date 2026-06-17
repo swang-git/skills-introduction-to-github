@@ -15,7 +15,7 @@ import emitter from 'tiny-emitter/instance'
 import { axiosFunctions } from '../src/composables/axiosFunctions'
 const { paxios } = axiosFunctions()
 import { libFunctions } from '../src/composables/libFunctions'
-const { $q } = libFunctions()
+const { $q, ENV_DEV } = libFunctions()
 const className = ref(null)
 const newCIname = ref(null)
 const classId = ref(0)
@@ -80,11 +80,11 @@ function addNewCIname () {
     inData = { name: newCIname.value, class_id: classId.value, class: className.value }
     // this.inData = inData
     console.log('-CK-add new item', inData)
-    path = process.env.API + '/shopping/addNewItem'
+    path = ENV_DEV + '/shopping/addNewItem'
   } else if (classId.value === 0) {
     inData = { class: newCIname.value }
     console.log('-CK-add new class', inData)
-    path = process.env.API + '/shopping/addNewClass'
+    path = ENV_DEV + '/shopping/addNewClass'
   }
   paxios(path, inData)
 }

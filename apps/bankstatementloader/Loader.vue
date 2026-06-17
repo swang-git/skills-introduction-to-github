@@ -30,13 +30,13 @@
 </template>
 <script setup>
 import { reactive, computed, ref } from 'vue'
-import ReconFidelityCC from './ReconFidelityCC'
-import MonthlyStatementsFidelity from './MonthlyStatementsFidelity'
-import YearlyStatementNAC from './YearlyStatementNAC'
-import MonthlyStatementsBOA from './MonthlyStatementsBOA'
-import MonthlyStatementChase from './MonthlyStatementChase'
-import ChaseBrockerageIntraday from './ChaseBrockerageIntraday'
-import DatePicker from '../src/components/DatePicker'
+import ReconFidelityCC from './ReconFidelityCC.vue'
+import MonthlyStatementsFidelity from './MonthlyStatementsFidelity.vue'
+import YearlyStatementNAC from './YearlyStatementNAC.vue'
+import MonthlyStatementsBOA from './MonthlyStatementsBOA.vue'
+import MonthlyStatementChase from './MonthlyStatementChase.vue'
+import ChaseBrockerageIntraday from './ChaseBrockerageIntraday.vue'
+import DatePicker from '../src/components/DatePicker.vue'
 import emitter from 'tiny-emitter/instance'
 import { libFunctions } from '../src/composables/libFunctions'
 const { isDesk, buildApp, $q } = libFunctions()

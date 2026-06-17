@@ -20,7 +20,7 @@ import { ref } from 'vue'
 import emitter from 'tiny-emitter/instance'
 import { libFunctions } from '../../src/composables/libFunctions'
 const { isDesk } = libFunctions()
-import PageNumPad from './PageNumPad'
+import PageNumPad from './PageNumPad.vue'
 
 const props = defineProps ({
   pNumPages: { type: Number },

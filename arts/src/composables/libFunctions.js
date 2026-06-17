@@ -1,7 +1,7 @@
 import { ref, computed } from 'vue'
 import emitter from 'tiny-emitter/instance.js'
 import { Platform, useQuasar } from 'quasar'
-import { useArtStore } from 'src/stores/art'
+import { useArtStore } from '../../src/stores/art'
 export function libFunctions() {
   const store = useArtStore()
   const $q = useQuasar()

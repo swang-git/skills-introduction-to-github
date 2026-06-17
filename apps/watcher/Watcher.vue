@@ -70,20 +70,20 @@
 import emitter from 'tiny-emitter/instance'
 import { ref, onMounted } from 'vue'
 
-import { libFunctions } from 'src/composables/libFunctions'
-import { dayFunctions } from 'src/composables/dayFunctions'
-import { axiosFunctions } from 'src/composables/axiosFunctions'
+import { libFunctions } from '../src/composables/libFunctions'
+import { dayFunctions } from '../src/composables/dayFunctions'
+import { axiosFunctions } from '../src/composables/axiosFunctions'
 
-import PortfolioPositions from './PortfolioPositions'
-import UserInput from './UserInput'
-import UserInputIM from './UserInputIM'
-import PortfolioNote from './PortfolioNote'
-import PortfolioDisplay from './PortfolioDisplay'
-import ChartsProxy from '../src/components/ChartsProxy'
-import InfoDisplay from '../src/components/InfoDisplay'
+import PortfolioPositions from './PortfolioPositions.vue'
+import UserInput from './UserInput.vue'
+import UserInputIM from './UserInputIM.vue'
+import PortfolioNote from './PortfolioNote.vue'
+import PortfolioDisplay from './PortfolioDisplay.vue'
+import ChartsProxy from '../src/components/ChartsProxy.vue'
+import InfoDisplay from '../src/components/InfoDisplay.vue'
 
-const fabOpen = true
-const { dalist, palist, buildApp, getLineBackground, formatCurrency, isDesk, iPhone, $q } = libFunctions()
+var fabOpen = true
+const { dalist, palist, buildApp, getLineBackground, formatCurrency, isDesk, iPhone, $q, ENV_DEV } = libFunctions()
 const { gaxios, paxios } = axiosFunctions()
 const { getDay2 } = dayFunctions()
 
@@ -138,7 +138,8 @@ function updWkgPortf (wkg, portf) {
   console.log(`-fn-updWkgPortf wkg=${wkg} portf=${portf} rowId=${clickedRow.value.id}`, clickedRow.value)
   clickedRow.value.portfolio = portf
   clickedRow.value.kilo = wkg
-  const path = process.env.API + '/watcher/updWeightPortfolio'
+  // const path = process.env.API + '/watcher/updWeightPortfolio'
+  const path = ENV_DEV + '/watcher/updWeightPortfolio'
   paxios(path, clickedRow.value)
 }
 function compTotalValue(date, toalval) {
@@ -178,7 +179,8 @@ function setList (da) {
   // console.info('-CK-setList accntOpts:', accntOpts.value)
 }
 function getList () {
-  const path = process.env.API + '/watcher/getList'
+  // const path = process.env.API + '/watcher/getList'
+  const path = ENV_DEV + '/watcher/getList'
   gaxios(path)
 }
 function getDocLinkStr (date) {
@@ -269,13 +271,15 @@ function setPortfolio (da) {
 }
 emitter.on('watcher-getMyPortfolios', (x) => setPositions(x))
 function getMyPortfolios (row) {
-  const path = row.date >= '2026-04-24' ? process.env.API + '/watcher/getMyPortfolios/' + row.date : process.env.API + '/watcher/getPositions/' + row.date
+  // const path = row.date >= '2026-04-24' ? process.env.API + '/watcher/getMyPortfolios/' + row.date : process.env.API + '/watcher/getPositions/' + row.date
+  const path = row.date >= '2026-04-24' ? ENV_DEV + '/watcher/getMyPortfolios/' + row.date : ENV_DEV + '/watcher/getPositions/' + row.date
   clickedRow.value = row
   gaxios(path)
 }
 emitter.on('watcher-getPositions', (x) => setPositions(x))
 function getPositions (row) {
-  const path = process.env.API + '/watcher/getPositions/' + row.date
+  // const path = process.env.API + '/watcher/getPositions/' + row.date
+  const path = ENV_DEV + '/watcher/getPositions/' + row.date
   clickedRow.value = row
   gaxios(path)
 }

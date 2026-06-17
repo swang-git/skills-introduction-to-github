@@ -33,7 +33,7 @@ function getPropertyKey () {
   else if (props.label === 'Dictionary Notes') return 'note'
   else if (props.label === 'Notes') return 'note'
   else if (props.label === '昨 日 餐 饮') return 'note'
-  else if (props.label === 'Notes') return 'note'
+  // else if (props.label === 'Notes') return 'note'd
   else if (props.label === 'Exercise') return 'exercise'
   else if (props.label === 'Breakfast') return 'breakfast'
   else if (props.label === 'Lunch') return 'lunch'

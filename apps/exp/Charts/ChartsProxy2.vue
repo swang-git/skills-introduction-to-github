@@ -11,10 +11,10 @@
 <script setup>
 import { ref } from 'vue'
 import emitter from 'tiny-emitter/instance'
-import { libFunctions } from 'src/composables/libFunctions'
-import { dayFunctions } from 'src/composables/dayFunctions'
-import ChartYmpi from './ChartYmpi'
-import ChartSubA from './ChartSubA'
+import { libFunctions } from '../../src/composables/libFunctions'
+import { dayFunctions } from '../../src/composables/dayFunctions'
+import ChartYmpi from './ChartYmpi.vue'
+import ChartSubA from './ChartSubA.vue'
 const props = defineProps({
   data: { type: Array },
   year: { type: Number },

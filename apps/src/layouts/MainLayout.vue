@@ -115,23 +115,23 @@
 <script setup>
 import { ref, computed } from 'vue'
 import emitter from 'tiny-emitter/instance'
-import Pagination from '../../src/components/Pagination'
-import AppItem from '../../src/components/AppItem'
-import Holidays from '../../holiday/HolidayDialog'
-import { libFunctions } from 'src/composables/libFunctions'
-import { dayFunctions } from 'src/composables/dayFunctions'
-import { infoFunctions } from 'src/composables/infoFunctions'
-import { useRouter } from 'vue-router'
-const router = useRouter()
+import Pagination from '../../src/components/Pagination.vue'
+import AppItem from '../../src/components/AppItem.vue'
+import Holidays from '../../holiday/HolidayDialog.vue'
+import { libFunctions } from '../../src/composables/libFunctions'
+import { dayFunctions } from '../../src/composables/dayFunctions'
+import { infoFunctions } from '../../src/composables/infoFunctions'
+// import { useRouter } from 'vue-router'
+// const router = useRouter()
 
-const { isIM, isDesk, isFone, dalist, $q } = libFunctions()
-const { getDay3 } = dayFunctions()
+const { isIM, isDesk, $q } = libFunctions()
+const { yyyymmdd } = dayFunctions()
 const { getA1cDefinitions } = infoFunctions()
 
 //== data
-const tvfab = ref(false)
+// const tvfab = ref(false)
 const wunit = ref(null)
-const wlgame = ref(null)
+// const wlgame = ref(null)
 const itemsPerPage = ref(11)
 // var numPages = 1
 const numItems = ref(12)
@@ -149,7 +149,7 @@ var searchQuery = ref('')
 
 //== emitter-on
 emitter.on('cur-tit', (ctit) => { setTitle(ctit); setInterval(setTitle, oneHour, ctit) })
-emitter.on('cur-app', (capp, from) => { curApp.value = capp})
+emitter.on('cur-app', (capp, from) => { curApp.value = from; console.log(`capp=${capp} from=${from}`) })
 emitter.on('num-items', (x) => numItems.value = x)
 // emitter.on('cur-app', (capp, from) => { curApp.value = capp; console.log(`emitter.on curApp=${curApp.value} from=${from}`) })
 // emitter.on('num-items', (x) => { numItems.value = x; console.log(`emitter.on numItems.value=${x} curApp=${curApp.value}`) })
@@ -158,7 +158,7 @@ emitter.on('win-lost', (x) => { flipShow(x) })
 emitter.on('weight-unit', (x) => { wunit.value = x })
 
 //== main
-console.log(`-ST-MainLayout curApp=${curApp.value} window.location.href=${window.location.href}`)
+console.log(`-ST-MainLayout curApp=${curApp.value} window.location.href=${window.location.href}`, import.meta.env.VITE_BUILD_TAG)
 // console.timeStamp('-ST-MainLayout curApp=${curApp.value}')
 wunit.value = $q.localStorage.getItem('weightUnit')
 if (isIM) {
@@ -177,7 +177,9 @@ const cookieKeys = Object.keys(allCookies)
 audCookies.value = cookieKeys.find(key => /add_|upd_|del_/.test(key)) !== undefined
 
 //== computed
-const compVer = computed(() => { return process.env.VER })
+// import.meta.env.PRODUCT_VER = 'X'
+const compVer = computed(() => { return import.meta.env.VITE_BUILD_TAG })
+// const compVer = computed(() => { return process.env.VER })
 const compNumPages = computed(() => { return Math.ceil(numItems.value / itemsPerPage.value) })
 // const compVer = computed(() => { return process.env.VER })
 const weightUnit = computed(() => {

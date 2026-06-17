@@ -70,7 +70,7 @@ const { chwk1, chwk2, today } = dayFunctions()
 const { gaxios, paxios } = axiosFunctions()
 const { isIM, isDesk, buildApp, palist, $q } = libFunctions()
 
-import InfoDisplay from '../src/components/InfoDisplay'
+import InfoDisplay from '../src/components/InfoDisplay.vue'
 
 //======= variables =========
 var lastClickedP = { key:0 }
@@ -89,8 +89,8 @@ const cols = [
   { required: false, label: '节 目 内 容', align: 'center', name: 'description', field: 'description', sortable: true },
   { required: false, label: 'Subtitle', align: 'center', name: 'subtitle', field: 'subtitle', sortable: true },
 ]
-const visibleColumnsDesk = [cols[1].name, cols[2].name, cols[3].name, cols[4].name]
-const visibleColumnsFone = [cols[1].name, cols[3].name]
+var visibleColumnsDesk = [cols[1].name, cols[2].name, cols[3].name, cols[4].name]
+var visibleColumnsFone = [cols[1].name, cols[3].name]
 const columns = [cols[0], cols[1], cols[2], cols[3], cols[4], cols[5], cols[6], cols[7]]
 // const columns = [cols[0], cols[1], cols[2], cols[3], cols[4]]
 const nRow = ref(20)

@@ -65,9 +65,9 @@
 <script setup>
 import { ref } from 'vue'
 import emitter from 'tiny-emitter/instance'
-import { dayFunctions } from 'src/composables/dayFunctions';
-import { axiosFunctions } from 'src/composables/axiosFunctions'
-import { libFunctions } from 'src/composables/libFunctions'
+import { dayFunctions } from '../src/composables/dayFunctions';
+import { axiosFunctions } from '../src/composables/axiosFunctions'
+import { libFunctions } from '../src/composables/libFunctions'
 const { $q } = libFunctions()
 const opened = ref('')
 const statement = ref({})

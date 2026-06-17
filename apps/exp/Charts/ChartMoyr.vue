@@ -9,7 +9,7 @@ import Chart from 'chart.js/auto'
 import ChartDataLabels from 'chartjs-plugin-datalabels'
 import cfg from './chart-moyr-config.js'
 import { ref, reactive, onMounted } from 'vue'
-import AllButtons from './AllButtons'
+import AllButtons from './AllButtons.vue'
 Chart.register(ChartDataLabels)
 const props = defineProps({
 	data: { type: Array },

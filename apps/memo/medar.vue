@@ -38,21 +38,21 @@
 <script setup>
 import { ref } from 'vue'
 import emitter from 'tiny-emitter/instance'
-import { libFunctions } from 'src/composables/libFunctions'
-import { axiosFunctions } from 'src/composables/axiosFunctions'
-import ConfirmDialog from '../src/components/ConfirmDialog'
-import TxtInput from '../src/components/TxtInput'
-import LnkInput from '../src/components/LnkInput'
-import NotePad from '../src/components/NotePad'
-import DateTimePicker from '../src/components/DateTimePicker'
-import DateTimeIMPicker from '../src/components/DateTimeIMPicker'
-import LayoutHeader from '../src/components/LayoutHeader'
+import { libFunctions } from '../src/composables/libFunctions'
+import { axiosFunctions } from '../src/composables/axiosFunctions'
+import ConfirmDialog from '../src/components/ConfirmDialog.vue'
+import TxtInput from '../src/components/TxtInput.vue'
+import LnkInput from '../src/components/LnkInput.vue'
+import NotePad from '../src/components/NotePad.vue'
+import DateTimePicker from '../src/components/DateTimePicker.vue'
+import DateTimeIMPicker from '../src/components/DateTimeIMPicker.vue'
+import LayoutHeader from '../src/components/LayoutHeader.vue'
 // import LayoutFooter from '../src/components/LayoutFooter'
-import LayoutFooter from '../src/components/LayoutFooter'
-import TxtPad from '../src/components/TxtPad'
+import LayoutFooter from '../src/components/LayoutFooter.vue'
+import TxtPad from '../src/components/TxtPad.vue'
 
 //== data
-const { isDesk, screenwidth } = libFunctions()
+const { isDesk, screenwidth, ENV_DEV } = libFunctions()
 const { paxios, gaxios } = axiosFunctions()
 const opened = ref(false)
 const forReminder = ref(false)
@@ -119,7 +119,7 @@ function lnk () {
 function add () {
   console.log('-fn-add', row.value)
   row.value.swProp = screenwidth/13
-  const path = process.env.API + '/memo/add'
+  const path = ENV_DEV + '/memo/add'
   const data = row.value
   data.link = Array.isArray(row.value.link) ? row.value.link.join('@') : row.value.link
   paxios(path, data)
@@ -127,7 +127,7 @@ function add () {
 }
 function upd () {
   console.log('-fn-upd', row.value)
-  const path = process.env.API + '/memo/upd'
+  const path = ENV_DEV + '/memo/upd'
   const data = {}
   data.swProp = screenwidth/13
   data.id = row.value.id
@@ -147,7 +147,7 @@ function del () {
 }
 function delFromDB () {
 console.log('-fn-del', row.value.id, row.value.tag)
-  const path = process.env.API + '/memo/del/' + row.value.id
+  const path = ENV_DEV + '/memo/del/' + row.value.id
   // const data = row
   // paxios(path, data)
   gaxios(path)

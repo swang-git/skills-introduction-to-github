@@ -3,58 +3,42 @@
   "version": "0.0.1",
   "description": "A Quasar Project",
   "productName": "Quasar App",
-  "author": "Shengli Wang <swang71@comcast.net>",
-  "private": true,
+  "author": "swang-git <swang71@comcast.net>",
   "type": "module",
+  "private": true,
   "scripts": {
-    "lint": "eslint -c ./eslint.config.js \"./src*/**/*.{js,cjs,mjs,vue}\"",
-    "format": "prettier --write \"**/*.{js,vue,scss,html,md,json}\" --ignore-path .gitignore",
-    "test": "echo \"No test specified\" && exit 0",
+    "lint": "oxfmt && oxlint --fix",
+    "lint:check": "oxfmt --check && oxlint",
     "dev": "quasar dev",
     "build": "quasar build",
-    "postinstall": "quasar prepare"
+    "postinstall": "quasar prepare --silent"
   },
   "dependencies": {
-    "@quasar/cli": "^5.0.1",
-    "@quasar/extras": "^1.18.0",
-    "axios": "^1.2.1",
-    "chart.js": "^4.4.8",
-    "chartjs": "^0.3.24",
-    "chartjs-plugin-datalabels": "^2.2.0",
-    "core-js": "^3.49.0",
+    "vue-i18n": "^11.3.0",
     "pinia": "^3.0.1",
+    "@quasar/extras": "^2.0.0",
     "quasar": "^2.20.0",
-    "tiny-emitter": "^2.1.0",
-    "vue": "^3.4.18",
-    "vue-i18n": "^11.0.0",
-    "vue-router": "^4.0.12",
-    "vuex": "^4.1.0"
+    "vue": "^3.5.22",
+    "vue-router": "^5.0.6"
   },
   "devDependencies": {
-    "@eslint/js": "^9.14.0",
-    "@quasar/app-webpack": "^4.4.5",
-    "@vue/eslint-config-prettier": "^10.1.0",
+    "@intlify/unplugin-vue-i18n": "^11.0.0",
+    "oxfmt": "^0.x",
+    "oxlint": "^1.x",
+    "@quasar/app-vite": "^3.0.0-rc.3",
     "autoprefixer": "^10.4.27",
-    "eslint": "^9.14.0",
-    "eslint-plugin-vue": "^9.30.0",
-    "eslint-webpack-plugin": "^4.2.0",
-    "globals": "^15.12.0",
-    "prettier": "^3.3.3"
+    "postcss": "^8.5.8"
   },
-  "browserslist": [
-    "last 10 Chrome versions",
-    "last 10 Firefox versions",
-    "last 4 Edge versions",
-    "last 7 Safari versions",
-    "last 8 Android versions",
-    "last 8 ChromeAndroid versions",
-    "last 8 FirefoxAndroid versions",
-    "last 10 iOS versions",
-    "last 5 Opera versions"
+  "keywords": [
+    "quasar",
+    "quasar-app",
+    "quasar-cli",
+    "quasar-app-vite",
+    "vite",
+    "vue",
+    "vuejs"
   ],
   "engines": {
-    "node": "^28 || ^26 || ^24 || ^22 || ^20 || ^18",
-    "npm": ">= 6.13.4",
-    "yarn": ">= 1.21.1"
+    "node": ">= 26 || ^24 || ^22.12"
   }
 }

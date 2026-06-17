@@ -1,58 +1,50 @@
 {
   "name": "apps",
   "version": "0.0.1",
-  "description": "A Quasar Framework app",
-  "productName": "MyApps",
-  "author": "swang",
+  "description": "A Quasar Project",
+  "productName": "Quasar App",
+  "author": "swang-git <swang71@comcast.net>",
+  "type": "module",
   "private": true,
   "scripts": {
-    "lint": "eslint --ext .js,.vue ./",
-    "test": "echo \"No test specified\" && exit 0"
+    "lint": "oxfmt && oxlint --fix",
+    "lint:check": "oxfmt --check && oxlint",
+    "dev": "quasar dev",
+    "build": "quasar build",
+    "postinstall": "quasar prepare --silent"
   },
   "dependencies": {
-    "@quasar/cli": "^5.0.1",
-    "@quasar/extras": "^1.18.0",
-    "axios": "^0.21.1",
-    "chart.js": "^4.0.1",
-    "chartjs-plugin-datalabels": "^2.0.0",
-    "core-js": "^3.49.0",
+    "@quasar/extras": "^2.0.0",
+    "axios": "^1.18.0",
+    "chart.js": "^4.5.1",
+    "chartjs": "^0.3.24",
+    "chartjs-plugin-datalabels": "^2.2.0",
     "pinia": "^3.0.1",
-    "quasar": "^2.19.3",
-    "stylus": "^0.55.0",
-    "stylus-loader": "3",
+    "quasar": "^2.20.0",
     "tiny-emitter": "^2.1.0",
-    "validator": "^13.6.0",
-    "validators": "^0.3.1",
-    "vue": "^3.5.13",
-    "vue-currency-input": "^2.4.0",
-    "vue-i18n": "^9.1.6",
-    "vue-router": "4",
-    "vuelidate": "^0.7.6",
-    "vuex": "^4.1.0"
+    "vue": "^3.5.22",
+    "vue-i18n": "^11.3.0",
+    "vue-router": "^5.0.6"
   },
   "devDependencies": {
-    "@babel/eslint-parser": "^7.13.14",
-    "@quasar/app-webpack": "^4.4.5",
-    "@vue/compiler-sfc": "^3.0.0-beta.1",
-    "eslint": "^7.14.0",
-    "eslint-config-prettier": "^8.1.0",
-    "eslint-plugin-vue": "^7.0.0",
-    "eslint-webpack-plugin": "^2.4.0"
+    "@intlify/unplugin-vue-i18n": "^11.0.0",
+    "@quasar/app-vite": "^3.0.0-rc.3",
+    "autoprefixer": "^10.4.27",
+    "dotenv": "^17.4.2",
+    "oxfmt": "^0.x",
+    "oxlint": "^1.x",
+    "postcss": "^8.5.8"
   },
-  "browserslist": [
-    "last 10 Chrome versions",
-    "last 10 Firefox versions",
-    "last 4 Edge versions",
-    "last 7 Safari versions",
-    "last 8 Android versions",
-    "last 8 ChromeAndroid versions",
-    "last 8 FirefoxAndroid versions",
-    "last 10 iOS versions",
-    "last 5 Opera versions"
+  "keywords": [
+    "quasar",
+    "quasar-app",
+    "quasar-cli",
+    "quasar-app-vite",
+    "vite",
+    "vue",
+    "vuejs"
   ],
   "engines": {
-    "node": ">= 12.22.1",
-    "npm": ">= 6.13.4",
-    "yarn": ">= 1.21.1"
+    "node": ">= 26 || ^24 || ^22.12"
   }
 }

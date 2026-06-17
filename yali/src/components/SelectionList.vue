@@ -41,7 +41,7 @@
 import emitter from 'tiny-emitter/instance'
 import { ref, computed } from 'vue'
 
-const emit = defineEmits(['selected-option'])
+// const emit = defineEmits(['selected-option'])
 var searchQuery = ref('')
 const cspOptions = ref([])
 const opened = ref(false)
@@ -72,14 +72,14 @@ function setOption (mod, xid) {
   cspId.value = xid
   model = mod
 }
-function selectedOpt (opt) {
-  console.log(`-fn-selectedOpt: model=${model}`, opt)
-  if (opt.sval === -1) {
-    $q.notify({ message: model + '(Add New)' })
-  }
-  emit('selected-option', model, opt)
-  opened.value = false
-}
+// function selectedOpt (opt) {
+//   console.log(`-fn-selectedOpt: model=${model}`, opt)
+//   if (opt.sval === -1) {
+//     $q.notify({ message: model + '(Add New)' })
+//   }
+//   emit('selected-option', model, opt)
+//   opened.value = false
+// }
 defineExpose({ openIt })
 function openIt (icon, mod, opts, xid) {
   // console.log(`-fn-openI-optList`, opts)

@@ -95,22 +95,22 @@
 import { ref, computed, onMounted } from 'vue'
 import emitter from 'tiny-emitter/instance'
 import { libFunctions } from '../src/composables/libFunctions'
-const { buildApp, isDesk, isIPad, fmtcy } = libFunctions()
+const { buildApp, isIPad, fmtcy, ENV_DEV } = libFunctions()
 import { axiosFunctions } from '../src/composables/axiosFunctions'
 const { gaxios } = axiosFunctions()
-import DICSummaryPad from './DICSummaryPad'
-import YearMonthPad from '../src/components/YearMonthPad'
-import CheckingPad from './CheckingPad'
-import InfoDisplay from '../src/components/InfoDisplay'
-import ConfirmDialog from '../src/components/ConfirmDialog'
+import DICSummaryPad from './DICSummaryPad.vue'
+import YearMonthPad from '../src/components/YearMonthPad.vue'
+import CheckingPad from './CheckingPad.vue'
+import InfoDisplay from '../src/components/InfoDisplay.vue'
+import ConfirmDialog from '../src/components/ConfirmDialog.vue'
 
 const refDICSummaryPad = ref(null)
 const refYearMonthPad = ref(null)
 const refCheckingPad = ref(null)
 onMounted(() => {
-  refDICSummaryPad
-  refYearMonthPad
-  refCheckingPad
+  refDICSummaryPad.value = null
+  refYearMonthPad.value = null
+  refCheckingPad.value = null
 })
 const holdings = ref([])
 const accounts = ref([])
@@ -252,7 +252,8 @@ function getDICLists (anu) {
   console.log('-fn-getDICLists()', anu)
   // acctNum.value = anum
   anum.value = anu
-  const path = process.env.API + `/holdings/getDICLists/${bank}/${year}`
+  // const path = process.env.API + `/holdings/getDICLists/${bank}/${year}`
+  const path = ENV_DEV + `/holdings/getDICLists/${bank}/${year}`
   gaxios(path)
 }
 function newYM (yr, mo) {
@@ -306,11 +307,13 @@ function showActivity (a) {
   actvx.sort((a, b) => Math.abs(a.amnt) - Math.abs(b.amnt))
 }
 function getListWithYearMonth () {
-  const path = process.env.API + `/holdings/getHoldings/${bank}/${year}/${month}`
+  // const path = process.env.API + `/holdings/getHoldings/${bank}/${year}/${month}`
+  const path = ENV_DEV + `/holdings/getHoldings/${bank}/${year}/${month}`
   gaxios(path)
 }
 function getHoldings () {
-  const path = process.env.API + `/holdings/getHoldings/${bank}/${year}/${month}`
+  // const path = process.env.API + `/holdings/getHoldings/${bank}/${year}/${month}`
+  const path = ENV_DEV + `/holdings/getHoldings/${bank}/${year}/${month}`
   gaxios(path)
 }
 emitter.on('holdings-getHoldings', (x) => setHoldings(x))

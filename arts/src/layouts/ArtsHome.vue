@@ -59,8 +59,8 @@ import { useRoute, useRouter } from 'vue-router'
 const route = useRoute()
 const $router = useRouter()
 import emitter from 'tiny-emitter/instance'
-import { libFunctions } from 'src/composables/libFunctions'
-import { axiosFunctions } from 'src/composables/axiosFunctions'
+import { libFunctions } from '../../src/composables/libFunctions'
+import { axiosFunctions } from '../../src/composables/axiosFunctions'
 const { gaxios } = axiosFunctions()
 const { isDesk, isFone, isIM, store } = libFunctions()
 
@@ -113,7 +113,8 @@ function goHome () {
 }
 
 function getList () {
-  const path = process.env.API + '/arts/getList'
+  // const path = process.env.API + '/arts/getList'
+  const path = '/arts/getList'
   gaxios(path)
 }
 

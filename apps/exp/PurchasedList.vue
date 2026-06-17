@@ -30,9 +30,9 @@
 <script setup>
 import emitter from 'tiny-emitter/instance'
 import { ref } from 'vue'
-import { libFunctions } from 'src/composables/libFunctions'
-import { axiosFunctions } from 'src/composables/axiosFunctions'
-const { isIM, isDesk } = libFunctions()
+import { libFunctions } from '../src/composables/libFunctions'
+import { axiosFunctions } from '../src/composables/axiosFunctions'
+const { ENV_DEV } = libFunctions()
 const { gaxios } = axiosFunctions()
 const date = ref(null)
 const payeeId = ref(null)
@@ -58,7 +58,8 @@ function setStore (item) {
   else tcosts -= xcost
   totalCosts.value = tcosts.toFixed(2)
   const pyId = item.isStoreSet ? payeeId.value : 0
-  const path = process.env.API + '/expense/setStore/' + item.id + '/' + pyId
+  // const path = process.env.API + '/expense/setStore/' + item.id + '/' + pyId
+  const path = ENV_DEV + '/expense/setStore/' + item.id + '/' + pyId
   const itm = pList.value.find(p => p.itemId == item.itemId)
   itm.isStoreSet = pyId > 0 ? true : false
   itm.payee_id = pyId

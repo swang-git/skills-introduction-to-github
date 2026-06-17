@@ -1,13 +1,20 @@
-import { getCurrentInstance } from 'vue'
-import { libFunctions } from './libFunctions.js'
+// import { getCurrentInstance } from 'vue'
+// import { libFunctions } from './libFunctions.js'
 import emitter from 'tiny-emitter/instance.js'
 // import { utilFunctions } from '../composables/utilFunctions'
+import { useQuasar } from 'quasar'
+import axios from 'axios'
 export function axiosFunctions() {
-  const { $q } = libFunctions()
-  const app = getCurrentInstance()
-  const axios = app.appContext.config.globalProperties.$axios
+  // const { q } = libFunctions()
+  // const app = getCurrentInstance()
+  // const axios = app.appContext.config.globalProperties.$axios
   // const $q = app.appContext.config.globalProperties.$q
+  const $q = useQuasar()
   function gaxios(path) {
+    if (!path || path.includes('undefined')) {
+        console.error('gaxios: invalid path:', path)
+        return
+    }
     let target = null
     const x = path.split('/')
     x.shift()
@@ -18,7 +25,7 @@ export function axiosFunctions() {
     // console.log(`gaxios path=${path}, target=${target}`)
     const pathx = path.replace(/^\/api\/\w+\/(.*)/, "$1")
     console.log(`%cGATH:${pathx}`, "font-size:10px;font-weight:600;color:yellow")
-    
+
     axios.get(path).then((response) => {
       const da = response.data
       console.log(`%cGTGT:${target}(${da.status})`, "font-size:10px;font-weight:600;color:yellow")
@@ -40,7 +47,7 @@ export function axiosFunctions() {
     let target = null
     if (x[0] === 'api') target = x[1] + '-' + x[2]
     else target = x[0] + '-' + x[1]
-    
+
     axios.post(path, data).then((response) => {
       const da = response.data
       console.log(`-XO-CK-paxios ${target} return status=${da.status}`, da)

@@ -66,13 +66,14 @@ const password = ref(null)
 const accept = ref(true)
 const opened = ref(false)
 
-console.log('-ST-LoginAdmin', process.env.API)
+// console.log('-ST-LoginAdmin', process.env.API)
+console.log('-ST-LoginDialog', import.meta.env)
 emitter.on('open-LoginDialog', () => openIt())
 
-if (process.env.API === '/api') {
-  username.value = 'swang71'
-  password.value = 'Ybsjll11'
-}
+// if (process.env.API === '/api') {
+//   username.value = 'swang71'
+//   password.value = 'Ybsjll11'
+// }
 function openIt () {
   opened.value = true
 }
@@ -103,7 +104,8 @@ function login () {
   // inData.username = username.value
   inData.username = username.value
   inData.password = password.value
-  const path = process.env.API + '/apps/loginAdmin'
+  // const path = process.env.API + '/apps/loginAdmin'
+  const path = '/apps/loginAdmin'
   paxios(path, inData)
 }
 function onReset () {
@@ -124,7 +126,8 @@ function setLogin (da) {
 }
 function add () {
   console.log("-fn-add")
-  const path = process.env.API + '/users/add'
+  // const path = process.env.API + '/users/add'
+  const path = '/users/add'
   const inData = {}
   inData.name = name.value
   inData.usertype = usertype.value

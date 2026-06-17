@@ -142,14 +142,14 @@ import emitter from 'tiny-emitter/instance'
 import { libFunctions } from '../src/composables/libFunctions'
 import { axiosFunctions } from '../src/composables/axiosFunctions'
 import { cssFunctions } from '../src/composables/cssFunctions'
-import ChartsProxy from '../src/components/ChartsProxy'
+import ChartsProxy from '../src/components/ChartsProxy.vue'
 // import ChartPortfolio from './ChartPortfolio'
 // import ChartBOA from './ChartBOA'
 // import ChartChase from './ChartChase'
 
 const { gaxios } = axiosFunctions()
 const { getLineBackgroundByMonth } = cssFunctions()
-const { buildApp, fmtcy, palist, isDesk } = libFunctions()
+const { buildApp, fmtcy, palist, isDesk, ENV_DEV } = libFunctions()
 //== data sections
 // const openPChart = ref(false)
 // const openBChart = ref(false)
@@ -355,7 +355,8 @@ function getAccountHoldings (a) {
 function getHoldings (e) {
   month.value = e.month
   // const curHideIt = !e.hideIt
-  const path = process.env.API + '/bankstatement/getHoldings/' + e.bank + '/' + e.year + '/' + e.month
+  // const path = process.env.API + '/bankstatement/getHoldings/' + e.bank + '/' + e.year + '/' + e.month
+  const path = ENV_DEV + '/bankstatement/getHoldings/' + e.bank + '/' + e.year + '/' + e.month
   // e.hideIt = curHideIt
   // if (!e.hideIt) axiosGet(args)
   gaxios(path)
@@ -430,7 +431,7 @@ function showDetails (e, i) {
   if (e.bank != 'NAC' && e.bank != 'BKG') getAllHoldings(e, i)
   if (e.bank == 'NAC' || e.bank == 'BKG') return
   if (e.bank === 'Fidelity') return
-  const path = process.env.API + '/bankstatement/getDetails/' + e.bank + '/' + e.year + '/' + e.month
+  const path = ENV_DEV + '/bankstatement/getDetails/' + e.bank + '/' + e.year + '/' + e.month
   if (!e.hideIt) gaxios(path)
 }
 emitter.on('bankstatement-getList', (da) => setList(da))
@@ -468,7 +469,8 @@ function setDetails(da) {
   savactvs.value = da.savactvs
 }
 function getList () {
-  const path = process.env.API + '/bankstatement/getList'
+  // const path = process.env.API + '/bankstatement/getList'
+  const path = ENV_DEV + '/bankstatement/getList'
   gaxios(path)
 }
 // function setNumItemsPerPage (pageNumber) {

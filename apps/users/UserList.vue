@@ -50,8 +50,8 @@ import { ref, computed, onMounted } from 'vue'
 import emitter from 'tiny-emitter/instance'
 import { axiosFunctions } from '../src/composables/axiosFunctions'
 const { gaxios, paxios } = axiosFunctions()
-import TxtInput from '../src/components/TxtInput'
-import ConfirmDialog from '../src/components/ConfirmDialog'
+import TxtInput from '../src/components/TxtInput.vue'
+import ConfirmDialog from '../src/components/ConfirmDialog.vue'
 const opened = ref(false)
 const rows = ref([])
 const rowId = ref(null)

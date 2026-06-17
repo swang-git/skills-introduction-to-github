@@ -35,7 +35,7 @@ const { chwk1, chwk2, today } = dayFunctions()
 const { gaxios, paxios } = axiosFunctions()
 const { isIM, isDesk, buildApp, dalist, $q } = libFunctions()
 
-import NumInput from '../src/components/NumInput'
+import NumInput from '../src/components/NumInput.vue'
 
 console.log(`-ST-ChnYears`)
 

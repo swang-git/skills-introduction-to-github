@@ -75,15 +75,15 @@
 import { ref, computed } from 'vue'
 import emitter from 'tiny-emitter/instance'
 import { libFunctions } from '../composables/libFunctions.js'
-const { isDesk } = libFunctions()
+const { isDesk, ENV_DEV } = libFunctions()
 import { axiosFunctions } from '../composables/axiosFunctions.js'
 const { gaxios } = axiosFunctions()
-import TxtPad from '../../src/components/TxtPad'
-import ConfirmDialog from '../../src/components/ConfirmDialog'
+import TxtPad from '../../src/components/TxtPad.vue'
+import ConfirmDialog from '../../src/components/ConfirmDialog.vue'
 
-import { useNumPadStore } from '../../src/stores/numPadStore'
+import { useNumPadStore } from '../../src/stores/numPadStore.js'
 const numPadStore = useNumPadStore()
-import { useAdminStore } from '../../src/stores/adminStore'
+import { useAdminStore } from '../../src/stores/adminStore.js'
 const admin = useAdminStore()
 emitter.on('pix-pidx', (idx) => { pidx.value = idx % piclst.value.length; console.log(`pidx=${pidx.value}`); getPic() })
 
@@ -131,7 +131,8 @@ function undoRemovedDupFile () {
   let fnm = piclst.value[idx]
   removedPidx.value = idx
   console.log(`-fn-undoRemovedDupFile pidx=${idx} fnm=${fnm}`)
-  const path = process.env.API + '/yali/undoRemovedDupFile/' + fnm
+  // const path = process.env.API + '/yali/undoRemovedDupFile/' + fnm
+  const path = ENV_DEV + '/yali/undoRemovedDupFile/' + fnm
   gaxios(path)
 }
 
@@ -148,7 +149,8 @@ function removeDupFile () {
   removedPidx.value = idx
   // console.log(`-fn-removeDupFile action=${action} pidx=${idx} fnm=${fnm}`)
   console.log(`-fn-removeDupFile pidx=${idx} fnm=${fnm}`)
-  const path = process.env.API + '/yali/removeDupFile/' + fnm
+  // const path = process.env.API + '/yali/removeDupFile/' + fnm
+  const path = ENV_DEV + '/yali/removeDupFile/' + fnm
   gaxios(path)
 }
 
@@ -165,7 +167,8 @@ function getBGimg () {
 }
 const pageBackground = computed(() => {
   return {
-    backgroundImage: 'url(' + process.env.API + "/yali/icons/" +  getBGimg(),
+    // backgroundImage: 'url(' + process.env.API + "/yali/icons/" +  getBGimg(),
+    backgroundImage: 'url(' + ENV_DEV + "/yali/icons/" +  getBGimg(),
     backgroundSize: 'cover',
     backgroundPosition: 'center',
     backgroundRepeat: 'no-repeat',
@@ -241,7 +244,8 @@ function getPic() {
   // console.log(`-fn-getPic() pidx=${pidx.value}` )
   // let picdir = isDesk ? '/pics/yali/' : '/pics/yaliIM/'
   let picdir = isDesk ? '/pics/yali/' : '/pics/yali/'
-  return process.env.API + picdir + piclst.value[pidx.value]
+  // return process.env.API + picdir + piclst.value[pidx.value]
+  return ENV_DEV + picdir + piclst.value[pidx.value]
 }
 // const getMeta = (url, cb) => {
 //   const img = new Image();

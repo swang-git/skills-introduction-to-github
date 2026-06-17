@@ -140,15 +140,15 @@
 <script setup>
 import { ref } from 'vue'
 import emitter from 'tiny-emitter/instance'
-import gludar from './gludar'
-import ChartProxy from './ChartProxy'
+import gludar from './gludar.vue'
+import ChartProxy from './ChartProxy.vue'
 
 import { axiosFunctions } from '../src/composables/axiosFunctions'
 const { gaxios } = axiosFunctions()
 import { dayFunctions } from '../src/composables/dayFunctions'
 const { today, getDateGap, between, chwk2 } = dayFunctions()
 import { libFunctions } from '../src/composables/libFunctions'
-const { isDesk, isIM, buildApp, palist, dalist, $q } = libFunctions()
+const { isDesk, isIM, buildApp, palist, dalist, $q, ENV_DEV } = libFunctions()
 
 //== data sections
 const fabOpen = ref(true)
@@ -172,7 +172,7 @@ const foOpt = ref([])
 const separator = ref('cell')
 const faVal = ref(null)
 const engVer = ref(true)
-const visibleColumnsDesk = ['datetime', 'week', 'glucose', 'weight', 'BMI', 'food', 'a1cp']
+var visibleColumnsDesk = ['datetime', 'week', 'glucose', 'weight', 'BMI', 'food', 'a1cp']
 var visibleColumnsFone = ['datetime', "week", 'glucose', 'weight', 'a1cp']
 // if (engVer.value) visibleColumnsFone = ['datetime', 'weekE', 'glucose', 'weight', 'a1cp']
 // else visibleColumnsFone = ['datetime', 'weekC', 'glucose', 'weight', 'a1cp']
@@ -500,7 +500,7 @@ function showDar (row, act) {
   emitter.emit('open-gludar', clone, act, exOpt.value, brOpt.value, luOpt.value, diOpt.value, drOpt.value, frOpt.value, foOpt.value)
 }
 function getList () {
-  const path = process.env.API + "/glucosecheck/getList"
+  const path = ENV_DEV + "/glucosecheck/getList"
   gaxios(path)
 }
 function convToEngWeek(wk) {

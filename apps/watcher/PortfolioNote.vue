@@ -49,8 +49,8 @@
 <script setup>
 import { ref } from 'vue'
 import emitter from 'tiny-emitter/instance'
-import ConfirmDialog from '../src/components/ConfirmDialog'
-import SelOptionsWithSearch from '../src/components/SelOptionsWithSearch'
+import ConfirmDialog from '../src/components/ConfirmDialog.vue'
+import SelOptionsWithSearch from '../src/components/SelOptionsWithSearch.vue'
 
 import { axiosFunctions } from '../src/composables/axiosFunctions'
 import { libFunctions } from '../src/composables/libFunctions'

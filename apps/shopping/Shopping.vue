@@ -62,13 +62,13 @@ import { ref, computed } from 'vue'
 import { libFunctions } from '../src/composables/libFunctions'
 import { axiosFunctions } from '../src/composables/axiosFunctions'
 const { gaxios, paxios } = axiosFunctions()
-const { buildApp, isDesk, isIM, palist, $q } = libFunctions()
+const { buildApp, ENV_DEV, isIM, palist, $q } = libFunctions()
 import emitter from 'tiny-emitter/instance'
-import PUCPad from './PUCPad'
-import UniPad from './UniPad'
-import TaxPad from './TaxPad'
-import SelOptPad from '../src/components/SelOptPad'
-import StoreList from './StoreList'
+import PUCPad from './PUCPad.vue'
+import UniPad from './UniPad.vue'
+import TaxPad from './TaxPad.vue'
+import SelOptPad from '../src/components/SelOptPad.vue'
+import StoreList from './StoreList.vue'
 
 console.log('-ST-Shopping')
 buildApp('采购记录', 'Shopping')
@@ -260,7 +260,7 @@ function setList (da) {
   }
 }
 function getList () {
-  const path = process.env.API + '/shopping/getThisDatePurchases/' + date.value
+  const path = ENV_DEV + '/shopping/getThisDatePurchases/' + date.value
   gaxios(path)
 }
 emitter.on('shopping-getPurchasedDate', (da) => {
@@ -274,7 +274,7 @@ emitter.on('shopping-getPurchasedDate', (da) => {
   }
 })
 function getPurchasedDate () {
-  const path = process.env.API + '/shopping/getPurchasedDate/' + selectedItemId.value
+  const path = ENV_DEV + '/shopping/getPurchasedDate/' + selectedItemId.value
   gaxios(path)
 }
 function updDate (d) {
@@ -313,14 +313,14 @@ function delPurchasedItemDialog (item) {
 }
 function updPurchasedItem (item) {
   // console.log('-dg-updPurchasesItem', item)
-  const path = process.env.API + '/shopping/addPurchasedItem'
+  const path = ENV_DEV + '/shopping/addPurchasedItem'
   paxios(path, item)
 }
 var candidateItem = null
 function delPurchasedItem (item) {
   item.status = 'D'
   // console.log('-dg-delPurchasedItem', item)
-  const path = process.env.API + '/shopping/delPurchasedItem/' + item.id
+  const path = ENV_DEV + '/shopping/delPurchasedItem/' + item.id
   gaxios(path)
   candidateItem = item
 }

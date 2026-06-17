@@ -12,10 +12,10 @@
 <script setup>
 import { ref, createApp } from 'vue'
 import emitter from 'tiny-emitter/instance'
-import { libFunctions } from 'src/composables/libFunctions'
-import WatcherCharts from '../../watcher/charts'
-import ChartsPortfolio from '../../bankstatement/ChartsPortfolio'
-import ChartsGlucose from '../../glucosecheck/ChartClv'
+import { libFunctions } from '../composables/libFunctions'
+import WatcherCharts from '../../watcher/charts.vue'
+import ChartsPortfolio from '../../bankstatement/ChartsPortfolio.vue'
+import ChartsGlucose from '../../glucosecheck/ChartClv.vue'
 const props = defineProps({
   chdata: { type: Array },
   chname: { type: String },

@@ -69,19 +69,23 @@
   <YearMonthPad @year-month="setYM" />
 </template>
 <script setup>
+
+// const API_BASE = import.meta.env.API || '/api'
+
 import { ref, computed } from 'vue'
+// Define getLabel before template uses it
 import emitter from 'tiny-emitter/instance'
 import { axiosFunctions } from '../../src/composables/axiosFunctions.js'
 const { gaxios } = axiosFunctions()
 import { libFunctions } from '../../src/composables/libFunctions.js'
 const { isIM, buildApp } = libFunctions()
-import PicDialog from '../pages/PicDialog'
-import RoundButton from '../../src/components/RoundButton'
-import YearMonthPad from '../../src/components/YearMonthPad'
+import PicDialog from '../pages/PicDialog.vue'
+import RoundButton from '../../src/components/RoundButton.vue'
+import YearMonthPad from '../../src/components/YearMonthPad.vue'
 
-import { useNumPadStore } from '../../src/stores/numPadStore'
+import { useNumPadStore } from '../../src/stores/numPadStore.js'
 const numPadStore = useNumPadStore()
-import { useAdminStore } from '../../src/stores/adminStore'
+import { useAdminStore } from '../../src/stores/adminStore.js'
 const admin = useAdminStore()
 emitter.on('jump-to-page', (page) => { jumpTo(page) })
 emitter.on('per-page', (prpg) => { perPage.value = 0; perPage.value = prpg; data.value=[]; getPages(1, perPage.value) })
@@ -114,7 +118,7 @@ console.log(`-ST-yali hostname=${window.location.hostname} href=${window.locatio
 
 emitter.on('yali-getPixByYM', (x) => setPixByYM(x))
 
-// const compYM = computed(() => { return ym.value }) 
+// const compYM = computed(() => { return ym.value })
 
 function getPrevYM () {
   [yex.value, yue.value] = [false, true]
@@ -271,7 +275,8 @@ function showFullImage(idx) {
 
 function getThumbnailURL(p) {
   let picdir = isIM ? '/pics/yali/' : '/pics/yali/'
-  let turl = process.env.API + picdir + 'thumbnails/' + p
+  // let turl = process.env.API + picdir + 'thumbnails/' + p
+  let turl = picdir + 'thumbnails/' + p
   // console.log(`thumbnaile.url=${turl}`)
   return turl
 }
@@ -282,7 +287,10 @@ function getPages(cpage, ppage) {
     console.log(`already reached the end of pages cpage=${cpage} > lastPage, return ...`)
     return
   }
-  const path = process.env.API + '/yali/getPages/' + cpage + '/' + ppage
+  // const path = process.env.API + '/yali/getPages/' + cpage + '/' + ppage
+  // const path = `${API_BASE}` + '/yali/getPages/' + cpage + '/' + ppage
+  // const path = import.meta.env.API + '/yali/getPages/' + cpage + '/' + ppage
+  const path = '/yali/getPages/' + cpage + '/' + ppage
   gaxios(path)
 }
 
@@ -303,6 +311,7 @@ function setPages(da) {
   ym.value = da.ym
   console.log(`years:`, years)
   console.log(`yms:`, yms)
+  console.log(`data:`, data.value)
 //   js: assuming a sorted array: a=['2018.5', '2018.11', '2019.8', '2019.11', '2021.5', '2022.11']. how to get an item in a cloest to ym='2019.10' (including the same one)
 }
 </script>

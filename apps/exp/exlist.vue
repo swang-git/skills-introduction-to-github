@@ -64,27 +64,27 @@
 </div>
 </template>
 <script setup>
-import { ref, reactive, computed, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 // import { dom } from 'quasar'
 // const { height, width } = dom
 import emitter from 'tiny-emitter/instance'
 import { Constants } from '../src/config.js'
-import ExpDetails from '../src/components/ExpDetails'
-import exdar from './exdar'
-import PurchasedList from './PurchasedList'
-import CCardReconcileSheet from './CCardReconcileSheet'
-import GiftCardBalanceSheet from './GiftCardBalanceSheet'
-import ScoreDisplay from './ScoreDisplay'
-import  ChartsProxy1 from './Charts/ChartsProxy1'
-import  ChartsProxy2 from './Charts/ChartsProxy2'
-import  ChartsProxy3 from './Charts/ChartsProxy3'
-import  ExpDetailsPad from '../src/components/ExpDetailsPad'
+import ExpDetails from '../src/components/ExpDetails.vue'
+import exdar from './exdar.vue'
+import PurchasedList from './PurchasedList.vue'
+import CCardReconcileSheet from './CCardReconcileSheet.vue'
+import GiftCardBalanceSheet from './GiftCardBalanceSheet.vue'
+import ScoreDisplay from './ScoreDisplay.vue'
+import  ChartsProxy1 from './Charts/ChartsProxy1.vue'
+import  ChartsProxy2 from './Charts/ChartsProxy2.vue'
+import  ChartsProxy3 from './Charts/ChartsProxy3.vue'
+import  ExpDetailsPad from '../src/components/ExpDetailsPad.vue'
 import { libFunctions } from '../src/composables/libFunctions'
 import { axiosFunctions } from '../src/composables/axiosFunctions'
 import { dayFunctions } from '../src/composables/dayFunctions'
 
 //== data
-const { isIM, isDesk, isFone, buildApp, fmtcy, dalist, palist, $q, screenheight, screenwidth, iPhone17 } = libFunctions()
+const { isIM, isDesk, buildApp, fmtcy, dalist, palist, $q, screenheight, screenwidth, ENV_DEV } = libFunctions()
 const { gaxios, paxios } = axiosFunctions()
 const { today, getFutureDate } = dayFunctions()
 
@@ -99,7 +99,9 @@ const cookyExpires = {expires:'1d 2h 3m 4s'}
 const year = ref(today().year())
 const yearReg = ref(null)
 const month = ref(today().yyyymm())
-const futureDate = ref(getFutureDate(Constants.PLUS_DAYS))
+// const futureDate = ref(getFutureDate(Constants.PLUS_DAYS))
+// const futureDate = ref(getFutureDate(31))
+const futureDate = ref(null)
 const scoreId = ref(0)
 const purchaselst = ref([])
 const dats = ref([])
@@ -118,7 +120,7 @@ const visibleColumnsDesk = ref([col(1).name,col(2).name,col(3).name,col(4).name,
 // const visibleColumnsFone = ref([col(1).name,col(2).name,col(3).name,col(5).name])
 const visibleColumnsFone = ref([col(1).name,col(2).name,col(5).name])
 const columns = ref([col(0), col(1), col(2), col(3), col(4), col(5)])
-const baseHeight = 6
+// const baseHeight = 6
 // const domHeight = ref(baseHeight)
 
 console.log(`-ST-exlist screenheight=${screenheight} screewidth=${screenwidth} iPhone17`)
@@ -175,13 +177,15 @@ function getAudClass (p) {
   }
 }
 function checkBalance () {
-  const path = process.env.API + '/exp/checkBalance/9'
+  // const path = process.env.API + '/exp/checkBalance/9'
+  const path = ENV_DEV + '/exp/checkBalance/9'
   gaxios(path)
 }
 function showGolfSores (rw) {
   clickedRow.value = rw
   console.log(`-FN-showGolfScores`, clickedRow.value)
-  const path = process.env.API + '/exp/getScoreId'
+  // const path = process.env.API + '/exp/getScoreId'
+  const path = ENV_DEV + '/exp/getScoreId'
   const data = { courseId: rw.payeId, playerId: rw.user_id, teetime: rw.date }
   paxios(path, data)
 }
@@ -189,7 +193,8 @@ function showChart (ymc) {
   emitter.emit('open-ChartsProxy1', 'cats')
 }
 function testDB () {
-  const path = process.env.API + '/exp/testDB/' + '2022-02-16 13:00/15/55555'
+  // const path = process.env.API + '/exp/testDB/' + '2022-02-16 13:00/15/55555'
+  const path = ENV_DEV + '/exp/testDB/' + '2022-02-16 13:00/15/55555'
   gaxios(path)
 }
 function col(idx) {
@@ -350,12 +355,14 @@ function showDetailsInExp(p) {
     // console.log(`-fn-showDetailsInExp -CK- row.date=${row.date}`, typeof row.date)
     const date = row.date.yyyymmdd()
     const payeId = row.payeId
-    const path = process.env.API + '/exp/getPurchasedList/' + date + '/' + payeId
+    // const path = process.env.API + '/exp/getPurchasedList/' + date + '/' + payeId
+    const path = ENV_DEV + '/exp/getPurchasedList/' + date + '/' + payeId
     gaxios(path)
   }
   scoreId.value = 0
   if (row.cats === 'Golf' && row.subc === 'Play') {
-    const path = process.env.API + '/exp/getScoreId'
+    // const path = process.env.API + '/exp/getScoreId'
+    const path = ENV_DEV + '/exp/getScoreId'
     const data = { courseId: row.payeId, playerId: row.user_id, teetime: row.date }
     paxios(path, data)
   }
@@ -368,7 +375,8 @@ function showDetailsInExp(p) {
 function getScore() {
   console.log('-fn-getScore', scoreId.value)
   const row = clickedRow.value
-  const path = process.env.API + '/exp/getScore'
+  // const path = process.env.API + '/exp/getScore'
+  const path = ENV_DEV + '/exp/getScore'
   const data = { playerId:row.user_id, scoreId:scoreId.value }
   paxios(path, data)
 }
@@ -422,7 +430,8 @@ function getCreditCardSpendings () {
   const startDay = bdays.split(' ~ ')[0]
   const endDay = bdays.split(' ~ ')[1]
   // console.log(`-CK-getCreditCardSpendings bdays=${bdays} startDay=${startDay} endDay=${endDay} e.date=${e.date}`)
-  const path = process.env.API + '/exp/getCreditCardSpendings/' + startDay + '/' + endDay + '/' + e.date
+  // const path = process.env.API + '/exp/getCreditCardSpendings/' + startDay + '/' + endDay + '/' + e.date
+  const path = ENV_DEV + '/exp/getCreditCardSpendings/' + startDay + '/' + endDay + '/' + e.date
   ccardPayment = parseFloat(e.unip)
   ccardDueDay = e.date
   gaxios(path)
@@ -452,8 +461,9 @@ function setPurchasedList (plst) {
   purchaselst.value = plst
 }
 function getList () {
-  console.log(`-fn-getList process.env.API=${process.env.API}`)
-  const path = process.env.API + '/exp/getList'
+  // console.log(`-fn-getList process.env.API=${process.env.API}`)
+  // const path = process.env.API + '/exp/getList'
+  const path = ENV_DEV + '/exp/getList'
   gaxios(path)
 }
 function setList (da) {
@@ -513,8 +523,10 @@ function setList (da) {
 //   }
 // }
 function setFutureDate () {
-  if (futureDate.value === getFutureDate(Constants.PLUS_DAYS)) futureDate.value = getFutureDate(365 * 10)
-  else futureDate = getFutureDate(Constants.PLUS_DAYS)
+  // if (futureDate.value === getFutureDate(Constants.PLUS_DAYS)) futureDate.value = getFutureDate(365 * 10)
+  // else futureDate = getFutureDate(Constants.PLUS_DAYS)
+  if (futureDate.value === getFutureDate(31)) futureDate.value = getFutureDate(365 * 10)
+  else futureDate.value = getFutureDate(31)
 }
 
 const loadingTime = computed(() => { return ((new Date().getTime() - chkspeed) / 1000).toFixed(1) })
