@@ -1,5 +1,6 @@
 <template>
-<q-page class="flex flex-center" style="background-image:url('https://cdn.quasar.dev/img/material.png')">
+<!-- <q-page class="flex flex-center" style="background-image:url('https://cdn.quasar.dev/img/material.png')"> -->
+<q-page class="flex flex-center" :style="getBackgroundImg()">
   <!-- <transition appear enter-active-class="animated flipInY" style="animation-duration:5s;animation-delay:0.5s"> -->
   <!-- <transition appear enter-active-class="animated fadeIn" style="animation-duration:5s;animation-delay:0.5s"> -->
   <!-- <transition appear enter-active-class="animated bounceIn" style="animation-duration:5s;animation-delay:0.5s"> -->
@@ -186,18 +187,16 @@
 import { ref, computed } from 'vue'
 import { useQuasar } from 'quasar'
 import { useRouter } from 'vue-router'
-// import { useStore } from 'vuex'
-import emitter from 'tiny-emitter/instance'
-import { axiosFunctions } from 'src/composables/axiosFunctions'
-import { libFunctions } from 'src/composables/libFunctions'
-import RoundButton from '../components/RoundButton'
-import LoginDialog  from './LoginDialog'
-// import Holidays from 'src/components/HolidayDialog'
-import DeviceType from 'src/components/DeviceType'
-import PlatformDataPad from '../components/PlatformDataPad'
+import emitter from "tiny-emitter/instance"
+import { axiosFunctions } from '../../src/composables/axiosFunctions'
+import { libFunctions } from '../../src/composables/libFunctions'
+import RoundButton from '../../src/components/RoundButton.vue'
+import LoginDialog  from '../../src/pages/LoginDialog.vue'
+import DeviceType from '../../src/components/DeviceType.vue'
+import PlatformDataPad from '../../src/components/PlatformDataPad.vue'
 
 const { gaxios } = axiosFunctions()
-const { store, isIM, SysAdmin, PGCsAdmin, JZsAdmin, golfUserType } = libFunctions()
+const { store, isIM, SysAdmin, PGCsAdmin, JZsAdmin, ENV_API } = libFunctions()
 // const store = useStore()
 const router = useRouter()
 const q = useQuasar()
@@ -217,14 +216,24 @@ getPlayerCount()
 // emitter.on('golf-logout', () => golf_usertype = null)
 emitter.on('golf-getPlayerCount', (x) => {mcount.value = x.mcnt;fcount.value = x.fcnt})
 
-const compVer = computed(() => { return process.env.VER })
+const compVer = computed(() => { return import.meta.env.VITE_BUILD_TAG })
 
+function getBackgroundImg () { 
+  return {
+      // backgroundImage: 'url("' + ENV_API + '/golf/icons/bg-img-purple.png"' + ')',
+      backgroundImage: 'url("' + ENV_API + '/golf/icons/material.png"' + ')',
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
+      backgroundRepeat: 'no-repeat',
+      height: '550px',
+    }
+}
 function showSysInfo () { 
   // console.log(`-fn-showSysInfo ${compVER.value}`)
   refPlatformDataPad.value.openIt()
 }
 function getPlayerCount () {
-  const path = process.env.API + '/golf/getPlayerCount'
+  const path = ENV_API + '/golf/getPlayerCount'
   gaxios(path)
 }
 function openApp(app) {
@@ -234,7 +243,7 @@ function openApp(app) {
 }
 //emitter.on('golf-logout', () => golfUserType.value = null)
 function logout () {
-  const path = process.env.API + '/golf/logout'
+  const path = ENV_API + '/golf/logout'
   localStorage.setItem('usertype', null)
   store.usertype = null
   //emitter.emit('golf-usertype', null)
@@ -260,7 +269,7 @@ function showHolidays () {
 function showPGCRules () {
   // console.log('-fn-showPGCRules')
   const gameId = 0 // 总则 1=1st tournament rule, 2=2nd tournament rule, etc.
-  const path = process.env.API + '/golf/getPGCRules/' + gameId
+  const path = ENV_API + '/golf/getPGCRules/' + gameId
   gaxios(path)
 }
 </script>

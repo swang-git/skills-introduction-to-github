@@ -2,8 +2,13 @@
 // https://v2.quasar.dev/quasar-cli-vite/quasar-config-file
 
 import { defineConfig } from '#q-app'
+// import dotenv from 'dotenv'
+// import { resolve } from 'path'
 
 export default defineConfig(ctx => {
+  // load .env file manually
+  // dotenv.config({ path: resolve(process.cwd(), '.env')})
+  console.log('quasar.config.js starting ...')
   return {
     // https://v2.quasar.dev/quasar-cli-vite/prefetch-feature
     // preFetch: true,
@@ -32,6 +37,12 @@ export default defineConfig(ctx => {
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-file#build
     build: {
+      base: './',
+      env: {
+        BUILD_VER: import.meta.env.VITE_BUILD_VER || '1.1.0'
+        // API: ctx.dev ? '' : '/api',
+        // VER: process.env.PRODUCT_VER || '1.0'
+      },
       target: {
         // browser: 'baseline-widely-available',
         // node: 'node22'
@@ -40,11 +51,12 @@ export default defineConfig(ctx => {
       // https://v2.quasar.dev/quasar-cli-vite/page-routing-with-vue-router#filename-based-routing
       // filenameBasedRouting: true,
 
-      vueRouterMode: 'hash', // available values: 'hash', 'history'
+      vueRouterMode: 'history', // available values: 'hash', 'history'
       // vueRouterBase,
       // vueDevtools,
-
-      // publicPath: '/',
+      // publicPath: '/' + (process.env.PRODUCT_NAME  === undefined ? 'apps' : process.env.PRODUCT_NAME), // this will be injected into index.html
+      // publicPath: '/' + (import.meta.env.PROD === false ? 'apps' : import.meta.env.PROD ), // this will be injected into index.html
+      publicPath: '/golf/',
       // define: {},
       // defineEnv: {}
       // ignorePublicFolder: true,
@@ -77,7 +89,16 @@ export default defineConfig(ctx => {
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-file#devserver
     devServer: {
       // https: true,
-      open: true // opens browser window automatically
+      open: true, // opens browser window automatically
+      port: ctx.mode.spa ? '8080' : (ctx.mode.pwa ? 9080 : 9090),
+      proxy: {
+         '/api': {
+          // target: 'http://192.168.1.107', 
+          target: 'http://devx',  // Your Fedora backend
+          changeOrigin: true,
+          rewrite: (path) => path.replace(/^\/api/, '')  // Only if backend doesn't expect /api
+        }
+      }
     },
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-file#framework
@@ -95,7 +116,7 @@ export default defineConfig(ctx => {
       // directives: [],
 
       // Quasar plugins
-      plugins: []
+      plugins: ['LocalStorage', 'Notify', 'Dialog', 'Cookies']
     },
 
     // animations: 'all', // --- includes all animations
@@ -189,7 +210,7 @@ export default defineConfig(ctx => {
       builder: {
         // https://www.electron.build/configuration
 
-        appId: 'golf'
+        appId: 'apps'
       }
     },
 

@@ -75,7 +75,7 @@
 import { ref, computed } from 'vue'
 import emitter from 'tiny-emitter/instance'
 import { libFunctions } from '../composables/libFunctions.js'
-const { isDesk, ENV_DEV } = libFunctions()
+const { isDesk, DEV_API } = libFunctions()
 import { axiosFunctions } from '../composables/axiosFunctions.js'
 const { gaxios } = axiosFunctions()
 import TxtPad from '../../src/components/TxtPad.vue'
@@ -85,7 +85,7 @@ import { useNumPadStore } from '../../src/stores/numPadStore.js'
 const numPadStore = useNumPadStore()
 import { useAdminStore } from '../../src/stores/adminStore.js'
 const admin = useAdminStore()
-emitter.on('pix-pidx', (idx) => { pidx.value = idx % piclst.value.length; console.log(`pidx=${pidx.value}`); getPic() })
+emitter.on('pix-pidx', (idx) => { pidx.value = idx%piclst.value.length; console.log(`pidx=${pidx.value}`); getPic() })
 
 const removedPidx = ref(-1)
 const opened = ref(false)
@@ -132,7 +132,7 @@ function undoRemovedDupFile () {
   removedPidx.value = idx
   console.log(`-fn-undoRemovedDupFile pidx=${idx} fnm=${fnm}`)
   // const path = process.env.API + '/yali/undoRemovedDupFile/' + fnm
-  const path = ENV_DEV + '/yali/undoRemovedDupFile/' + fnm
+  const path = DEV_API + '/yali/undoRemovedDupFile/' + fnm
   gaxios(path)
 }
 
@@ -150,25 +150,25 @@ function removeDupFile () {
   // console.log(`-fn-removeDupFile action=${action} pidx=${idx} fnm=${fnm}`)
   console.log(`-fn-removeDupFile pidx=${idx} fnm=${fnm}`)
   // const path = process.env.API + '/yali/removeDupFile/' + fnm
-  const path = ENV_DEV + '/yali/removeDupFile/' + fnm
+  const path = DEV_API + '/yali/removeDupFile/' + fnm
   gaxios(path)
 }
 
 function getBGimg () {
   let idx = pidx.value % 7
-  let istr0 = "bg-img-purple.png" + ')' 
-  let istr1 = "bg-img-black.png" + ')' 
-  let istr2 = "bg-img-beige.png" + ')' 
-  let istr3 = "bg-img-white.png" + ')' 
-  let istr4 = "bg-img-pink.png" + ')' 
-  let istr5 = "bg-img-grey.png" + ')' 
-  let istr6 = "bg-img-gold.png" + ')' 
+  let istr0 = "bg-img-purple.png" + ')'
+  let istr1 = "bg-img-black.png" + ')'
+  let istr2 = "bg-img-beige.png" + ')'
+  let istr3 = "bg-img-white.png" + ')'
+  let istr4 = "bg-img-pink.png" + ')'
+  let istr5 = "bg-img-grey.png" + ')'
+  let istr6 = "bg-img-gold.png" + ')'
   return idx==0 ? istr0 : idx==1 ? istr1 : idx==2 ? istr2 : idx==3 ? istr3 : idx==4 ? istr4 : idx==5 ? istr5 : istr6
 }
 const pageBackground = computed(() => {
   return {
     // backgroundImage: 'url(' + process.env.API + "/yali/icons/" +  getBGimg(),
-    backgroundImage: 'url(' + ENV_DEV + "/yali/icons/" +  getBGimg(),
+    backgroundImage: 'url(' + DEV_API + "/yali/icons/" +  getBGimg(),
     backgroundSize: 'cover',
     backgroundPosition: 'center',
     backgroundRepeat: 'no-repeat',
@@ -178,7 +178,6 @@ const pageBackground = computed(() => {
 
 function getStyle() {
   let trans = "left: 50%; top: 50%; transform: translate(-50%, -50%)"
-  // let bgimg = "backgroundImage: url(" + "'/api/yali/icons/bg-img-01.png'" + ")"
   if (!isDesk) return trans // + ';' + bgimg
 
   let idx = pidx.value
@@ -245,7 +244,7 @@ function getPic() {
   // let picdir = isDesk ? '/pics/yali/' : '/pics/yaliIM/'
   let picdir = isDesk ? '/pics/yali/' : '/pics/yali/'
   // return process.env.API + picdir + piclst.value[pidx.value]
-  return ENV_DEV + picdir + piclst.value[pidx.value]
+  return DEV_API + picdir + piclst.value[pidx.value]
 }
 // const getMeta = (url, cb) => {
 //   const img = new Image();
@@ -308,8 +307,8 @@ function openIt(idx, imgdata) {
   background-image: url('https://images.unsplash.com/photo-1519681393784-d120267933ba');
   background-image: url('https://images.unsplash.com/photo-1507409611970-2599c616268a');
   background-image: url('https://images.unsplash.com/photo-1520034475321-cbe63696469a');
-  background-image: url('http://shengli.cn.mt/pics/yali/bg-img-10.png'); */
-  background-image: url('/api/yali/icons/bg-img-01.png');
+  background-image: url('http://shengli.cn.mt/pics/yali/bg-img-10.png');
+  background-image: url('/api/yali/icons/bg-img-purple.png'); */
   background-size: cover;       /* Fills screen nicely */
   background-position: center;   /* Centers image */
   background-repeat: no-repeat;  /* No tiling */

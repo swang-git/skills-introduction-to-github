@@ -29,8 +29,8 @@ import emitter from 'tiny-emitter/instance'
 import { ref, computed, onMounted } from 'vue' 
 import { libFunctions } from '../composables/libFunctions'
 const { isDesk, isIM, opened } = libFunctions()
-import { Calendar } from './Calendar'
-import YearPad from './YearPad'
+import { Calendar } from './Calendar.js'
+import YearPad from './YearPad.vue'
 
 var tit = null
 const year = ref(new Date().getFullYear())
@@ -38,7 +38,7 @@ const refYearPad = ref(null)
 
 console.log('-ST-HolidayDialog')
 
-onMounted(() => { refYearPad })
+onMounted(() => { console.log(refYearPad) })
 
 tit = isDesk ? 'Holidays in the Year' : 'Holidays of'
 emitter.on('show-holidays', () => opened.value = true)

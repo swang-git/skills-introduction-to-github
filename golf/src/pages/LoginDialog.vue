@@ -39,18 +39,18 @@
 <script setup>
 import emitter from "tiny-emitter/instance";
 import { ref } from "vue";
-import { axiosFunctions } from "src/composables/axiosFunctions";
-import { libFunctions } from "src/composables/libFunctions";
+import { axiosFunctions } from "../../src/composables/axiosFunctions";
+import { libFunctions } from "../../src/composables/libFunctions";
 const { paxios } = axiosFunctions();
-const { screenheight, screenwidth, $q, store } = libFunctions();
+const { screenheight, screenwidth, $q, store, ENV_API } = libFunctions();
 
 const username = ref("SysAdmin");
 const password = ref(null);
 const accept = ref(true);
 const opened = ref(false);
 
-if (process.env.API === "/api") password.value = "Ybsjll11";
-// console.log(`-ST-LoginDialog process.env.API=${process.env.API}`)
+if (ENV_API === "/api") password.value = "Ybsjll11";
+// console.log(`-ST-LoginDialog ENV_API=${ENV_API}`)
 emitter.on("open-LoginDialog", () => (opened.value = true));
 function onSubmit() {
   if (accept.value !== true) {
@@ -95,7 +95,7 @@ function login() {
   const inData = {};
   inData.username = username.value;
   inData.password = password.value;
-  const path = process.env.API + "/golf/login";
+  const path = ENV_API + "/golf/login";
   paxios(path, inData);
 }
 </script>

@@ -55,7 +55,7 @@ import { dayFunctions } from '../src/composables/dayFunctions'
 const { yyyymmdd } = dayFunctions()
 const { paxios } = axiosFunctions()
 import { libFunctions } from '../src/composables/libFunctions'
-const { $q } = libFunctions()
+const { $q, ENV_DEV } = libFunctions()
 
 const type = ref('pond')
 const ctype = ref('磅')
@@ -124,7 +124,7 @@ function doAction(act) {
 }
 function delFromDB () {
   var inData = { id: row.value.id }
-  const path = process.env.API + '/watcher/del'
+  const path = ENV_DEV + '/watcher/del'
   paxios(path, inData)
 }
 function del () {
@@ -143,7 +143,7 @@ function upd () {
   $q.localStorage.set('weightUnit', type.value)
   var inData = getInputData()
   // console.log('inData', inData)
-  const path = process.env.API + '/watcher/upd'
+  const path = ENV_DEV + '/watcher/upd'
   paxios(path, inData)
   opened.value = false
 }
@@ -157,7 +157,7 @@ function add () {
   $q.localStorage.set('weightUnit', type.value)
   var inData = getInputData()
   inData.id = -1
-  const path = process.env.API + '/watcher/add'
+  const path = ENV_DEV + '/watcher/add'
   paxios(path, inData)
   opened.value = false
 }

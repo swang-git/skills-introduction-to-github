@@ -32,9 +32,9 @@ const keyedIn = ref('')
 const keyedNum = ref(0)
 const totalPix = ref(0)
 const flag = ref(null)
-const emit = defineEmits(['pix-pidx', 'set-interval-delay', 'per-page', 'jump-to-page'])
+const emit = defineEmits(['pix-pidx', 'set-interval-delay', 'per-page', 'jump-page'])
 
-// console.log('-ST-NumPad')
+console.log('-ST-NumPad')
 
 emitter.on('open-NumPad', (x, y, z) => openIt(x, y, z))
 
@@ -59,7 +59,7 @@ function setNumber(n) {
 function setPicIdx() {
   console.log(`-fn-setPicIdx keyedId=${keyedIn.value} flag=${flag.value}`)
   if (flag.value == 'YALI_PIX_PIDX') emit('pix-pidx', parseInt(keyedIn.value) - 1)
-  if (flag.value == 'YALI_PIX_PAGE') emit('jump-to-page', parseInt(keyedIn.value))
+  if (flag.value == 'YALI_PIX_PAGE') emit('jump-page', parseInt(keyedIn.value))
   if (flag.value == 'YALI_PER_PAGE') emit('per-page', parseInt(keyedIn.value))
   opened.value = false
 }
@@ -69,7 +69,7 @@ function setPicIdx() {
 //   opened.value = false
 // }
 function openIt(flg, tit, numPix) {
-  console.info(`flag=${flg} tit=${tit} totalPix=${numPix}`)
+  console.info(`-fn-NumPad.openIt flag=${flg} tit=${tit} totalPix=${numPix}`)
   flag.value = flg
   padTit.value = tit
   totalPix.value = numPix

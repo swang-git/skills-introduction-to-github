@@ -1,8 +1,9 @@
-import emitter from 'tiny-emitter/instance.js'
+import emitter from 'tiny-emitter/instance'
 import { getCurrentInstance } from 'vue'
+import axios from 'axios'
 export function axiosFunctions() {
   const app = getCurrentInstance()
-  const axios = app.appContext.config.globalProperties.$axios
+  // const axios = app.appContext.config.globalProperties.$axios
   const q = app.appContext.config.globalProperties.$q
   function gaxios(path) {
     // console.log(`=====gaxios path=${path}`)

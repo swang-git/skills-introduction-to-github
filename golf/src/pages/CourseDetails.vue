@@ -210,20 +210,20 @@
 import { ref, onMounted } from 'vue'
 // import { useQuasar } from 'quasar'
 import emitter from 'tiny-emitter/instance'
-import { libFunctions } from '../composables/libFunctions'
-const { $q, store, SysAdmin, isDesk } = libFunctions()
-import { axiosFunctions } from '../composables/axiosFunctions'
+import { libFunctions } from '../../src/composables/libFunctions'
+const { $q, store, SysAdmin, isDesk, ENV_API } = libFunctions()
+import { axiosFunctions } from '../../src/composables/axiosFunctions'
 const { gaxios, paxios } = axiosFunctions()
 import { storeFunctions } from '../composables/storeFunctions'
 const { hole, yard, hcap } = storeFunctions()
 
-import TeeboxPad from './TeeboxPad'
-import NumberPadDecimal from './NumberPadDecimal'
-import CourseHolePad from './CourseHolePad'
-import CourseYardPad from './CourseYardPad'
-import CourseHcapPad from './CourseHcapPad'
-import SelOptionsWithSearch from 'src/components/SelOptionsWithSearch'
-import Tooltip from 'src/components/ToolTip'
+import TeeboxPad from './TeeboxPad.vue'
+import NumberPadDecimal from './NumberPadDecimal.vue'
+import CourseHolePad from './CourseHolePad.vue'
+import CourseYardPad from './CourseYardPad.vue'
+import CourseHcapPad from './CourseHcapPad.vue'
+import SelOptionsWithSearch from '../../src/components/SelOptionsWithSearch.vue'
+import Tooltip from '../../src/components/ToolTip.vue'
 
 const refCourseName = ref(null)
 const refCourseHolePad = ref(null)
@@ -335,7 +335,7 @@ function getStyle (i) {
 }
 function getCourseList () {
   console.log('-CK-fn-getCourseList')
-  const path = process.env.API + '/golf/CourseList'
+  const path = ENV_API + '/golf/CourseList'
   gaxios(path)
 }
 function selectedCourse (model, selectedOpt) {
@@ -371,7 +371,7 @@ function getCourseDetails () {
   store.pageTitle = 'Course Details'
   store.page = 'course_details'
   console.log(`-CK-fn-getCourseDetails courseId=${courseId}`)
-  const path = process.env.API + '/golf/CourseDetails/' + courseId
+  const path = ENV_API + '/golf/CourseDetails/' + courseId
   gaxios(path)
 }
 // function setCourse (teeIdx, crs) {
@@ -461,7 +461,7 @@ function getCourseYardage () {
   // let yardage = course.value.trys[teeIdx].yardage
   // console.log(`%c-fn-getCourseYardage teeIdx=${teeIdx} teebox=${teebox.value} pars=${pars} yardage=${yardage}`, 'color:red')
   // console.table(course.value.trys)
-  const path = process.env.API + '/golf/CourseYardage/' + courseId + '/' + teeboxId + '/' + teebox.value
+  const path = ENV_API + '/golf/CourseYardage/' + courseId + '/' + teeboxId + '/' + teebox.value
   gaxios(path)
 }
 function checkYardage () {
@@ -531,7 +531,7 @@ function delTee () { // delete the last row in the teeboxes, need to click updat
     del = course.value.trys.splice(teeIdx, 1)[0]
     // console.log('delTee', del)
     const inData = { courseId: del.course_id, teeboxId: del.id }
-    const path = process.env.API + '/golf/delTeebox'
+    const path = ENV_API + '/golf/delTeebox'
     paxios(path, inData)
     getCourseYardage()
   }).onCancel(() => {
@@ -548,7 +548,7 @@ function delCourse () {
     cancel: 'Disagree'
   }).onOk(() => {
     $q.notify('Agreed!')
-    const path = process.env.API + '/golf/delCourse'
+    const path = ENV_API + '/golf/delCourse'
     // console.log('inData', args.inData)
     emit('act-course', 'del', null)
     paxios(path, course.value)
@@ -603,14 +603,14 @@ function checkInput (act) {
 }
 function updCourse () {
   console.log('-CK-fn-updCourse', course.value)
-  const path = process.env.API + '/golf/updCourse'
+  const path = ENV_API + '/golf/updCourse'
   let inData = course.value
   // console.log('inData', args.inData)
   paxios(path, inData)
 }
 function addCourse () {
   console.log(`-CK-fn-addCourse`, course.value)
-  const path = process.env.API + '/golf/addCourse'
+  const path = ENV_API + '/golf/addCourse'
   let inData = course.value
   emit('act-course', 'add', course.value)
   paxios(path, inData)
@@ -647,7 +647,7 @@ function addCourseTemplate () {
   //   h18:'h18',
   // }
   // course.value.hcaps = {}
-  const path = process.env.API + '/golf/addCourse'
+  const path = ENV_API + '/golf/addCourse'
   let inData = course.value
   emit('act-course', 'add', course.value)
   paxios(path, inData)

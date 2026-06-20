@@ -16,7 +16,7 @@
 </template>
 <script setup>
 import { ref, computed } from 'vue'
-import { libFunctions } from 'src/composables/libFunctions'
+import { libFunctions } from '../../src/composables/libFunctions'
 const { isIM, opened } = libFunctions()
 const year = ref(2021)
 // const opened = ref(false)

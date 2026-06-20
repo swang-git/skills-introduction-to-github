@@ -40,12 +40,12 @@ export default defineConfig(ctx => {
       // https://v2.quasar.dev/quasar-cli-vite/page-routing-with-vue-router#filename-based-routing
       // filenameBasedRouting: true,
 
-      vueRouterMode: 'hash', // available values: 'hash', 'history'
+      vueRouterMode: 'history', // available values: 'hash', 'history'
       // vueRouterBase,
       // vueDevtools,
 
-      publicPath: '/' + (process.env.PRODUCT_NAME  === undefined ? 'yali' : process.env.PRODUCT_NAME), // this will be injected into index.html
-      // publicPath: '/',
+      // publicPath: '/' + (process.env.PRODUCT_NAME  === undefined ? 'arts' : process.env.PRODUCT_NAME), // this will be injected into index.html
+      publicPath: '/arts/',
       // define: {},
       // defineEnv: {}
       // ignorePublicFolder: true,
@@ -78,7 +78,16 @@ export default defineConfig(ctx => {
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-file#devserver
     devServer: {
       // https: true,
-      open: true // opens browser window automatically
+      open: true, // opens browser window automatically
+      port: ctx.mode.spa ? '8080' : (ctx.mode.pwa ? 9080 : 9090),
+      proxy: {
+         '/api': {
+          // target: 'http://192.168.1.107',
+          target: 'http://localhost',  // Your Fedora backend
+          changeOrigin: true,
+          rewrite: (path) => path.replace(/^\/api/, '')  // Only if backend doesn't expect /api
+        }
+      }
     },
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-file#framework
@@ -96,7 +105,7 @@ export default defineConfig(ctx => {
       // directives: [],
 
       // Quasar plugins
-      plugins: []
+      plugins: ['Notify', 'Dialog', 'Cookies']
     },
 
     // animations: 'all', // --- includes all animations

@@ -65,11 +65,11 @@
 import { ref, computed } from 'vue'
 import { useQuasar } from 'quasar'
 import emitter from 'tiny-emitter/instance'
-import { axiosFunctions } from 'src/composables/axiosFunctions'
-import { libFunctions } from 'src/composables/libFunctions'
+import { axiosFunctions } from '../../src/composables/axiosFunctions'
+import { libFunctions } from '../../src/composables/libFunctions'
 console.info('-ST-UserGuidePad')
 const $q = useQuasar()
-const { isIM } = libFunctions()
+const { isIM, ENV_API } = libFunctions()
 const { paxios } = axiosFunctions()
 const pagename = ref(null)
 const icon = ref(null)
@@ -95,10 +95,10 @@ function openIt (pgname, Id=0, uguide='') {
 function saveUpdUserGuide () {
   if (id.value > 0) {
     console.info(`-fn-UPDATE UserGuide id=${id.value} pagename=${pagename.value} userguide=${userguide.value}`)
-    const path = process.env.API + '/golf/updUserGuide'
+    const path = ENV_API + '/golf/updUserGuide'
   } else {
     console.info(`-fn-SAVE UserGuide id=${id.value} pagename=${pagename.value} userguide=${userguide.value}`)
-    const path = process.env.API + '/golf/saveUserGuide'
+    const path = ENV_API + '/golf/saveUserGuide'
   }
 
   const inData = { id:id.value, page_name:pagename.value, user_guide:userguide.value }

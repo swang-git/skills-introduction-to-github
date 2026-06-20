@@ -7,12 +7,12 @@
 <script setup>
 import { ref, reactive } from 'vue'
 import emitter from 'tiny-emitter/instance'
-import { libFunctions } from '../composables/libFunctions'
-const { store } = libFunctions() 
+import { libFunctions } from '../../src/composables/libFunctions'
+const { store, ENV_API } = libFunctions() 
 import { axiosFunctions } from '../composables/axiosFunctions'
 const { gaxios } = axiosFunctions() 
-import CardSelection from 'src/components/CardSelection'
-import PGCGroupListTempl from './PGCGroupListTempl'
+import CardSelection from '../../src/components/CardSelection.vue'
+import PGCGroupListTempl from './PGCGroupListTempl.vue'
   
 var tmnt = reactive({})
 const activeGames = ref([])
@@ -29,7 +29,7 @@ emitter.on('golf-UnexpiredTournaments', (x) => { activeGames.value = x.games; /*
 
 function getUnexpiredTournaments (gameName = 'ALL') {
   // console.log(`-CK-fn-getUnexpiredTournaments gameName=${gameName}`)
-  const path = process.env.API + '/golf/UnexpiredTournaments/' + gameName
+  const path = ENV_API + '/golf/UnexpiredTournaments/' + gameName
   gaxios(path)
 }
 function userSelected (tmt) {

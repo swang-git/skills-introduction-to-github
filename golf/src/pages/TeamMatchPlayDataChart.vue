@@ -19,8 +19,8 @@ import Chart from 'chart.js/auto'
 import ChartDataLabels from 'chartjs-plugin-datalabels'
 import configCompChart from './chart-line-config.js'
 import configHandicap from './chart-handicap-config.js'
-import { dayFunctions } from 'src/composables/dayFunctions'
-import { libFunctions } from 'src/composables/libFunctions'
+import { dayFunctions } from '../../src/composables/dayFunctions'
+import { libFunctions } from '../../src/composables/libFunctions'
 import { ref, onMounted } from 'vue'
 Chart.register(ChartDataLabels)
 const props = defineProps({

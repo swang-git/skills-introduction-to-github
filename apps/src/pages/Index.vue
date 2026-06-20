@@ -243,7 +243,9 @@ import PlatformDataPad from '../components/PlatformDataPad.vue'
 const refPlatformDataPad = ref(null)
 
 const refUserList = ref(null)
-const compVer = computed(() => { return import.meta.env.VITE_BUILD_TAG })
+const compVer = computed(() => {
+  return import.meta.env.VITE_BUILD_TAG
+})
 
 console.log(`-ST-Index bg-img=${getBackgroundImg().backgroundImage}`)
 // console.log(`-ST-Index AppAdmin=${AppAdmin.value}`)
@@ -254,15 +256,15 @@ onMounted(() => {
   console.log(refPlatformDataPad.value)
 })
 
-function getBackgroundImg () {
+function getBackgroundImg() {
   return {
-      backgroundImage: 'url("' + ENV_DEV + '/apps/icons/bg-img-purple.png"' + ')',
-      // backgroundImage: 'url("' + ENV_DEV + '/apps/icons/material.svg"' + ')',
-      backgroundSize: 'cover',
-      backgroundPosition: 'center',
-      backgroundRepeat: 'no-repeat',
-      height: '550px',
-    }
+    backgroundImage: 'url("' + ENV_DEV + '/apps/icons/bg-img-purple.png"' + ')',
+    // backgroundImage: 'url("' + ENV_DEV + '/apps/icons/material.svg"' + ')',
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+    backgroundRepeat: 'no-repeat',
+    height: '550px'
+  }
 }
 
 //== function sections

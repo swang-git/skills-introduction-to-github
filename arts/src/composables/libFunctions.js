@@ -227,6 +227,7 @@ export function libFunctions() {
     // getUsertype()
     // getList()
   }
+  const DEV_API = import.meta.env.DEV ? '/api' : ''
   return {
     userGuidePage,
     $q,
@@ -256,5 +257,6 @@ export function libFunctions() {
     dats,
     dalist,
     buildApp,
+    DEV_API,
   }
 }

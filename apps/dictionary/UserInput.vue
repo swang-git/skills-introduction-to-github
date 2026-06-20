@@ -15,10 +15,10 @@
 </q-dialog>
 </template>
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref } from 'vue'
 import emitter from 'tiny-emitter/instance'
 import { libFunctions } from '../src/composables/libFunctions'
-const { buildApp, isIM, isDesk, palist, getLineBackground } = libFunctions()
+const { buildApp, isIM, isDesk, palist, getLineBackground, ENV_DEV } = libFunctions()
 import { axiosFunctions } from '../src/composables/axiosFunctions'
 const { gaxios, paxios } = axiosFunctions()
 
@@ -34,17 +34,11 @@ import ConfirmDialog from '../src/components/ConfirmDialog.vue'
 defineExpose({ openIt })
 const emit = defineEmits(['deled-word', 'added-word', 'upded-word'])
 
-const file = ref(null)
 const opened = ref(false)
-const dense = ref(false)
-var id = ref(-1)
 const row = ref({datetime:null, details: null})
 
 console.log('-ST-UserInput')
 
-function closeIt () {
-  opened.value = false
-}
 function updDateTime (val) {
   // console.log('-fn-updDateTime', val)
   row.value.datetime = val
@@ -104,7 +98,7 @@ function msg () {
 }
 function delFromDB () {
   var inData = { id: row.value.id }
-  const path = process.env.API + '/dictionary/del'
+  const path = ENV_DEV + '/dictionary/del'
   paxios(path, inData)
 }
 function del () {
@@ -116,7 +110,7 @@ function del () {
 function upd () {
   const inData = getInputData()
   // console.log('inData', inData)
-  const path = process.env.API + '/dictionary/upd'
+  const path = ENV_DEV + '/dictionary/upd'
   paxios(path, inData)
   opened.value = false
   const lnks = inData.lnks
@@ -127,7 +121,7 @@ function upd () {
 function add () {
   const inData = getInputData()
   inData.id = -1
-  const path = process.env.API + '/dictionary/add'
+  const path = ENV_DEV + '/dictionary/add'
   paxios(path, inData)
   opened.value = false
   const lnks = inData.lnks

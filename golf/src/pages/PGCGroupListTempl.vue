@@ -50,17 +50,16 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import emitter from 'tiny-emitter/instance'
-import { useStore } from 'vuex'
+// import { useStore } from 'vuex'
 import { axiosFunctions } from '../composables/axiosFunctions'
-// import { dayFunctions } from '../composables/dayFunctions'
 import { cssFunctions } from '../composables/cssFunctions'
 import { libFunctions } from '../composables/libFunctions'
 const { getAvgColor } = cssFunctions()
-const { getAvatar, PGCsAdmin, isIM } = libFunctions()
+const { getAvatar, ENV_API } = libFunctions()
 // import SelOptionsWithSearch from 'src/components/SelOptionsWithSearch'
-import MemberDialog from '../components/MemberDialog'
-import HolePad from 'src/components/HolePad'
-const store = useStore()
+import MemberDialog from '../components/MemberDialog.vue'
+import HolePad from '../components/HolePad.vue'
+// const store = useStore()
 const { paxios, gaxios } = axiosFunctions()
 
 //== data section
@@ -81,7 +80,10 @@ const gameId = props.tmnt.game_id
 const shotgun = props.tmnt.teetime_gap == 0 ? true : false
 
 const props = defineProps({ tmnt: Object })
-onMounted(() => { refMemberDialog, refHolePad})
+onMounted(() => { 
+  console.log(refMemberDialog)
+  console.log(refHolePad)
+})
 
 //== main == section
 console.log(`-ST-PGCGroupListTempl shotgun=${shotgun} teetime_gap=${props.tmnt.teetime_gap}`, props.tmnt)
@@ -116,7 +118,7 @@ function moveOutGrouping (p, g) {
   p.captain = 0
   players.value.unshift(p)
   tplayers.value = tplayers.value.filter(x => x.player_id != p.player_id)
-  const path = process.env.API + '/golf/moveOutGrouping'
+  const path = ENV_API + '/golf/moveOutGrouping'
   paxios(path, p)
 }
 function addToOpenSlot (p) {
@@ -195,7 +197,7 @@ function sendToDB (p) {
   grouped.value.push(p)
   tplayers.value.push(p)
   players.value = players.value.filter(x => x.player_id != p.player_id)
-  const path = process.env.API + '/golf/moveToGrouped'
+  const path = ENV_API + '/golf/moveToGrouped'
   paxios(path, p)
 }
 const compPlayers = computed(() => {
@@ -321,12 +323,12 @@ function getPGCGamePlayers () {
   const gameId = props.tmnt.game_id
   const year = props.tmnt.year
   console.log(`-fn-getPGCGamePlayers tmntId=${tmntId} gameId=${gameId} year=${year}`)
-  const path = process.env.API + '/golf/getPGCGamePlayers/' + tmntId + '/' + gameId + '/' + year
+  const path = ENV_API + '/golf/getPGCGamePlayers/' + tmntId + '/' + gameId + '/' + year
   gaxios(path)
 }
 // function getPlayers () {
 //   console.log(`-CK-fn-getPlayers`)
-//   const path = process.env.API + '/golf/getPlayers'
+//   const path = ENV_API + '/golf/getPlayers'
 //   gaxios(path)
 // }
 function showGroups () {

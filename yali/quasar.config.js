@@ -44,7 +44,7 @@ export default defineConfig((ctx) => {
 
       // quasar.config.js for Vite
       // Vite uses 'base', not 'publicPath'
-      base: '/' + (process.env.PRODUCT_NAME === undefined ? 'yali/' : process.env.PRODUCT_NAME),
+      //base: '/' + (process.env.PRODUCT_NAME === undefined ? 'yali/' : process.env.PRODUCT_NAME),
       // base: '/',
       
       // Env vars for Vite
@@ -53,7 +53,7 @@ export default defineConfig((ctx) => {
       //   VER: process.env.PRODUCT_VER || '1.0'
       // },
 
-      publicPath: '/' + (process.env.PRODUCT_NAME  === undefined ? 'yali' : process.env.PRODUCT_NAME), // this will be injected into index.html, like
+      //publicPath: '/' + (process.env.PRODUCT_NAME  === undefined ? 'yali' : process.env.PRODUCT_NAME), // this will be injected into index.html, like
       // productName: process.env.PRODUCT_NAME === undefined ? 'apps' : process.env.PRODUCT_NAME,
       // appName: process.env.APP,
       // env: ctx.dev ? { API: '/api', VER: process.env.PRODUCT_VER } : { API: '', VER: process.env.PRODUCT_VER },
@@ -64,7 +64,7 @@ export default defineConfig((ctx) => {
       // vueRouterBase,
       // vueDevtools,
 
-      // publicPath: '/',
+      publicPath: '/yali/',
       // define: {},
       // defineEnv: {}
       // ignorePublicFolder: true,
@@ -108,6 +108,15 @@ export default defineConfig((ctx) => {
     devServer: {
       // https: true,
       open: true, // opens browser window automatically
+      port: ctx.mode.spa ? '8080' : (ctx.mode.pwa ? 9080 : 9090),
+      proxy: {
+         '/api': {
+          // target: 'http://192.168.1.107', 
+          target: 'http://localhost',  // Your Fedora backend
+          changeOrigin: true,
+          rewrite: (path) => path.replace(/^\/api/, '')  // Only if backend doesn't expect /api
+        }
+      }
     },
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-file#framework

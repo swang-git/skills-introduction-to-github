@@ -4,14 +4,16 @@
       <q-toolbar class="bg-teal-10 glossy">
         <q-toolbar-title>
           <div class="row justify-evenly q-pt-sm">
-            <RoundButton size="10px" icon="页" clas="q-pb-sm" colr="red-10" style="margin-top:5px" iclr="yellow" ttip="跳转到某页" @click="openNumPad('jump-page')" />
-            <div class="text-center cursor-pointer text-yellow q-pt-sm text-h5" @click="loadRandomPage">婭 莉<span class="text-h6">({{ ym==null ? '共' : ym }} {{ total }}幅)</span>画 展</div>
-            <RoundButton size="10px" icon="月" clas="q-pb-sm" colr="indigo-10" style="margin-top:5px" iclr="yellow" ttip="go to Year Month" @click="openYmPad" />
+            <RoundButton size="16px" icon="幅" clas="q-pb-xs" colr="indigo-9" style="margin-top:5px" iclr="yellow" ttip="设置每页包含幅数" @click="openNumPad('per-page')" />
+            <div v-if="ym!=null" class="text-center cursor-pointer text-whit q-pt-sm text-h4" @click="loadRandomPage">婭莉画展 <span class="text-h5">({{ ym }})</span></div>
+            <div v-else class="text-center cursor-pointer text-whit q-pt-sm text-h4" @click="loadRandomPage">婭莉画展 <span class="text-h5">(共{{ total }}幅)</span></div>
+            <RoundButton size="16px" icon="月" clas="q-pb-xs" colr="indigo-9" style="margin-top:5px" iclr="yellow" ttip="跳到某年某月" @click="openYmPad" />
           </div>
           <q-card v-if="yue" class="bg-teal-10" style="margin-top:10px">
             <q-card-actions align="between">
               <RoundButton size="16px" icon="头" clas="q-pb-sm" colr="red-10" iclr="yellow" ttip="just show the first page" @click="getFirstPage" />
               <RoundButton size="16px" icon="chevron_left"  colr="indigo-10" iclr="yellow" ttip="appending next page(on end)" @click="getPrevYM" />
+              <q-btn v-if="ym!=null" size="24px" :label="total"  colr="teal-10" />
               <RoundButton size="16px" icon="chevron_right" colr="indigo-10" iclr="yellow" ttip="preppend the prev page(on top)" @click="getNextYM" />
               <RoundButton size="16px" icon="尾" clas="q-pb-sm" colr="red-10" iclr="yellow" ttip="just the last page" @click="getLastPage" />
             </q-card-actions>
@@ -21,7 +23,7 @@
               <RoundButton size="16px" icon="头" clas="q-pb-sm" :colr="pageBegin==1 && numPages==1 ? 'pink-3' : 'red-10'" iclr="yellow" ttip="just show the first page" @click="getFirstPage" />
               <RoundButton size="16px" icon="upload" :colr="pageBegin+numPages>lastPage ? 'pink-3' : 'red-10'" iclr="yellow" ttip="appending next page(on end)" @click="appnNextPage" />
               <RoundButton v-if="pageBegin==1 && numPages==1" size="16px" :icon="compVer" clas="q-pb-sm" colr="indigo-10" iclr="yellow" ttip="跳转到某页" @click="openNumPad('jump-page')" />
-              <q-btn v-else flat round  dense size="22px" style="width:80px; justify-content:center" :label=getLabel() color="cyan-3" />
+              <q-btn v-else flat round  dense size="22px" style="width:80px; justify-content:center" :label=getLabel() color="cyan-3" @click="openNumPad('jump-page')"/>
               <RoundButton size="16px" icon="download" :colr="pageBegin>1 ? 'red-10' : 'pink-3'" iclr="yellow" ttip="preppend the prev page(on top)" @click="prepnPrevPage" />
               <RoundButton size="16px" icon="尾" clas="q-pb-sm" :colr="pageBegin==lastPage && numPages==1 ? 'pink-3' : 'red-10'" iclr="yellow" ttip="just the last page" @click="getLastPage" />
             </q-card-actions>
@@ -48,24 +50,17 @@
             <q-card-actions align="between">
               <RoundButton size="16px" icon="头" clas="q-pb-sm" colr="red-10" iclr="yellow" ttip="just show the first page" @click="getFirstPage" />
               <RoundButton size="16px" icon="chevron_left"  colr="indigo-10" iclr="yellow" ttip="appending next page(on end)" @click="getPrevYM" />
+              <q-btn v-if="ym!=null" size="24px" :label="total"  colr="teal-10" />
               <RoundButton size="16px" icon="chevron_right" colr="indigo-10" iclr="yellow" ttip="preppend the prev page(on top)" @click="getNextYM" />
               <RoundButton size="16px" icon="尾" clas="q-pb-sm" colr="red-10" iclr="yellow" ttip="just the last page" @click="getLastPage" />
             </q-card-actions>
-            <!-- <q-card-actions align="between">
-              <RoundButton size="16px" icon="头" clas="q-pb-sm" :colr="pageBegin==1 && numPages==1 ? 'pink-3' : 'red-10'" iclr="yellow" ttip="just show the first page" @click="getFirstPage" />
-              <RoundButton size="16px" icon="upload" :colr="pageBegin+numPages>lastPage ? 'pink-3' : 'red-10'" iclr="yellow" ttip="appending next page(on end)" @click="appnNextPage" />
-              <RoundButton v-if="pageBegin==1 && numPages==1" size="16px" icon="跳" clas="q-pb-sm" colr="indigo-10" iclr="yellow" ttip="跳转到某页" @click="openNumPad('jump-page')" />
-              <q-btn v-else flat round  dense size="22px" style="width:80px; justify-content:center" :label=getLabel() color="cyan-3" @click="openNumPad('jump-page')" />
-              <RoundButton size="16px" icon="月" colr="green" iclr="yellow" ttip="preppend the prev page(Year Month)" @click="openYmPad" />
-              <RoundButton size="16px" icon="download" :colr="pageBegin>1 ? 'red-10' : 'pink-3'" iclr="yellow" ttip="preppend the prev page(on top)" @click="prepnPrevPage" />
-              <RoundButton size="16px" icon="尾" clas="q-pb-sm" :colr="pageBegin==lastPage && numPages==1 ? 'pink-3' : 'red-10'" iclr="yellow" ttip="just the last page" @click="getLastPage" />
-            </q-card-actions> -->
           </q-card>
         </q-toolbar-title>
       </q-toolbar>
     </q-footer>
   </q-layout>
   <PicDialog />
+  <NumPad @per-page="setPerPage" @jump-page="jumpTo" @pix-pidx="setPidx" />
   <YearMonthPad @year-month="setYM" />
 </template>
 <script setup>
@@ -78,17 +73,18 @@ import emitter from 'tiny-emitter/instance'
 import { axiosFunctions } from '../../src/composables/axiosFunctions.js'
 const { gaxios } = axiosFunctions()
 import { libFunctions } from '../../src/composables/libFunctions.js'
-const { isIM, buildApp } = libFunctions()
+const { isIM, buildApp, DEV_API } = libFunctions()
 import PicDialog from '../pages/PicDialog.vue'
 import RoundButton from '../../src/components/RoundButton.vue'
 import YearMonthPad from '../../src/components/YearMonthPad.vue'
+import NumPad from '../../src/components/NumPad.vue'
 
 import { useNumPadStore } from '../../src/stores/numPadStore.js'
 const numPadStore = useNumPadStore()
 import { useAdminStore } from '../../src/stores/adminStore.js'
 const admin = useAdminStore()
-emitter.on('jump-to-page', (page) => { jumpTo(page) })
-emitter.on('per-page', (prpg) => { perPage.value = 0; perPage.value = prpg; data.value=[]; getPages(1, perPage.value) })
+// emitter.on('jump-to-page', (page) => { jumpTo(page) })
+// emitter.on('per-page', (prpg) => { perPage.value = 0; perPage.value = prpg; data.value=[]; getPages(1, perPage.value) })
 
 const data = ref([])
 const hasMore = ref(true)
@@ -115,11 +111,19 @@ getPages(pageBegin.value, perPage.value)
 
 admin.isCleanup = ref(window.location.href.substring(window.location.href.length - 2) == '//')
 console.log(`-ST-yali hostname=${window.location.hostname} href=${window.location.href.substring(window.location.href.length - 2)} isCleanup=${admin.isCleanup}`)
-
 emitter.on('yali-getPixByYM', (x) => setPixByYM(x))
-
 // const compYM = computed(() => { return ym.value })
 
+// ---- function section -----
+function setPidx (idx) {
+  emitter.emit('pix-pidx', idx)
+}
+function setPerPage (ppage) {
+  perPage.value = 0
+  perPage.value = ppage
+  data.value = []
+  getPages(1, perPage.value)
+}
 function getPrevYM () {
   [yex.value, yue.value] = [false, true]
   let pos = yms.indexOf(ym.value)
@@ -171,7 +175,7 @@ function findClosest () {
 
 function getPixByYM (ym) {
   console.log(`-fn-getPixByYM YM=${ym}`)
-  const path = process.env.API + `/yali/getPixByYM/${ym}`
+  const path = DEV_API + `/yali/getPixByYM/${ym}`
   gaxios(path)
 }
 
@@ -183,8 +187,7 @@ function setPixByYM (da) {
   total.value = da.total
 }
 
-// ---- function section -----
-const compVer = computed(() => { return process.env.VER })
+const compVer = computed(() => { return import.meta.env.VITE_BUILD_TAG })
 // const compNumPages = computed({ get() { return Math.ceil(data.value.length/perPage.value) }, set(val) { numPages.value = val } })
 
 function getFirstPage () {
@@ -252,9 +255,10 @@ function prepnPrevPage () {
 
 function openNumPad(flag=null) {
   [yex.value, yue.value] = [true, false]
-  console.log(`-fn-openNumPad isIM=${isIM}`)
+  console.log(`-fn-openNumPad flag=${flag}`)
   if (flag == 'per-page') numPadStore.open('YALI_PER_PAGE', '输入每页的页数', total.value)
   else if (flag == 'jump-page') numPadStore.open('YALI_PIX_PAGE', '输入要跳转的页数', lastPage.value)
+  // else if (flag == 'jump-page') emitter.emit('open-NumPad', 'YALI_PIX_PAGE', '输入要跳转的页数', lastPage.value)
 }
 /**
  * Load next page and append to existing drawings
@@ -275,8 +279,7 @@ function showFullImage(idx) {
 
 function getThumbnailURL(p) {
   let picdir = isIM ? '/pics/yali/' : '/pics/yali/'
-  // let turl = process.env.API + picdir + 'thumbnails/' + p
-  let turl = picdir + 'thumbnails/' + p
+  let turl = DEV_API + picdir + 'thumbnails/' + p
   // console.log(`thumbnaile.url=${turl}`)
   return turl
 }
@@ -289,8 +292,7 @@ function getPages(cpage, ppage) {
   }
   // const path = process.env.API + '/yali/getPages/' + cpage + '/' + ppage
   // const path = `${API_BASE}` + '/yali/getPages/' + cpage + '/' + ppage
-  // const path = import.meta.env.API + '/yali/getPages/' + cpage + '/' + ppage
-  const path = '/yali/getPages/' + cpage + '/' + ppage
+  const path = DEV_API + '/yali/getPages/' + cpage + '/' + ppage
   gaxios(path)
 }
 

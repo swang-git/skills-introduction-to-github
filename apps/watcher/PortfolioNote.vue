@@ -56,7 +56,7 @@ import { axiosFunctions } from '../src/composables/axiosFunctions'
 import { libFunctions } from '../src/composables/libFunctions'
 import { dayFunctions } from '../src/composables/dayFunctions'
 const { paxios } = axiosFunctions()
-const { isDesk } = libFunctions()
+const { isDesk, ENV_DEV } = libFunctions()
 const { today, chwk3 } = dayFunctions()
 
 const opened = ref(false)
@@ -112,7 +112,7 @@ function add () {
     delete p.txoltip
   })
   console.log('add pnote', pnote.value)
-  const path = process.env.API + '/watcher/addPNote'
+  const path = ENV_DEV + '/watcher/addPNote'
   paxios(path, pnote.value)
   opened.value = false
 }
@@ -122,7 +122,7 @@ function upd () {
     delete p.txoltip
   })
   console.log('upd pnote', pnote.value)
-  const path = process.env.API + '/watcher/updPNote'
+  const path = ENV_DEV + '/watcher/updPNote'
   paxios(path, pnote.value)
   opened.value = false
 }
@@ -134,7 +134,7 @@ function userConfirmed () {
 }
 function delPNote () {
   let inData = { date: date }
-  const path = process.env.API + '/watcher/delPNote'
+  const path = ENV_DEV + '/watcher/delPNote'
   paxios(path, inData)
 }
 function del () {

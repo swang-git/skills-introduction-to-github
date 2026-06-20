@@ -47,12 +47,12 @@
 <script setup>
 import { ref, computed } from 'vue'
 import emitter from 'tiny-emitter/instance'
-import layoutHeader from 'src/components/LayoutHeader'
-import MemberDialog from '../components/MemberDialog'
+import layoutHeader from '../components/LayoutHeader.vue'
+import MemberDialog from '../components/MemberDialog.vue'
 const opened = ref(false)
 const notGrouped = []
 // const playerList = []
-const searchQuery = ''
+const searchQuery = ref('')
 // const player = null
 // const tmntId = null
 // const gameId = null
@@ -63,7 +63,6 @@ console.log('-ST-PGCPlayerList')
 emitter.on('add-to-not-grouped', (p) => this.addToNotGrouped(p))
 emitter.on('golf-getPGCNotGroupedPlayers', (x) => this.setPGCNotGroupedPlayers(x))
 emitter.on('new-pgc-member', (x) => this.addToList(x))
-
 
 // function addToList (da) {
 //   const newMember = { tournament_id:this.tmntId, game_id:this.gameId, gamefee:this.gameFee, year:this.year }
@@ -98,7 +97,7 @@ function addMembership (p) {
 // function getPGCNotGroupedPlayers () {
 //   console.log(`-fn-getPGCNotGroupedPlayers`)
 //   const params = this.tmntId + '/' + this.gameId + '/' + this.year
-//   const path = process.env.API + '/golf/getPGCNotGroupedPlayers/' + params
+//   const path = ENV_API + '/golf/getPGCNotGroupedPlayers/' + params
 //   this.gaxios(path)
 // }
 // function setPGCNotGroupedPlayers (da) {
@@ -125,7 +124,7 @@ function addToGroup (p) {
 function delPGCTPlayer (p) {
   // if (this.isNotPGCsAdmin()) return
   console.log(`-fn-delPGCTplayer ${p.id} ${this.playerList.length}`, p) // delete it from tplayers table
-  const path = process.env.API + '/golf/delPGCTplayer/' + p.id
+  const path = ENV_API + '/golf/delPGCTplayer/' + p.id
   this.notGrouped = this.notGrouped.filter(x => x.player_id !== p.player_id)
   this.playerList.push(p)
   console.log(`-fn-delPGCTplayer ${p.id} ${this.playerList.length}`, p) // delete it from tplayers table
@@ -134,7 +133,7 @@ function delPGCTPlayer (p) {
 
 const compNotGrouped = computed(() => { return notGrouped })
 const compPlayerList = computed(() => {
-    var filterKey = searchQuery.length > 0 && searchQuery.toLowerCase()
+    var filterKey = searchQuery.value.length > 0 && searchQuery.value.toLowerCase()
   // console.log(`-fn-search-${this.searchQuery} ${this.gameId} ${filterKey}`, Object.keys(this.playerList[0]))
   var data = this.playerList
   if (filterKey.length > 0) {

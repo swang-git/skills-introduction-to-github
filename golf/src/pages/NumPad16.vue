@@ -6,7 +6,7 @@
           <div style="margin-left:-10px"><q-btn color="amber-10" glossy size="lg" dense icon="chevron_left" round v-close-popup /></div>
           <q-toolbar-title class="text-h6 text-white">Number of Groups</q-toolbar-title>
         </q-toolbar>
-        <table style="y-overflow:auto;margin:auto">
+        <table style="overflow:auto;margin:auto">
           <tr><td v-for="i in compPadNum.slice(0,  4)" :key=i.x><q-btn size="lg" :color="getColor(i)" round @click="setNumGroups(i)">{{i}}</q-btn></td></tr>
           <tr><td v-for="i in compPadNum.slice(4,  8)" :key=i.x><q-btn size="lg" :color="getColor(i)" round @click="setNumGroups(i)">{{i}}</q-btn></td></tr>
           <tr><td v-for="i in compPadNum.slice(8, 12)" :key=i.x><q-btn size="lg" :color="getColor(i)" round @click="setNumGroups(i)">{{i}}</q-btn></td></tr>
@@ -41,7 +41,7 @@ export default {
       // this.$emit('set-num-groups', i)
       const args = { vm: this.$parent }
       args.inData = { tmntId: this.tmntId, numGroups: i }
-      args.path = process.env.API + '/golf/setTmntNumGroups'
+      args.path = ENV_API + '/golf/setTmntNumGroups'
       args.target = 'golf.setTmntNumGroups'
       this.axiosPost(args)
     },

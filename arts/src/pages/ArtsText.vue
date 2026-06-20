@@ -65,7 +65,7 @@ import { useRoute, useRouter } from 'vue-router'
 const route = useRoute()
 const $router = useRouter()
 import { libFunctions } from '../../src/composables/libFunctions'
-const { isDesk, isIM, isLocal, $q, store } = libFunctions()
+const { isDesk, isIM, isLocal, $q, store, DEV_API } = libFunctions()
 import { axiosFunctions } from '../../src/composables/axiosFunctions'
 const { gaxios } = axiosFunctions()
 // const { getScrollTarget, setVerticalScrollPosition, getScrollPosition } = scroll
@@ -106,8 +106,7 @@ function getText() {
   totalHeight.value = document.body.scrollHeight - window.innerHeight
   // console.warn(`totalHeight=${totalHeight.value}`)
   // setPrevNextQids()
-  // const path = process.env.API + '/arts/getText/' + tag.value + '/' + ymd.value + '/' + qid.value
-  const path = '/arts/getText/' + tag.value + '/' + ymd.value + '/' + qid.value
+  const path = DEV_API + '/arts/getText/' + tag.value + '/' + ymd.value + '/' + qid.value
   gaxios(path)
 }
 emitter.on('arts-getText', (da) => setText(da))
@@ -368,12 +367,12 @@ function setPrevNextQids() {
 }
 
 function add_api_for_testing() {
-  if (process.env.API == '') return
-  console.log(`-fn-add_api_for_testing process.env.API=${process.env.API}`)
+  if (import.meta.env.PROD) return
+  console.log(`-fn-add_api_for_testing import.meta.env.PROD=${import.meta.env.PROD}`)
   var re = /<img\s+src="\/daily_data/gi
   // if (tag.value === 'PXWX') {
   // art.value.modifiedTxt = art.value.txt.replace(re, '<img src="' + process.env.API + '/daily_data')
-  art.value.modifiedTxt = art.value.txt.replace(re, '<img src="/daily_data')
+  art.value.modifiedTxt = art.value.txt.replace(re, '<img src="' + DEV_API + '/daily_data')
   art.value.txt = art.value.modifiedTxt
   // re = 'style="max-width:600px;float:left;margin:9px 9px 0 0"'
   // art.value.imgRestyled = art.value.modifiedTxt.replace(re, 'class="q-px-xs w-full"')

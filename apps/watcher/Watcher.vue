@@ -138,7 +138,6 @@ function updWkgPortf (wkg, portf) {
   console.log(`-fn-updWkgPortf wkg=${wkg} portf=${portf} rowId=${clickedRow.value.id}`, clickedRow.value)
   clickedRow.value.portfolio = portf
   clickedRow.value.kilo = wkg
-  // const path = process.env.API + '/watcher/updWeightPortfolio'
   const path = ENV_DEV + '/watcher/updWeightPortfolio'
   paxios(path, clickedRow.value)
 }
@@ -179,7 +178,6 @@ function setList (da) {
   // console.info('-CK-setList accntOpts:', accntOpts.value)
 }
 function getList () {
-  // const path = process.env.API + '/watcher/getList'
   const path = ENV_DEV + '/watcher/getList'
   gaxios(path)
 }
@@ -259,7 +257,6 @@ function showIt (i) {
   // const rowOpened = !palist.value[i].hideIt
   // console.info('B hideIt', i, this.portfData.length, rowOpened, date, this.palist[i].hideIt, '[' + this.palist[i].date + ']', this.palist[i].dif)
   // if (rowOpened) {
-    // const path = process.env.API + '/watcher/getPortfolio/' + date
     // gaxios(path)
   // }
 }
@@ -271,14 +268,12 @@ function setPortfolio (da) {
 }
 emitter.on('watcher-getMyPortfolios', (x) => setPositions(x))
 function getMyPortfolios (row) {
-  // const path = row.date >= '2026-04-24' ? process.env.API + '/watcher/getMyPortfolios/' + row.date : process.env.API + '/watcher/getPositions/' + row.date
   const path = row.date >= '2026-04-24' ? ENV_DEV + '/watcher/getMyPortfolios/' + row.date : ENV_DEV + '/watcher/getPositions/' + row.date
   clickedRow.value = row
   gaxios(path)
 }
 emitter.on('watcher-getPositions', (x) => setPositions(x))
 function getPositions (row) {
-  // const path = process.env.API + '/watcher/getPositions/' + row.date
   const path = ENV_DEV + '/watcher/getPositions/' + row.date
   clickedRow.value = row
   gaxios(path)

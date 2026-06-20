@@ -34,8 +34,8 @@
 <script setup>
 import { ref } from 'vue'
 import emitter from 'tiny-emitter/instance'
-import { storeFunctions } from 'src/composables/storeFunctions';
-import { libFunctions } from 'src/composables/libFunctions';
+import { storeFunctions } from '../../src/composables/storeFunctions';
+import { libFunctions } from '../../src/composables/libFunctions';
 const opened = ref(false)
 const f9 = ref(null)
 const b9 = ref(null)

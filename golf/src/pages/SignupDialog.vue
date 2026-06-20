@@ -28,21 +28,21 @@
 </template>
 <script setup>
 import { ref } from 'vue'
-import { libFunctions  } from 'src/composables/libFunctions'
-import { axiosFunctions  } from 'src/composables/axiosFunctions'
-const { $q } = libFunctions()
+import { libFunctions  } from '../composables/libFunctions'
+import { axiosFunctions  } from '../composables/axiosFunctions'
+const { $q, ENV_API } = libFunctions()
 const { paxios } = axiosFunctions()
 const year = (new Date()).getFullYear()
 const fees = ref(0.0)
-const mtype = null
-const action = null
-const lastname = ''
-const firstname = ''
-const chname = ''
-const nkname = ''
-const email = ''
-const phone = ''
-const gender = ''
+const mtype = ref(null)
+const action = ref(null)
+const lastname = ref('')
+const firstname = ref('')
+const chname = ref('')
+const nkname = ref('')
+const email = ref('')
+const phone = ref('')
+const gender = ref('')
 const member = {}
 const opened = ref(false)
 
@@ -86,9 +86,9 @@ function setFees () {
 // }
 function saveMember () {
   console.log('-Ck-fn-save new / updated member ', lastname, member)
-  var path = process.env.API + '/golf/updMember'
+  var path = ENV_API + '/golf/updMember'
   if (action === 'create') {
-    path = process.env.API + '/golf/addMember'
+    path = ENV_API + '/golf/addMember'
   }
   member.year = year
   member.act = action

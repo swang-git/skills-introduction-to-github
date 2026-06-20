@@ -48,10 +48,10 @@
 </div>
 </template>
 <script setup>
-import dialogForSelect from 'src/components/CardSelection'
-import { libFunctions } from 'src/composables/libFunctions'
+import dialogForSelect from '../components/CardSelection.vue'
+import { libFunctions } from '../composables/libFunctions'
 const { $q } = libFunctions()
-import numPad from 'pages/OrderedNumPad'
+import numPad from './OrderedNumPad.vue'
 const score = {}
 const tplayers = []
 const tournament = {}

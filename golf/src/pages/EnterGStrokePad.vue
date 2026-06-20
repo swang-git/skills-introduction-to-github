@@ -33,9 +33,9 @@
 <script setup>
 import emitter from 'tiny-emitter/instance'
 import { ref } from 'vue'
-import { libFunctions } from 'src/composables/libFunctions';
-import { cssFunctions } from 'src/composables/cssFunctions';
-import { storeFunctions } from 'src/composables/storeFunctions';
+import { libFunctions } from '../../src/composables/libFunctions';
+import { cssFunctions } from '../../src/composables/cssFunctions';
+import { storeFunctions } from '../../src/composables/storeFunctions';
 const { isDesk } = libFunctions()
 const { hole, yard, hcap, getScore } = storeFunctions()
 const { getStrokePadClass } = cssFunctions()

@@ -34,10 +34,10 @@
 <script setup>
 import emitter from 'tiny-emitter/instance'
 import { ref, computed, createApp } from 'vue'
-import { libFunctions } from 'src/composables/libFunctions'
-import { dayFunctions } from 'src/composables/dayFunctions'
-import { cssFunctions } from 'src/composables/cssFunctions'
-import ChartsProxy from 'src/components/ChartsProxy'
+import { libFunctions } from '../../src/composables/libFunctions'
+import { dayFunctions } from '../../src/composables/dayFunctions'
+import { cssFunctions } from '../../src/composables/cssFunctions'
+import ChartsProxy from '../components/ChartsProxy.vue'
 const app = createApp({})
 app.component('ChartsProxy', ChartsProxy)
 var gameId = 0
@@ -53,6 +53,7 @@ const compGScores = computed(() => {
 const { isDesk } = libFunctions()
 const { today } = dayFunctions()
 const { getGSColor } = cssFunctions()
+
 function getHandicap () { // get current year handicap if p == null
   console.log(`-fn-getHandicap for player ${name.value}, year=${year.value}`)
   const games20 = gscores.value.filter(p => p.start_at.substring(0, 4) == year.value).sort((a, b) => a.start_at - b.start_at).slice(0, 20)

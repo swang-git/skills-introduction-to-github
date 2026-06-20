@@ -1,26 +1,26 @@
 <template>
   <q-dialog v-model="opened">
-    <div class="bg-cyan-19 q-pa-xs bg-red-9" style="border-radius:0px">
-      <q-card class="bg-teal-10" dense>
+    <div class="bg-cyan-19 q-pa-xs bg-teal-9" style="border-radius:0px">
+      <q-card class="bg-teal-10" >
         <q-card-section>
           <div class="q-pa-sm bg-teal-10 text-lime text-h5 text-center text-no-wrap">{{ padTit }}</div>
           <div class="row no-wrap">
-            <q-card class="text-h6 bg-cyan-6" style="border-radius:0px;width:100px">
+            <q-card class="text-h6 bg-cyan-6" style="border-radius:0;width:100px;height:340px">
               <q-card-section>
-                <div class="q-pa-md text-body1" style="margin-left:-20px">
+                <div class="q-pa-md text-h5" style="margin:-9px 0 0 -22px">
                   <q-option-group class="q-py-xs" :options="years" type="radio" v-model="year" dark dense />
                 </div>
               </q-card-section>
             </q-card>
-            <q-card class="text-h6 bg-cyan-7" style="border-radius:0px;width:200px">
-              <q-card-actions class="q-pt-md">
-                <q-btn glossy v-for="i in [1,  2, 3]" :key="i" class="q-ma-xs" size="16px" color="teal-9" round @click="month=i">{{ i }}</q-btn>
-                <q-btn glossy v-for="i in [4,  5, 6]" :key="i" class="q-ma-xs" size="16px" color="teal-9" round @click="month=i">{{ i }}</q-btn>
-                <q-btn glossy v-for="i in [7,  8, 9]" :key="i" class="q-ma-xs" size="16px" color="teal-9" round @click="month=i">{{ i }}</q-btn>
-                <q-btn glossy v-for="i in [10,11,12]" :key="i" class="q-ma-xs" size="16px" color="teal-9" round @click="month=i">{{ i }}</q-btn>
-                <q-btn class="q-ma-xs" size="16px" color="teal-9" glossy round @click="opened=false"><q-icon name="cancel" color="lime" /></q-btn>
-                <q-btn outline class="q-ma-xs" size="16px" color="cyan-10" round><span class="text-bold text-red-9 text-h5">{{ month }}</span></q-btn>
-                <q-btn class="q-ma-xs" size="16px" color="teal-9" glossy round @click="setYM"><q-icon name="check_circle" color="blue-4" /></q-btn>
+            <q-card class="text-h6 bg-cyan-7" style="border-radius:0;width:220px;height:340px">
+              <q-card-actions class="q-py-md">
+                <q-btn glossy v-for="i in [1,  2, 3]" :key="i" class="q-ma-xs" size="18px" color="teal-9" round @click="month=i">{{ i }}</q-btn>
+                <q-btn glossy v-for="i in [4,  5, 6]" :key="i" class="q-ma-xs" size="18px" color="teal-9" round @click="month=i">{{ i }}</q-btn>
+                <q-btn glossy v-for="i in [7,  8, 9]" :key="i" class="q-ma-xs" size="18px" color="teal-9" round @click="month=i">{{ i }}</q-btn>
+                <q-btn glossy v-for="i in [10,11,12]" :key="i" class="q-ma-xs" size="18px" color="teal-9" round @click="month=i">{{ i }}</q-btn>
+                <q-btn class="q-ma-xs" size="18px" color="teal-9" glossy round @click="opened=false"><q-icon name="cancel" color="lime" /></q-btn>
+                <q-btn outline class="q-ma-xs" size="18px" color="cyan-10" round><span class="text-bold text-red-9 text-h5">{{ month }}</span></q-btn>
+                <q-btn class="q-ma-xs" size="18px" color="teal-9" glossy round @click="setYM"><q-icon name="check_circle" color="blue-4" /></q-btn>
               </q-card-actions>
             </q-card>
           </div>

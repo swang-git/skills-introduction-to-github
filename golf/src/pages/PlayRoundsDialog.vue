@@ -86,12 +86,12 @@ import emitter from 'tiny-emitter/instance'
 import { dayFunctions } from '../composables/dayFunctions'
 const { today } = dayFunctions()
 import { libFunctions } from '../composables/libFunctions'
-const { $q, store } = libFunctions()
+const { $q, store, ENV_API } = libFunctions()
 import { axiosFunctions } from '../composables/axiosFunctions'
 const { gaxios } = axiosFunctions()
 
-import EnterPScoresDialog from 'pages/EnterPScoresDialog'
-import SelOption from 'src/components/SelOptionsWithSearch'
+import EnterPScoresDialog from './EnterPScoresDialog.vue'
+import SelOption from '../components/SelOptionsWithSearch.vue'
 
 // const state = 'none'
 var gameDate = today()
@@ -168,7 +168,7 @@ function selectedOption (model, opt) {
   }
 }
 function getCourseList () {
-  const path = process.env.API + '/golf/CourseList'
+  const path = ENV_API + '/golf/CourseList'
   gaxios(path)
 }
 function nextRound () {
@@ -231,9 +231,9 @@ function openIt (m, tg) {
   playerId = m.id
   let path = null
   if (tag === 'play') {
-    path = process.env.API + '/golf/RoundList/' + playerId
+    path = ENV_API + '/golf/RoundList/' + playerId
   } else {
-    path = process.env.API + '/golf/PlayedRoundList/' + playerId
+    path = ENV_API + '/golf/PlayedRoundList/' + playerId
   }
   gaxios(path)
   opened.value = true
@@ -246,7 +246,7 @@ function getTeeboxList () {
   player.course = course.value.label
   player.courseId = course.value
   // const args = { vm: this }
-  let path = process.env.API + '/golf/TeeboxList/' + player.courseId
+  let path = ENV_API + '/golf/TeeboxList/' + player.courseId
   // args.target = 'golf.TeeboxList'
   gaxios(path)
 }
@@ -254,7 +254,7 @@ function getCourseInfo () {
   console.log(`-fn-getCourseInfo course=${course.value.label} teebox.label=${teebox.value.label} courseId=${courseId.value} teeboxId=${teeboxId.value}`)
   player.teeboxId = teebox.value
   player.teebox = teebox.value.label.split(' ~ ')[0]
-  const path = process.env.API + '/golf/getCourseInfo/' + courseId.value + '/' + teeboxId.value
+  const path = ENV_API + '/golf/getCourseInfo/' + courseId.value + '/' + teeboxId.value
   gaxios(path)
 }
 function setCourseInfo (da) {

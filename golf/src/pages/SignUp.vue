@@ -61,14 +61,14 @@ import emitter from 'tiny-emitter/instance'
 import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 const $router = useRouter()
-import { libFunctions } from '../composables/libFunctions'
-const { $q, store, isDesk, SysAdmin, PGCAdmin } = libFunctions()
-import { axiosFunctions } from '../composables/axiosFunctions'
+import { libFunctions } from '../../src/composables/libFunctions'
+const { $q, store, isDesk, SysAdmin, PGCAdmin, ENV_API } = libFunctions()
+import { axiosFunctions } from '../../src/composables/axiosFunctions'
 const { paxios, gaxios } = axiosFunctions()
 
-import SignupDialog from './SignupDialog'
-import CardSelection from 'src/components/CardSelection'
-import SelOptions from 'src/components/SelOptionsWithSearch'
+import SignupDialog from './SignupDialog.vue'
+import CardSelection from '../../src/components/CardSelection.vue'
+import SelOptions from '../../src/components/SelOptionsWithSearch.vue'
 
 var year = (new Date()).getFullYear()
 var tmntId = 0
@@ -168,7 +168,7 @@ function setUnexpiredTournaments (da) {
 }
 function getUnexpiredTournaments (gameName = 'ALL') {
   // console.log(`-CK-fn-getUnexpiredTournaments gameName=${gameName}`)
-  const path = process.env.API + '/golf/UnexpiredTournaments/' + gameName
+  const path = ENV_API + '/golf/UnexpiredTournaments/' + gameName
   gaxios(path)
 }
 function getIcon (p) {
@@ -206,7 +206,7 @@ function updTplayerActivity (p) {
     inData.id = p.id
     // inData.activity = option
     // console.log(-CK-p.player + ' selected', inData)
-    const path = process.env.API + '/golf/updTplayerActivity'
+    const path = ENV_API + '/golf/updTplayerActivity'
     paxios(path, inData)
   }).onCancel(() => { $q.notify('canceled')})
 }
@@ -365,7 +365,7 @@ function delTournamentPlayer (p, idx) {
     ok: 'Conform',
     cancel: 'Cancel'
   }).onOk(() => {
-    let path = process.env.API + '/golf/delTournamentPlayer/' + p.id
+    let path = ENV_API + '/golf/delTournamentPlayer/' + p.id
     gaxios(path)
     tPlayers.splice(idx, 1)
     signerCount.value--
@@ -416,7 +416,7 @@ function addTournamentPlayer (model, opt) {
       // inData.activity = option
       inData.status = 'A'
       // inData = [inData] // to be able to re-use upserTplayers at the backend
-      const path = process.env.API + '/golf/addTournamentPlayer'
+      const path = ENV_API + '/golf/addTournamentPlayer'
       paxios(path, [inData])
       playersForTournament.value = playersForTournament.value.filter(p => p.value !== playerId)
     }).onCancel(() => { $q.notify('canceled')})
@@ -451,9 +451,9 @@ function showSignupPage (tmt) {
   // console.log('-CK-fn-showSignUpPage stored tmnt', tmt)
   year = tmt.year
   const tid = tmt.id
-  let path = process.env.API + '/golf/getPlayersForTournament/' + tid
+  let path = ENV_API + '/golf/getPlayersForTournament/' + tid
   gaxios(path)
-  path = process.env.API + '/golf/getTournamentPlayersWithScores/' + tid
+  path = ENV_API + '/golf/getTournamentPlayersWithScores/' + tid
   gaxios(path)
 }
 </script>

@@ -29,9 +29,9 @@
 import { ref, onMounted } from 'vue'
 import emitter from 'tiny-emitter/instance'
 import { libFunctions } from '../src/composables/libFunctions'
-const { buildApp, isIM, isDesk, palist, getLineBackground } = libFunctions()
+const { buildApp, isIM, isDesk, palist, getLineBackground, ENV_DEV } = libFunctions()
 import { axiosFunctions } from '../src/composables/axiosFunctions'
-const { gaxios, paxios } = axiosFunctions()
+const { gaxios } = axiosFunctions()
 import UserInput from './UserInput.vue'
 
 const dats = ref([])
@@ -41,14 +41,14 @@ var clickedRowId = -1
 
 // const emit = defineEmits(['user-confirm'])
 console.log('-ST-dictionary')
-onMounted(() => { refUserInput })
+onMounted(() => { console.log(refUserInput) })
 buildApp('英汉字典', 'Dictionary')
 emitter.emit('items-per-page', isIM ? 13 : 30)
 getList()
 emitter.on('dictionary-getList', (x) => setList(x))
 
 function getList () {
-  const path = process.env.API + '/dictionary/getList'
+  const path = ENV_DEV + '/dictionary/getList'
   gaxios(path)
 }
 function setList (da) {

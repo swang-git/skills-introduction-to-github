@@ -8,8 +8,9 @@ export const useNumPadStore = defineStore('numpad', {
   }),
   actions: {
     close() { this.isOpen = false },
-    open(flag, tit, msg) { 
+    open(flag, tit, msg) {
       this.isOpen = true
+      console.log(`-fn-numPadStore.open isOpen=${this.isOpen} flag=${flag} tit=${tit} msg=${msg}`)
       emitter.emit('open-NumPad', flag, tit, msg)
     }
   }

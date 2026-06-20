@@ -212,7 +212,7 @@ export function libFunctions() {
     else if (n.length === 2) return '0.' + n
     else if (n.length >= 3) return (parseInt(n) / 100.00)
   }
-  const ENV_DEV = import.meta.env.DEV ? '/api' : ''
+  const DEV_API = import.meta.env.DEV ? '/api' : ''
   return {
     getLineBackground,formatCurrency,fmtcy,deepClone,decimal2,
     isLocal,
@@ -234,6 +234,6 @@ export function libFunctions() {
     dats,
     dalist,
     palist,
-    ENV_DEV,
+    DEV_API,
   }
 }

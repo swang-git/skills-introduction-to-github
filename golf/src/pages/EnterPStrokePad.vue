@@ -22,8 +22,8 @@
 import { ref } from 'vue'
 import emitter from 'tiny-emitter/instance'
 // import { libFunctions } from 'src/composables/libFunctions'
-import { cssFunctions } from 'src/composables/cssFunctions'
-import { storeFunctions } from 'src/composables/storeFunctions'
+import { cssFunctions } from '../../src/composables/cssFunctions'
+import { storeFunctions } from '../../src/composables/storeFunctions'
 const emit = defineEmits(['set-score'])
 // const { isIM, SysAdmin } = libFunctions()
 const { getStrokePadClass } = cssFunctions()

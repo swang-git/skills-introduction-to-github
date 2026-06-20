@@ -18,8 +18,8 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { dayFunctions } from '../composables/dayFunctions'
-import TimePicker from './TimePicker'
-import NumGapPad from './NumGapPad'
+import TimePicker from './TimePicker.vue'
+import NumGapPad from './NumGapPad.vue'
 const { yyyymmddHHMM } = dayFunctions()
 const emit = defineEmits(['save-teetimes'])
 const opened = ref(false)

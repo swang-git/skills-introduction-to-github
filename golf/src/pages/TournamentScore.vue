@@ -19,14 +19,14 @@
   </div>
 </template>
 <script setup>
-import { libFunctions } from 'src/composables/libFunctions';
-const { store, $router } = libFunctions()
-import { axiosFunctions } from 'src/composables/axiosFunctions';
+import { libFunctions } from '../composables/libFunctions';
+const { store, $router, ENV_API } = libFunctions()
+import { axiosFunctions } from '../composables/axiosFunctions';
 const { gaxios } = axiosFunctions()
 const gameName = "";
-const search = "";
+const search = ref("");
 const playersRanking = [];
-const sortby = { value: "GSC", label: "Sort by Gross Score" };
+const sortby = ref({ value: "GSC", label: "Sort by Gross Score" })
 const sortOptions = [];
 
 console.log("-ST-TournamentScore");
@@ -36,7 +36,7 @@ if (tid < 0 || tid === undefined) {
   $router.push({ path: "TournamentList" });
 }
 
-const path = process.env.API + "/golf/PlayersRanking/" + tid;
+const path = ENV_API + "/golf/PlayersRanking/" + tid;
 gaxios(path);
 
 let opt = { label: "Gross Score", value: "GSC" };
@@ -51,8 +51,8 @@ opt = { label: "Club Index", value: "CDX" };
 this.sortOptions.push(opt);
 
 function doSorting() {
-  console.log("-CK-fn-sorted by", this.sortby.value);
-  const sortKey = this.sortby.value === "" ? "GSC" : this.sortby.value;
+  console.log("-CK-fn-sorted by", sortby.value);
+  const sortKey = sortby.value === "" ? "GSC" : sortby.value;
   if (sortKey === "") return playersRanking;
 
   let data = playersRanking;

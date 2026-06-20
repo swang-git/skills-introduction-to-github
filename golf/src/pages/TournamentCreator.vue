@@ -45,21 +45,21 @@
 <script setup>
 import emitter from 'tiny-emitter/instance'
 import { ref, onMounted } from 'vue'
-import { axiosFunctions } from 'src/composables/axiosFunctions'
-// import { dayFunctions } from 'src/composables/dayFunctions'
-import { libFunctions } from 'src/composables/libFunctions'
-import DateTimePicker from 'src/components/DateTimePicker'
-import LayoutFooter from 'src/components/LayoutFooter'
-import selection from 'src/components/MySelection'
-import numInput from 'src/components/NumInput.vue'
-import txtInput from 'src/components/TxtInput.vue'
-import LnkInput from 'src/components/LnkInput'
-import NotePad from 'src/components/NotePad'
-import SelOptionsWithSearch from 'src/components/SelOptionsWithSearch'
+import { axiosFunctions } from '../composables/axiosFunctions'
+// import { dayFunctions } from '../composables/dayFunctions'
+import { libFunctions } from '../composables/libFunctions'
+import DateTimePicker from '../components/DateTimePicker.vue'
+import LayoutFooter from '../components/LayoutFooter.vue'
+import selection from '../components/MySelection.vue'
+import numInput from '../components/NumInput.vue'
+import txtInput from '../components/TxtInput.vue'
+import LnkInput from '../components/LnkInput.vue'
+import NotePad from '../components/NotePad.vue'
+import SelOptionsWithSearch from '../components/SelOptionsWithSearch.vue'
 
 const { gaxios, paxios } = axiosFunctions()
 // const { getNNextSunday } = dayFunctions()
-const { isIM } = libFunctions()
+const { isIM, ENV_API } = libFunctions()
 const tit = ref(null)
 // const gameName = ref(null)
 // const courseName = ref(null)
@@ -144,30 +144,30 @@ function showLnkInput () {
 }
 function addTournament () {
   console.log('addTournament() called')
-  const path = process.env.API + '/golf/addTournament'
+  const path = ENV_API + '/golf/addTournament'
   console.log('addTournament inData', tmnt.value)
   paxios(path, tmnt.value)
   opened.value = false
 }
 function updTournament () {
-  const path = process.env.API + '/golf/updTournament'
+  const path = ENV_API + '/golf/updTournament'
   paxios(path, tmnt.value)
   opened.value = false
 }
 function getCourseList () {
   console.log('getCourseList() called')
-  const path = process.env.API + '/golf/CourseList'
+  const path = ENV_API + '/golf/CourseList'
   gaxios(path)
 }
 function getTeeboxList () {
   console.log('getTeeboxList() called course_id', tmnt.value.course_id)
   if (tmnt.value.course_id === -1) this.$refs.addCourse.openIt()
-  const path = process.env.API + '/golf/TeeboxList/' + tmnt.value.course_id
+  const path = ENV_API + '/golf/TeeboxList/' + tmnt.value.course_id
   gaxios(path)
 }
 function getGameNameList () {
   // console.log('getGameNameList() called')
-  const path = process.env.API + '/golf/GameNameList'
+  const path = ENV_API + '/golf/GameNameList'
   gaxios(path)
 }
 </script>
