@@ -79,8 +79,8 @@ import RoundButton from '../../src/components/RoundButton.vue'
 import YearMonthPad from '../../src/components/YearMonthPad.vue'
 import NumPad from '../../src/components/NumPad.vue'
 
-import { useNumPadStore } from '../../src/stores/numPadStore.js'
-const numPadStore = useNumPadStore()
+// import { useNumPadStore } from '../../src/stores/numPadStore.js'
+// const numPadStore = useNumPadStore()
 import { useAdminStore } from '../../src/stores/adminStore.js'
 const admin = useAdminStore()
 // emitter.on('jump-to-page', (page) => { jumpTo(page) })
@@ -109,14 +109,17 @@ emitter.on('yali-getPages', (x) => setPages(x))
 buildApp('娅莉硬笔画', 'yali')
 getPages(pageBegin.value, perPage.value)
 
-admin.isCleanup = ref(window.location.href.substring(window.location.href.length - 2) == '//')
-console.log(`-ST-yali hostname=${window.location.hostname} href=${window.location.href.substring(window.location.href.length - 2)} isCleanup=${admin.isCleanup}`)
+// admin.isCleanup = ref(window.location.href.substring(window.location.href.length - 2) == '//')
+// console.log(`-CK-isCleanup hostname=${window.location.hostname} href=${window.location.href.substring(window.location.href.length - 2)} isCleanup=${admin.isCleanup}`)
+admin.isCleanup = ref(window.location.hostname == 'localhost')
+let wloc = window.location
+console.log(`-CK-isCleanup=${admin.isCleanup} hostname=${wloc.hostname} host=${wloc.host} href=${wloc.href}`)
 emitter.on('yali-getPixByYM', (x) => setPixByYM(x))
 // const compYM = computed(() => { return ym.value })
 
 // ---- function section -----
 function setPidx (idx) {
-  emitter.emit('pix-pidx', idx)
+  emitter.emit('pix-pidx', idx - 1)
 }
 function setPerPage (ppage) {
   perPage.value = 0
@@ -256,9 +259,12 @@ function prepnPrevPage () {
 function openNumPad(flag=null) {
   [yex.value, yue.value] = [true, false]
   console.log(`-fn-openNumPad flag=${flag}`)
-  if (flag == 'per-page') numPadStore.open('YALI_PER_PAGE', '输入每页的页数', total.value)
-  else if (flag == 'jump-page') numPadStore.open('YALI_PIX_PAGE', '输入要跳转的页数', lastPage.value)
+  // if (flag == 'per-page') numPadStore.open('YALI_PER_PAGE', '输入每页的页数', total.value)
+  // else if (flag == 'jump-page') numPadStore.open('YALI_PIX_PAGE', '输入要跳转的页数', lastPage.value)
+  // if (flag == 'per-page') emitter.emit('open-NumPad', 'YALI_PER_PAGE', '输入每页的页数', total.value)
   // else if (flag == 'jump-page') emitter.emit('open-NumPad', 'YALI_PIX_PAGE', '输入要跳转的页数', lastPage.value)
+  if (flag == 'per-page') emitter.emit('open-NumPad', flag, '输入每页的页数', total.value)
+  else if (flag == 'jump-page') emitter.emit('open-NumPad', flag, '输入要跳转的页数', lastPage.value)
 }
 /**
  * Load next page and append to existing drawings

@@ -258,12 +258,12 @@ onMounted(() => {
 
 function getBackgroundImg() {
   return {
-    backgroundImage: 'url("' + ENV_DEV + '/apps/icons/bg-img-purple.png"' + ')',
-    // backgroundImage: 'url("' + ENV_DEV + '/apps/icons/material.svg"' + ')',
+    backgroundImage: 'url("' + ENV_DEV + '/apps/assets/bg-img-purple.png"' + ')',
+    // backgroundImage: 'url("' + ENV_DEV + '/apps/assets/material.svg"' + ')',
     backgroundSize: 'cover',
     backgroundPosition: 'center',
     backgroundRepeat: 'no-repeat',
-    height: '550px'
+    height: '400px'
   }
 }
 

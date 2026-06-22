@@ -47,12 +47,17 @@
           <span class="text-bold text-cyan-2 text-body1" style="margin: 0 4px 0 -10px">上一幅</span>
         </q-btn>
         <div v-show="admin.isCleanup">
-          <q-btn glossy rounded class="bg-teal" v-close-popup>
-            <q-icon left name="cancel" size="md" color="lime" />
-            <span class="text-bold text-cyan-2 text-body1" style="margin: 0 4px 0 -10px">关闭</span>
+          <q-btn glossy rounded class="bg-pink" @click="askRemoveDupFile">
+            <q-icon left name="cancel" size="36px" color="yellow" />
+            <span class="text-yellow text-h6" style="margin:4px 4px 0 -10px">删除</span>
           </q-btn>
-          <q-btn v-if="compRemovedPidx>=0" glossy dense icon="cancel" class="text-h6 text-cyan-3" label="undo" color="cyan-10" @click="askUndoRemoveDupFile" />
-          <q-btn glossy dense icon="delete" class="text-h6 text-pink-3" label="delete" color="cyan-10" @click="askRemoveDupFile" />
+          <q-btn v-if="compRemovedPidx>=0" glossy rounded class="bg-teal" @click="askUndoRemoveDupFile">
+            <q-icon left name="info" size="36px" color="yellow-9" />
+            <span class="text-cyan-2 text-h6" style="margin:4px 4px 0 -10px">确定</span>
+          </q-btn>
+
+          <!-- <q-btn v-if="compRemovedPidx>=0" glossy dense icon="cancel" class="text-h6 text-cyan-3" label="undo" color="cyan-10" @click="askUndoRemoveDupFile" />
+          <q-btn rounded glossy dense icon="delete" class="text-h6 text-red" label="delete" color="cyan-10" @click="askRemoveDupFile" /> -->
         </div>
         <q-btn glossy rounded class="bg-teal-9" @click="slideshow()">
           <q-icon name="motion_photos_auto" size="md" color="yellow-9" />
@@ -81,8 +86,8 @@ const { gaxios } = axiosFunctions()
 import TxtPad from '../../src/components/TxtPad.vue'
 import ConfirmDialog from '../../src/components/ConfirmDialog.vue'
 
-import { useNumPadStore } from '../../src/stores/numPadStore.js'
-const numPadStore = useNumPadStore()
+// import { useNumPadStore } from '../../src/stores/numPadStore.js'
+// const numPadStore = useNumPadStore()
 import { useAdminStore } from '../../src/stores/adminStore.js'
 const admin = useAdminStore()
 emitter.on('pix-pidx', (idx) => { pidx.value = idx%piclst.value.length; console.log(`pidx=${pidx.value}`); getPic() })
@@ -168,7 +173,7 @@ function getBGimg () {
 const pageBackground = computed(() => {
   return {
     // backgroundImage: 'url(' + process.env.API + "/yali/icons/" +  getBGimg(),
-    backgroundImage: 'url(' + DEV_API + "/yali/icons/" +  getBGimg(),
+    backgroundImage: 'url(' + DEV_API + "/yali/assets/" +  getBGimg(),
     backgroundSize: 'cover',
     backgroundPosition: 'center',
     backgroundRepeat: 'no-repeat',
@@ -207,9 +212,9 @@ const compPidx = computed(() => { return pidx.value })
 emitter.on('open-PicDialog', (idx, imgdata) => openIt(idx, imgdata))
 
 function openNumPad() {
-  // const filenum = pidx.value + 1
   console.log(`-fn-openNumPad totalPix=${piclst.value.length}`)
-  numPadStore.open('YALI_PIX_PIDX', '要看哪幅画？', piclst.value.length)
+  // numPadStore.open('YALI_PIX_PIDX', '要看哪幅画？', piclst.value.length)
+  emitter.emit('open-NumPad', 'pix-pidx', '要看哪幅画？', piclst.value.length)
 }
 
 function openTxtPad() {

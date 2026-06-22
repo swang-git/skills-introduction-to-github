@@ -221,7 +221,7 @@ const compVer = computed(() => { return import.meta.env.VITE_BUILD_TAG })
 function getBackgroundImg () { 
   return {
       // backgroundImage: 'url("' + ENV_API + '/golf/icons/bg-img-purple.png"' + ')',
-      backgroundImage: 'url("' + ENV_API + '/golf/icons/material.png"' + ')',
+      backgroundImage: 'url("' + ENV_API + '/golf/assets/material.png"' + ')',
       backgroundSize: 'cover',
       backgroundPosition: 'center',
       backgroundRepeat: 'no-repeat',
