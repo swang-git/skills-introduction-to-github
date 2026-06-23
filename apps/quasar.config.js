@@ -9,6 +9,7 @@ export default defineConfig(ctx => {
   // load .env file manually
   // dotenv.config({ path: resolve(process.cwd(), '.env')})
   // console.log('===CK=== quasar.config.js starting ...', ctx)
+  // console.log('===CK=== quasar.config.js starting ... import.meta.env', import.meta.env)
   return {
     // https://v2.quasar.dev/quasar-cli-vite/prefetch-feature
     // preFetch: true,
@@ -65,7 +66,7 @@ export default defineConfig(ctx => {
 
       // extendViteConf (viteConf) {},
       extendViteConf(viteConf) {
-        if (ctx.prod) {
+        if (ctx.prod && !ctx.debug) {
           viteConf.build = {
             ...viteConf.build,
             // Use terser instead of esbuild for full comment removal

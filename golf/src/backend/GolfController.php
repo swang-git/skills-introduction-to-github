@@ -390,7 +390,7 @@ class GolfController extends Controller {
 		// return ['canList' => $canList, 'allList' => $allList, 'status' => 'OK'];
 		return ['lst' => $lst, 'status' => 'OK'];
 	}
-	public function delTeamMatchPlayer($id, $tmntId, $gameId, $matchDate) {
+	public function delTeamMatchPlayer($id, $tmntId, $gameId, $matchDate) { Log::info("-fn-getTeamMatchPlayer id=$id tmntId=$tmntId gameId=$gameId matchDate=$matchDate");
 		$dm = Tplayer::find($id);
 		$this->logPage($dm->name);
 		$dm->delete();
@@ -1482,8 +1482,10 @@ class GolfController extends Controller {
 		// Log::info('getPGCGamePlayers', json_decode(json_encode($PGCPlayers[0], true), true));
 		return [ 'PGCPlayers' => $PGCPlayers, 'status' => "OK" ];
 	}
-	public function getTeamMatchPlayers($tmntId, $gameId, $gameDate) { // Log::info("getTeamMatchPlayers tmntId=$tmntId gameId=$gameId gameDate=$gameDate");
+	public function getTeamMatchPlayers($tmntId, $gameId, $gameDate) { Log::info("getTeamMatchPlayers tmntId=$tmntId gameId=$gameId gameDate=$gameDate");
 		$tplayers = DB::select("CALL get_team_match_players(?, ?, ?)", [$tmntId, $gameId, $gameDate]);
+		// $tplayers = DB::select("CALL get_team_match_players(0, 13, '2026-06-30)')");
+		Log::info("-CK-tplayers:", $tplayers);
 		$group_scenario = null;
 		if (count($tplayers)>0) {
 			$tmntId = $tplayers[0]->tmntId;

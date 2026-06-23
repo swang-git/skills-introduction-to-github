@@ -55,7 +55,7 @@ export default defineConfig(ctx => {
       // extendViteConf (viteConf) {},
       // viteVuePluginOptions: {},
       extendViteConf(viteConf) {
-        if (ctx.prod) {
+        if (ctx.prod && !ctx.debug) {
           viteConf.build = {
             ...viteConf.build,
             // Use terser instead of esbuild for full comment removal

@@ -1,7 +1,7 @@
 <template>
 <div v-if="showMatchGrouped" class="justify-center">
   <q-card-actions v-if="matchDate" align="evenly" class="row q-py-xs text-cyan-1 text-h5 inset-shadow-down">
-    <q-btn round glossy @click="showTeamScore=!showTeamScore"><q-icon name="G" color="cyan-2" style="margin:-8px 0 0 0" /></q-btn>
+    <q-btn v-show="teamAScore!=null && teamBScore!=null" round glossy @click="showTeamScore=!showTeamScore"><q-icon name="G" color="cyan-2" style="margin:-8px 0 0 0" /></q-btn>
     <div class="text-center">{{ matchDate }} ({{ matchDate.chwk3() }})</div>
     <q-btn v-if="matchDate>=today()" glossy round icon="diversity_2" @click="doGrouping()"><b style="margin-top:-15px">{{ gsx }}</b></q-btn>
     <q-btn v-else flat round />
