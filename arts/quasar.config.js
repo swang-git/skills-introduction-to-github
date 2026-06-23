@@ -54,6 +54,27 @@ export default defineConfig(ctx => {
 
       // extendViteConf (viteConf) {},
       // viteVuePluginOptions: {},
+      extendViteConf(viteConf) {
+        if (ctx.prod) {
+          viteConf.build = {
+            ...viteConf.build,
+            // Use terser instead of esbuild for full comment removal
+            minify: 'terser',
+            terserOptions: {
+              compress: {
+                drop_console: true, // remove all console.log / console.debug
+                drop_debugger: true
+              },
+              format: {
+                comments: false // DELETE ALL JS comments (critical for your need)
+              },
+              mangle: {
+                toplevel: true // aggressive variable renaming
+              }
+            }
+          }
+        }
+      },
 
       vitePlugins: [
         [

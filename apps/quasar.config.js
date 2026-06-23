@@ -8,7 +8,7 @@ import { defineConfig } from '#q-app'
 export default defineConfig(ctx => {
   // load .env file manually
   // dotenv.config({ path: resolve(process.cwd(), '.env')})
-  console.log('quasar.config.js starting ...')
+  // console.log('===CK=== quasar.config.js starting ...', ctx)
   return {
     // https://v2.quasar.dev/quasar-cli-vite/prefetch-feature
     // preFetch: true,
@@ -39,7 +39,7 @@ export default defineConfig(ctx => {
     build: {
       base: './',
       env: {
-        BUILD_VER: import.meta.env.VITE_BUILD_VER || '1.1.0'
+        // BUILD_VER: import.meta.env.VITE_BUILD_VER || '1.1.0'
         // API: ctx.dev ? '' : '/api',
         // VER: process.env.PRODUCT_VER || '1.0'
       },
@@ -64,6 +64,27 @@ export default defineConfig(ctx => {
       // distDir
 
       // extendViteConf (viteConf) {},
+      extendViteConf(viteConf) {
+        if (ctx.prod) {
+          viteConf.build = {
+            ...viteConf.build,
+            // Use terser instead of esbuild for full comment removal
+            minify: 'terser',
+            terserOptions: {
+              compress: {
+                drop_console: true, // remove all console.log / console.debug
+                drop_debugger: true
+              },
+              format: {
+                comments: false // DELETE ALL JS comments (critical for your need)
+              },
+              mangle: {
+                toplevel: true // aggressive variable renaming
+              }
+            }
+          }
+        }
+      },
       // viteVuePluginOptions: {},
 
       vitePlugins: [
@@ -90,15 +111,16 @@ export default defineConfig(ctx => {
     devServer: {
       // https: true,
       open: true, // opens browser window automatically
-      port: ctx.mode.spa ? '8080' : (ctx.mode.pwa ? 9080 : 9090),
+      port: ctx.mode.spa ? '8080' : ctx.mode.pwa ? 9080 : 9090,
       proxy: {
-         '/api': {
-          // target: 'http://192.168.1.107', 
-          target: 'http://localhost',  // Your Fedora backend
+        '/api': {
+          // target: 'http://192.168.1.107',
+          target: 'http://localhost', // Your Fedora backend
           changeOrigin: true,
-          rewrite: (path) => path.replace(/^\/api/, '')  // Only if backend doesn't expect /api
+          rewrite: path => path.replace(/^\/api/, '') // Only if backend doesn't expect /api
         }
-      }
+      },
+      vueDevTools: true
     },
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-file#framework
