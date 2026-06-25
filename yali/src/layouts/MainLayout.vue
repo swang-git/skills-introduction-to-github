@@ -150,7 +150,7 @@ function getNextYM () {
 function openYmPad () {
   // console.log('-fn-openYmPad')
   [yex.value, yue.value] = [false, true]
-  emitter.emit('open-YearMonthPad', 100, '选您想看的画(年.月)', years)
+  emitter.emit('open-YearMonthPad', 100, '选您想看哪年哪月的画', years)
 }
 
 // 找到最接近的项
