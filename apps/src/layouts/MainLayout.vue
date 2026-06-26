@@ -3,9 +3,10 @@
     <q-layout view="hHh Lpr lFr">
       <q-header v-if="curApp!='arts'" class="bg-teal-9 inset-shadow-down">
         <q-toolbar style="margin-left:-5px">
-          <q-btn v-if="isDesk" glossy @click="drawerClick()" round dense icon="img:icons/quasar-logo.svg" size="18px" />
-          <!-- <q-btn v-else to="/" round dense glossy color="blue"><q-icon name="🏠" style="margin:-13px 0 0 0" /></q-btn> -->
-          <q-btn v-else to="/" round dense glossy color="blue"><q-icon :name="compVer" style="margin:-9px 0 0 0" /></q-btn>
+          <!-- <q-btn v-if="isDesk" glossy @click="drawerClick()" round dense icon="img:icons/quasar-logo.svg" size="18px" /> -->
+          <q-btn v-if="isDesk" glossy @click="openApp('/')" round dense icon="img:icons/quasar-logo.svg" size="18px" />
+          <q-btn v-else to="/" round dense glossy color="blue"><q-icon name="🏠" style="margin:-8px 0 0 -2px" /></q-btn>
+          <!-- <q-btn v-else to="/" round dense glossy color="blue"><q-icon :name="compVer" style="margin:-0px 0 0 0" /></q-btn> -->
           <q-toolbar-title>
             <div class="row q-pt-sm no-wrap">
               <span >{{ appTitle }}</span>
@@ -126,7 +127,7 @@ import { useRouter } from 'vue-router'
 import LoginDialog from '../../users/LoginDialog.vue'
 const router = useRouter()
 
-const { isIM, isDesk, $q, AppAdmin } = libFunctions()
+const { isIM, isDesk, $q, AppAdmin, ENV_DEV } = libFunctions()
 const { yyyymmdd } = dayFunctions()
 const { getA1cDefinitions } = infoFunctions()
 
@@ -311,7 +312,7 @@ function search () {
 }
 function drawerClick () {
   console.log(`-fn-drawerClick`)
-  window.location.href = "/apps"
+  window.location.href = ENV_DEV + "/apps"
   // miniState = !miniState
   // drawer = drawer
 }

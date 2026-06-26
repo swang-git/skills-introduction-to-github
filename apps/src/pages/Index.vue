@@ -196,10 +196,10 @@
         colr="amber-10"
         iclr="grey-10"
         ttip="系 统 Logout"
-        @click="userTye=null;logout()"
+        @click="logout()"
         v-show="AppAdmin"
       />
-      <RoundButton
+      <!-- <RoundButton
         size="22px"
         icon="login"
         clas="q-ma-xs"
@@ -208,7 +208,7 @@
         ttip="系 统 管 理"
         @click="login()"
         v-if="!AppAdmin"
-      />
+      /> -->
       <RoundButton
         size="22px"
         :icon="compVer"
@@ -243,9 +243,7 @@ import PlatformDataPad from '../components/PlatformDataPad.vue'
 const refPlatformDataPad = ref(null)
 
 const refUserList = ref(null)
-const compVer = computed(() => {
-  return import.meta.env.VITE_BUILD_TAG
-})
+const compVer = computed(() => { return import.meta.env.VITE_BUILD_TAG })
 
 console.log(`-ST-Index bg-img=${getBackgroundImg().backgroundImage}`)
 // console.log(`-ST-Index AppAdmin=${AppAdmin.value}`)
@@ -273,11 +271,9 @@ function showSysInfo() {
   refPlatformDataPad.value.openIt()
 }
 function openApp(app) {
-  if (
-    [
-      '../golf',
-      '../arts',
-      '../yali',
+  if (['../golf', '../arts', '../yali'].includes(app)) {
+    window.location.href = ENV_DEV + app
+  } else if ([
       'glucosecheck',
       'holdings',
       'exlist',
@@ -292,8 +288,6 @@ function openApp(app) {
       'pfcheck',
     ].includes(app) && !AppAdmin.value
   ) {
-    // no need to reload for chart
-    // window.location.href = app // this navigates to app and also trigger to loading. otherwise <canvas> not working
       login(app)
   } else {
     router.replace({ path: app })
@@ -308,13 +302,14 @@ function showHolidays() {
   console.log('-CK-fn-showHolidays')
   emitter.emit('open-Holidays')
 }
+// emitter.on('apps-logout', () => router.replace({ path: '/' }))
 function logout() {
   console.log(`-fn-logout AppAdmin=${AppAdmin.value}`)
   const path = ENV_DEV + '/apps/logout'
   userType.value = null
   $q.localStorage.set('userType', null)
   store.userType = null
+  window.location.href = ENV_DEV + '/apps'
   gaxios(path)
-  window.location.href = '/apps'
 }
 </script>

@@ -58,7 +58,7 @@ const router = useRouter()
 import { axiosFunctions } from '../src/composables/axiosFunctions'
 const { gaxios, paxios } = axiosFunctions()
 import { libFunctions } from '../src/composables/libFunctions'
-const { isAdmin, userType, store, $q } = libFunctions()
+const { isAdmin, userType, store, $q, ENV_DEV } = libFunctions()
 
 //== data sections
 const name = ref(null)
@@ -110,7 +110,7 @@ function login() {
   inData.username = username.value
   inData.password = password.value
   // const path = process.env.API + '/apps/loginAdmin'
-  const path = '/apps/loginAdmin'
+  const path = ENV_DEV + '/apps/loginAdmin'
   paxios(path, inData)
 }
 function onReset() {
@@ -119,7 +119,7 @@ function onReset() {
   password.value = null
   accept.value = false
 }
-emitter.on('apps-loginAdmin', da => setLogin(da))
+emitter.on('apps-loginAdmin', (da) => setLogin(da))
 function setLogin(da) {
   console.log('-CK-fn-setLogin', da)
   const user = da.user
