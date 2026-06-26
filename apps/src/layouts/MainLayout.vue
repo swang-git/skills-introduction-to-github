@@ -74,7 +74,7 @@
               <AppItem appl="月 报 分 析" colr="brown-9"  iclr="white"  size="25px" styl="margin:-6px 0 0 0" icon="报" @click="openApp('bankstatementloader')" />
               <AppItem appl="网 上 阅 读" colr="indigo-9" iclr="white"  size="25px" styl="margin:-6px 0 0 0" icon="文" appn="../arts" />
               <AppItem appl="娅 莉 画 展" colr="red-9"   iclr="yellow" size="25px" styl="margin:-6px 0 0 0" icon="画" appn="../yali" />
-              <AppItem appl="高 尔 夫 球" colr="green-9"  iclr="yellow" size="27px" styl="margin:-1px 0 0 0" icon="golf_course" appn="../golf" />
+              <AppItem appl="高 尔 夫 球" colr="green-9"  iclr="yellow" size="27px" styl="margin:-1px 0 0 0" icon="golf_course" @click="openApp('../golf')" />
               <AppItem appl="跳 转 首 页" colr="blue-9"   iclr="grey"   size="25px" styl="margin:-9px 0 0 0" :icon="compVer" appn="/" />
               <AppItem appl="英 汉 字 典" colr="brown-9"  iclr="yellow" size="25px" styl="margin:-1px 0 0 0" icon="translate" @click="openApp('dictionary')" />
               <AppItem appl="法 定 假 日" colr="pink-9"   iclr="yellow" size="25px" styl="margin:-1px 0 0 0" icon="card_giftcard" appn="" @click="showHolidays()" />
@@ -233,6 +233,12 @@ function setTitle (tit) {
 function openApp (app) {
   console.log(`-fn-openApp, app=${app} AppAdmin=${AppAdmin.value} drawer=${drawer} numItems=${numItems.value} itemsPerPage=${itemsPerPage.value}`)
   curApp.value = app
+  if (app == '../golf') {
+    emitter.emit('apps-logout')
+    // router.push({ path: ENV_DEV + app })
+    window.location.href='/golf'
+    return
+  }
   if ([
       '../arts', 
       '../yali', 

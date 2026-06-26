@@ -272,6 +272,7 @@ function showSysInfo() {
 }
 function openApp(app) {
   if (['../golf', '../arts', '../yali'].includes(app)) {
+    logout()
     window.location.href = ENV_DEV + app
   } else if ([
       'glucosecheck',
@@ -302,7 +303,7 @@ function showHolidays() {
   console.log('-CK-fn-showHolidays')
   emitter.emit('open-Holidays')
 }
-// emitter.on('apps-logout', () => router.replace({ path: '/' }))
+emitter.on('apps-logout', () => logout())
 function logout() {
   console.log(`-fn-logout AppAdmin=${AppAdmin.value}`)
   const path = ENV_DEV + '/apps/logout'
