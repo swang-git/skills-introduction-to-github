@@ -96,18 +96,19 @@ const visibleColumnsFone = [col(3).name]
 const columns = ref([col(0), col(1), col(2), col(3), col(4) ])
 const fabOpen = ref(false)
 const dalst = ref([])
+var searchQuery = null
 
 //== main
 console.log('-ST-melist')
-buildApp ('备忘录', 'memo')
-getList(screenwidth/13)
-emitter.emit('items-per-page', isIM ? 13 : 22)
-
-emitter.on('search', (searchQuery) => { searchQuery = searchQuery })
+emitter.on('search', (x) => { searchQuery = x })
 emitter.on('memo-getList', (da) => setList(da))
 emitter.on('memo-add', (x) => addedRow(x.row))
 emitter.on('memo-upd', (x) => updedRow(x.row))
 emitter.on('memo-del', () => deledRow())
+buildApp ('备忘录', 'memo')
+emitter.emit('items-per-page', isIM ? 13 : 22)
+getList(screenwidth/13)
+
 
 function col (idx) {
   const cols = [

@@ -7,6 +7,7 @@ export const useAppsStore = defineStore('apps', {
     pageTile: null,
     clickedCont: {},
     clickedIndex: -1,
+    userType: null,
   }),
   actions: {
     increment() {

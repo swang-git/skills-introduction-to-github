@@ -196,8 +196,8 @@
         colr="amber-10"
         iclr="grey-10"
         ttip="系 统 Logout"
-        @click="logout()"
-        v-if="AppAdmin"
+        @click="userTye=null;logout()"
+        v-show="AppAdmin"
       />
       <RoundButton
         size="22px"
@@ -231,7 +231,7 @@ import { useRouter } from 'vue-router'
 const router = useRouter()
 
 import { libFunctions } from '../../src/composables/libFunctions'
-const { buildApp, userType, q, $store, AppAdmin, ENV_DEV } = libFunctions()
+const { buildApp, store, $q, userType, AppAdmin, ENV_DEV } = libFunctions()
 import { axiosFunctions } from '../../src/composables/axiosFunctions'
 const { gaxios } = axiosFunctions()
 
@@ -250,7 +250,7 @@ const compVer = computed(() => {
 console.log(`-ST-Index bg-img=${getBackgroundImg().backgroundImage}`)
 // console.log(`-ST-Index AppAdmin=${AppAdmin.value}`)
 buildApp('Apps Home', '家庭应用')
-emitter.on('user-type', x => (userType.value = x))
+// emitter.on('user-type', x => (userType.value = x))
 onMounted(() => {
   console.log(refUserList.value)
   console.log(refPlatformDataPad.value)
@@ -279,31 +279,42 @@ function openApp(app) {
       '../arts',
       '../yali',
       'glucosecheck',
+      'holdings',
       'exlist',
-      'reminder'
-    ].includes(app)
+      'reminder',
+      'memo',
+      'watcher',
+      'bankstatement',
+      'bankstatementloader',
+      'healthtest',
+      'pancreaticfluid',
+      'dictionary',
+      'pfcheck',
+    ].includes(app) && !AppAdmin.value
   ) {
     // no need to reload for chart
-    window.location.href = app // this navigates to app and also trigger to loading. otherwise <canvas> not working
+    // window.location.href = app // this navigates to app and also trigger to loading. otherwise <canvas> not working
+      login(app)
   } else {
     router.replace({ path: app })
-    console.log(`-CK-open app ${app}`)
+    console.log(`-CK-openApp ${app}`)
   }
 }
-function login() {
-  console.log('-CK-fn-login')
-  emitter.emit('open-LoginDialog')
+function login(app) {
+  console.log(`-CK-fn-login app=${app}`)
+  emitter.emit('open-LoginDialog', app)
 }
 function showHolidays() {
   console.log('-CK-fn-showHolidays')
   emitter.emit('open-Holidays')
 }
 function logout() {
-  console.log('-CK-fn-logout')
-  const path = ENV_DEV + '/logout'
-  userType.value = undefined
-  q.localStorage.set('usertype', undefined)
-  $store.commit('apps/setUserType', undefined)
+  console.log(`-fn-logout AppAdmin=${AppAdmin.value}`)
+  const path = ENV_DEV + '/apps/logout'
+  userType.value = null
+  $q.localStorage.set('userType', null)
+  store.userType = null
   gaxios(path)
+  window.location.href = '/apps'
 }
 </script>

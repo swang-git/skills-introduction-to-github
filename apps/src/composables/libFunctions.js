@@ -102,7 +102,7 @@ export function libFunctions() {
   const AppAdmin = computed(() => { return userType.value === 'yadmin' })
   const userType = computed({
     get: () => store.userType || $q.localStorage.getItem('userType'),
-    set: val => store.userType = val
+    set: val => { store.userType = val; $q.localStorage.set('userType', val) }
   })
   const screenwidth = ScreenWidth()
   const screenheight = ScreenHeight()

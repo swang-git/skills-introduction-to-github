@@ -57,6 +57,7 @@ const rows = ref([])
 const rowId = ref(null)
 const selectedRow = ref([])
 const refConfirmDialog = ref(false)
+const ENV_DEV = import.meta.env.DEV ? '/api' : ''
 
 console.log('-ST-UserListDialog')
 emitter.on('users-getUserList', (x) => openIt(x))
@@ -84,24 +85,24 @@ function updatedRow (da) {
 }
 function delFromDB () {
   console.log(`-fn-delFromDB rowId=${rowId.value}`, rowId.value)
-  const path = process.env.API + '/users/del/' + rowId.value
+  const path = ENV_DEV + '/users/del/' + rowId.value
   rows.value.splice(rows.value.map(x => { return x.id }).indexOf(rowId.value), 1)
   gaxios(path)
 }
 function upd () {
   // const upduser = rows.value.filter(x => x.id === rowId.value)[0]
   console.log(`-fn-upd rowId=${rowId.value}`, selectedRow.value)
-  const path = process.env.API + '/users/upd'
+  const path = ENV_DEV + '/users/upd'
   paxios(path, selectedRow.value)
 }
 function add () {
   // console.log(`-fn-add rowId=${rowId.value}`, rows.value.filter(x => x.id === rowId.value)[0])
-  const path = process.env.API + '/users/add'
+  const path = ENV_DEV + '/users/add'
   paxios(path, selectedRow.value)
 }
 function getUserList () {
   console.log('-fn-getUserList')
-  const path = process.env.API + '/users/getUserList'
+  const path = ENV_DEV + '/users/getUserList'
   gaxios(path)
 }
 function openIt(da) {

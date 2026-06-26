@@ -62,20 +62,20 @@
         <q-drawer v-model="drawer" :mini="isDesk ? true : !drawer || miniState" :width="230" :breakpoint="392" show-if-above class="bg-teal-9">
           <q-scroll-area class="fit" style="font-family:youyuan">
             <q-list padding>
-              <AppItem appl="日 常 消 费" colr="purple-9" iclr="yellow" size="27px" styl="margin: 0 0 0 1.5px" icon="monetization_on" appn="exlist" />
+              <AppItem appl="日 常 消 费" colr="purple-9" iclr="yellow" size="27px" styl="margin: 0 0 0 1.5px" icon="monetization_on" @click="openApp('exlist')" />
               <AppItem appl="采 购 清 单" colr="indigo-9" iclr="white"  size="27px" styl="margin: 3pxpx 0 0 0" icon="add_shopping_cart" appn="shopping" />
-              <AppItem appl="温 馨 提 示" colr="teal-9"   iclr="white"  size="27px" styl="margin: 0 0 0 1.5px" icon="schedule" appn="reminder" />
-              <AppItem appl="备 忘 录 表" colr="grey-9"   iclr="white"  size="27px" styl="margin: 0px 0 0 0" icon="assignment" appn="memo" />
-              <AppItem appl="每 天 看 看" colr="pink-9"   iclr="yellow" size="25px" styl="margin:-5px 0 0 1.5px" icon="健" appn="watcher" />
-              <AppItem appl="银 行 月 报" colr="indigo-9" iclr="yellow" size="28px" styl="margin: 1px 0 0 0" icon="account_balance" appn="bankstatement" />
-              <AppItem appl="月 报 明 细" colr="brown-9"  iclr="white"  size="25px" styl="margin:-6px 0 0 0" icon="析" appn="holdings" />
+              <AppItem appl="温 馨 提 示" colr="teal-9"   iclr="white"  size="27px" styl="margin: 0 0 0 1.5px" icon="schedule" @click="openApp('reminder')" />
+              <AppItem appl="备 忘 录 表" colr="grey-9"   iclr="white"  size="27px" styl="margin: 0px 0 0 0" icon="assignment" @click="openApp('memo')" />
+              <AppItem appl="每 天 看 看" colr="pink-9"   iclr="yellow" size="25px" styl="margin:-5px 0 0 1.5px" icon="健" @click="openApp('watcher')" />
+              <AppItem appl="银 行 月 报" colr="indigo-9" iclr="yellow" size="28px" styl="margin: 1px 0 0 0" icon="account_balance" @click="openApp('bankstatement')" />
+              <AppItem appl="月 报 明 细" colr="brown-9"  iclr="white"  size="25px" styl="margin:-6px 0 0 0" icon="析" @click="openApp('holdings')" />
               <AppItem appl="血 糖 控 制" colr="pink-7"   iclr="yellow" size="27px" styl="margin:-1px 0 0 0" icon="bloodtype" appn="glucosecheck" />
-              <AppItem appl="月 报 分 析" colr="brown-9"  iclr="white"  size="25px" styl="margin:-6px 0 0 0" icon="报" appn="bankstatementloader" />
+              <AppItem appl="月 报 分 析" colr="brown-9"  iclr="white"  size="25px" styl="margin:-6px 0 0 0" icon="报" @click="openApp('bankstatementloader')" />
               <AppItem appl="网 上 阅 读" colr="indigo-9" iclr="white"  size="25px" styl="margin:-6px 0 0 0" icon="文" appn="../arts" />
               <AppItem appl="娅 莉 画 展" colr="red-9"   iclr="yellow" size="25px" styl="margin:-6px 0 0 0" icon="画" appn="../yali" />
               <AppItem appl="高 尔 夫 球" colr="green-9"  iclr="yellow" size="27px" styl="margin:-1px 0 0 0" icon="golf_course" appn="../golf" />
               <AppItem appl="跳 转 首 页" colr="blue-9"   iclr="grey"   size="25px" styl="margin:-9px 0 0 0" :icon="compVer" appn="/" />
-              <AppItem appl="英 汉 字 典" colr="brown-9"  iclr="yellow" size="25px" styl="margin:-1px 0 0 0" icon="translate" appn="dictionary" />
+              <AppItem appl="英 汉 字 典" colr="brown-9"  iclr="yellow" size="25px" styl="margin:-1px 0 0 0" icon="translate" @click="openApp('dictionary')" />
               <AppItem appl="法 定 假 日" colr="pink-9"   iclr="yellow" size="25px" styl="margin:-1px 0 0 0" icon="card_giftcard" appn="" @click="showHolidays()" />
               <AppItem appl="健 康 检 查" colr="red" iclr="white"  size="25px" styl="margin:-7px 0 0 2px" icon="查" appn="htlist" />
               <!-- <AppItem appl="胰 流 报 告" colr="grey-9"   iclr="yellow" size="25px" styl="margin:-5px 0 0 0" icon="胰" appn="pfcheck" /> -->
@@ -111,6 +111,7 @@
     </q-layout>
   </div>
   <Holidays />
+  <LoginDialog />
 </template>
 <script setup>
 import { ref, computed } from 'vue'
@@ -121,10 +122,11 @@ import Holidays from '../../holiday/HolidayDialog.vue'
 import { libFunctions } from '../../src/composables/libFunctions'
 import { dayFunctions } from '../../src/composables/dayFunctions'
 import { infoFunctions } from '../../src/composables/infoFunctions'
-// import { useRouter } from 'vue-router'
-// const router = useRouter()
+import { useRouter } from 'vue-router'
+import LoginDialog from '../../users/LoginDialog.vue'
+const router = useRouter()
 
-const { isIM, isDesk, $q } = libFunctions()
+const { isIM, isDesk, $q, AppAdmin } = libFunctions()
 const { yyyymmdd } = dayFunctions()
 const { getA1cDefinitions } = infoFunctions()
 
@@ -227,17 +229,35 @@ function setTitle (tit) {
   if (isDesk) appTitle += ' ' + ymd + ' (' + ymd.chwk3() + ')'
   document.title = tit
 }
-// function XXopenApp (app, appTitle) {
-//   console.log(`-fn-openApp, appTitle, app=${app},appTitle=${appTitle},drawer=${drawer},numItems=${numItems.value},itemsPerPage=${itemsPerPage.value}`)
-//   curApp.value = app
-//   for (const key of Object.keys(disableBtn)) disableBtn[key] = false
-//   disableBtn[app] = true
-//   // if (['../golf', '../arts', 'glucosecheck','exlist', 'relist'].includes(app)) { // no need to reload for chart
-//   if (['../arts', '../yali', '../golf'].includes(app)) { // no need to reload for chart
-//     window.location.href = app // this navigates to app and also trigger to loading. otherwise <canvas> not working
-//   }
-//   router.replace({ path: app })  // this is just navigating no loading
-// }
+function openApp (app) {
+  console.log(`-fn-openApp, app=${app} AppAdmin=${AppAdmin.value} drawer=${drawer} numItems=${numItems.value} itemsPerPage=${itemsPerPage.value}`)
+  curApp.value = app
+  if ([
+      '../arts', 
+      '../yali', 
+      '../golf',
+      'exlist',
+      'reminder',
+      'memo',
+      'watcher',
+      'glucosecheck',
+      'holdings',
+      'healthtest',
+      'bankstatement',
+      'bankstatementloader',
+      'dictionary',
+    ].includes(app) && !AppAdmin.value) { // no need to reload for chart
+    // window.location.href = app // this navigates to app and also trigger to Login view. otherwise <canvas> not working
+      console.log(`-CK-openApp AppAdmin=${AppAdmin.value}`)
+      login(app)
+  } else {
+    router.replace({ path: app })  // this is just navigating no loading
+  }
+}
+function login (app) {
+  console.log(`-CK-fn-login app=${app}`)
+  emitter.emit('open-LoginDialog', app)
+}
 function togglePFSum () {
   emitter.emit('toggle-pf-sum')
 }
