@@ -58,9 +58,33 @@
         </q-toolbar>
       </q-header>
 
-      <!-- <div v-if="curApp!=='arts' && curApp!=='yali' && curApp!=='golf' && isDesk && !isIM"> -->
-      <div v-if="isDesk && !isIM">
-        <q-drawer v-model="drawer" :mini="isDesk ? true : !drawer || miniState" :width="230" :breakpoint="392" show-if-above class="bg-teal-9">
+      <!-- <div v-if="isDesk && curApp=='tvmanager'">
+        <q-drawer v-model="drawer" :mini="miniState" :width="68" class="bg-teal-9 text-h5 text-cyan-2">
+          <q-scroll-area class="fit" style="margin:0 0 0 -11px">
+            <q-list padding>
+              <AppItem colr="purple-9" iclr="yellow" size="27px" styl="margin: 0 0 0 1.5px" icon="monetization_on" @click="openApp('exlist')" />
+              <AppItem colr="indigo-9" iclr="white"  size="27px" styl="margin: 3pxpx 0 0 0" icon="add_shopping_cart" appn="shopping" />
+              <AppItem colr="teal-9"   iclr="white"  size="27px" styl="margin: 0 0 0 1.5px" icon="schedule" @click="openApp('reminder')" />
+              <AppItem colr="grey-9"   iclr="white"  size="27px" styl="margin: 0px 0 0 0" icon="assignment" @click="openApp('memo')" />
+              <AppItem colr="pink-9"   iclr="yellow" size="25px" styl="margin:-5px 0 0 1.5px" icon="健" @click="openApp('watcher')" />
+              <AppItem colr="indigo-9" iclr="yellow" size="28px" styl="margin: 1px 0 0 0" icon="account_balance" @click="openApp('bankstatement')" />
+              <AppItem colr="brown-9"  iclr="white"  size="25px" styl="margin:-6px 0 0 0" icon="析" @click="openApp('holdings')" />
+              <AppItem colr="pink-7"   iclr="yellow" size="27px" styl="margin:-1px 0 0 0" icon="bloodtype" appn="glucosecheck" />
+              <AppItem colr="brown-9"  iclr="white"  size="25px" styl="margin:-6px 0 0 0" icon="报" @click="openApp('bankstatementloader')" />
+              <AppItem colr="indigo-9" iclr="white"  size="25px" styl="margin:-6px 0 0 0" icon="文" appn="../arts" />
+              <AppItem colr="red-9"   iclr="yellow" size="25px" styl="margin:-6px 0 0 0" icon="画" appn="../yali" />
+              <AppItem colr="green-9"  iclr="yellow" size="27px" styl="margin:-1px 0 0 0" icon="golf_course" @click="openApp('../golf')" />
+              <AppItem colr="blue-9"   iclr="grey"   size="25px" styl="margin:-9px 0 0 0" :icon="compVer" appn="/" />
+              <AppItem colr="brown-9"  iclr="yellow" size="25px" styl="margin:-1px 0 0 0" icon="translate" @click="openApp('dictionary')" />
+              <AppItem colr="pink-9"   iclr="yellow" size="25px" styl="margin:-1px 0 0 0" icon="card_giftcard" appn="" @click="showHolidays()" />
+              <AppItem colr="red" iclr="white"  size="25px" styl="margin:-7px 0 0 2px" icon="查" appn="htlist" />
+              <AppItem colr="grey-9"   iclr="yellow" size="25px" styl="margin:-5px 0 0 0" icon="视" appn="tvmanager" />
+            </q-list>
+          </q-scroll-area>
+        </q-drawer>
+      </div> -->
+      <div v-if="isDesk && !isIM && curApp!='tvmanager'">
+        <q-drawer v-model="drawer" :mini="isDesk ? true : !drawer || miniState" :width="230" :breakpoint="393" show-if-above class="bg-teal-9 text-h5 text-cyan-2">
           <q-scroll-area class="fit" style="font-family:youyuan">
             <q-list padding>
               <AppItem appl="日 常 消 费" colr="purple-9" iclr="yellow" size="27px" styl="margin: 0 0 0 1.5px" icon="monetization_on" @click="openApp('exlist')" />
@@ -79,8 +103,8 @@
               <AppItem appl="英 汉 字 典" colr="brown-9"  iclr="yellow" size="25px" styl="margin:-1px 0 0 0" icon="translate" @click="openApp('dictionary')" />
               <AppItem appl="法 定 假 日" colr="pink-9"   iclr="yellow" size="25px" styl="margin:-1px 0 0 0" icon="card_giftcard" appn="" @click="showHolidays()" />
               <AppItem appl="健 康 检 查" colr="red" iclr="white"  size="25px" styl="margin:-7px 0 0 2px" icon="查" appn="htlist" />
+              <AppItem appl="电 视 列 表" colr="grey-9"   iclr="yellow" size="25px" styl="margin:-5px 0 0 0" icon="视" appn="tvmanager" />
               <!-- <AppItem appl="胰 流 报 告" colr="grey-9"   iclr="yellow" size="25px" styl="margin:-5px 0 0 0" icon="胰" appn="pfcheck" /> -->
-              <!-- <AppItem appl="电 视 列 表" colr="grey-9"   iclr="yellow" size="25px" styl="margin:-5px 0 0 0" icon="视" appn="tvmanager" /> -->
               <!-- <AppItem appl="跳 转 首 页" colr="amber-9"                size="25px" styl="margin:-9px 0 0 0" icon="🏠" appn="/" /> -->
 
               <!-- <q-icon v-if="compVer==null" name="普" class="text-h5" color="teal-4" style="margin-left:20px" />
@@ -106,7 +130,7 @@
       </q-page-container>
       <q-footer class="bg-teal-9" v-if="/memo|reminder|expense|watcher|bankstatement|shopping|bank|dictionary|glucosecheck|PancreaticFluid/i.test(curApp)">
         <q-toolbar>
-          <Pagination :pNumPages="compNumPages" :pItemsPerPage="itemsPerPage" />
+          <Pagination :pNumPages="compNumPages" :pItemsPerPage="compItemsPerPage" />
         </q-toolbar>
       </q-footer>
     </q-layout>
@@ -161,13 +185,17 @@ emitter.on('win-lost', (x) => { flipShow(x) })
 emitter.on('weight-unit', (x) => { wunit.value = x })
 
 //== main
-console.log(`-ST-MainLayout curApp=${curApp.value} window.location.href=${window.location.href}`, import.meta.env.VITE_BUILD_TAG)
+console.log(`-ST-MainLayout curApp=${curApp.value} window.location.href=${window.location.href} BUILD_TAG=${import.meta.env.VITE_BUILD_TAG}`)
 // console.timeStamp('-ST-MainLayout curApp=${curApp.value}')
 wunit.value = $q.localStorage.getItem('weightUnit')
 if (isIM) {
   drawer = false
   miniState = true
 }
+// miniState = false
+// drawer = false
+// if (curApp.value == 'tvmanager') miniState = false
+
 /*** redirect -- check components/AppItem.vue to find out */
 // console.log('-dg-document.url:', window.location.pathname)
 // alert(`curApp=${curApp.value}`);
@@ -183,7 +211,8 @@ audCookies.value = cookieKeys.find(key => /add_|upd_|del_/.test(key)) !== undefi
 // import.meta.env.PRODUCT_VER = 'X'
 const compVer = computed(() => { return import.meta.env.VITE_BUILD_TAG })
 // const compVer = computed(() => { return process.env.VER })
-const compNumPages = computed(() => { return Math.ceil(numItems.value / itemsPerPage.value) })
+const compItemsPerPage = computed(() => { return itemsPerPage.value })
+const compNumPages = computed(() => { return Math.ceil(numItems.value / compItemsPerPage.value) })
 // const compVer = computed(() => { return process.env.VER })
 const weightUnit = computed(() => {
   return wunit.value=='pond' ? '磅' : wunit.value=='kilo' ? '公' : wunit.value=='jing' ? '斤' : '磅'

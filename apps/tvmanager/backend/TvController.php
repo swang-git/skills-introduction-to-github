@@ -45,7 +45,7 @@ class TvController extends Controller
 		if (file_exists("/f36/bak/xtv/$d->basename")) { $d->filename = "/f36/bak/xtv/$d->basename"; $d->dsk="atv"; }
 		else if (file_exists("/btv/$d->basename")) { $d->filename = "/btv/$d->basename"; $d->dsk="btv"; }
 		else if (file_exists("/ctv/$d->basename")) { $d->filename = "/ctv/$d->basename"; $d->dsk="ctv"; }
-		else if (file_exists("/dtv/rec/$d->basename")) { $d->filename = "/dtv/rec/$d->basename"; $d->dsk="dtv"; }
+		else if (file_exists("/dtv/$d->basename")) { $d->filename = "/dtv/$d->basename"; $d->dsk="dtv"; }
 		else if (file_exists("/home/swang/htv/$d->basename")) { $d->filename = "/home/swang/htv/$d->basename"; $d->dsk="htv"; }
 		if (is_null($d->filesize)) return $d;
 		$d->filesize = round($d->filesize / 1024 / 1024 / 1024, 1);

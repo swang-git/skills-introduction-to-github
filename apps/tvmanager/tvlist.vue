@@ -1,8 +1,11 @@
 <template>
-<div class="q-px-xs" style="margin-top:-30px">
-<q-table class="sh-sticky-header-table" v-model:rows="palist" :columns="columns"
-  :grid=false :visible-columns="isDesk ? visibleColumnsDesk : visibleColumnsFone"
-  row-key="basename" :separator="separator" :showCol="showCol" wrap-cells :pagination="isDesk ? { rowsPerPage: nRow } : { rowsPerPage: 13 }"
+<div class="q-pl-xs" style="width:99.2%; margin:-17px 0 0 0">
+<q-table class="sh-sticky-header-table" dense
+  v-model:rows="palist" 
+  :columns="columns"
+  :visible-columns="isDesk ? visibleColumnsDesk : visibleColumnsFone"
+  row-key="basename" :separator="separator" :showCol="showCol" wrap-cells 
+  :pagination="isDesk ? { rowsPerPage: nRow } : { rowsPerPage: 13 }"
 >
   <template v-slot:top="props">
     <q-select v-if="isIM"
@@ -58,6 +61,9 @@
   </template>
 </q-table>
 <InfoDisplay />
+<div class="flex justify-center items-center h-full">
+  <q-spinner-ios v-if="isLoading" size="150" color="lime" />
+</div>
 </div>
 </template>
 <script setup>
@@ -68,7 +74,7 @@ import { axiosFunctions } from '../src/composables/axiosFunctions'
 import { dayFunctions } from '../src/composables/dayFunctions'
 const { chwk1, chwk2, today } = dayFunctions()
 const { gaxios, paxios } = axiosFunctions()
-const { isIM, isDesk, buildApp, palist, $q } = libFunctions()
+const { isIM, isDesk, buildApp, palist, $q, ENV_DEV } = libFunctions()
 
 import InfoDisplay from '../src/components/InfoDisplay.vue'
 
@@ -94,6 +100,7 @@ var visibleColumnsFone = [cols[1].name, cols[3].name]
 const columns = [cols[0], cols[1], cols[2], cols[3], cols[4], cols[5], cols[6], cols[7]]
 // const columns = [cols[0], cols[1], cols[2], cols[3], cols[4]]
 const nRow = ref(20)
+const isLoading = ref(false)
 
 //======= main =========
 emitter.on('tvmanager-getList', (x) => setList(x))
@@ -103,15 +110,14 @@ console.log('-ST-tvlist')
 buildApp('电视列表', 'tvmanager')
 // emitter.emit('items-per-page', isIM ? 12 : `${nRow.value}`)
 // emitter.emit('items-per-page', isIM ? 12 : 100)
-getList(1)
+getList(3)
 
 //======= functions =========
 function getList(hours) {
-  $q.dialog({
-    title: `TV Shows Recorded in ${hours} hours`
-  })
-  const path = process.env.API + '/tvmanager/getList/' + hours
+  if (hours > 3) $q.dialog({ title: `TV Shows Recorded in ${hours} hours` })
+  const path = ENV_DEV + '/tvmanager/getList/' + hours
   gaxios(path)
+  isLoading.value = true
 }
 function setList(da) {
   console.log('-fn-setList', da.lst)
@@ -119,12 +125,14 @@ function setList(da) {
   // da.lst.forEach(p => { if (p.duration > 100) { p.duration = (''+p.duration).substring(0, 2) }})
   nRow.value = da.lst.length
   dats.value = da.lst
-  emitter.emit('items-per-page', isIM ? 12 : `${nRow.value}`)
+  emitter.emit('items-per-page', isIM ? 12 : nRow.value)
+  // emitter.emit('items-per-page', isIM ? 12 : 23)
   emitter.emit('dats', dats.value)
+  isLoading.value = false
 }
 function del (row) {
   console.log('-fn-del', row)
-  const path = process.env.API + '/tvmanager/del'
+  const path = ENV_DEV + '/tvmanager/del'
   paxios(path, row)
 }
 function copyToClipboard (p) {
