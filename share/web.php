@@ -573,8 +573,8 @@ Route::post('/apps/loginAdmin', 'AppsController@loginAdmin');
 // Route::get('/users', [UserController::class, 'getUserList'])->name('users.getUserList');
 
 Route::group (
-  array('prefix' => 'users'), function() {
-    Route::get ('getUserList', 'UserController@getUserList'); //->middleware('auth');
+  array('prefix' => 'users'), function() { Log::info('calling users from web.php');
+    Route::get ('getUserList', 'UserController@getUserList')->middleware('auth');
     Route::get ('del/{id}', 'UserController@deleteById'); //->middleware('auth');
     Route::post('upd', 'UserController@updateUser'); //->middleware('auth');
     Route::post('add', 'UserController@store')->middleware('auth');

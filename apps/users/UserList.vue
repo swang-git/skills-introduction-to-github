@@ -1,15 +1,15 @@
 <template>
 <q-dialog v-model="opened" full-width>
-  <div class="q-py-xsbg-cyan-10">
-    <q-btn round icon="close" color="amber" v-close-popup style="z-index:10;float:right;margin:5px 0 0 -88px" />
-    <q-table flat bordered
+  <div class="q-pa-sm bg-cyan-10" style="border: solid cyan 4px">
+    <q-btn round icon="close" glossy color="amber-10" v-close-popup class="float-right" style="z-index:10; margin:-1px 0 0 -100px" />
+    <q-table flat bordered dense
       title="User List"
       :rows="rows"
       :columns="columns"
       row-key="id" 
       :rows-per-page-options="[10, 20, 30]"
       hide-pagination
-      class="bg-teal-10 text-white"
+      class="bg-teal-10 text-white text-h6"
     >
       <template v-slot:body="props">
         <q-tr key="id" :props="props" @click="cloneIt(props.row)" class="cursor-pointer">
@@ -34,11 +34,11 @@
       <TxtInput class="col-12" :obj="selectedRow" label="email" icon="email" iColor="cyan-2" :rightIcon="true" />
     </div>
     <div v-if="rowId>0" class="row justify-between q-px-md q-py-xs">
-      <q-btn round icon="chevron_left" color="amber" @click="rowId=null" />
-      <q-btn label="delete" icon="delete" @click="del" color="red" />
-      <q-btn label="update" icon="update" @click="upd" color="amber" />
-      <q-btn label="create" icon="create" @click="add" color="green" />
-      <q-btn round icon="close" color="amber" v-close-popup />
+      <q-btn glossy round icon="chevron_left" color="teal-9" @click="rowId=null" />
+      <q-btn glossy rounded label="delete" icon="delete" @click="del" color="red" />
+      <q-btn glossy rounded label="update" icon="update" @click="upd" color="amber-9" />
+      <q-btn glossy rounded label="create" icon="create" @click="add" color="green-9" />
+      <q-btn glossy round icon="close" color="amber-10" v-close-popup />
     </div>
   </div>
 </q-dialog>
@@ -68,9 +68,10 @@ onMounted(() => refConfirmDialog)
 defineExpose({ getUserList })
 
 function cloneIt (row) {
-  selectedRow.value = structuredClone(row)
+  // selectedRow.value = structuredClone(row)
+  selectedRow.value = JSON.parse(JSON.stringify(row))
   rowId.value = row.id
-  selectedRow.value.password = 'P@$$w0rdZ'
+  selectedRow.value.password = 'P@$$w00rdZ'
 }
 function del () {
   const tit = "Delete Following User?"
