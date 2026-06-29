@@ -219,7 +219,7 @@
         @click="showSysInfo()"
       />
     </q-card-actions>
-    <LoginAdmin />
+    <!-- <LoginAdmin /> -->
     <UserList ref="refUserList" />
   </q-card>
   <PlatformDataPad ref="refPlatformDataPad" />
@@ -236,7 +236,7 @@ import { axiosFunctions } from '../../src/composables/axiosFunctions'
 const { gaxios } = axiosFunctions()
 
 import RoundButton from '../../src/components/RoundButton.vue'
-import LoginAdmin from '../../users/LoginDialog.vue'
+// import LoginAdmin from '../../users/LoginDialog.vue'
 import UserList from '../../users/UserList.vue'
 import PlatformDataPad from '../components/PlatformDataPad.vue'
 
@@ -248,7 +248,8 @@ const compVer = computed(() => { return import.meta.env.VITE_BUILD_TAG })
 console.log(`-ST-Index bg-img=${getBackgroundImg().backgroundImage}`)
 // console.log(`-ST-Index AppAdmin=${AppAdmin.value}`)
 buildApp('Apps Home', '家庭应用')
-// emitter.on('user-type', x => (userType.value = x))
+emitter.on('user-type', (x) => userType.value = x)
+emitter.on('open-app', (x) => openApp(x))
 onMounted(() => {
   console.log(refUserList.value)
   console.log(refPlatformDataPad.value)
