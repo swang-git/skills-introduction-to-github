@@ -44,10 +44,9 @@ export function axiosFunctions() {
     
     axios.post(path, data).then((response) => {
       const da = response.data
-      console.log(`-XO-CK-paxios ${target} return status=${da.status}`, da)
+      console.log(`-CK-paxios ${target} return status=${da.status}`, da)
       console.log(`%cPTGT:${target}(${da.status})`, "font-size:14px;font-weight:600;color:lime")
       emitter.emit(target, da)
-      // console.log(`%cRETURN status=${da.status}`, "font-size:11px;font-weight:600;color:red")
       if (da.status === 'FAILED') notifyFunc(path, target, da.errmsg)
     }).catch(error => { notifyFunc(path, target, error) })
   }
@@ -62,10 +61,10 @@ export function axiosFunctions() {
     })
     $q.dialog({
       color: 'teal-9',
-      fullWidth: true,
+      // fullWidth: true,
       title: '<strong class="text-cyan text-h5">' + target + ' status:</strong>',
       // message: '<strong class="text-white text-h6">' + error + '. Please Login First</strong>',
-      message: '<strong class="text-white text-h6">' + error + '</strong>',
+      message: '<strong class="text-amber text-h6">' + error + '</strong>',
       icon: 'info',
       ok: { label: '关闭', size: '18px' },
       style: { background: 'navy' },

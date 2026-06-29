@@ -1,6 +1,6 @@
 <template>
 <q-footer elevated>
-  <div v-if="isDesk && /add|upd/.test(act)" class="q-pa-sm bg-teal-10 flex justify-between">
+  <div v-if="isDesk && /add|upd/.test(act)" class="q-pa-sm flex justify-between">
     <q-btn icon="cancel" v-close-popup color="amber-9" text-color="cyan-1" rounded glossy label="Cancel" />
     <q-btn v-if="/NOTE_LINK_POST|Gas Mileage/.test(tit)" icon="schedule" round @click="psd" color="green-10" glossy size="16px" />
     <q-btn v-if="/NOTE_LINK/.test(tit)" icon="message"   round @click="msg" color="blue-10" glossy size="16px"  />

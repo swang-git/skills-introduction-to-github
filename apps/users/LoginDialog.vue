@@ -1,52 +1,15 @@
 <template>
-  <q-dialog v-model="opened">
-    <div class="q-pa-md bg-cyan-10 text-cyan" style="max-width: 400px">
-      <q-form @submit="onSubmit" @reset="onReset" class="q-gutter-md">
-        <!-- @csrf -->
-        <q-input
-          class="text-h6"
-          dark
-          filled
-          v-model="username"
-          label="username"
-          hint="apps login for apps/applications"
-          lazy-rules
-          :rules="[
-            val => (val && val.length > 5) || 'Please type the username'
-          ]"
-        />
-
-        <q-input
-          autocomplete
-          class="text-h6"
-          dark
-          filled
-          type="password"
-          v-model="password"
-          label="Password"
-          lazy-rules
-          :rules="[
-            val => (val !== null && val !== '') || 'Please type the password'
-          ]"
-        />
-
-        <q-toggle v-model="accept" label="I accept the license and terms" />
-
-        <q-card-actions align="between">
-          <q-btn flat label="Cancel" color="amber" v-close-popup />
-          <q-btn flat label="Reset" type="reset" color="primary" />
-          <q-btn flat label="Login" type="submit" color="secondary" />
-        </q-card-actions>
-        <!-- <q-card-actions align="between">
-        <q-btn flat label="Create"  color="amber" @click="add"/>
-        <q-btn flat label="Retrive" color="green" @click="getUserList" />
-        <q-btn flat label="Update"  color="amber" />
-        <q-btn flat label="Destroy" color="red" />
-      </q-card-actions> -->
-      </q-form>
-    </div>
-    <!-- <UserListDialog /> -->
-  </q-dialog>
+  <q-dialog v-model="opened" width="800px" max-height="90vh">
+  <q-card class="no-shadow q-pa-0" style="height:80vh;display:flex;flex-col">
+    <q-layout view="hHh lpR fFf" class="full-height">
+      <q-header class="q-pa-md">Header</q-header>
+      <q-page-container>
+        <q-page class="q-pa-md">Scrollable content</q-page>
+      </q-page-container>
+      <q-footer class="q-pa-md">Footer buttons</q-footer>
+    </q-layout>
+  </q-card>
+</q-dialog>
 </template>
 <script setup>
 import { ref } from 'vue'
@@ -71,7 +34,7 @@ const appName = ref('')
 
 // console.log('-ST-LoginAdmin', process.env.API)
 console.log('-ST-LoginDialog', import.meta.env)
-emitter.on('open-LoginDialog', (app) => openIt(app))
+emitter.on('open-LoginDialog', app => openIt(app))
 
 // if (process.env.API === '/api') {
 //   username.value = 'swang71'
@@ -119,7 +82,7 @@ function onReset() {
   password.value = null
   accept.value = false
 }
-emitter.on('apps-loginAdmin', (da) => setLogin(da))
+emitter.on('apps-loginAdmin', da => setLogin(da))
 function setLogin(da) {
   console.log('-CK-fn-setLogin', da)
   const user = da.user
