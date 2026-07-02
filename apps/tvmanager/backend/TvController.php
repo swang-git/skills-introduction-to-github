@@ -60,7 +60,7 @@ class TvController extends Controller
 		$d->channum = str_replace('_', '-', $d->channum);
 		if (is_numeric($d->filesize) and !preg_match('/\./', $d->filesize))	$d->filesize = $d->filesize . ".0";
 		$d->duration = round((strtotime($d->endtime) - strtotime($d->starttime))/60, 0);
-		if ($d->dsk == 'Default')	$d->dsk = 'abc';
+		if ($d->dsk == 'Default')	$d->dsk = null;
 		else if ($d->dsk == 'HomeTV')	$d->dsk = 'htv';
 		else if ($d->dsk == 'USBdisk')	$d->dsk = 'dtv';
 		return $d;

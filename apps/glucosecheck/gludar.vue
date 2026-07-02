@@ -22,7 +22,7 @@
         <TxtInput class="col-12" :obj="row" label="Breakfast" icon="egg" iColor="brown-6" :rightIcon="true" @click="openSelection('egg', 'Breakfast', brOpt)" />
         <TxtInput class="col-12" :obj="row" label="Lunch" icon="lunch_dining" iColor="yellow-9" :rightIcon="true" @click="openSelection('lunch_dining', 'Lunch', luOpt)" />
         <TxtInput class="col-12" :obj="row" label="Dinner" icon="dinner_dining" iColor="indigo-3" :rightIcon="true" @click="openSelection('dinner_dining', 'Dinner', diOpt)" />
-        <TxtInput class="col-12" :obj="row" label="Notes" icon="note" iColor="cyan-3" :rightIcon="true" @click="openSelection('note', 'Notes', diOpt)" />
+        <TxtInput class="col-12" :obj="row" label="Note" icon="note" iColor="cyan-3" :rightIcon="true" @click="openSelection('note', 'Note', diOpt)" />
         <div class="row">
           <TxtInput class="col-6" :obj="row" label="Drink" icon="local_bar" iColor="green" :rightIcon="true" @click="openSelection('local_bar', 'Drink', drOpt)" />
           <TxtInput class="col-6" :obj="row" label="Fruit" icon="apple" iColor="green-3" :rightIcon="true" @click="openSelection('apple', 'Fruit', frOpt)" />
@@ -46,7 +46,7 @@
       <TxtInput class="col-12" :obj="row" label="Breakfast" icon="egg" iColor="brown-6" :rightIcon="true" @click="openSelection('egg', 'Breakfast', brOpt)" />
       <TxtInput class="col-12" :obj="row" label="Lunch" icon="lunch_dining" iColor="yellow-9" :rightIcon="true" @click="openSelection('lunch_dining', 'Lunch', luOpt)" />
       <TxtInput class="col-12" :obj="row" label="Dinner" icon="dinner_dining" iColor="indigo-3" :rightIcon="true" @click="openSelection('dinner_dining', 'Dinner', diOpt)" />
-      <TxtInput class="col-12" :obj="row" label="Notes" icon="notes" iColor="cyan-3" :rightIcon="true" @click="openSelection('notes', 'Notes', diOpt)" />
+      <TxtInput class="col-12" :obj="row" label="Note" icon="note" iColor="cyan-3" :rightIcon="true" @click="openSelection('note', 'Note', diOpt)" />
       <div class="row">
         <TxtInput class="col-6" :obj="row" label="Drink" icon="local_bar" iColor="green" :rightIcon="true" @click="openSelection('local_bar', 'Drink', drOpt)" />
         <TxtInput class="col-6" :obj="row" label="Fruit" icon="apple" iColor="green-3" :rightIcon="true" @click="openSelection('apple', 'Fruit', frOpt)" />
@@ -66,7 +66,7 @@ import { ref, onMounted } from 'vue'
 import emitter from 'tiny-emitter/instance'
 import ConfirmDialog from '../src/components/ConfirmDialog.vue'
 import TxtInput from '../src/components/TxtInput.vue'
-import TxaInput from '../src/components/TxaInput.vue'
+// import TxaInput from '../src/components/TxaInput.vue'
 import NumInput from '../src/components/NumInput.vue'
 import LayoutHeader from '../src/components/LayoutHeader.vue'
 import LayoutFooter from '../src/components/LayoutFooter.vue'
@@ -106,11 +106,6 @@ console.log('-ST-gludar')
 emitter.on('open-gludar', (rw, act, exOpt, brOpt, luOpt, diOpt, drOpt, frOpt, foOpt) => openIt(rw, act, exOpt, brOpt, luOpt, diOpt, drOpt, frOpt, foOpt))
 
 //== function section
-// function XXXsetBloodPressureFone (x) {
-//   console.log(`setBloodPressure=${x}`)
-//   row.value.bloodPressure = x
-// }
-
 function setDateTime (dt) {
   row.value.datetime = dt
   dtTimeDone.value = true
@@ -140,7 +135,7 @@ function updSelectedOpt (model, txt) {
   else if (model == 'Drink') row.value.drink = txt
   else if (model == 'Fruit') row.value.fruit = txt
   else if (model == 'Food') row.value.food = txt
-  else if (model == 'Notes') row.value.note = txt
+  else if (model == 'Note') row.value.note = txt
 }
 function setSelectedOpt (model, opt) {
   console.log(`-fn-setSelectedOpt model=${model} selectedOpt=${opt.label}`)

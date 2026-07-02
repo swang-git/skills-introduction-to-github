@@ -7,14 +7,14 @@
         <div class="q-pa-sm bg-teal-10" style="border: solid red 0px">
           <div class="q-pa-xs">
             <div class="row">
-              <TxtInput class="col-6 q-pa-xs" :obj="selectedRow" label="Full Name" icon="person" iColor="green" :rightIcon="true" />
-              <TxtInput class="col-6 q-pa-xs" :obj="selectedRow" label="username" icon="account_box" iColor="cyan" :rightIcon="true" />
+              <TxtInputMark class="col-6 q-pa-xs" :obj="selectedRow" label="Full Name" icon="person" iColor="green" :rightIcon="true" />
+              <TxtInputMark class="col-6 q-pa-xs" :obj="selectedRow" label="username" icon="account_box" iColor="cyan" :rightIcon="true" />
             </div>
             <div class="row">
-              <TxtInput class="col-6 q-pa-xs" :obj="selectedRow" label="usertype" icon="contacts" iColor="lime" :rightIcon="true" />
-              <TxtInput class="col-6 q-pa-xs" :obj="selectedRow" label="password" icon="password" iColor="amber" :rightIcon="true" />
+              <TxtInputMark class="col-6 q-pa-xs" :obj="selectedRow" label="usertype" icon="contacts" iColor="lime" :rightIcon="true" />
+              <TxtInputMark class="col-6 q-pa-xs" :obj="selectedRow" label="password" icon="password" iColor="amber" :rightIcon="true" />
             </div>
-            <TxtInput class="col-12" :obj="selectedRow" label="email" icon="email" iColor="secondary" :rightIcon="true" />
+            <TxtInputMark class="col-12" :obj="selectedRow" label="email" icon="email" iColor="secondary" :rightIcon="true" />
           </div>
         </div>
       </q-page-container>
@@ -30,7 +30,7 @@ import { libFunctions } from '../src/composables/libFunctions'
 import { axiosFunctions } from '../src/composables/axiosFunctions'
 const { gaxios, paxios } = axiosFunctions()
 const { isIM } = libFunctions()
-import TxtInput from '../src/components/TxtInput.vue'
+import TxtInputMark from '../src/components/TxtInputMark.vue'
 import ConfirmDialog from '../src/components/ConfirmDialog.vue'
 import LayoutHeader from '../src/components/LayoutHeader.vue'
 import LayoutFooter from '../src/components/LayoutFooter.vue'

@@ -1,240 +1,52 @@
 <template>
-  <q-dialog
-    v-model="opened"
-    :transition-show="action == 'add' ? 'slide-right' : 'rotate'"
-    :maximized="isIM"
-  >
+  <q-dialog v-model="opened" :transition-show="action == 'add' ? 'slide-right' : 'rotate'" :maximized="isIM" >
     <q-layout container class="bg-teal-10" :style="{ height: compHeight }">
       <LayoutHeader :tit="getTitle()" @do-action="doAction" :rbtn="iicon" />
-      <LayoutFooter
-        :tit="getFoote()"
-        icon="link"
-        :act="action"
-        @do-action="doAction"
-      />
+      <LayoutFooter :tit="getFoote()" icon="link" :act="action" @do-action="doAction" />
       <q-page-container>
         <q-page class="q-pa-sm">
           <div v-if="isDesk">
-            <DateTimePicker
-              label="Purchased at Date and Time"
-              :dateTime="row.purchasedon"
-              @upd-dt="updDateTime"
-              txsz="text-h6"
-            />
+            <DateTimePicker label="Purchased at Date and Time" :dateTime="row.purchasedon" @upd-dt="updDateTime" txsz="text-h6" />
           </div>
           <div v-else>
-            <DateTimeIMPicker
-              class="q-pa-xs"
-              label="Match Starting Date Time"
-              txsz="text-h6"
-              :dateTime="row.purchasedon"
-              @upd-dt="setDateTime"
-            />
+            <DateTimeIMPicker class="q-pa-xs" label="Match Starting Date Time" txsz="text-h6" :dateTime="row.purchasedon" @upd-dt="setDateTime" />
           </div>
-          <SelInput
-            :obj="row"
-            label="Select Paid with"
-            icon="money"
-            iColor="amber"
-            :optList="paymOptions"
-            @add-new-csp="handleUserSelection"
-          />
-          <SelInput
-            :obj="row"
-            label="Select Category"
-            icon="category"
-            iColor="pink"
-            :optList="catsOptions"
-            @get-subc-opt="getSubcOpt"
-          />
-          <SelInput
-            :obj="row"
-            label="Select Subcategory"
-            icon="category"
-            iColor="green-6"
-            :optList="subcOptions"
-            @get-paye-opt="getPayeOpt"
-          />
-          <SelInput
-            :obj="row"
-            label="Select Payee"
-            icon="store"
-            iColor="cyan-3"
-            :optList="payeOptions"
-            @add-new-paye="addNewPayee"
-          />
+          <SelInput :obj="row" label="Select Paid with" icon="money" iColor="amber" :optList="paymOptions" @add-new-csp="handleUserSelection" />
+          <SelInput :obj="row" label="Select Category" icon="category" iColor="pink" :optList="catsOptions" @get-subc-opt="getSubcOpt" />
+          <SelInput :obj="row" label="Select Subcategory" icon="category" iColor="green-6" :optList="subcOptions" @get-paye-opt="getPayeOpt" />
+          <SelInput :obj="row" label="Select Payee" icon="store" iColor="cyan-3" :optList="payeOptions" @add-new-paye="addNewPayee" />
 
           <div v-if="isGolfPlayRelated() || isGolfMembership()">
             <div class="row">
-              <NumInput
-                class="col-6"
-                v-if="isFCCAutopay(row)"
-                :obj="row"
-                :showRight="true"
-                :rightIcon="true"
-                label="Fidelity CCard Payment"
-                mask="#.##"
-                icon="monetization_on"
-                iColor="orange"
-                @disable-gc="setGcard"
-              />
-              <NumInput
-                class="col-6"
-                v-else-if="isCCCAutopay(row)"
-                :obj="row"
-                :showRight="true"
-                :rightIcon="true"
-                label="Chase CCard Payment"
-                mask="#.##"
-                icon="monetization_on"
-                iColor="orange"
-                @disable-gc="setGcard"
-              />
-              <NumInput
-                class="col-6"
-                v-else
-                :obj="row"
-                label="Total Cost"
-                :rightIcon="true"
-                mask="#.##"
-                icon="monetization_on"
-                iColor="orange"
-                @disable-gc="setGcard"
-              />
-              <NumInput
-                v-if="isGolfPlay()"
-                class="col-6"
-                :obj="row"
-                :label="isIM ? 'W or L' : 'Won or Lost'"
-                :showRight="true"
-                :rightIcon="true"
-                mask=""
-                icon="paid"
-                iColor="yellow"
-              />
+              <NumInput class="col-6" v-if="isFCCAutopay(row)" :obj="row" :showRight="true" :rightIcon="true" label="Fidelity CCard Payment" mask="#.##" icon="monetization_on" iColor="orange" @disable-gc="setGcard" />
+              <NumInput class="col-6" v-else-if="isCCCAutopay(row)" :obj="row" :showRight="true" :rightIcon="true" label="Chase CCard Payment" mask="#.##" icon="monetization_on" iColor="orange" @disable-gc="setGcard" />
+              <NumInput class="col-6" v-else :obj="row" label="Total Cost" :rightIcon="true" mask="#.##" icon="monetization_on" iColor="orange" @disable-gc="setGcard" />
+              <NumInput v-if="isGolfPlay()" class="col-6" :obj="row" :label="isIM ? 'W or L' : 'Won or Lost'" :showRight="true" :rightIcon="true" mask="" icon="paid" iColor="yellow" />
             </div>
             <!-- <div v-if="['Mercer County Golf Gift Card','Somerset County Golf Gift Card','Spooky Brook Golf Course'].includes(row.paym)" class="row"> -->
             <div v-if="isGiftCard()" class="row">
-              <NumInput
-                class="col"
-                :obj="row"
-                label="Gift Card Balance"
-                mask="#.##"
-                :rightIcon="true"
-                icon="balance"
-                iColor="cyan-5"
-                :disable="gcDisable"
-              />
-              <NumInput
-                class="col"
-                :obj="row"
-                label="Gift Card Number"
-                mask="#"
-                :rightIcon="true"
-                icon="tag"
-                iColor="cyan-1"
-                :disable="gcDisable"
-                prefix=""
-              />
+              <NumInput class="col" :obj="row" label="Gift Card Balance" mask="#.##" :rightIcon="true" icon="balance" iColor="cyan-5" :disable="gcDisable" />
+              <NumInput class="col" :obj="row" label="Gift Card Number" mask="#" :rightIcon="true" icon="tag" iColor="cyan-1" :disable="gcDisable" prefix="" />
             </div>
           </div>
           <div v-else-if="isAutoGaso(row)" class="row">
             <div class="row">
-              <NumInput
-                class="col-6"
-                :obj="row"
-                label="Total Cost"
-                iconSize="lg"
-                :rightIcon="true"
-                mask="#.##"
-                icon="monetization_on"
-                iColor="orange"
-                @disable-gc="setGcard"
-              />
-              <NumInput
-                class="col-6"
-                :obj="row"
-                label="Unit Price"
-                iconSize="lg"
-                :rightIcon="true"
-                mask="#.###"
-                icon="money"
-                iColor="orange"
-              />
+              <NumInput class="col-6" :obj="row" label="Total Cost" iconSize="lg" :rightIcon="true" mask="#.##" icon="monetization_on" iColor="orange" @disable-gc="setGcard" />
+              <NumInput class="col-6" :obj="row" label="Unit Price" iconSize="lg" :rightIcon="true" mask="#.###" icon="money" iColor="orange" />
             </div>
             <div class="row">
-              <NumInput
-                class="col"
-                :obj="row"
-                label="Quantities"
-                iconSize="sm"
-                :rightIcon="true"
-                prefix=""
-                mask="#.##"
-                icon="numbers"
-                iColor="yellow"
-                @calc-quan="calcQuan"
-              />
-              <NumInput
-                class="col"
-                :obj="row"
-                label="Miles Run"
-                iconSize="lg"
-                :rightIcon="true"
-                prefix=""
-                mask="#.#"
-                icon="directions_car"
-                iColor="grey-4"
-                @calc-mileage="calcGasMileage"
-              />
+              <NumInput class="col" :obj="row" label="Quantities" iconSize="sm" :rightIcon="true" prefix="" mask="#.##" icon="numbers" iColor="yellow" @calc-quan="calcQuan" />
+              <NumInput class="col" :obj="row" label="Miles Run" iconSize="lg" :rightIcon="true" prefix="" mask="#.#" icon="directions_car" iColor="grey-4" @calc-mileage="calcGasMileage" />
             </div>
           </div>
           <div v-else>
-            <NumInput
-              v-if="isFCCAutopay(row)"
-              :obj="row"
-              label="Fidelity CCard Payment"
-              iconSize="lg"
-              :showRight="true"
-              :rightIcon="true"
-              mask="#.##"
-              icon="paid"
-              iColor="amber"
-              @disable-gc="setGcard"
-            />
-            <NumInput
-              v-else-if="isCCCAutopay(row)"
-              :obj="row"
-              label="Chase CCard Payment"
-              iconSize="lg"
-              :showRight="true"
-              :rightIcon="true"
-              mask="#.##"
-              icon="paid"
-              iColor="amber"
-              @disable-gc="setGcard"
-            />
-            <NumInput
-              v-else
-              :obj="row"
-              label="Total Cost"
-              iconSize="lg"
-              :showRight="true"
-              :rightIcon="true"
-              mask="#.##"
-              icon="paid"
-              iColor="teal-2"
-              @disable-gc="setGcard"
-            />
+            <NumInput v-if="isFCCAutopay(row)" :obj="row" label="Fidelity CCard Payment" iconSize="lg" :showRight="true" :rightIcon="true" mask="#.##" icon="paid" iColor="amber" @disable-gc="setGcard" />
+            <NumInput v-else-if="isCCCAutopay(row)" :obj="row" label="Chase CCard Payment" iconSize="lg" :showRight="true" :rightIcon="true" mask="#.##" icon="paid" iColor="amber" @disable-gc="setGcard" />
+            <NumInput v-else :obj="row" label="Total Cost" iconSize="lg" :showRight="true" :rightIcon="true" mask="#.##" icon="paid" iColor="teal-2" @disable-gc="setGcard" />
           </div>
           <div v-if="row.paym === 'Fidelity Credit Card' && showPostDate">
-            <datepicker
-              label="Set Post Date for Payment or Refund"
-              :date="row.post_date"
-              txsz="text-h6"
-              @upd-date="setPostDate"
-            />
-          </div>
+            <datepicker label="Set Post Date for Payment or Refund" :date="row.post_date" txsz="text-h6" @upd-date="setPostDate" />
+           </div>
         </q-page>
       </q-page-container>
     </q-layout>
@@ -640,8 +452,8 @@ function setPayee(da) {
   if (da.lst[0].value === -1)
     return emitter.emit('open-AddNewCSPDialog', 'Payee')
   payeOptions.value = da.lst
-  row.value.paye = row.value.paye
-  row.value.payeId = row.value.payeId
+  // row.value.paye = row.value.paye
+  // row.value.payeId = row.value.payeId
   // row.value.paye = da.lst[0].label
   // row.value.payeId = da.lst[0].value
 }
