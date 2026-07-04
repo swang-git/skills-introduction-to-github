@@ -32,8 +32,8 @@
                 <q-btn v-if="/healthtest/i.test(curApp)" round glossy color="teal-9" icon="图" class="chicon-pos" @click="showHealthTestChart" />
                 <div v-if="/PancreaticFluid/i.test(curApp)" class="q-pl-md q-pb-sm"><q-btn round glossy size="11px" color="indigo" icon="add" @click="togglePFSum" /></div>
                 <div v-if="/tvmanager/i.test(curApp)" class="q-mb-sm q-mx-sm">
-                  <q-fab color="brown-9" padding="xs sm sm" label="Upcoming Recordings" direction="right" icon="history" >
-                    <q-fab-action v-for="hr in [3, 5, 8, 10, 12, 24]" :key="hr" color="primary" @click="getTvShows(hr)" icon="history" :label="hr" class="text-h6" />
+                  <q-fab color="brown-9" glossy padding="xs sm sm" label="Upcoming" direction="right" icon="history" >
+                    <q-fab-action v-for="hr in [5,8,10,12,24]" :key="hr" color="teal-10" dense glossy @click="getTvShows(hr)" icon="history" :label="hr" class="text-h6" />
                   </q-fab>
                 </div>
               </div>

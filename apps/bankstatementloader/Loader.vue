@@ -79,7 +79,7 @@ const compUrlname = computed({
 const compUrl = computed({
   get: () => {
     const yyyymm = compDate.value.yyyymm().replace('-', '')
-    statement.date = compDate.value
+    // statement.date = compDate.value
     let url = null
     console.log(`-CP-compUrl compDate=${compDate.value} statement.date=${statement.date} statement.bank=${statement.bank} from compUrl`)
     if (statement.bank === 'FidelCC') url = '/docs/fidelity_credit_card/' + compDate.value + '.pdf'
@@ -184,9 +184,10 @@ function setBankStatementDate() {
   else if (date < 5 && bank === 'Fidelity') month -= 1 // do last month if in the first 4 days of the month
   // else if (date >= 20 && bank === 'BOA') month -= 1 // do last month if in the first 4 days of the month
   // else if (date < 20 && bank === 'BOA') month -= 1 // do last last month if in the first 4 days of the month
-  else if (date < 20 && bank === 'BOA') month -= 0 // do last last month if in the first 4 days of the month
+  else if (date < 5 && bank === 'BOA') month -= 1 // do last last month if in the first 4 days of the month
+  else if (date > 15 && bank === 'BOA') month -= 0 // do last last month if in the first 4 days of the month
   // else if (date < 20 && bank === 'BOA') month -= 1 // do last last month if in the first 4 days of the month
-  else if (date < 25 && /Chase/.test(bank)) month -= 1 // do last month if in the first 4 days of the month
+  else if (date < 5 && /Chase/.test(bank)) month -= 1 // do last month if in the first 4 days of the month
   else if (date < 25 && /ChaseBkg/.test(bank)) month -= 1 // do last month if in the first 4 days of the month
   // else if (date <  16 && bank === 'Chase') month -= 2 // do last last month if in the first 4 days of the month
   // else if (date <  7 && bank === 'FidelCC') month -= 1 // do last last month if in the first 4 days of the month

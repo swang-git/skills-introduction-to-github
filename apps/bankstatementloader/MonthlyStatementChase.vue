@@ -68,7 +68,7 @@ import emitter from 'tiny-emitter/instance'
 import { dayFunctions } from '../src/composables/dayFunctions';
 import { axiosFunctions } from '../src/composables/axiosFunctions'
 import { libFunctions } from '../src/composables/libFunctions'
-const { $q } = libFunctions()
+const { $q, ENV_DEV } = libFunctions()
 const opened = ref('')
 const statement = ref({})
 const showData = ref([4])
@@ -89,7 +89,7 @@ emitter.on('open-MonthlyStatementChase', (x) => loadData(x))
 emitter.on('close-MonthlyStatementChase', () => opened.value = 'none')
 
 function addAssets () {
-  const path = process.env.API + '/bankstatementloader/addAssets'
+  const path = ENV_DEV + '/bankstatementloader/addAssets'
   paxios(path, assets.value)
 }
 function addNotes () {
@@ -105,7 +105,7 @@ function addNotes () {
     x.amount = p[1]
     inData.push(x)
   })
-  const path = process.env.API + '/bankstatementloader/addNotes'
+  const path = ENV_DEV + '/bankstatementloader/addNotes'
   paxios(path, inData)
 }
 function addSavings () {
@@ -129,7 +129,7 @@ function addSavings () {
     begin_balance = x.end_balance
     inData.push(x)
   })
-  const path = process.env.API + '/bankstatementloader/addChecking'
+  const path = ENV_DEV + '/bankstatementloader/addChecking'
   paxios(path, inData)
 }
 function addChecking () {
@@ -171,7 +171,7 @@ function addChecking () {
       inData.push(x)
     })
   }
-  const path = process.env.API + '/bankstatementloader/addChecking'
+  const path = ENV_DEV + '/bankstatementloader/addChecking'
   paxios(path, inData)
   checkingAdded.value = true
 }
@@ -220,7 +220,7 @@ function loadData(stmt) {
   month.value = x[1]
   let yyyymm = x[0]+x[1]
   // console.log(`-CK-fn-loadData Chase stmt yyyymm=${yyyymm}`)
-  const path = process.env.API + '/bankstatementloader/loadMonthlyStatementChase/' + yyyymm
+  const path = ENV_DEV + '/bankstatementloader/loadMonthlyStatementChase/' + yyyymm
   gaxios(path)
 }
 function reLoadDataTryNewYmon() {
@@ -228,7 +228,7 @@ function reLoadDataTryNewYmon() {
   month.value = month.value.replace(/[1-9]/, mx)
   let yyyymm = year.value + month.value
   console.log(`-fn-loadData Chase stmt for ${yyyymm}`)
-  const path = process.env.API + '/bankstatementloader/loadMonthlyStatementChase/' + yyyymm
+  const path = ENV_DEV + '/bankstatementloader/loadMonthlyStatementChase/' + yyyymm
   gaxios(path)
 }
 </script>

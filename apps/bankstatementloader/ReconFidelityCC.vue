@@ -87,7 +87,7 @@ import MatchedSpendsDialog from './MatchedSpendsDialog.vue'
 import CCardReconcileSheet from '../exp/CCardReconcileSheet.vue'
 import InfoDisplay from '../src/components/InfoDisplay.vue'
 const { gaxios, paxios } = axiosFunctions()
-const { $q, BASE_URL } = libFunctions()
+const { $q, ENV_DEV } = libFunctions()
 // const mapping = {"$": "X", ",": "Y"}
 
 const opened = ref('')
@@ -204,7 +204,7 @@ function getCreditCardSpendings () {
   if (fCCardSpendings.length > 0) {
     showCCardReconcileSheet()
   }
-  const path = BASE_URL + '/expense/getCreditCardSpendings/' + openDate.value.addDays(-1) + '/' + closeDate.value + '/' + dueDate.value
+  const path = ENV_DEV + '/expense/getCreditCardSpendings/' + openDate.value.addDays(-1) + '/' + closeDate.value + '/' + dueDate.value
   gaxios(path)
 }
 function showCCardReconcileSheet () {
@@ -237,7 +237,7 @@ function getMatchedSpends (lookupspend) {
   // let bedate = openDate.value
   // let afdate = closeDate.value
   const cost = /RETURN/.test(lookingupSpend[3]) ? -lookingupSpend[4] : lookingupSpend[4]
-  const path = BASE_URL + '/bankstatementloader/getMatchedSpends'
+  const path = ENV_DEV + '/bankstatementloader/getMatchedSpends'
   // console.log(`-fn-getMatchedSpends postDate=${postDate} bedate=${bedate} tranDate=${tranDate} afdate=${afdate} cost=${cost}`, lookupspend)
   const inData = {postDate:postDate, openDate:openDate.value.addDays(-1), closeDate:closeDate.value, cost:cost}
   paxios(path, inData)
@@ -394,8 +394,8 @@ function creditsDistr() {
 }
 function getCreditCardData() {
   console.log(`%c-fn-getCreditCardData`, 'color:lime');
-  // const path = process.env.API + "/bankstatementloader/getCreditCardData/" + dueDate.value + "/" + bank.value
-  const path = BASE_URL + "/bankstatementloader/getCreditCardData/" + dueDate.value + "/" + bank.value
+  // const path = ENV_DEV + "/bankstatementloader/getCreditCardData/" + dueDate.value + "/" + bank.value
+  const path = ENV_DEV + "/bankstatementloader/getCreditCardData/" + dueDate.value + "/" + bank.value
   gaxios(path)
 }
 function getStyle (i) {

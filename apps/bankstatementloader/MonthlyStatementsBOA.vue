@@ -69,7 +69,7 @@ import emitter from 'tiny-emitter/instance'
 import { dayFunctions } from '../src/composables/dayFunctions'
 import { axiosFunctions } from '../src/composables/axiosFunctions'
 import { libFunctions } from '../src/composables/libFunctions'
-const { $q } = libFunctions()
+const { $q, ENV_DEV } = libFunctions()
 const opened = ref('')
 const { gaxios, paxios } = axiosFunctions()
 const statement = ref({ bank:null })
@@ -119,7 +119,7 @@ function addNotes () {
     inData.push(x)
   })
   console.log('-CK-fn-notes Data', Object.values(chkinfo.value.chk.nos), inData)
-  const path = process.env.API + '/bankstatementloader/addNotes'
+  const path = ENV_DEV + '/bankstatementloader/addNotes'
   paxios(path, inData)
 }
 function addSavings () {
@@ -144,7 +144,7 @@ function addSavings () {
     inData.push(x)
   })
   // console.log('-fn-Activity Data', inData)
-  const path = process.env.API + '/bankstatementloader/addActivityBOA'
+  const path = ENV_DEV + '/bankstatementloader/addActivityBOA'
   paxios(path, inData)
 }
 function addChecking () {
@@ -184,12 +184,12 @@ function addChecking () {
     inData.push(x)
   })
   // console.log('-CK-fn-Activity Data', inData)
-  const path = process.env.API + '/bankstatementloader/addActivityBOA'
+  const path = ENV_DEV + '/bankstatementloader/addActivityBOA'
   paxios(path, inData)
 }
 function addAssets () {
   // console.log('-CK-fn-addAssets')
-  const path = process.env.API + '/bankstatementloader/addAssets'
+  const path = ENV_DEV + '/bankstatementloader/addAssets'
   assets.value.bank = bank.value
   assets.value.year = year.value
   assets.value.month =  month.value
@@ -231,7 +231,7 @@ function loadData (stmt) {
   year.value = x[0]
   month.value = x[1]
   ymon = x[0] + x[1]
-  const path = process.env.API + '/bankstatementloader/loadMonthlyStatementsBOA/' + ymon
+  const path = ENV_DEV + '/bankstatementloader/loadMonthlyStatementsBOA/' + ymon
   gaxios(path)
 }
 function reLoadDataTryNewYmon () {
@@ -240,7 +240,7 @@ function reLoadDataTryNewYmon () {
   month.value = month.value.replace(/[1-9]/, mx)
   ymon = year.value + month.value
   // console.log(`-CK-new ymon={$ymon}`)
-  const path = process.env.API + '/bankstatementloader/loadMonthlyStatementsBOA/' + ymon
+  const path = ENV_DEV + '/bankstatementloader/loadMonthlyStatementsBOA/' + ymon
   gaxios(path)
 }
 </script>

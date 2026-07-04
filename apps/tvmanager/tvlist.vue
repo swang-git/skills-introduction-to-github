@@ -1,87 +1,35 @@
 <template>
   <div class="q-pl-xs" style="width: 99.2%; margin: -17px 0 0 0">
-    <q-table
-      class="sh-sticky-header-table"
-      dense
-      v-model:rows="palist"
-      :columns="columns"
+    <q-table class="sh-sticky-header-table" dense v-model:rows="palist" :columns="columns"
       :visible-columns="isDesk ? visibleColumnsDesk : visibleColumnsFone"
-      row-key="basename"
-      :separator="separator"
-      :showCol="showCol"
-      wrap-cells
+      row-key="basename" :separator="separator" :showCol="showCol" wrap-cells
       :pagination="isDesk ? { rowsPerPage: nRow } : { rowsPerPage: 13 }"
     >
       <template v-slot:top="props">
-        <q-select
-          v-if="isIM"
-          v-model="visibleColumnsDesk"
-          multiple
-          borderless
-          dense
-          options-dense
-          emit-value
-          map-options
-          option-value="name"
-          style="min-width: 60px"
-          :display-value="$q.lang.table.columns"
-          :options="columns"
+        <q-select v-if="isIM" v-model="visibleColumnsDesk" multiple borderless dense options-dense
+          emit-value map-options option-value="name" style="min-width: 60px" :display-value="$q.lang.table.columns" :options="columns"
         />
-        <q-btn
-          v-if="isIM"
-          flat
-          round
-          dense
-          color="accent"
-          :icon="props.inFullscreen ? 'fullscreen_exit' : 'fullscreen'"
-          @click="props.toggleFullscreen"
-          class="q-pr-xs"
-        />
+        <q-btn v-if="isIM" flat round dense color="accent" :icon="props.inFullscreen ? 'fullscreen_exit' : 'fullscreen'" @click="props.toggleFullscreen" class="q-pr-xs" />
       </template>
 
       <template v-slot:header="props">
         <q-tr :props="props">
-          <q-th
-            v-for="col in props.cols"
-            :key="col.name"
-            :props="props"
-            class="bg-red-10 text-yellow-1 text-center text-no-wrap"
-            >{{ col.label }}</q-th
-          >
+          <q-th v-for="col in props.cols" :key="col.name" :props="props" class="bg-red-10 text-yellow-1 text-center text-no-wrap" >{{ col.label }}</q-th>
         </q-tr>
       </template>
 
       <template v-slot:body="p">
         <q-tr :props="p">
-          <q-td
-            v-for="col in p.cols"
-            :key="col"
-            class="text-no-wrap"
-            @click="expandRow(p, col.name)"
-            :style="getStyle(p, col)"
-            :class="getClass(p, col)"
-          >
-            {{ col.value > 0 ? parseFloat(col.value).toFixed(1) : col.value }}
+          <q-td v-for="col in p.cols" :key="col" class="text-no-wrap" @click="expandRow(p, col.name)" :style="getStyle(p, col)" :class="getClass(p, col)">
+             {{ col.value > 0 ? parseFloat(col.value).toFixed(1) : col.value }}
           </q-td>
         </q-tr>
         <q-tr v-show="p.expand" :props="p">
           <q-td class="bg-cyan-8" colspan="6">
             <table style="width: 100%; margin: 1px 1px 1px 1px">
               <q-tr>
-                <td style="font-size: 24px; width: 150px">{{
-                  cols[0].label
-                }}</td>
-                <td class="bg-teal-9" style="width: 560px">{{
-                  getVal(p.row, 0)
-                }}</td>
-                <td
-                  ><q-btn
-                    glossy
-                    round
-                    icon="delete"
-                    color="red"
-                    @click="del(p.row)" /></td
-              ></q-tr>
+                <td style="font-size: 24px; width: 150px">{{ cols[0].label }}</td> <td class="bg-teal-9" style="width: 560px">{{ getVal(p.row, 0) }}</td>
+                <td><q-btn glossy round icon="delete" color="red" @click="del(p.row)" /></td></q-tr>
               <q-tr>
                 <td style="font-size: 24px">{{ cols[5].label }}</td>
                 <!-- endtime -->
@@ -89,36 +37,18 @@
               </q-tr>
               <q-tr>
                 <td style="font-size: 24px">{{ cols[4].label }}</td>
-                <td colspan="3" class="bg-teal-9 text-white">{{
-                  getVal(p.row, 4)
-                }}</td>
+                <td colspan="3" class="bg-teal-9 text-white">{{ getVal(p.row, 4) }}</td>
               </q-tr>
               <q-tr>
                 <td style="font-size: 24px">{{ cols[6].label }}</td>
-                <td
-                  colspan="3"
-                  class="bg-teal-10 text-white"
-                  style="line-height: 1.2; font-size: 26px; width: 0px"
-                  >{{ getVal(p.row, 6) }}</td
-                >
+                <td colspan="3" class="bg-teal-10 text-white" style="line-height: 1.2; font-size: 26px; width: 0px" >{{ getVal(p.row, 6) }}</td>
               </q-tr>
               <q-tr>
                 <td style="font-size: 24px">视 频 文 件</td>
-                <td
-                  colspan="2"
-                  class="bg-teal-10 text-white"
-                  style="line-height: 1.2; font-size: 26px; width: 100px"
-                  >vlc {{ p.row.filename }}</td
-                >
+                <td colspan="2" class="bg-teal-10 text-white" style="line-height: 1.2; font-size: 26px; width: 100px">vlc {{ p.row.filename }}</td>
               </q-tr>
-              <q-tr v-if="getVal(p.row, 7).length > 0"
-                ><td colspan="3">{{ cols[7].label }}</td></q-tr
-              >
-              <q-tr v-if="getVal(p.row, 7).length > 0"
-                ><td colspan="3" class="bg-teal-9">{{
-                  getVal(p.row, 7)
-                }}</td></q-tr
-              >
+              <q-tr v-if="getVal(p.row, 7).length > 0"><td colspan="3">{{ cols[7].label }}</td></q-tr>
+              <q-tr v-if="getVal(p.row, 7).length > 0"><td colspan="3" class="bg-teal-9">{{ getVal(p.row, 7) }}</td></q-tr>
             </table>
           </q-td>
         </q-tr>
@@ -363,12 +293,12 @@ function getClass(p, col) {
   console.log(`-fn-getClass-XX starttime=${p.cols[0].value} duration=${p.cols[3].value}`, p.cols)
   let recording = isRecording(p.cols[0].value, p.cols[3].value)
   // if (recording) console.log(`-ck-recording=${recording}`)
-  if (col.name == 'title' && recording && p.cols[4].value != null) return 'text-no-wrap text-left text-amber'
+  if (col.name == 'title' && recording && p.cols[4].value != null) return 'text-no-wrap text-left text-amber cursor-pointer'
   else if (col.name == cols[0].name) return 'text-no-wrap text-center'
   // else if (col.name == cols[1].name) return 'text-no-wrap text-right bg-cyan-10'
   else if (col.name == cols[2].name) return 'text-no-wrap text-right bg-cyan-9'
   else if (col.name == cols[3].name) return 'text-no-wrap text-right bg-teal-9'
-  else if (col.name == cols[4].name) return 'text-no-wrap text-right bg-teal-10'
+  else if (col.name == cols[4].name) return 'text-no-wrap text-right bg-teal-10 cursor-pointer'
   else if (col.name == cols[5].name)
     return 'text-no-wrap ellipsis cursor-pointer'
   // else if (col.name == cols[3].name) return 'text-no-wrap text-center bg-teal-10 text-yellow'
