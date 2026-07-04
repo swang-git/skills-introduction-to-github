@@ -75,7 +75,7 @@ class TvController extends Controller
 		// $upcoming = Oldrecorded::where('watched', 0)
 		$gmtnow = $this->UTCnow();
 		$upcoming = Oldrecorded::where([['oldrecorded.starttime', '>', $gmtnow], ['oldrecorded.endtime', '<', $this->UTCplus($hours)]])
-			->select('record.recordid as recordedid', 'channum', 'oldrecorded.starttime', 'oldrecorded.endtime',
+			->select('record.recordid as recordedid', 'channum', 'oldrecorded.starttime', 'oldrecorded.endtime', 'oldrecorded.endtime',
 				DB::raw('null as basename'), 'oldrecorded.title', 'oldrecorded.subtitle', 'oldrecorded.description',
 				DB::raw('null as filesize'), DB::raw('storagegroup as dsk'))
 			->join('channel', 'channel.chanid', 'oldrecorded.chanid')
