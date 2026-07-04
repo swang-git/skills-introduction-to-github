@@ -19,8 +19,7 @@
 
       <template v-slot:body="p">
         <q-tr :props="p">
-          <q-td v-for="col in p.cols" :key="col" class="text-no-wrap" @click="expandRow(p, col.name)" :style="getStyle(p, col)" :class="getClass(p, col)">
-             {{ col.value > 0 ? parseFloat(col.value).toFixed(1) : col.value }}
+          <q-td v-for="col in p.cols" :key="col" class="text-no-wrap" @click="expandRow(p, col.name)" :style="getStyle(p, col)" :class="getClass(p, col)"> {{ col.value }}
              <q-tooltip v-if="col.name=='title'" class="bg-primary text-h6">{{ p.cols[6].value }}</q-tooltip>
           </q-td>
         </q-tr>
@@ -86,10 +85,10 @@ const cols = [
   { required: true, label: '开 播 时 间', align: 'center', name: 'starttime', field: 'starttime', sortable: true, headerStyle: 'min-width:170px' },
   { required: true, label: 'GB', align: 'center', name: 'filesize', field: 'filesize', sortable: true, headerStyle: 'max-width:30px' }, 
   { required: true, label: '频道', align: 'center', name: 'channum', field: 'channum', sortable: true, headerStyle: 'max-width:30px' },
-  { required: true, label: '分钟', align: 'center', name: 'duration', field: 'duration', sortable: true, headerStyle: 'max-width:30px' },
+  { required: true, label: '分钟', align: 'left', name: 'duration', field: 'duration', sortable: true, headerStyle: 'max-width:10px'},
   { required: true, label: 'DK', align: 'left', name: 'dsk', field: 'dsk', sortable: true, headerStyle: 'max-width:50px' },
   { required: true, label: '电 视 节 目', align: 'left', name: 'title', field: 'title', sortable: true, headerStyle: 'max-width:50px', headerClasses: 'ellipsis' },
-  { required: false, label: '结 束 时 间', align: 'center', name: 'endtime', field: 'endtime', sortable: true },
+  { required: false, label: '结  束', align: 'center', name: 'endtime', field: 'endtime', sortable: true, headerStyle: 'max-width:12px' },
   { required: false, label: '节 目 内 容', align: 'center', name: 'description', field: 'description', sortable: true },
   { required: false, label: 'Subtitle', align: 'center', name: 'subtitle', field: 'subtitle', sortable: true }
 ]
@@ -118,9 +117,10 @@ function getList(hours) {
   isLoading.value = true
 }
 function setList(da) {
-  console.log('-fn-setList', da.lst)
   // da.lst.forEach(p => { if (p.duration > 60) { p.duration /= 60; p.duration = p.duration.toFixed(0) }})
-  // da.lst.forEach(p => { if (p.duration > 100) { p.duration = (''+p.duration).substring(0, 2) }})
+  // da.lst.forEach(p => { p.endtime = p.endtime.substring(11); p.duration = parseInt(p.duration) })
+  da.lst.forEach(p => { p.endtime = p.endtime.substring(11) })
+  console.log('-fn-setList', da.lst)
   nRow.value = da.lst.length
   dats.value = da.lst
   emitter.emit('items-per-page', isIM ? 12 : nRow.value)
@@ -201,21 +201,14 @@ function isRecording(startStr, durationMin) {
   return now <= endTime
 }
 function getClass(p, col) {
-  // console.log('-fn-getClass p', p, 'col', col)
-  // console.log(`-fn-getClass col.name = ${col.name}`, col)
-  // if (col.name == 'starttime') console.log(`-fn-getClass col.name = ${col.name} ${col.value}`, p.cols)
-  // console.log(`-fn-getClass-XX starttime = ${p.cals[0]} durantion=${p.cals[3]}`, p.cols)
   console.log(`-fn-getClass-XX starttime=${p.cols[0].value} duration=${p.cols[3].value}`, p.cols)
   let recording = isRecording(p.cols[0].value, p.cols[3].value)
-  // if (recording) console.log(`-ck-recording=${recording}`)
   if (col.name == 'title' && recording && p.cols[4].value != null) return 'text-no-wrap text-left text-amber ellipsis cursor-pointer'
   else if (col.name == cols[0].name) return 'text-no-wrap text-center'
-  // else if (col.name == cols[1].name) return 'text-no-wrap text-right bg-cyan-10'
   else if (col.name == cols[2].name) return 'text-no-wrap text-right bg-cyan-9'
   else if (col.name == cols[3].name) return 'text-no-wrap text-right bg-teal-9'
   else if (col.name == cols[4].name) return 'text-no-wrap text-right bg-teal-10'
-  else if (col.name == cols[5].name) return 'text-no-wrap ellipsis cursor-pointer' // ellipsis not working! why?
-  // else if (col.name == cols[3].name) return 'text-no-wrap text-center bg-teal-10 text-yellow'
+  else if (col.name == cols[5].name) return 'text-no-wrap ellipsis cursor-pointer'
   else if (col.name == cols[1].name) return 'text-no-wrap text-center'
   else return 'text-no-wrap ellipsis text-left'
 }
