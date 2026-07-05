@@ -63,6 +63,7 @@ class TvController extends Controller
 		if ($d->dsk == 'Default')	$d->dsk = null;
 		else if ($d->dsk == 'HomeTV')	$d->dsk = 'htv';
 		else if ($d->dsk == 'USBdisk')	$d->dsk = 'dtv';
+		// else if ($d->dsk == 'Golf')	$d->dsk = null;
 		return $d;
 	}
 	private function UTCnow() {  // or call GMT (Greenwich Time)
@@ -75,9 +76,10 @@ class TvController extends Controller
 		// $upcoming = Oldrecorded::where('watched', 0)
 		$gmtnow = $this->UTCnow();
 		$upcoming = Oldrecorded::where([['oldrecorded.starttime', '>', $gmtnow], ['oldrecorded.endtime', '<', $this->UTCplus($hours)]])
-			->select('record.recordid as recordedid', 'channum', 'oldrecorded.starttime', 'oldrecorded.endtime', 'oldrecorded.endtime',
+			->select('record.recordid as recordedid', 'channum', 'oldrecorded.starttime', 'oldrecorded.endtime',
 				DB::raw('null as basename'), 'oldrecorded.title', 'oldrecorded.subtitle', 'oldrecorded.description',
-				DB::raw('null as filesize'), DB::raw('storagegroup as dsk'))
+				// DB::raw('null as filesize'), DB::raw('storagegroup as dsk'))
+				DB::raw('null as filesize'), DB::raw('null as dsk'))
 			->join('channel', 'channel.chanid', 'oldrecorded.chanid')
 			->join('record', 'record.recordid', 'oldrecorded.recordid')
 			->orderBy('starttime', 'desc')->get();

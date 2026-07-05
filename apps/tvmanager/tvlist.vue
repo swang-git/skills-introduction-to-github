@@ -20,7 +20,7 @@
       <template v-slot:body="p">
         <q-tr :props="p">
           <q-td v-for="col in p.cols" :key="col" class="text-no-wrap" @click="expandRow(p, col.name)" :style="getStyle(p, col)" :class="getClass(p, col)"> {{ col.value }}
-             <q-tooltip v-if="col.name=='title'" class="bg-primary text-h6">{{ p.cols[6].value }}</q-tooltip>
+             <q-tooltip v-if="col.name=='title'" class="bg-primary text-h6">结束时间：{{ getVal(p.row, 6) }}</q-tooltip>
           </q-td>
         </q-tr>
         <q-tr v-show="p.expand" :props="p">
@@ -88,11 +88,11 @@ const cols = [
   { required: true, label: '分钟', align: 'left', name: 'duration', field: 'duration', sortable: true, headerStyle: 'max-width:10px'},
   { required: true, label: 'DK', align: 'left', name: 'dsk', field: 'dsk', sortable: true, headerStyle: 'max-width:50px' },
   { required: true, label: '电 视 节 目', align: 'left', name: 'title', field: 'title', sortable: true, headerStyle: 'max-width:50px', headerClasses: 'ellipsis' },
-  { required: false, label: '结  束', align: 'center', name: 'endtime', field: 'endtime', sortable: true, headerStyle: 'max-width:12px' },
+  { required: false, label: '结 束 时 间', align: 'center', name: 'endtime', field: 'endtime', sortable: true, headerStyle: 'max-width:12px' },
   { required: false, label: '节 目 内 容', align: 'center', name: 'description', field: 'description', sortable: true },
   { required: false, label: 'Subtitle', align: 'center', name: 'subtitle', field: 'subtitle', sortable: true }
 ]
-var visibleColumnsDesk = [ cols[1].name, cols[2].name, cols[3].name, cols[4].name, cols[5].name, cols[6].name ]
+var visibleColumnsDesk = [ cols[1].name, cols[2].name, cols[3].name, cols[4].name, cols[5].name ]
 var visibleColumnsFone = [cols[1].name, cols[3].name]
 const columns = [ cols[0], cols[1], cols[2], cols[3], cols[4], cols[5], cols[6], cols[7] ]
 // const columns = [cols[0], cols[1], cols[2], cols[3], cols[4]]
@@ -110,8 +110,12 @@ buildApp('电视列表', 'tvmanager')
 getList(3)
 
 //======= functions =========
+function getEndTime(cols) {
+  console.log(`-fn-getEndTime starttime=`, cols)
+  console.log(`-fn-getEndTime starttime=${cols[0].value} duration=${cols[3].value}`)
+}
 function getList(hours) {
-  if (hours > 3) $q.dialog({ title: `TV Shows Recorded in ${hours} hours` })
+  if (hours > 3) $q.dialog({ title: `TV Shows Scheduled or Recording in ${hours} hours` })
   const path = ENV_DEV + '/tvmanager/getList/' + hours
   gaxios(path)
   isLoading.value = true
@@ -119,8 +123,8 @@ function getList(hours) {
 function setList(da) {
   // da.lst.forEach(p => { if (p.duration > 60) { p.duration /= 60; p.duration = p.duration.toFixed(0) }})
   // da.lst.forEach(p => { p.endtime = p.endtime.substring(11); p.duration = parseInt(p.duration) })
-  da.lst.forEach(p => { p.endtime = p.endtime.substring(11) })
-  console.log('-fn-setList', da.lst)
+  // da.lst.forEach(p => { p.endtime = p.endtime.substring(11) })
+  console.log('-CK-fn-setList', da.lst)
   nRow.value = da.lst.length
   dats.value = da.lst
   emitter.emit('items-per-page', isIM ? 12 : nRow.value)
