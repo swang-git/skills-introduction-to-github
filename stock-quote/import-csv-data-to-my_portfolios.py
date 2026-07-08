@@ -118,9 +118,10 @@ def import_portfolio_csv(db, csv_file_path, dict, asof_time: datetime):
 if __name__ == "__main__":
     rootdir = "/Users/swang/sites/webdata/docs/Portfolio/"
     today = date.today()
-    csvfile = 'snapshot_' + today.strftime('%Y%m%d') + '.csv'
+    theday = today + timedelta(days=subdays)
+    csvfile = 'snapshot_' + theday.strftime('%Y%m%d') + '.csv'
     print('--subdays=[%d]'%subdays)
-    if subdays < 0: csvfile = 'snapshot_' + (today - timedelta(days=-subdays)).strftime('%Y%m%d') + '.csv'
+    # if subdays < 0: csvfile = 'snapshot_' + (today - timedelta(days=-subdays)).strftime('%Y%m%d') + '.csv'
     csv_data_file = rootdir + csvfile
     if os.path.exists(csv_data_file):
         print("✅ [%s] File exists!"%csv_data_file)
@@ -132,7 +133,7 @@ if __name__ == "__main__":
     cursor = conn.cursor()
     meta = get_data_from_table(cursor, 'security_metas', 'status="A"')
     dict = build_dict(cursor, meta)
-    ASOF_TIME = datetime(today.year, today.month, today.day, 17, 41, 0)
+    ASOF_TIME = datetime(theday.year, theday.month, theday.day, 17, 41, 0)
     # ASOF_TIME = datetime(2026, 5, 7, 17, 30, 0)
     # Start import
     import_portfolio_csv(db, csv_data_file, dict, ASOF_TIME)

@@ -2,6 +2,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\tv\Recorded;
+use App\Models\tv\Record;
 use App\Models\tv\Oldrecorded;
 // use App\Models\tv\Channel;
 // use App\Models\tv\ChannelOldId;
@@ -109,7 +110,12 @@ class TvController extends Controller
 		return ['lst' => $dats, 'status' => "OK"];
 	}
 	public function del(Request $d) { //Log::info("tvmanager-del", $d->toArray());
-		Log::info("tvmanager-del file: $d->filename");
+		Log::info("tvmanager-del file: $d->filename, recordedid=$d->recordedid");
+		if ($d->filename == '') {
+			$rec = Record::find($d->recordedid);
+			$rec->delete();
+			return $this->getList();
+		}
 		$recd = Recorded::find($d->recordedid);
 		$recd->watched = 2;
 		$recd->deletepending = true;
