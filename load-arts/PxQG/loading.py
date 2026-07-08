@@ -28,7 +28,8 @@ from UpdateHomePage import updHomePage
 
 TESTING = False
 # TESTING = True
-MAX_PAGES = 60
+# MAX_PAGES = 60
+MAX_PAGES = 4
 tag = 'PXQG'
 CAT_INDEX = '2'   # for PXZJ change this to '60'
 # print('Loading ' + tag + ' ......')
