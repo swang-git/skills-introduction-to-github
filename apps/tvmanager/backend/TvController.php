@@ -85,7 +85,8 @@ class TvController extends Controller
 			->join('record', 'record.recordid', 'oldrecorded.recordid')
 			->orderBy('starttime', 'desc')->get();
 
-		$datx = Recorded::where('watched', 0)
+		// $datx = Recorded::where('watched', 0)
+		$datx = Recorded::where('recgroup', 'Default')
 			->select('recordedid', 'channel.channum', 'starttime', 'endtime', 'basename', 'title', 'subtitle', 'description', 'filesize')
 			->join('channel', 'channel.chanid', 'recorded.chanid')
 			// ->select('recordedid', 'channel_old_id_ALL.channum', 'starttime', 'endtime', 'basename', 'title', 'subtitle', 'description', 'filesize')
@@ -111,15 +112,17 @@ class TvController extends Controller
 	}
 	public function del(Request $d) { //Log::info("tvmanager-del", $d->toArray());
 		Log::info("tvmanager-del file: $d->filename, recordedid=$d->recordedid");
-		if ($d->filename == '') {
-			$rec = Record::find($d->recordedid);
-			$rec->delete();
-			return $this->getList();
-		}
+		// if ($d->filename == '') {
+		// 	$rec = Record::find($d->recordedid);
+		// 	$rec->delete();
+		// 	return $this->getList();
+		// }
 		$recd = Recorded::find($d->recordedid);
-		$recd->watched = 2;
-		$recd->deletepending = true;
+		// $recd->watched = 2;
+		// $recd->deletepending = true;
 		$recd->recgroup = 'Deleted';
+		$recd->recgroupid = 3;
+		$recd->autoexpire = 9999;
 		$recd->bookmarkupdate = date('Y-m-d h:i:s', time());
 		$recd->update();
 		// Log::info("lastLine:[$lastLine], status=[$retval]");

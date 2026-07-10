@@ -5,6 +5,7 @@ from datetime import datetime, timedelta, date
 
 from Utils import get_data_from_table, build_dict, get_52_week_low, get_52_week_high, padsp
 from MyPortfolio_Models import get_connection, CSV_TO_DB_MAP, TYPE_CONVERTERS, MyPortfolio
+# from MyPortfolio_Models import get_connection, Csv_To_Db_Map, Csv_to_db_map, TYPE_CONVERTERS, MyPortfolio
 
 import argparse
 parser = argparse.ArgumentParser()
@@ -16,6 +17,16 @@ subdays = args.sub_days
 print("database:%s, subdays:%i"%(database,subdays))
 # sys.exit(0)
 
+# # =============================================================================
+# # 5.0 get proper csv header to db map based on Account Number/number
+# # =============================================================================
+# def getCSV_TO_DB_MAP(reader):
+#     for row_num, row in enumerate(reader, 1):
+#         if row.get('Account Number') == None:
+#             print('row_num[%d]'%row_num)
+#             return Csv_to_db_map.items()
+#     return Csv_To_Db_Map.items()
+
 # =============================================================================
 # 5. CORE FUNCTION: READ CSV → UPSERT TO MYSQL
 # =============================================================================
@@ -25,14 +36,21 @@ def import_portfolio_csv(db, csv_file_path, dict, asof_time: datetime):
     try:
         with open(csv_file_path, 'r', encoding='utf-8-sig') as f:
             csv_dict = csv.DictReader(f)
-            reader = list(csv_dict)[::-1] ## reverse the order
+            # reader = list(csv_dict)[::-1] ## reverse the order
+            reader = list(csv_dict) ## no reverse
+            # print("reader[10]", reader[10])
 
-            for row_num, row in enumerate(reader, 1):
+            # csv2dbMap = getCSV_TO_DB_MAP(reader)
+            for row_num, row_ in enumerate(reader, 1):
+                row = {k.lower() if isinstance(k, str) else k: v for k, v in row_.items()} # covert all kyes(csv_header) to lower case
+                # print('row_num[%d]row'%row_num, row.keys())
+
                 added_seconds += 1
                 # --------------------------
                 # Step 1: Map CSV → DB fields
                 # --------------------------
                 data = {}
+                # for csv_header, db_col in csv2dbMap:
                 for csv_header, db_col in CSV_TO_DB_MAP.items():
                     raw_val = row.get(csv_header, "")
                     # Convert types
@@ -89,18 +107,21 @@ def import_portfolio_csv(db, csv_file_path, dict, asof_time: datetime):
                 # --------------------------
                 existing = db.query(MyPortfolio).filter( MyPortfolio.asof_time == asof, MyPortfolio.account == account, MyPortfolio.symbol == symbl).first()
 
+                # rwn = f"{row_num:2d}"
                 if existing:
                     # Update all fields
                     for key, value in data.items():
                         setattr(existing, key, value)
                     # print(f"🔄 Updated | Account: {account} | As-of: {asof} | 52wk_low: {low} | 52wk_high: {high} | created_at: {created_at} | updated_at: {updated_at}")
                     # print(f"🔄 Updated | Account: {account} | Asof: {asof} | price: {price} | price_change: {price_change} | 52wk_low: {low} | 52wk_high: {high} | updated_at: {value}")
-                    print(f"🔄 Updated | Account: {account} | Asof: {asof} | {symb}: price: {price} | price_change: {price_change} | 52wk_low: {low} | 52wk_high: {high}")
+                    # print(f"🔄 Updated {rwn} | Account: {account} | Asof: {asof} | {symb}: price: {price} | price_change: {price_change} | 52wk_low: {low} | 52wk_high: {high}")
+                    print(f"🔄 Updated | Account: {account} | {asof} | {symb}: price: {price} | price_change: {price_change} | 52wk_low: {low} | 52wk_high: {high}")
                 else:
                     # Create new record (NO __init__ needed!)
                     new_record = MyPortfolio(**data)
                     db.add(new_record)
-                    print(f"✅ Added   | Account: {account} | Asof: {asof} | {symb}: price: {price} | price_change: {price_change} | 52wk_low: {low} | 52wk_high: {high}")
+                    # print(f"✅ Added {rwn} | Account: {account} | Asof: {asof} | {symb}: price: {price} | price_change: {price_change} | 52wk_low: {low} | 52wk_high: {high}")
+                    print(f"✅ Added | Account: {account} | {asof} | {symb}: price: {price} | price_change: {price_change} | 52wk_low: {low} | 52wk_high: {high}")
 
         # Save all changes
         db.commit()

@@ -168,7 +168,7 @@ var visibleColumnsDesk = [ cols[1].name, cols[2].name, cols[3].name, cols[4].nam
 var visibleColumnsFone = [cols[1].name, cols[3].name]
 const columns = [ cols[0], cols[1], cols[2], cols[3], cols[4], cols[5], cols[6], cols[7] ]
 // const columns = [cols[0], cols[1], cols[2], cols[3], cols[4]]
-const nRow = ref(28)
+const nRow = ref(22)
 const isLoading = ref(false)
 
 //======= main =========
