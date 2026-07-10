@@ -43,9 +43,10 @@ def import_portfolio_csv(db, csv_file_path, dict, asof_time: datetime):
             # csv2dbMap = getCSV_TO_DB_MAP(reader)
             for row_num, row_ in enumerate(reader, 1):
                 row = {k.lower() if isinstance(k, str) else k: v for k, v in row_.items()} # covert all kyes(csv_header) to lower case
+                # print("\n==row[%d] account[%s], symbol[%s]"%(row_num, row['account number'], row['symbol']))
                 # print('row_num[%d]row'%row_num, row.keys())
 
-                added_seconds += 1
+                # added_seconds += 1
                 # --------------------------
                 # Step 1: Map CSV → DB fields
                 # --------------------------
@@ -69,21 +70,22 @@ def import_portfolio_csv(db, csv_file_path, dict, asof_time: datetime):
                 account = data.get("account")
                 
                 # SKIP ROW IF: no account OR length > 20
-                if not account or len(str(account)) > 20:
+                if not account or len(str(account)) > 10: # account = 'X85275143' len(account) = 9
                     # print(f"⚠️ Skipping row {row_num}: Invalid account: {account}")
-                    added_seconds = added_seconds - 1 ## keep original started datetime
+                    # added_seconds = added_seconds - 1 ## keep original started datetime
                     continue
 
                 # SKIP ROW IF: no symbo OR length > 8 # skip Pending activity line
                 symbol = data.get("symbol")
                 if not symbol or len(str(symbol)) > 8:
                     print(f"⚠️ Skipping row {row_num}: Invalid symbol: {symbol}")
-                    added_seconds = added_seconds - 1 ## keep original started datetime
+                    # added_seconds = added_seconds - 1 ## keep original started datetime
                     continue
 
                 # --------------------------
                 # Step 2: Add asof_time (datetime)
                 # --------------------------
+                added_seconds += 1
                 data["asof_time"] = asof_time + timedelta(seconds=added_seconds)
 
                 # --------------------------
