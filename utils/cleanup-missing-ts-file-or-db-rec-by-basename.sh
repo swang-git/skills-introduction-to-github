@@ -12,7 +12,7 @@ if [ "$idx" -gt "0" ]; then
 fi
 # echo $basen
 # exit
-echo
+##echo
 # echo "checking recorded file with basename = $basen"
 
 fileExist="Not Exist $basen in /atv /btv /ctv /dtv /stv"
@@ -21,8 +21,8 @@ do
   FILE="$dr/$basen"
   # echo checking $FILE
   if test -f $FILE; then
-    #echo $FILE exists
-    echo "==========================================================================="
+    ##_echo $FILE exists
+    ##echo "==========================================================================="
     fileExist="Yes, rcfile exists $FILE in $dr"
     # ls -l $FILE
     break
@@ -32,26 +32,27 @@ done
 fileEx=${fileExist:0:3}
 # echo $fileEx
 if [ $fileEx = "Not" ]; then
-  cnt=$(mysql -pYbsjll11 -b mythconverg --batch -N -e "select COUNT(*) from recorded where basename = '$basen'")
+  cnt=$(mariadb -pYbsjll11 -b mythconverg --batch -N -e "select COUNT(*) from recorded where basename = '$basen'")
   if [ $cnt -gt 0 ]; then
     echo "delete record $basen ...."
-    mysql -pYbsjll11 -b mythconverg -e "delete from recorded where basename = '$basen'"
+    mariadb -pYbsjll11 -b mythconverg -e "delete from recorded where basename = '$basen'"
   else
     echo "No row in recorded table and recorded file for $basen, exiting ..."
   fi
   exit
 else
-  echo $fileExist
+  ##_echo $fileExist
   # echo "And  *.png file is ${FILE}.png"
   # echo "checking record in recorded table"
-  record=$(mysql -pYbsjll11 -b mythconverg --batch -N -e "select COUNT(*) from recorded where basename = '$basen'")
+  record=$(mariadb -pYbsjll11 -b mythconverg --batch -N -e "select COUNT(*) from recorded where basename = '$basen'")
   if [ "$record" -gt 0 ]; then
-    echo "Yes, record exists  for $basen in recorded table"
-    mysql -pYbsjll11 -b mythconverg -e "select watched,chanid,starttime,endtime,title from recorded where basename='$basen'"
+    ##_echo "Yes, record exists  for $basen in recorded table"
+    ##mariadb -pYbsjll11 -b mythconverg -e "select recgroup,recgroupid,watched,recordedid,autoexpire,starttime,bookmarkupdate,LEFT(title,15) as title from recorded where basename='$basen'"
+    mariadb -pYbsjll11 -b mythconverg -e "select recgroup,recgroupid as rg,recordedid as rcdedid,recordid as rcdid,watched,autoexpire as autoexp,ROUND(filesize/1024/1024/1024,1) as '(GB)',LEFT(starttime,16) as starttime,LEFT(endtime,16) as endtime,LEFT(title,35) as title from recorded where basename='$basen'"
     if [ $fileEx = "Yes" ]; then
       ls -lh $FILE
     fi
-    echo "==========================================================================="
+    ##echo "==========================================================================="
     exit
   else
     echo "No record in recoded table"

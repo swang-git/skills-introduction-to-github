@@ -117,13 +117,13 @@ def import_portfolio_csv(db, csv_file_path, dict, asof_time: datetime):
                     # print(f"🔄 Updated | Account: {account} | As-of: {asof} | 52wk_low: {low} | 52wk_high: {high} | created_at: {created_at} | updated_at: {updated_at}")
                     # print(f"🔄 Updated | Account: {account} | Asof: {asof} | price: {price} | price_change: {price_change} | 52wk_low: {low} | 52wk_high: {high} | updated_at: {value}")
                     # print(f"🔄 Updated {rwn} | Account: {account} | Asof: {asof} | {symb}: price: {price} | price_change: {price_change} | 52wk_low: {low} | 52wk_high: {high}")
-                    print(f"🔄 Updated | Account: {account} | {asof} | {symb}: price: {price} | price_change: {price_change} | 52wk_low: {low} | 52wk_high: {high}")
+                    print(f"🔄 Upd | Account: {account} | {asof} | {symb}: price: {price} | price_change: {price_change} | 52wk_high: {high}")
                 else:
                     # Create new record (NO __init__ needed!)
                     new_record = MyPortfolio(**data)
                     db.add(new_record)
                     # print(f"✅ Added {rwn} | Account: {account} | Asof: {asof} | {symb}: price: {price} | price_change: {price_change} | 52wk_low: {low} | 52wk_high: {high}")
-                    print(f"✅ Added | Account: {account} | {asof} | {symb}: price: {price} | price_change: {price_change} | 52wk_low: {low} | 52wk_high: {high}")
+                    print(f"✅ Add | Account: {account} | {asof} | {symb}: price: {price} | price_change: {price_change} | 52wk_high: {high}")
 
         # Save all changes
         db.commit()

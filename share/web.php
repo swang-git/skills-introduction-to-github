@@ -105,7 +105,7 @@ Route::prefix('memo')
       Route::get('getList/{swd13}', 'getList'); //->middleware('auth');
       Route::post('add', 'add');//->middleware('auth');
       Route::post('upd', 'upd');//->middleware('auth');
-      Route::post('del/{id}', 'del');//->middleware('auth');
+      Route::get('del/{id}', 'del');//->middleware('auth');
     }
   );
 
