@@ -38,7 +38,8 @@
                 </div>
               </div>
               <div v-if="isDesk">
-                <q-input dark borderless v-model="searchQuery" :label="curApp=='Expense' ? null : 'Quasar Version: ' + $q.version" input-class="text-right text-h6" class="absolute-bottom-right" dense @keyup="search()">
+                <!-- <q-input dark borderless v-model="searchQuery" :label="curApp=='Expense' ? null : 'Quasar Version: ' + $q.version" input-class="text-right text-h6" class="absolute-bottom-right" dense @keyup="search()"> -->
+                <q-input dark borderless v-model="searchQuery" :label="'Quasar Version: ' + $q.version" input-class="text-right text-h6" class="absolute-bottom-right" dense @keyup="search()">
                   <template v-slot:append>
                     <q-icon v-if="searchQuery===''" name="search" />
                     <q-icon v-else name="clear" class="cursor-pointer" @click.stop.prevent="searchQuery='';search()" />
