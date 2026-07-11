@@ -14,13 +14,13 @@
     "postinstall": "quasar prepare --silent"
   },
   "dependencies": {
-    "@quasar/extras": "^2.0.0",
+    "@quasar/extras": "^2.0.2",
     "axios": "^1.18.0",
     "chart.js": "^4.5.1",
     "chartjs": "^0.3.24",
     "chartjs-plugin-datalabels": "^2.2.0",
     "pinia": "^3.0.1",
-    "quasar": "^2.20.0",
+    "quasar": "^2.21.2",
     "tiny-emitter": "^2.1.0",
     "vue": "^3.5.22",
     "vue-i18n": "^11.3.0",
@@ -29,7 +29,7 @@
   },
   "devDependencies": {
     "@intlify/unplugin-vue-i18n": "^11.0.0",
-    "@quasar/app-vite": "^3.0.0-rc.3",
+    "@quasar/app-vite": "^3.0.1",
     "autoprefixer": "^10.4.27",
     "dotenv": "^17.4.2",
     "oxfmt": "^0.x",

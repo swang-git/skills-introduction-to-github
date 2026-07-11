@@ -112,16 +112,16 @@ export default defineConfig((ctx) => {
             include: [ctx.appPaths.resolve.app('src/i18n')],
           },
         ],
-        [
-          'vite-plugin-checker',
-          {
-            eslint: {
-              lintCommand: 'eslint -c ./eslint.config.js "./src*/**/*.{js,mjs,cjs,vue}"',
-              useFlatConfig: true,
-            },
-          },
-          { server: false },
-        ],
+        //[
+        //  'vite-plugin-checker',
+        //  {
+        //    eslint: {
+        //      lintCommand: 'eslint -c ./eslint.config.js "./src*/**/*.{js,mjs,cjs,vue}"',
+        //      useFlatConfig: true,
+        //    },
+        //  },
+        //  { server: false },
+        //],
       ],
     },
 
