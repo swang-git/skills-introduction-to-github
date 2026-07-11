@@ -272,7 +272,7 @@ Route::group (
     // Route::view('apps/watcher', 'watcher');
     
 Route::view('/', 'golf');
-//__Route::view('golf/PlayerList', 'golf');
+Route::view('golf/PlayerList', 'golf');
 Route::view('golf/EnterScores', 'golf');
 Route::view('golf/PGCGroupList', 'golf');
 Route::view('golf/TournamentList', 'golf');

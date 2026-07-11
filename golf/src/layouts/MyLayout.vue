@@ -2,10 +2,12 @@
   <q-layout view="hHh Lpr fFf" container style="height: 1530px">
     <q-header elevated class="bg-cyan-8">
       <q-toolbar>
-        <q-btn v-if="isDesk" flat @click="drawer = !drawer" round dense icon="menu" />
+        <q-btn v-if="isDesk" @click="drawer = !drawer" round glossy color="indigo-9" dense><q-icon :name="compVer" style="margin-top:-6px" /></q-btn>
+        <!-- <q-btn v-if="isDesk" flat @click="drawer = !drawer" round dense><q-icon name="compVer" /></q-btn> -->
         <q-btn v-else to="/" round dense glossy color="blue-6" ><q-icon name="🏠" style="margin: -12px 0 0 0"/></q-btn>
         <q-toolbar-title class="cursor-pointer" @click="reloadPage()">{{ pageTitle }}</q-toolbar-title>
-        <q-input v-if="showSearch" :style="isIM ? { width: '90px' } : { width: '200px' }" dark borderless v-model="searchQuery" class="text-right text-h6" dense @keyup="search()">
+        <!-- <q-input v-if="showSearch" :style="isIM ? { width: '90px' } : { width: '200px' }" dark v-model="searchQuery" :label="'Quasar Version: ' + $q.version" class="text-right text-h6" dense @keyup="search()"> -->
+        <q-input :style="isIM ? { width: '90px' } : { width: '200px' }" dark v-model="searchQuery" :label="'Quasar Version: ' + $q.version" class="text-right text-h6" dense @keyup="search()">
           <template v-slot:append>
             <q-icon v-if="searchQuery === ''" name="search" />
             <q-icon v-else name="clear" class="cursor-pointer" @click=" searchQuery = ''; search()" />
@@ -161,16 +163,16 @@
             <q-item-section> Show Logs </q-item-section>
           </q-item>
 
-          <q-item v-if="compVer==undefined" clickable v-ripple @click="openApp('DevTest', 'Testing New', 'Testing New')">
+          <q-item v-if="compVer=='开'" clickable v-ripple @click="openApp('DevTest', 'Testing New', 'Testing New')">
             <q-item-section avatar>
               <q-icon name="developer_mode" color="indigo" size="30px" />
             </q-item-section>
             <q-item-section> Testing New </q-item-section>
           </q-item>
 
-          <div class="row text-grey text-h6 q-pl-xl">
+          <!-- <div class="row text-grey text-h6 q-pl-xl">
             <q-icon :name="compVer" /><span class="q-pl-md">{{ $q.version }}</span>
-          </div>
+          </div> -->
         </q-list>
       </q-scroll-area>
 
@@ -213,21 +215,7 @@ import { dayFunctions } from '../../src/composables/dayFunctions'
 // import { useStore } from 'vuex'
 // const store = useStore()
 const $q = useQuasar()
-// const { store, golfUserType, JZsAdmin, KJsAdmin, ALsAdmin, SysAdmin, isIM, isDesk, PGCsAdmin, doGroup, pagename, userGuidePage } = libFunctions()
-const {
-  store,
-  JZsAdmin,
-  KJsAdmin,
-  ALsAdmin,
-  SysAdmin,
-  isIM,
-  isDesk,
-  PGCsAdmin,
-  doGroup,
-  pagename,
-  userGuidePage,
-  DEV_API
-} = libFunctions()
+const { store, JZsAdmin, KJsAdmin, ALsAdmin, SysAdmin, isIM, isDesk, PGCsAdmin, doGroup, pagename, userGuidePage } = libFunctions()
 const { yyyymmdd } = dayFunctions()
 
 const oneHour = 1000 * 60 * 60
@@ -255,24 +243,24 @@ emitter.on('num-items', x => (numItems.value = x))
 const { gaxios } = axiosFunctions()
 const { ENV_API } = libFunctions()
 
-const compVer = computed(() => { return import.meta.env.VITE_BUILD_TAG })
+const compVer = computed(() => { return import.meta.env.VITE_BUILD_TAG==undefined ? '开' : import.meta.env.VITE_BUILD_TAG })
 // const pagename = computed({
 //   get: () => store.state.golf.page,
 //   set: val => store.commit('golf/setPage', val)
 // })
-const showSearch = computed(() => {
-  return (
-    [
-      'PGCGames',
-      'PlayerList',
-      'tournmaentList',
-      'grouping',
-      'team_match_top',
-      'JZsMatch',
-      'LoadLogPage'
-    ].indexOf(pagename.value) >= 0
-  )
-})
+// const showSearch = computed(() => {
+//   return (
+//     [
+//       'PGCGames',
+//       'PlayerList',
+//       'tournmaentList',
+//       'grouping',
+//       'team_match_top',
+//       'JZsMatch',
+//       'LoadLogPage'
+//     ].indexOf(pagename.value) >= 0
+//   )
+// })
 const pageTitle = computed(() => {
   return store.pageTitle
 })
@@ -294,7 +282,7 @@ const gcinfo = ref(false)
 const appname = ref(null)
 const refPlatformDataPad = ref(false)
 
-console.log(`-CK-showSearch=${showSearch.value}`)
+// console.log(`-CK-showSearch=${showSearch.value}`)
 console.log(`-CK-pageTitle=${pageTitle.value}`)
 onMounted(() => {
   refPlatformDataPad
