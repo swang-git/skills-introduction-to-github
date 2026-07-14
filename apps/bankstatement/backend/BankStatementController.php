@@ -35,7 +35,7 @@ class BankStatementController extends Controller
 	public function index() {
 		// $this->middleware('auth');
 	}
-	public function getList() {
+	public function getList() { Log::info("-fn-BankStatementController.getList");
 		$userId = Auth::user()->id;
 		$hideSql = 'select true';
 		$diffSql = 'end_balance - begin_balance';
@@ -88,28 +88,31 @@ class BankStatementController extends Controller
 		->orderBy('year', 'desc')
 		->orderBy('month', 'desc')
 		->orderBy('bank', 'desc')
-    ->limit(1)->get();
+    	->limit(1)->get();
 
 		// Log::info("year=$year money market(cash in Fidelity Personal Accounts Z71 and X85)=$fidel_cash", $nacd->toArray());
 		Log::info("year=$year nacd=", $nacd->toArray());
 		// $datsAr = $dats->toArray()[0];
-    if (count($nacd) > 0) {
-      $month = $dats[0]->month; // Log::info("-CK-XXX month=$month");
-      $month = $dats[0]->month; // Log::info("-CK-XXX month=$month");
-      // $nacd[0]->month = date('m') + 1;
-      $dats = $nacd->merge($dats);
-    }
+		if (count($nacd) > 0) {
+			$month = $dats[0]->month; // Log::info("-CK-XXX month=$month");
+			// $month = $dats[0]->month; // Log::info("-CK-XXX month=$month");
+			// $nacd[0]->month = date('m') + 1;
+			$dats = $nacd->merge($dats);
+		}
+		// $dats = $nacd->merge($dats);
 		[$bkgd, $stocks, $cash, $intraday, $last_bkg_pdf] = $this->getChaseBkgAssets();
-		$dats = $bkgd->merge($dats); //Log::info("-CK-XXX stocks=$stocks cash=$cash", $bkgd->toArray());
+		Log::info("-CK-BKG stocks=$stocks cash=$cash", $bkgd->toArray());
+		$dats = $bkgd->merge($dats); 
+		// Log::info("-CK-NAC", $nacd->toArray());
 		$stock_val = $bkgd[0]->end_balance - $cash;
 
-    $currFidelPortfo = HealthRecord::where('status', 'A')->orderByDesc('date')->limit(1)->value('portfolio');
-    Log::info("currentFidelityPortFolio=$currFidelPortfo", []);
+		$currFidelPortfo = HealthRecord::where('status', 'A')->orderByDesc('date')->limit(1)->value('portfolio');
+		Log::info("currentFidelityPortFolio=$currFidelPortfo", []);
 		return ['stocks_val' => $stock_val, 'fidel_cash' => $fidel_cash, 'dats' => $dats, 'bkg_stocks' => $stocks, 'bkg_cash' => $cash,
         'intraday' => $intraday, 'last_bkg_pdf' => $last_bkg_pdf, 'curr_fidel_portfo' => $currFidelPortfo, 'status' => "OK" ];
 	}
 
-  private function getLastMatchingFile($directory, $pattern) {
+	private function getLastMatchingFile($directory, $pattern) {
       if (!is_dir($directory)) {
           return null;
       }
@@ -131,13 +134,13 @@ class BankStatementController extends Controller
       natsort($matchingFiles);
 
       return end($matchingFiles);
-  }
+	}
 
-  // // Example usage:
-  // $lastFile = getLastMatchingFile('/path/to/directory', 'prefix_*.txt');
-  // echo $lastFile ? "Last file: $lastFile" : "No matching files found";
+	// // Example usage:
+	// $lastFile = getLastMatchingFile('/path/to/directory', 'prefix_*.txt');
+	// echo $lastFile ? "Last file: $lastFile" : "No matching files found";
 
-	private function getChaseBkgAssets() { Log::info("getChaseBkgAssets");
+	private function getChaseBkgAssets() { Log::info("-fn-getChaseBkgAssets");
         $last_bkg_pdf = $this->getLastMatchingFile(config('constants.DOC_DIR') . '/Chase/', '202*_bkg.pdf');
         Log::info("last_bkg_pdf=$last_bkg_pdf");
 
@@ -158,15 +161,14 @@ class BankStatementController extends Controller
 			$begin_balance_stocks += ($d->price - $d->price_change) * $d->quantity;
 			$end_balance_stocks += $d->price * $d->quantity;
 		}
-		// $cash = 40465.51;
-		// $cash = 41745.24;
-		// $cash = 41482.49;
-		// $cash = 41844.12;
-    $loadMonth = substr(StockQuote::where('status', 'A')->max('asof_time'), 0, 7);
-    $cash = ChaseBkgCash::where([ ['status', 'A'], ['date', 'like', "$loadMonth%"] ])->value('cash');
-    if (is_null($cash)) $cash = ChaseBkgCash::where('status', 'A')->orderByDesc('date')->limit(1)->value('cash');
-    Log::info("loadMonth=$loadMonth cash=$cash");
-		$bkgd = StockQuote::select(DB::raw("1 as user_id") , DB::raw("'BKG' as bank"),
+		$loadMonth = substr(StockQuote::where('status', 'A')->max('asof_time'), 0, 7);
+		$cash = ChaseBkgCash::where([ ['status', 'A'], ['date', 'like', "$loadMonth%"] ])->value('cash');
+		if (is_null($cash)) $cash = ChaseBkgCash::where('status', 'A')->orderByDesc('date')->limit(1)->value('cash');
+		Log::info("loadMonth=$loadMonth cash=$cash");
+		$bkgd = StockQuote::select(
+				DB::raw("'fakeId' as id"), 
+				DB::raw("1 as user_id"), 
+				DB::raw("'BKG' as bank"),
 				DB::raw("DATE_FORMAT(asof_time, '%Y') as year"),
 				DB::raw("DATE_FORMAT(asof_time, '%m') as month"),
 				DB::raw("'985 10278' as primary_account"),
