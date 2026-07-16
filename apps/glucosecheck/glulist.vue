@@ -217,23 +217,6 @@ getList()
 function showA1xChart () {
 // do nothing -- redirect to other charts
 }
-// function X_OLD_showAllCharts () {
-//   console.log('-fn-showAllCharts', dalist.value)
-//   clvs.value = []
-//   dalist.value.filter(x => x.food == null).forEach((p, i) => clvs.value.push({ idx: p.idx, date: p.datetime, clv:p.clvl==undefined ? 0 : p.clvl.toFixed(1) }))
-//   clvs.value.forEach((p, i) => {
-//     const x = dalist.value[p.idx + 1] // prev day
-//     const y = dalist.value[p.idx]     // this morning
-//     p.note = y!=undefined ? y.note : 'no note'
-//     p.food = x!=undefined ? x.food : 'no food'
-//     p.fdtm = x!=undefined ? x.datetimeOrig : 'no food time'
-//     p.gptm = x!=undefined ? ((new Date(p.date).getTime() - new Date(x.datetimeOrig).getTime()) / 1000 / 60 / 60).toFixed(1) : 'no time gap'
-//     // console.log(p.idx, p.clv, p.date, x.datetime, p.food)
-//   })
-//   // this.a1cData = gluSections.value.map(p => (p.eag * 0.0555).toFixed(1))
-//   // this.a1cLabels = gluSections.value.map(p => p.dat)
-//   emitter.emit('open-ChartProxy')
-// }
 function showAllCharts () {
   console.log('-fn-showAllCharts', dalist.value)
   clvs.value = []
@@ -362,7 +345,8 @@ function calcEAG_A1C_A1Cp (row) {
   if (glucoses.length === 0) {
     return
   }
-  const eAG90 = glucoses.reduce((a, b) => a + b) / glucoses.length  // 90 days average = eAG
+  // console.log(`-CK-90 days glucoses.length=${glucoses.length} ${glucoses.reduce((a, b) => a + b)}`, glucoses)
+  const eAG90 = glucoses.reduce((a, b) => a + b) / glucoses.length  // 90 days average = eAG mg/dL
   const eAGml = (eAG90 / 18.015).toFixed(1) // 中国标准 mmol/L
   const a1cp = ((eAG90 + 46.7) / 28.7).toFixed(1)
   const a1c = (10.929 * (a1cp - 2.15)).toFixed(1)
@@ -383,7 +367,7 @@ function prev90date (dt) {
   return dt90
 }
 function getValue (col, row) {
-  console.log(`-fn-getValue col.name=${col.name} col.value=${row.week}`)
+  // console.log(`-fn-getValue col.name=${col.name} col.value=${row.week}`)
   calcEAG_A1C_A1Cp(row)
   if (col.name === 'glucose') {
     // return  col.value
@@ -406,18 +390,10 @@ function getValue (col, row) {
     // return '90天平均 ' + row.eag + ' (mg/dL) / ' + row.glu + ' (mmol/L)'
     return '90天平均 ' + row.eag + '~' + row.glu
   }
+  console.log(`-fn-getValue(col, row): col.name=${col.name} col.value=${col.value}`)
   return col.value
 }
-// function getValue (col, row) {
-//   if (col.name === 'glucose') {
-//     if (col.value / 18 < 10) return  col.value + '~' + (col.value / 18).toFixed(1)
-//     else return col.value + '~' + (col.value / 18).toFixed(0)
-//   } else if (col.name === 'food' && col.value == null) {
-//     // return row.a1cp + ' / ' + row.a1c + ' / ' + row.eag + ' / ' + (row.eag / 18.015).toFixed(1)
-//     return row.a1cp + ' / ' + row.a1c + ' / ' + row.eag + ' / ' + row.glu
-//   }
-//   return col.value
-// }
+
 function getStyle (col) {
   if (col === 'datetime') return "width:160px;white-space:nowrap;"
   // else if (col === 'glucose') return "max-width:0px"
@@ -426,39 +402,31 @@ function getStyle (col) {
   else if (col === 'week') return "max-width:20px"
   else return "white-space:nowrap"
 }
+// function between (x, a, b) { return x >= a && x < b }
 function getClass (col, row) {
   // console.log(`-CK-row.id = ${row.id} clickedIex = ${clickedIdx.value}`)
-  let bgc = row.id == lastClickedRow.value.row.id ? 'bg-indigo-9 ' : ''
-  if (col === 'datetime') return bgc + 'cursor-pointer text-no-wrap;text-center'
+  const bgc = row.id == lastClickedRow.value.row.id ? 'bg-indigo-9 ' : ''
+  if (col == 'datetime') return bgc + 'cursor-pointer text-no-wrap;text-center'
   else if (col === 'week') return bgc + 'text-center text-no-wrap'
-  // else if (col === 'food' && row.food == null) return bgc + 'text-cyan-2 text-bold text-body1 cursor-pointer'
   else if (col === 'food') return bgc + 'text-cyan-2 cursor-pointer text-no-wrap ellipsis'
   else if (col === 'food' || col === 'datetime') return bgc + 'text-left text-no-wrap cursor-pointer'
   else if (col === 'drink' || col === 'fruit' || col === 'a1cp') return bgc + 'text-center text-no-wrap'
-  else if (col === 'glucose' && between(row.glucose,   0, 101) && row.typeC === '空腹') return bgc + 'text-center text-green-9'
-  else if (col === 'glucose' && between(row.glucose, 100, 126) && row.typeC === '空腹') return bgc + 'text-center text-green-7'
-  else if (col === 'glucose' && between(row.glucose, 125, 141) && row.typeC === '空腹') return bgc + 'text-center text-green-5'
-  else if (col === 'glucose' && between(row.glucose, 140, 156) && row.typeC === '空腹') return bgc + 'text-center text-blue'
-  else if (col === 'glucose' && between(row.glucose, 155, 999) && row.typeC === '空腹') return bgc + 'text-center text-pink-4'
-  else if (col === 'glucose' && between(row.glucose,   0, 156) && row.typeC.slice(0, 2) === '餐一') return bgc + 'text-center text-green'
-  else if (col === 'glucose' && between(row.glucose, 157, 199) && row.typeC.slice(0, 2) === '餐一') return bgc + 'text-center text-amber'
-  else if (col === 'glucose' && between(row.glucose, 200, 999) && row.typeC.slice(0, 2) === '餐一') return bgc + 'text-center text-pink-5'
-  else if (col === 'glucose' && between(row.glucose,   0, 156) && row.typeC.slice(0, 2) === '餐二') return bgc + 'text-center text-green'
-  else if (col === 'glucose' && between(row.glucose, 157, 199) && row.typeC.slice(0, 2) === '餐二') return bgc + 'text-center text-amber'
-  else if (col === 'glucose' && between(row.glucose, 200, 999) && row.typeC.slice(0, 2) === '餐二') return bgc + 'text-center text-pink-5'
-  else if (col === 'glucose' && between(row.glucose,   0, 156) && row.typeC.slice(0, 2) === '餐三') return bgc + 'text-center text-green'
-  else if (col === 'glucose' && between(row.glucose, 157, 199) && row.typeC.slice(0, 2) === '餐三') return bgc + 'text-center text-amber'
-  else if (col === 'glucose' && between(row.glucose, 200, 999) && row.typeC.slice(0, 2) === '餐三') return bgc + 'text-center text-pink-5'
+  else if (col === 'glucose' && row.typeC === '空腹') {
+    if      (between(row.glucose,  10, 100)) return bgc + 'text-center text-green-9'  // between(x, a, b) = []; between(x, a, b, true) = ()
+    else if (between(row.glucose, 101, 125)) return bgc + 'text-center text-green-7'
+    else if (between(row.glucose, 126, 140)) return bgc + 'text-center text-green-5'
+    else if (between(row.glucose, 141, 155)) return bgc + 'text-center text-blue'
+    else if (between(row.glucose, 156, 190)) return bgc + 'text-center text-pink-4'
+    else if (between(row.glucose, 191, 999)) return bgc + 'text-center text-pink-8'
+  } else if (col === 'glucose' && /^餐[一二三]$/.test(row.typeC)) { 
+    if      (between(row.glucose,  10, 155)) return bgc + 'text-center text-green-9'
+    else if (between(row.glucose, 156, 170)) return bgc + 'text-center text-green-4'
+    else if (between(row.glucose, 171, 180)) return bgc + 'text-center text-blue'
+    else if (between(row.glucose, 181, 195)) return bgc + 'text-center text-amber'
+    else if (between(row.glucose, 196, 999)) return bgc + 'text-center text-pink-4'
+  }
   else return 'text-right'
 }
-// function isFasting (row) {
-//   // return (row.drink === null && row.food === null && row.fruit === null)
-//   return (row.drink === null && row.food === null)
-// }
-// function noFasting (row) {
-//   // return (row.drink != null || row.food != null || row.fruit != null)
-//   return (row.drink != null || row.food != null)
-// }
 function showExpend (col, p) {
   console.log(`%c-fn-showExpand col=${col} row.id=${p.row.id}, lastRowId=${lastClickedRow.value.row.id}`, 'color: red;font-size:18px')
   if (isDesk) return showExpendDesk(col, p)
@@ -531,22 +499,22 @@ function setList (da) {
 
   emitter.emit('dats', dats.value)
   console.log('-CK-dalist:', dalist.value)
-  // setGluData()
+  // setGluData() -- will do row by row -- much faster
 }
-function setGluData () {
-  const year = today().substring(0, 4)
-  // console.log(`-fn-setGluData year=${year}`, palist.value)
-  dalist.value.forEach((p, i) => {
-    calcEAG_A1C_A1Cp(p)
-    p.datetimeOrig = p.datetime
-    p.idx = i
-    if (p.datetime.indexOf(year) >= 0) {
-      appendWeekDay(p)
-    }
-  })
-  getGluSections()
-  // console.log('-ck-glucoseLevel', this.glucoseLevel)
-}
+// function setGluDataXX () {
+//   const year = today().substring(0, 4)
+//   // console.log(`-fn-setGluData year=${year}`, palist.value)
+//   dalist.value.forEach((p, i) => {
+//     calcEAG_A1C_A1Cp(p)
+//     p.datetimeOrig = p.datetime
+//     p.idx = i
+//     if (p.datetime.indexOf(year) >= 0) {
+//       appendWeekDay(p)
+//     }
+//   })
+//   getGluSections()
+//   // console.log('-ck-glucoseLevel', this.glucoseLevel)
+// }
 function appendWeekDay (row) {
   // const wday = this.getDay1(row.datetime)
   const wday = row.datetime.chwk1()
