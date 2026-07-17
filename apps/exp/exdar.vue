@@ -46,7 +46,7 @@
           </div>
           <div v-if="row.paym === 'Fidelity Credit Card' && showPostDate">
             <datepicker label="Set Post Date for Payment or Refund" :date="row.post_date" txsz="text-h6" @upd-date="setPostDate" />
-           </div>
+          </div>
         </q-page>
       </q-page-container>
     </q-layout>
@@ -116,22 +116,13 @@ console.log('-ST-exdar')
 //== emitter.on
 // emitter.on('open-exdar', (rw) => { console.table([rw.id, rw.payeId, rw.paye]); openIt(rw) })
 // emitter.on('del-row', (rowId) => { console.log(`-CK-del_row id=${rowId}`) })
-emitter.on('del-row', rw => {
-  row.value = rw
-  del()
-})
-emitter.on('open-exdar', (rw, act) => {
-  openIt(rw, act)
-})
+emitter.on('del-row', rw => { row.value = rw; del() })
+emitter.on('open-exdar', (rw, act) => { openIt(rw, act) })
 emitter.on('exp-getGiftCardBalance', x => setGiftCardBalance(x))
 emitter.on('exp-getCatsCombo', x => setCatsCombo(x))
 emitter.on('num-input', x => openFloatPad(x))
-emitter.on('exp-getPurchasedList4Exdar', x => {
-  setPurchasedList(x.lst)
-})
-emitter.on('expense-addNewCSP', x => {
-  setNewCSP(x)
-})
+emitter.on('exp-getPurchasedList4Exdar', x => { setPurchasedList(x.lst) })
+emitter.on('expense-addNewCSP', x => { setNewCSP(x) })
 
 //== computed
 const compHeight = computed(() => {
@@ -150,9 +141,7 @@ const compHeight = computed(() => {
   return parseInt(baseh + golfplay + autogaso) + 'px'
 })
 const compDate = computed(() => {
-  return row.value.date === undefined
-    ? null
-    : getDay(row.value.date.substring(0, 10))
+  return row.value.date === undefined ? null : getDay(row.value.date.substring(0, 10))
 })
 // const compGcDisable = computed(() => { return gcDisable })
 const defaultYM = computed(() => {
@@ -250,9 +239,7 @@ function getFoote() {
 }
 function setPostDate(date) {
   row.value.post_date = date
-  console.log(
-    `-fn-setPostDate post_date=${date} row.value.post_date=${row.value.post_date}`
-  )
+  console.log( `-fn-setPostDate post_date=${date} row.value.post_date=${row.value.post_date}`)
 }
 function isGolfPlay() {
   return row.value.cats === 'Golf' && row.value.subc === 'Play'
@@ -260,10 +247,7 @@ function isGolfPlay() {
 function isGolfPlayRelated() {
   const cats = row.value.cats
   const subc = row.value.subc
-  const regex = new RegExp(
-    'Play|Tournament|Outing|Playof|Golf Balls|Range Balls|Membership|Driving Range',
-    'gi'
-  )
+  const regex = new RegExp( 'Play|Tournament|Outing|Playof|Golf Balls|Range Balls|Membership|Driving Range', 'gi')
   // const regex = new RegExp('Playof', 'i')
   const retval = row.value.cats === 'Golf' && regex.test(subc)
   // console.log(`-fn-isGolfPlayRelated()=${retval} cats=${cats} subc=${subc}`, regex, /Club Playoff/ig.test(subc))
@@ -276,16 +260,10 @@ function isGolfMembership() {
   return row.value.cats === 'Golf' && 'Membership' === subc
 }
 function isFCCAutopay() {
-  return (
-    row.value.subc === 'Monthly Autopay' &&
-    row.value.paye === 'Fidelity Credit Card'
-  )
+  return ( row.value.subc === 'Monthly Autopay' && row.value.paye === 'Fidelity Credit Card')
 }
 function isCCCAutopay() {
-  return (
-    row.value.subc === 'Monthly Autopay' &&
-    row.value.paye === 'Chase Credit Card'
-  )
+  return ( row.value.subc === 'Monthly Autopay' && row.value.paye === 'Chase Credit Card')
 }
 function isAutoGaso() {
   return row.value.cats === 'Auto' && row.value.subc === 'Gasoline'
@@ -607,33 +585,25 @@ function setNewCSP(da) {
     row.value.paymId = csp.id
   }
 }
+// function fmt2decimals(str) { // 120.2 => 120.20
+//   const num = parseFloat(str)
+//   if (isNaN(num)) return null
+//   return num.toFixed(2)
+// }
 function openIt(rw, act) {
+  // console.log(`-fn-openIt act=${act} cost=${rw.cost} unip=${rw.unip}`, rw)
   action.value = act
   row.value = rw
   iicon = null
   originalCost.value = row.value.cost
   // console.log(`-CK-fn-openIt id=${rw.id} payeId=${rw.payeId} paye=${rw.paye}`)
-  if (
-    row.value.cats === 'Shopping' &&
-    row.value.subc === 'Grocery' &&
-    row.value.hasPlst
-  )
-    iicon = 'shopping_cart'
-  else if (
-    row.value.cats === 'Golf' &&
-    row.value.subc === 'Play' &&
-    row.value.hasScore
-  )
-    iicon = 'golf_course'
-  else if (
-    act === 'add' &&
-    row.value.cats === 'Banking' &&
-    row.value.subc === 'Monthly Autopay'
-  ) {
-    row.value.unip = row.value.unip.replace(/0$/, '')
-    row.value.date = row.value.date.addMonthsKeepDay(1)
-    setNoteAndLink()
-  }
+  if (row.value.cats === 'Shopping' && row.value.subc === 'Grocery' && row.value.hasPlst) iicon = 'shopping_cart'
+  else if (row.value.cats === 'Golf' && row.value.subc === 'Play' && row.value.hasScore) iicon = 'golf_course'
+  // else if ( act === 'add' && row.value.cats === 'Banking' && row.value.subc === 'Monthly Autopay') {
+  //   row.value.unip = row.value.unip.replace(/0$/, '')
+  //   row.value.date = row.value.date.addMonthsKeepDay(1)
+  //   setNoteAndLink()
+  // }
   // console.table(row)
   // console.log(`-fn-openIt-exdar-trimedUnip=${row.value.unip}`)
   showPostDate.value = false
@@ -660,9 +630,7 @@ function openIt(rw, act) {
   // row.value.cost = (/Refund|Trade in/.test(row.value.subc)) ? -1*Math.abs(row.value.cost) : Math.abs(row.value.cost)
   // else row.value.cost = Math.abs(row.value.cost)
   opened.value = true
-  if (catsOptions.value.length > 0) {
-    return
-  }
+  if (catsOptions.value.length > 0) return
   // console.log(`-CK--fn-openIt open=${opened.value} payeId=${row.value.payeId}`, row.value)
   const path =
     ENV_DEV + '/exp/getCatsCombo/' + row.value.catsId + '/' + row.value.subcId
