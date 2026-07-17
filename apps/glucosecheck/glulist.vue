@@ -146,7 +146,7 @@ import ChartProxy from './ChartProxy.vue'
 import { axiosFunctions } from '../src/composables/axiosFunctions'
 const { gaxios } = axiosFunctions()
 import { dayFunctions } from '../src/composables/dayFunctions'
-const { today, getDateGap, between, chwk2 } = dayFunctions()
+const { today, getDateGap, between, yyyymmddHHMM } = dayFunctions()
 import { libFunctions } from '../src/composables/libFunctions'
 const { isDesk, isIM, buildApp, palist, dalist, $q, ENV_DEV } = libFunctions()
 
@@ -200,13 +200,14 @@ const columnsC = [
     { required: false, label: '%', align: 'center', name: 'a1cp', field: 'a1cpX', sortable: false }]
 
 const columns = ref(columnsE)
+// const searchQuery = ref(null)
 
 console.log('-ST-glulist')
 emitter.on('glucosecheck-getList', (x) => setList(x))
 emitter.on('glucosecheck-add', (x) => setList(x))
 emitter.on('glucosecheck-upd', (x) => setList(x))
 emitter.on('glucosecheck-del', (x) => setList(x))
-emitter.on('search', (x) => { searchQuery = x })
+// emitter.on('search', (x) => { searchQuery.value = x }) // this is done in libFunctions.js dalist
 emitter.on('show-clv-chart', () => { showAllCharts() })
 emitter.on('toggle-eng-ver', () => { engVer.value = !engVer.value })
 buildApp('血糖控制', 'glucosecheck')
@@ -362,9 +363,11 @@ function calcEAG_A1C_A1Cp (row) {
   row.a1cX = a1c + ' (mmol/mol)'
 }
 function prev90date (dt) {
-  const dt90 = dt.getTime() - 90 * 24 * 60 * 60 * 1000
-  // console.log(`in dt=${this.yyyymmddHHMM(dt)}, ${this.yyyymmddHHMM(new Date(dt90))}`)
-  return dt90
+  const oneDay = 1000 * 24 * 60 * 60
+  const prev90dt = dt.getTime() - 90 * oneDay
+  // console.log(`prev90dt=${yyyymmddHHMM(new Date(prev90dt))} dt=${yyyymmddHHMM(dt)}`)
+  // console.log(`-CK-(dt-prev90dt)/oneDay=${(dt - prev90dt)/oneDay} days`)
+  return prev90dt
 }
 function getValue (col, row) {
   // console.log(`-fn-getValue col.name=${col.name} col.value=${row.week}`)
