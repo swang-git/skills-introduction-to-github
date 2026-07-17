@@ -1,6 +1,7 @@
 <template>
 <!-- <div class="q-px-xs" :class="{ fixed: clickedIdx < 8 }"> -->
-<div class="q-px-xs text-h6" :class="{ fixed: clickedIdx>0 && palist[clickedIdx].details.length<99 }">
+<!-- <div class="q-px-xs text-h6" :class="{ fixed: clickedIdx>0 && palist[clickedIdx].details.length<99 }"> -->
+<div class="q-px-xs text-h6" :class="{ fixed: clickedIdx>0 }">
   <q-table class="sh-sticky-header-table" v-model:rows="palist" :columns="columns" dense :hide-header="isIM"
     :grid=false :visible-columns="isDesk ? visibleColumnsDesk : visibleColumnsFone" :style="{ width:(screenwidth-4)+'px' }" 
     row-key="id" :separator="separator" :showCol="showCol" wrap-cells :hide-pagination="true" 
