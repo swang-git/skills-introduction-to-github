@@ -152,7 +152,7 @@
         ttip="健 康 检 查"
         @click="openApp('htlist')"
       />
-      <RoundButton
+      <RoundButton v-if="isFedora"
         size="22px"
         icon="视"
         clas="q-ma-xs q-pb-sm"
@@ -231,7 +231,7 @@ import { useRouter } from 'vue-router'
 const router = useRouter()
 
 import { libFunctions } from '../../src/composables/libFunctions'
-const { buildApp, store, $q, userType, AppAdmin, ENV_DEV } = libFunctions()
+const { isFedora, buildApp, store, $q, userType, AppAdmin, ENV_DEV } = libFunctions()
 import { axiosFunctions } from '../../src/composables/axiosFunctions'
 const { gaxios } = axiosFunctions()
 
@@ -245,7 +245,7 @@ const refPlatformDataPad = ref(null)
 const refUserList = ref(null)
 const compVer = computed(() => { return import.meta.env.VITE_BUILD_TAG })
 
-console.log(`-ST-Index bg-img=${getBackgroundImg().backgroundImage}`)
+console.log(`-ST-Index bg-img=${getBackgroundImg().backgroundImage} isFedora=${isFedora}`)
 // console.log(`-ST-Index AppAdmin=${AppAdmin.value}`)
 buildApp('Apps Home', '家庭应用')
 emitter.on('user-type', (x) => userType.value = x)

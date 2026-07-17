@@ -17,42 +17,117 @@ export function libFunctions() {
   const screen_height = $q.screen.height
   const screen_width = $q.screen.width
 
-  const compTestX = computed(() => { return testX })
+  const compTestX = computed(() => {
+    return testX
+  })
   //function desk () { return Platform.is.desktop && (Platform.is.platform === 'linux' || Platform.is.platform === 'win') && !Platform.has.touch }
-  function desk () { return Platform.is.desktop || Platform.is.ipad }
-  function android () { return Platform.is.android }
-  function mate () { return Platform.is.android }
-  function mate9 () { return Platform.userAgent.includes('windows') && Platform.has.touch }
-  function iPad () { return Platform.is.ipad }
-  function IPhone () { return Platform.is.iphone }
-  function mobile () { return Platform.is.mobile }
-  function safari () { return Platform.is.safari }
-  function chromeExt () { return Platform.is.chromeExt }
-  function chrome () { return Platform.is.chrome }
-  function linux () { return Platform.is.linux }
-  function firefox () { return Platform.is.mozilla }
-  function touchable () { return Platform.has.touch }
-  function edge () { return Platform.is.edge }
-  function fone () { return IPhone() || mate9() }
-  function whatPlatform () { console.log(' ==== platform', Platform, desk(), Platform.userAgent.indexOf('HUAWEI'), 'not undefined = ', !undefined) }
-  function showUserAgent () { alert(Platform.userAgent) }
-  function showPlatform () { alert('isAndroid:' + Platform.is.android + ' isMobile:' + Platform.is.mobile + ' hasTouch:' + Platform.has.touch + ' Platform:' + Platform.is.platform) }
-  function checkiPhone () { alert('is iPhone ' + iPhone()) }
-  function checkMate9 () { alert('is Mate9 ' + mate9()) }
-  function checkFone () { alert('is fone ' + fone()) }
-  function checkDesk () { alert('is Desk ' + desk()) }
-  function local () {
-    const localhosts = /http:\/\/(prod|devx|divx|192.168.|localhost|127.0.0.1)/gi
+  function desk() {
+    return Platform.is.desktop || Platform.is.ipad
+  }
+  function android() {
+    return Platform.is.android
+  }
+  function mate() {
+    return Platform.is.android
+  }
+  function mate9() {
+    return Platform.userAgent.includes('windows') && Platform.has.touch
+  }
+  function iPad() {
+    return Platform.is.ipad
+  }
+  function IPhone() {
+    return Platform.is.iphone
+  }
+  function mobile() {
+    return Platform.is.mobile
+  }
+  function safari() {
+    return Platform.is.safari
+  }
+  function chromeExt() {
+    return Platform.is.chromeExt
+  }
+  function chrome() {
+    return Platform.is.chrome
+  }
+  function linux() {
+    return Platform.is.linux
+  }
+  function firefox() {
+    return Platform.is.mozilla
+  }
+  function touchable() {
+    return Platform.has.touch
+  }
+  function edge() {
+    return Platform.is.edge
+  }
+  function fone() {
+    return IPhone() || mate9()
+  }
+  function whatPlatform() {
+    console.log(
+      ' ==== platform',
+      Platform,
+      desk(),
+      Platform.userAgent.indexOf('HUAWEI'),
+      'not undefined = ',
+      !undefined
+    )
+  }
+  function showUserAgent() {
+    alert(Platform.userAgent)
+  }
+  function showPlatform() {
+    alert(
+      'isAndroid:' +
+        Platform.is.android +
+        ' isMobile:' +
+        Platform.is.mobile +
+        ' hasTouch:' +
+        Platform.has.touch +
+        ' Platform:' +
+        Platform.is.platform
+    )
+  }
+  function checkiPhone() {
+    alert('is iPhone ' + iPhone())
+  }
+  function checkMate9() {
+    alert('is Mate9 ' + mate9())
+  }
+  function checkFone() {
+    alert('is fone ' + fone())
+  }
+  function checkDesk() {
+    alert('is Desk ' + desk())
+  }
+  function local() {
+    const localhosts =
+      /http:\/\/(prod|devx|divx|192.168.|localhost|127.0.0.1)/gi
     // console.log('-lb-local', window.location.href, localhosts.test(window.location.href))
     return localhosts.test(window.location.href)
   }
-  function ScreenWidth () { return $q.screen.width }
-  function ScreenHeight () { return $q.screen.height }
+  function isfedora() {
+    const hostPatt = /http:\/\/(fedora|192.168.1.110)/gi
+    return hostPatt.test(window.location.href)
+  }
+  function ScreenWidth() {
+    return $q.screen.width
+  }
+  function ScreenHeight() {
+    return $q.screen.height
+  }
   // function ScreenHeight () { return  Math.min(screen_height, 708) }
   // function ScreenWidth () { return  Math.min(screen_width, 414) }
 
-  function iphone13 () { return  screen_width == 390 && screen_height == 659 }
-  function iphone17 () { return  screen_width == 393 && screen_height == 852 }
+  function iphone13() {
+    return screen_width == 390 && screen_height == 659
+  }
+  function iphone17() {
+    return screen_width == 393 && screen_height == 852
+  }
 
   // const isDesk = computed(() => { return desk() || iPad() })
   // const isFone = computed(() => { return fone() })
@@ -65,27 +140,47 @@ export function libFunctions() {
   const iPhone = IPhone()
   const iPhone13 = iphone13()
   const iPhone17 = iphone17()
+  const isFedora = isfedora()
 
-  const firstOnPage = computed(() => { return (curPage.value - 1) * itemsPerPage.value })
-  emitter.on('dats', (x) => dats.value = x)
+  const firstOnPage = computed(() => {
+    return (curPage.value - 1) * itemsPerPage.value
+  })
+  emitter.on('dats', x => (dats.value = x))
   const palist = computed(() => {
-    const plst = dalist.value.slice(firstOnPage.value, firstOnPage.value + itemsPerPage.value)
+    const plst = dalist.value.slice(
+      firstOnPage.value,
+      firstOnPage.value + itemsPerPage.value
+    )
     // console.log(`-CK-comp-palist is triggered firstOnPage=${firstOnPage.value} itemsPerPage=${itemsPerPage.value}`, dalist.value)
     return plst
   })
   const dalist = computed(() => {
-    var filterKey = searchQuery.value.length > 0 && searchQuery.value.toLowerCase()
+    var filterKey =
+      searchQuery.value.length > 0 && searchQuery.value.toLowerCase()
     var data = dats.value
     if (filterKey.length > 0) {
       var words = filterKey.split(' ')
       words.forEach(word => {
         data = data.filter(row => {
-          return Object.keys(row).filter(key => { return ![
-            // 'id', 'catsId', 'subcId', 'payeId', 'paymId', 'note', 'link', 'post_date', 'created_at', 'updated_at', 'deleted_at'
-            'id', 'catsId', 'subcId', 'payeId', 'paymId', 'link', 'post_date', 'created_at', 'updated_at', 'deleted_at'
-            ].includes(key) }).some(key => {
-            return String(row[key]).toLowerCase().indexOf(word) >= 0
-          })
+          return Object.keys(row)
+            .filter(key => {
+              return ![
+                // 'id', 'catsId', 'subcId', 'payeId', 'paymId', 'note', 'link', 'post_date', 'created_at', 'updated_at', 'deleted_at'
+                'id',
+                'catsId',
+                'subcId',
+                'payeId',
+                'paymId',
+                'link',
+                'post_date',
+                'created_at',
+                'updated_at',
+                'deleted_at'
+              ].includes(key)
+            })
+            .some(key => {
+              return String(row[key]).toLowerCase().indexOf(word) >= 0
+            })
         })
       })
     }
@@ -93,77 +188,98 @@ export function libFunctions() {
     return data
   })
 
-  const doGroup = computed(() => { return golfUserType.value === 'doGroup' })
-  const SysAdmin = computed(() => { return golfUserType.value === 'SysAdmin' || userType.value === 'yadmin' })
-  const JZsAdmin = computed(() => { return golfUserType.value === 'JZsAdmin' })
-  const PGCsAdmin = computed(() => { return golfUserType.value === 'PGCsAdmin' })
-  const isAdmin = computed(() => { return userType.value === 'yadmin' })
+  const doGroup = computed(() => {
+    return golfUserType.value === 'doGroup'
+  })
+  const SysAdmin = computed(() => {
+    return golfUserType.value === 'SysAdmin' || userType.value === 'yadmin'
+  })
+  const JZsAdmin = computed(() => {
+    return golfUserType.value === 'JZsAdmin'
+  })
+  const PGCsAdmin = computed(() => {
+    return golfUserType.value === 'PGCsAdmin'
+  })
+  const isAdmin = computed(() => {
+    return userType.value === 'yadmin'
+  })
 
-  const AppAdmin = computed(() => { return userType.value === 'yadmin' })
+  const AppAdmin = computed(() => {
+    return userType.value === 'yadmin'
+  })
   const userType = computed({
     get: () => store.userType || $q.localStorage.getItem('userType'),
-    set: val => { store.userType = val; $q.localStorage.set('userType', val) }
+    set: val => {
+      store.userType = val
+      $q.localStorage.set('userType', val)
+    }
   })
   const screenwidth = ScreenWidth()
   const screenheight = ScreenHeight()
   const golfUserType = computed({
     get: () => store.usertype,
-    set: val => store.userType = val
+    set: val => (store.userType = val)
   })
-  function buildApp (tit, app) {
+  function buildApp(tit, app) {
     // console.log(`-fn-buildApp() tit=${tit}, curApp=${app}`)
-    emitter.on('search', (txt) => { searchQuery.value = txt; console.log('search', txt) })
+    emitter.on('search', txt => {
+      searchQuery.value = txt
+      console.log('search', txt)
+    })
     // emitter.emit('cur-tit', tit + ' ' + app)
     emitter.emit('cur-tit', tit)
     // emitter.emit('cur-app', tit + ' ' + app, 'EMIT-FROM libs')
     emitter.emit('cur-app', tit, app)
     // emitter.emit('items-per-page', this.itemsPerPage)
     // emitter.on('items-per-page', (itpp) => { console.log('-fn-buildApp.on-itemsPerPage', itpp); itemsPerPage.value = itpp })
-    emitter.on('items-per-page', (itpp) => itemsPerPage.value = itpp)
+    emitter.on('items-per-page', itpp => (itemsPerPage.value = itpp))
     // emitter.on('auth-getUsertype', (x) => { setUsertype(x) })
     // emitter.on('dats', (x) => { dats.value = x; emitter.emit('num-items', x.length) })
-    emitter.on('dats', (x) => setDats(x))
-    emitter.on('cur-page', (cpage) => curPage.value = cpage)
+    emitter.on('dats', x => setDats(x))
+    emitter.on('cur-page', cpage => (curPage.value = cpage))
     // getUsertype()
     // getList()
   }
-  function setDats (x) {
+  function setDats(x) {
     dats.value = x
     // console.log(`-CK-dalist.length=${dalist.value.length}`)
     // emitter.emit('num-items', dalist.value.length)
   }
-  function getLineBackground (i) {
-    const sty = i % 2 === 0 ? 'background: RGB(18,48,68); color: cyan' : 'background: RGB(18,68,88); color: lightcyan'
+  function getLineBackground(i) {
+    const sty =
+      i % 2 === 0
+        ? 'background: RGB(18,48,68); color: cyan'
+        : 'background: RGB(18,68,88); color: lightcyan'
     return sty + '; height:33.2px'
   }
-  function formatCurrency (n) {
+  function formatCurrency(n) {
     if (n === 0) return '0.00'
     else if (n === 1) return '1.00'
     const val = Number(n).toLocaleString('en-US')
     const pos = val.indexOf('.')
     if (pos < 0) return val + '.00'
-    const dec = val.substring(pos+1, pos+3)
+    const dec = val.substring(pos + 1, pos + 3)
     if (dec.length < 2) return val + '0'
     return val
   }
-  function fmtcy (n) {
+  function fmtcy(n) {
     if (n === 0) return '0.00'
     else if (n === 1) return '1.00'
     const val = Number(n).toLocaleString('en-US')
     const pos = val.indexOf('.')
     if (pos < 0) return val + '.00'
-    const dec = val.substring(pos+1, pos+3)
+    const dec = val.substring(pos + 1, pos + 3)
     if (dec.length < 2) return val + '0'
-    else if (dec.length >= 2) return val.substring(0, pos+3)
+    else if (dec.length >= 2) return val.substring(0, pos + 3)
     console.log(`n=${n} val=${val} dec=${dec}`)
     return val
   }
-  function fmtpt (n, d) {
-    if (n === 0) return '0.'.padEnd(2+d, '0')
-    else if (n === 1) return '1.'.padEnd(2+d, '0')
+  function fmtpt(n, d) {
+    if (n === 0) return '0.'.padEnd(2 + d, '0')
+    else if (n === 1) return '1.'.padEnd(2 + d, '0')
     const val = Number(n).toLocaleString('en-US')
     const pos = val.indexOf('.')
-    if (pos < 0) return (val + '.').padEnd(val.length+1+d, '0')
+    if (pos < 0) return (val + '.').padEnd(val.length + 1 + d, '0')
     const x = val.split('.')
     let dec = x[1].slice(0, d)
     if (dec.length < d) dec = dec.padEnd(d, '0')
@@ -174,7 +290,7 @@ export function libFunctions() {
     console.log(`n=${n} val=${val} dec=${dec}`)
     return val
   }
-  function deepClone (obj) {
+  function deepClone(obj) {
     if (Array.isArray(obj)) {
       const arr = []
       for (var i = 0; i < obj.length; i++) {
@@ -185,7 +301,7 @@ export function libFunctions() {
     if (obj === null || obj === '') {
       return null
     }
-    if (typeof (obj) === 'object') {
+    if (typeof obj === 'object') {
       var cloned = {}
       for (const key in obj) {
         cloned[key] = deepClone(obj[key])
@@ -194,15 +310,23 @@ export function libFunctions() {
     }
     return obj
   }
-  function decimal2 (n) {
+  function decimal2(n) {
     if (n.length === 1) return '0.0' + n
     else if (n.length === 2) return '0.' + n
-    else if (n.length >= 3) return (parseInt(n) / 100.00)
+    else if (n.length >= 3) return parseInt(n) / 100.0
   }
-  const ENV_DEV = import.meta.env.DEV ? '/api' : '' 
+  const ENV_DEV = import.meta.env.DEV ? '/api' : ''
   return {
-    getLineBackground,formatCurrency,fmtcy,fmtpt,deepClone,decimal2,isAdmin,userType,
-    buildApp,opened,
+    getLineBackground,
+    formatCurrency,
+    fmtcy,
+    fmtpt,
+    deepClone,
+    decimal2,
+    isAdmin,
+    userType,
+    buildApp,
+    opened,
     store,
     $q,
     screenwidth,
@@ -214,10 +338,11 @@ export function libFunctions() {
     isDesk,
     isIM,
     isFone,
+    isFedora,
     searchQuery,
     dats,
     dalist,
     palist,
-    ENV_DEV,
+    ENV_DEV
   }
 }
