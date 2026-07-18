@@ -414,22 +414,49 @@ function getClass (col, row) {
   else if (col === 'food') return bgc + 'text-cyan-2 cursor-pointer text-no-wrap ellipsis'
   else if (col === 'food' || col === 'datetime') return bgc + 'text-left text-no-wrap cursor-pointer'
   else if (col === 'drink' || col === 'fruit' || col === 'a1cp') return bgc + 'text-center text-no-wrap'
-  else if (col === 'glucose' && row.typeC === '空腹') {
-    if      (between(row.glucose,  10, 100)) return bgc + 'text-center text-green-9'  // between(x, a, b) = []; between(x, a, b, true) = ()
-    else if (between(row.glucose, 101, 125)) return bgc + 'text-center text-green-7'
-    else if (between(row.glucose, 126, 140)) return bgc + 'text-center text-green-5'
-    else if (between(row.glucose, 141, 155)) return bgc + 'text-center text-blue'
-    else if (between(row.glucose, 156, 190)) return bgc + 'text-center text-pink-4'
-    else if (between(row.glucose, 191, 999)) return bgc + 'text-center text-pink-8'
-  } else if (col === 'glucose' && /^餐[一二三]$/.test(row.typeC)) { 
-    if      (between(row.glucose,  10, 155)) return bgc + 'text-center text-green-9'
-    else if (between(row.glucose, 156, 170)) return bgc + 'text-center text-green-4'
-    else if (between(row.glucose, 171, 180)) return bgc + 'text-center text-blue'
-    else if (between(row.glucose, 181, 195)) return bgc + 'text-center text-amber'
-    else if (between(row.glucose, 196, 999)) return bgc + 'text-center text-pink-4'
-  }
-  else return 'text-right'
+  else if (col === 'glucose') {
+    const gluc = row.glucose
+    const type = row.typeC
+    if (type === '空腹') {
+      if      (10  <= gluc && gluc < 100) return bgc + 'text-center text-green-9'
+      else if (100 <= gluc && gluc < 125) return bgc + 'text-center text-green-7'
+      else if (125 <= gluc && gluc < 140) return bgc + 'text-center text-green-5'
+      else if (140 <= gluc && gluc < 155) return bgc + 'text-center text-blue'
+      else if (155 <= gluc && gluc < 190) return bgc + 'text-center text-pink-4'
+      else if (190 <= gluc && gluc < 999) return bgc + 'text-center text-pink-8'
+    } else if (/^餐[一二三]$/.test(type)) { 
+      if      (80  <= gluc && gluc < 155) return bgc + 'text-center text-green-9'
+      else if (155 <= gluc && gluc < 170) return bgc + 'text-center text-green-4'
+      else if (170 <= gluc && gluc < 180) return bgc + 'text-center text-blue'
+      else if (180 <= gluc && gluc < 195) return bgc + 'text-center text-amber'
+      else if (195 <= gluc && gluc < 999) return bgc + 'text-center text-pink-4'
+    }
+  } else return 'text-right'
 }
+// function getClass (col, row) {
+//   // console.log(`-CK-row.id = ${row.id} clickedIex = ${clickedIdx.value}`)
+//   const bgc = row.id == lastClickedRow.value.row.id ? 'bg-indigo-9 ' : ''
+//   if (col == 'datetime') return bgc + 'cursor-pointer text-no-wrap;text-center'
+//   else if (col === 'week') return bgc + 'text-center text-no-wrap'
+//   else if (col === 'food') return bgc + 'text-cyan-2 cursor-pointer text-no-wrap ellipsis'
+//   else if (col === 'food' || col === 'datetime') return bgc + 'text-left text-no-wrap cursor-pointer'
+//   else if (col === 'drink' || col === 'fruit' || col === 'a1cp') return bgc + 'text-center text-no-wrap'
+//   else if (col === 'glucose' && row.typeC === '空腹') {
+//     if      (between(row.glucose,  10, 100)) return bgc + 'text-center text-green-9'  // between(x, a, b) = []; between(x, a, b, true) = ()
+//     else if (between(row.glucose, 101, 125)) return bgc + 'text-center text-green-7'
+//     else if (between(row.glucose, 126, 140)) return bgc + 'text-center text-green-5'
+//     else if (between(row.glucose, 141, 155)) return bgc + 'text-center text-blue'
+//     else if (between(row.glucose, 156, 190)) return bgc + 'text-center text-pink-4'
+//     else if (between(row.glucose, 191, 999)) return bgc + 'text-center text-pink-8'
+//   } else if (col === 'glucose' && /^餐[一二三]$/.test(row.typeC)) { 
+//     if      (between(row.glucose,  10, 155)) return bgc + 'text-center text-green-9'
+//     else if (between(row.glucose, 156, 170)) return bgc + 'text-center text-green-4'
+//     else if (between(row.glucose, 171, 180)) return bgc + 'text-center text-blue'
+//     else if (between(row.glucose, 181, 195, false)) return bgc + 'text-center text-red'
+//     else if (between(row.glucose, 196, 999)) return bgc + 'text-center text-pink-4'
+//   }
+//   else return 'text-right'
+// }
 function showExpend (col, p) {
   console.log(`%c-fn-showExpand col=${col} row.id=${p.row.id}, lastRowId=${lastClickedRow.value.row.id}`, 'color: red;font-size:18px')
   if (isDesk) return showExpendDesk(col, p)
