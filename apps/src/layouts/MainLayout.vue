@@ -1,7 +1,7 @@
 <template>
   <div class="bg-teal-9">
     <q-layout view="hHh Lpr lFr">
-      <q-header v-if="curApp!='arts'" class="bg-teal-9 inset-shadow-down">
+      <q-header v-if="curApp!='arts'" class="bg-teal-10 inset-shadow-down">
         <q-toolbar style="margin-left:-5px">
           <!-- <q-btn v-if="isDesk" glossy @click="drawerClick()" round dense icon="img:icons/quasar-logo.svg" size="18px" /> -->
           <q-btn v-if="isDesk" glossy @click="openApp('/')" round dense icon="img:icons/quasar-logo.svg" size="18px" />
@@ -130,7 +130,7 @@
           <router-view />
         </q-page>
       </q-page-container>
-      <q-footer class="bg-teal-9" v-if="/memo|reminder|expense|watcher|bankstatement|shopping|bank|dictionary|glucosecheck|PancreaticFluid/i.test(curApp)">
+      <q-footer class="bg-teal-10" v-if="/memo|reminder|expense|watcher|bankstatement|shopping|bank|dictionary|glucosecheck|PancreaticFluid/i.test(curApp)">
         <q-toolbar>
           <Pagination :pNumPages="compNumPages" :pItemsPerPage="compItemsPerPage" />
         </q-toolbar>
