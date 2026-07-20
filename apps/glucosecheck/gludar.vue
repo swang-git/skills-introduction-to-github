@@ -120,7 +120,8 @@ function setNum (flg, n) {
   console.log(`-fn-setNum flag=${flg} n=${n}`)
   if (flg == 'GL') {
     row.value.glucose = n
-    showNumPad('WT', '当日体重')
+    // showNumPad('WT', '当日体重')
+    openSelection('bloodtype', 'Check Type', tyOpt)
   } else if (flg == 'WT') {
     row.value.weight = n
   }
@@ -145,8 +146,10 @@ function setSelectedOpt (model, opt) {
   else if (model == 'Dinner') row.value.dinner = opt.label
   else if (model == 'Drink') row.value.drink = opt.label
   else if (model == 'Fruit') row.value.fruit = opt.label
-  else if (model == 'Check Type') row.value.type = opt.label
-  else if (model == 'Food') row.value.food = opt.label
+  else if (model == 'Check Type') {
+    row.value.type = opt.label
+    showNumPad('WT', '当日体重')
+  } else if (model == 'Food') row.value.food = opt.label
   else if (model == 'Notes') row.value.note = opt.label
 }
 function openSelection (icon, model, opts) {
