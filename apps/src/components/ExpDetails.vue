@@ -10,10 +10,8 @@
       </tr>
     </template>
 
-    <template v-slot:top-right>
-      <!-- <q-fab  v-model="fabOpen" flat hide-icon :label="getTitle()" direction="left" color="cyan-2" :style="idx>23 ? { marginTop:'-180px' } : {}"> -->
-      <!-- <q-fab  v-model="fabOpen" flat hide-icon :label="isIM ? '' : getTitle()" direction="left" color="cyan-2"> -->
-      <q-fab v-if="isDesk" v-model="fabOpen" flat hide-icon :label="isIM ? '' : getTitle()" direction="left" color="cyan-2">
+    <template v-slot:top-left>
+      <q-fab v-if="isDesk" v-model="fabOpen" flat hide-icon :label="isIM ? '' : getTitle()" direction="right" color="cyan-2">
         <q-btn round glossy class="q-mr-sm" size="16px" icon="add_circle" color="green-10"  @click="$emit('open-dar', 'add')" />
         <q-btn round glossy class="q-mr-sm" size="16px" icon="update"     color="indigo-10" @click="$emit('open-dar', 'upd')" v-if="!props.record.del"  />
         <q-btn v-if="hasPurchases" round glossy size="16px" icon="shopping_cart" color="green-10" text-color="amber-1" class="q-mr-sm" @click="$emit('open-plist')" />

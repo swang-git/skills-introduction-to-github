@@ -21,7 +21,7 @@ if sub_days > 0:
     warnings.warn("sub_days must negative, %s given, exiting..."%sub_days)
     sys.exit(1)
 database = args.db
-warnings.warn("sub_days=%d db=%s money_format:%s"%(sub_days, database, money_format))
+##warnings.warn("sub_days=%d db=%s money_format:%s"%(sub_days, database, money_format))
 # sys.exit(0)
 
 def get_formated_data(diff):
