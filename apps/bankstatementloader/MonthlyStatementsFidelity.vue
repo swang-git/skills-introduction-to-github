@@ -275,7 +275,11 @@ import emitter from 'tiny-emitter/instance'
 import { axiosFunctions } from '../src/composables/axiosFunctions'
 import { dayFunctions } from '../src/composables/dayFunctions'
 import { libFunctions } from '../src/composables/libFunctions'
+<<<<<<< HEAD
 const { $q } = libFunctions()
+=======
+const { $q, ENV_DEV } = libFunctions()
+>>>>>>> f67d697ec603fc6e69dd4d286f3f63a3be8036be
 const { yyyymmdd } = dayFunctions()
 const { gaxios, paxios } = axiosFunctions()
 const opened = ref('')
@@ -304,7 +308,7 @@ function addAnnuityHoldings () {
     idx: 0, bank:bank.value, year:year.value, month:month.value, account_num:dataAnn.value.cnum, account_name:'Retirement Annuity', symbol:'FMPCC',
     start_balance: dataAnn.value.sbal , price:dataAnn.value.epric, quantity:dataAnn.value.eunit, end_balance:dataAnn.value.ebal, cost:50000
   }
-  const path = process.env.API + '/bankstatementloader/addHoldings'
+  const path = ENV_DEV + '/bankstatementloader/addHoldings'
   paxios(path, inData)
 }
 function getActivityData (acctNum, acctName, activity) {
@@ -329,7 +333,7 @@ function getActivityData (acctNum, acctName, activity) {
 function addActivity (acctNum, acctName, activity) {
   const inData = getActivityData(acctNum, acctName, Object.values(activity))
   console.log('-fn-Activity Data', inData)
-  const path = process.env.API + '/bankstatementloader/addActivity'
+  const path = ENV_DEV + '/bankstatementloader/addActivity'
   paxios(path, inData)
 }
 function getInData (acctNum, acctName, holdings) {
@@ -347,12 +351,12 @@ function getInData (acctNum, acctName, holdings) {
 function addHoldings(acctNum, acctName, holdings) {
   const inData = getInData(acctNum, acctName, Object.values(holdings))
   // console.log('-fn-addHoldings inData', inData)
-  const path = process.env.API + '/bankstatementloader/addHoldings'
+  const path = ENV_DEV + '/bankstatementloader/addHoldings'
   paxios(path, inData)
 }
 function addAssets () {
   console.log('-fn-addAssets')
-  const path = process.env.API + '/bankstatementloader/addAssets'
+  const path = ENV_DEV + '/bankstatementloader/addAssets'
   const inData = assets.value
   paxios(path, inData)
 }
@@ -401,7 +405,7 @@ function loadData (stmt) {
   loadFidelityMonthlyStatements();
 }
 function loadFidelityMonthlyStatements () {
-  const path = process.env.API + '/bankstatementloader/loadFidelityMonthlyStatements/' + ymon.value
+  const path = ENV_DEV + '/bankstatementloader/loadFidelityMonthlyStatements/' + ymon.value
   gaxios(path)
 }
 emitter.on('bankstatementloader-loadFidelityMonthlyStatements', (x) => setStatement(x))

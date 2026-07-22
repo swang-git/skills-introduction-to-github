@@ -98,7 +98,7 @@ class ExpenseController extends Controller {
 		$dm->save();
 		Log::info("getCreditCardSpendings Id=$ccStatementId");
 		$ccdata = DB::select('CALL get_credit_card_spendings(?, ?, ?, ?)', [$userId, $startDay, $endDay, $dueDay]);
-    // Log::info("getCreditCardSpendings", $ccdata);
+    Log::info("getCreditCardSpendings", $ccdata);
 		return ['ccdata' => $ccdata, 'status' => "OK"];
 	}
 	public function setReconcile(Request $da) {

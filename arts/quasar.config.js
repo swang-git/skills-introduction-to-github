@@ -101,10 +101,18 @@ export default defineConfig(ctx => {
       // https: true,
       open: true, // opens browser window automatically
       port: ctx.mode.spa ? '8080' : (ctx.mode.pwa ? 9080 : 9090),
+<<<<<<< HEAD
       proxy: {
          '/api': {
           // target: 'http://192.168.1.107',
           target: 'http://localhost',  // Your Fedora backend
+=======
+      host: 'devx',
+      allowedHosts: ['devx', '192.168.1.107', '127.0.0.1'],
+      proxy: {
+         '/api': {
+          target: 'http://devx',  // Your Fedora backend
+>>>>>>> f67d697ec603fc6e69dd4d286f3f63a3be8036be
           changeOrigin: true,
           rewrite: (path) => path.replace(/^\/api/, '')  // Only if backend doesn't expect /api
         }

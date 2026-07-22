@@ -1,0 +1,24 @@
+1, find today's values for DOW_JONES, NASDAQ, SP500, FTSE100, NIKKEI;
+2, create an mysql insert query to the following table
+3. use US eastern time
+mysql> describe health_records;
++------------+---------------+------+-----+------------+----------------+
+| Field      | Type          | Null | Key | Default    | Extra          |
++------------+---------------+------+-----+------------+----------------+
+| id         | int unsigned  | NO   | PRI | NULL       | auto_increment |
+| user_id    | int unsigned  | NO   |     | 1          |                |
+| date       | date          | NO   |     | NULL       |                |
+| weight     | double        | NO   |     | 69.54      |                |
+| portfolio  | decimal(10,2) | YES  |     | 1977777.77 |                |
+| DOW_JONES  | decimal(10,2) | YES  |     | NULL       |                |
+| NASDAQ     | decimal(10,2) | YES  |     | NULL       |                |
+| SP500      | decimal(10,2) | YES  |     | NULL       |                |
+| FTSE100    | decimal(10,2) | YES  |     | NULL       |                |
+| NIKKEI     | decimal(10,2) | YES  |     | NULL       |                |
+| status     | char(1)       | NO   |     | A          |                |
+| note       | text          | YES  |     | NULL       |                |
+| created_at | timestamp     | YES  |     | NULL       |                |
+| updated_at | timestamp     | YES  |     | NULL       |                |
++------------+---------------+------+-----+------------+----------------+
+14 rows in set (0.00 sec)
+

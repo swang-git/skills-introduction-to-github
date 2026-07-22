@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 #!/usr/bin/python
+=======
+#!/Users/swang/myenv/bin/python
+>>>>>>> f67d697ec603fc6e69dd4d286f3f63a3be8036be
 import sys
 import argparse
 import warnings
@@ -21,7 +25,11 @@ if sub_days > 0:
     warnings.warn("sub_days must negative, %s given, exiting..."%sub_days)
     sys.exit(1)
 database = args.db
+<<<<<<< HEAD
 warnings.warn("sub_days=%d db=%s money_format:%s"%(sub_days, database, money_format))
+=======
+##warnings.warn("sub_days=%d db=%s money_format:%s"%(sub_days, database, money_format))
+>>>>>>> f67d697ec603fc6e69dd4d286f3f63a3be8036be
 # sys.exit(0)
 
 def get_formated_data(diff):

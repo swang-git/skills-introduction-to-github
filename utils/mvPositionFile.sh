@@ -2,8 +2,9 @@
 if [ $# -eq 1 ] && ([ $1 == "-help" ] || [ $1 == "-h" ]);  then
     echo
     echo "copy daily position files .pdf and .csv"
-    echo "copy from Documents/dailydownload/snapshots_20230112.pdf to /sites/webdata/docs/Portfolio"
-    echo "copy from Documents/dailydownloads/Portfolio_Positions_Jan-02-2023.csv to /sites/webdata/docs/Portfolio"
+    echo "copy from Documents/dailydownload/snapshots_20230112.pdf to /Users/swang/sites/webdata/docs/Portfolio"
+    echo "copy from Documents/dailydownloads/Portfolio_Positions_Jan-02-2023.csv to /Users/swang/sites/webdata/docs/Portfolio"
+    echo "-1 for previous day, etc."
     echo
     exit
 fi
@@ -15,17 +16,17 @@ bddyyyy=`date +%b-%d-%Y`
 Ym=`date +%Y_%m`
 Wn=`date +%a`
 
-if [ $# -eq 1 ]; then
-  yyyymmdd=$1
-  bddyyyy=`date -d$1 +%b-%d-%Y`
+if [[ $# -eq 1 && -n $1 ]]; then
+  yyyymmdd=`date -v $1d +'%Y%m%d'`
+  bddyyyy=`date -v $1d +%b-%d-%Y`
 fi
 
-echo $yyyymmdd
-echo $bddyyyy
+echo ymd=$yyyymmdd
+echo vdd=$bddyyyy
 ppd=Portfolio_Positions_${bddyyyy}
 
-## echo "cp /home/swang/Documents/dailydownload/snapshot_$yyyymmdd.pdf /sites/webdata/docs/Portfolio/"
-## echo "cp /home/swang/Documents/dailydownload/$ppd.csv /sites/webdata/docs/Portfolio/snapshot_$yyyymmdd.csv"
-cp /home/swang/Documents/dailydownload/snapshot_$yyyymmdd.pdf /sites/webdata/docs/Portfolio/
-cp /home/swang/Documents/dailydownload/$ppd.csv /sites/webdata/docs/Portfolio/snapshot_$yyyymmdd.csv
+cp /Users/swang/Documents/fidelity_daily/snapshot_$yyyymmdd.pdf /Users/swang/sites/webdata/docs/Portfolio/
+cp /Users/swang/Documents/fidelity_daily/$ppd.csv /Users/swang/sites/webdata/docs/Portfolio/snapshot_$yyyymmdd.csv
 
+## echo "cp /Users/swang/Documents/dailydownload/snapshot_$yyyymmdd.pdf /sites/webdata/docs/Portfolio/"
+## echo "cp /Users/swang/Documents/dailydownload/$ppd.csv /sites/webdata/docs/Portfolio/snapshot_$yyyymmdd.csv"

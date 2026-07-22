@@ -1,6 +1,11 @@
 <template>
 <!-- <div class="q-px-xs" :class="{ fixed: clickedIdx < 8 }"> -->
+<<<<<<< HEAD
 <div class="q-px-xs text-h6" :class="{ fixed: clickedIdx>0 && palist[clickedIdx].details.length<99 }">
+=======
+<!-- <div class="q-px-xs text-h6" :class="{ fixed: clickedIdx>0 && palist[clickedIdx].details.length<99 }"> -->
+<div class="q-px-xs text-h6" :class="{ fixed: clickedIdx>0 }">
+>>>>>>> f67d697ec603fc6e69dd4d286f3f63a3be8036be
   <q-table class="sh-sticky-header-table" v-model:rows="palist" :columns="columns" dense :hide-header="isIM"
     :grid=false :visible-columns="isDesk ? visibleColumnsDesk : visibleColumnsFone" :style="{ width:(screenwidth-4)+'px' }" 
     row-key="id" :separator="separator" :showCol="showCol" wrap-cells :hide-pagination="true" 
@@ -96,18 +101,19 @@ const visibleColumnsFone = [col(3).name]
 const columns = ref([col(0), col(1), col(2), col(3), col(4) ])
 const fabOpen = ref(false)
 const dalst = ref([])
+var searchQuery = null
 
 //== main
 console.log('-ST-melist')
-buildApp ('备忘录', 'memo')
-getList(screenwidth/13)
-emitter.emit('items-per-page', isIM ? 13 : 22)
-
-emitter.on('search', (searchQuery) => { searchQuery = searchQuery })
+emitter.on('search', (x) => { searchQuery = x })
 emitter.on('memo-getList', (da) => setList(da))
 emitter.on('memo-add', (x) => addedRow(x.row))
 emitter.on('memo-upd', (x) => updedRow(x.row))
 emitter.on('memo-del', () => deledRow())
+buildApp ('备忘录', 'memo')
+emitter.emit('items-per-page', isIM ? 13 : 22)
+getList(screenwidth/13)
+
 
 function col (idx) {
   const cols = [

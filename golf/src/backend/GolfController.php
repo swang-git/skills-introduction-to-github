@@ -390,7 +390,7 @@ class GolfController extends Controller {
 		// return ['canList' => $canList, 'allList' => $allList, 'status' => 'OK'];
 		return ['lst' => $lst, 'status' => 'OK'];
 	}
-	public function delTeamMatchPlayer($id, $tmntId, $gameId, $matchDate) {
+	public function delTeamMatchPlayer($id, $tmntId, $gameId, $matchDate) { Log::info("-fn-getTeamMatchPlayer id=$id tmntId=$tmntId gameId=$gameId matchDate=$matchDate");
 		$dm = Tplayer::find($id);
 		$this->logPage($dm->name);
 		$dm->delete();
@@ -441,44 +441,44 @@ class GolfController extends Controller {
 			// 	return ['matches' => $tmgames, 'aliases' => $aliases, 'status' => "OK"];
 			// }
 			return ['matches' => $tmgames, 'tmntId' => $tmntId, 'kjNewPlayer' => $kjNewPlayer, 'status' => "OK"];
-		}
-		public function getTournamentByTmntId($tmntId, $gameId) { Log::info("by tmntId -fn-getTournamentByTmntId/$tmntId", [__file__, 'line='.__line__]);
-			$this->logPage("for match game $tmntId");
-			$matchGame = Tournament::where([['id', $tmntId], ['status', 'A']])
-				->select('id', 'game_id', 'start_at', 'teetime_gap', 'course_id', 'note', 'fees', 'mens_tee_id', 'lady_tee_id')
-				->with('course:id,name')
-				->with('lteebox:id,par,teebox,rating,slope,yardage')
-				->with('mteebox:id,par,teebox,rating,slope,yardage')->get();
-				// ->orderBy('start_at', 'desc')->get();
+	}
+	public function getTournamentByTmntId($tmntId, $gameId) { Log::info("by tmntId -fn-getTournamentByTmntId/$tmntId", [__file__, 'line='.__line__]);
+		$this->logPage("for match game $tmntId");
+		$matchGame = Tournament::where([['id', $tmntId], ['status', 'A']])
+			->select('id', 'game_id', 'start_at', 'teetime_gap', 'course_id', 'note', 'fees', 'mens_tee_id', 'lady_tee_id')
+			->with('course:id,name')
+			->with('lteebox:id,par,teebox,rating,slope,yardage')
+			->with('mteebox:id,par,teebox,rating,slope,yardage')->get();
+			// ->orderBy('start_at', 'desc')->get();
 
-				if ($gameId == 14) {
-					$kjNewPlayer = KjNewPlayer::where([['player_id', null], ['status', 'A']])->select('id', 'game_date', 'firstname', 'lastname')->get();
-					return ['matchGame' => $matchGame[0], 'kjNewPlayer' => $kjNewPlayer, 'status' => "OK"];
-				} else return ['matchGame' => $matchGame[0], 'status' => "OK"];
-			}
-			public function delRound($scoreId) {
-				try {
-					Score::destroy($scoreId);
-					return "OK";
-				} catch(MyException $e) {
-					return "FAILED " + $e;
-				}
-			}
-			public function getPlayerCount() { // Log::info('getPlayerCount', [Auth::user()]);
-				$mcnt = Player::where([['status', 'A'], ['gender', 'M']])->count();
-				$fcnt = Player::where([['status', 'A'], ['gender', 'F']])->count();
-				return ['status' => "OK", 'mcnt' => $mcnt, 'fcnt' => $fcnt];
-			}
-			// public function getPlayerCount() { // Log::info('getPlayerCount', [Auth::user()]);
-			// 	$players = Player::where('status', 'A')->select('gender')->get();
-			// 	// Log::info('players', $players->toArray());
-			// 	return ['status' => "OK", 'tplayers' => $players->toArray()];
-			// }
-			public function XXXsaveTeamMatch(Request $da) { //Log::info('saveTeamMatch', $da->toArray());
-				foreach($da->toArray() as $d) {
-					$dm = Tplayer::find($d['id']);
-					$dm->tournament_id = $d['tmntId'];
-					$dm->player = $d['player'];
+			if ($gameId == 14) {
+				$kjNewPlayer = KjNewPlayer::where([['player_id', null], ['status', 'A']])->select('id', 'game_date', 'firstname', 'lastname')->get();
+				return ['matchGame' => $matchGame[0], 'kjNewPlayer' => $kjNewPlayer, 'status' => "OK"];
+			} else return ['matchGame' => $matchGame[0], 'status' => "OK"];
+	}
+	public function delRound($scoreId) {
+		try {
+			Score::destroy($scoreId);
+			return "OK";
+		} catch(MyException $e) {
+			return "FAILED " + $e;
+		}
+	}
+	public function getPlayerCount() { Log::info('-fn-getPlayerCount', [Auth::user()]);
+		$mcnt = Player::where([['status', 'A'], ['gender', 'M']])->count();
+		$fcnt = Player::where([['status', 'A'], ['gender', 'F']])->count();
+		return ['status' => "OK", 'mcnt' => $mcnt, 'fcnt' => $fcnt];
+	}
+	// public function getPlayerCount() { // Log::info('getPlayerCount', [Auth::user()]);
+	// 	$players = Player::where('status', 'A')->select('gender')->get();
+	// 	// Log::info('players', $players->toArray());
+	// 	return ['status' => "OK", 'tplayers' => $players->toArray()];
+	// }
+	public function XXXsaveTeamMatch(Request $da) { //Log::info('saveTeamMatch', $da->toArray());
+		foreach($da->toArray() as $d) {
+			$dm = Tplayer::find($d['id']);
+			$dm->tournament_id = $d['tmntId'];
+			$dm->player = $d['player'];
 			$dm->grp = $d['grp'];
 			$dm->tnum = $d['team'];
 			$dm->captain = $d['gscore'];
@@ -1275,7 +1275,7 @@ class GolfController extends Controller {
 		return [ 'usertype' => is_null($user) ? null : $user->usertype, 'status' => "OK" ];
 	}
 	public function getUserType() {
-		$user = Auth::guard('gadmin')->user(); Log::info("getUserType", [$user]);
+		$user = Auth::guard('gadmin')->user(); Log::info("getUserType user=", [$user]);
 		return ['status' => "OK", 'usertype' => is_null($user) ? null : $user->usertype];
 	}
 	private function XXXgetLoginUser() {
@@ -1482,8 +1482,10 @@ class GolfController extends Controller {
 		// Log::info('getPGCGamePlayers', json_decode(json_encode($PGCPlayers[0], true), true));
 		return [ 'PGCPlayers' => $PGCPlayers, 'status' => "OK" ];
 	}
-	public function getTeamMatchPlayers($tmntId, $gameId, $gameDate) { // Log::info("getTeamMatchPlayers tmntId=$tmntId gameId=$gameId gameDate=$gameDate");
+	public function getTeamMatchPlayers($tmntId, $gameId, $gameDate) { Log::info("getTeamMatchPlayers tmntId=$tmntId gameId=$gameId gameDate=$gameDate");
 		$tplayers = DB::select("CALL get_team_match_players(?, ?, ?)", [$tmntId, $gameId, $gameDate]);
+		// $tplayers = DB::select("CALL get_team_match_players(0, 13, '2026-06-30)')");
+		Log::info("-CK-tplayers:", $tplayers);
 		$group_scenario = null;
 		if (count($tplayers)>0) {
 			$tmntId = $tplayers[0]->tmntId;
@@ -2482,7 +2484,7 @@ class GolfController extends Controller {
 		$info = Collect($info);
 		return view('Golf.signup', compact('tournament', 'info'));
 	}
-	public function getPlayerList() {
+	public function getPlayerList() { Log::info("getPlayerList()");
 		$da = Player::where('status', 'A')->select('id', 'lastname', 'firstname')->orderBy('lastname')->get();
 		$players = [];
 		foreach($da as $d) {

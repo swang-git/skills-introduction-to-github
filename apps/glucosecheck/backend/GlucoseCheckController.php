@@ -24,38 +24,38 @@ class GlucoseCheckController extends Controller {
 	public function getList() { Log::info('-fn-GlucoseCheck->getList()');
 		$user = Auth::user();
 		$dats = GlucoseCheck::where([ ['status', 'A'], ['user_id', $user->id] ])->orderBy('datetime', 'desc')
-      ->select('datetime', 'glucose', 'type', 'weight', 'blood_pressure as bloodPressure', 'food', 'exercise', 'breakfast', 'lunch', 'dinner', 'fruit', 'drink', 'note', 'id')
-      ->get();
+      		->select('datetime', 'glucose', 'type', 'weight', 'blood_pressure as bloodPressure', 'food', 'exercise', 'breakfast', 'lunch', 'dinner', 'fruit', 'drink', 'note', 'id')
+      		->get();
 		foreach($dats as $d) {
 			$d->datetime = substr($d->datetime, 0, 16);
-      $d->BMI = $d->weight * 0.4536 / 1.73 / 1.73;
-      $x = explode(' / ', $d->bloodPressure);
-      $d->hiBP = isset($x[0]) ? $x[0] : null;
-      $d->loBP = isset($x[1]) ? $x[1] : null;
-      $d->htBT = isset($x[2]) ? $x[1] : null;
+      		$d->BMI = $d->weight * 0.4536 / 1.73 / 1.73;
+      		$x = explode(' / ', $d->bloodPressure);
+      		$d->hiBP = isset($x[0]) ? $x[0] : null;
+      		$d->loBP = isset($x[1]) ? $x[1] : null;
+      		$d->htBT = isset($x[2]) ? $x[1] : null;
 			if (is_null($d->food)) $d->glucoseSearch = 'glucose';
 		}
 
-    $ex = GlucoseCheck::where([ ['status', 'A'], ['user_id', $user->id], ['exercise', '<>', null] ])->distinct()->pluck('exercise');
-    foreach($ex as $i => $e) $exOpt[] = ['value' => $i + 1, 'label' => $e];
-    // Log::info("exercise", $exOpt);
-    $ex = GlucoseCheck::where([ ['status', 'A'], ['user_id', $user->id], ['breakfast', '<>', null] ])->distinct()->pluck('breakfast');
-    foreach($ex as $i => $e) $brOpt[] = ['value' => $i + 1, 'label' => $e];
-    // Log::info("brOpt", $brOpt);
-    $ex = GlucoseCheck::where([ ['status', 'A'], ['user_id', $user->id], ['lunch', '<>', null] ])->distinct()->pluck('lunch');
-    foreach($ex as $i => $e) $luOpt[] = ['value' => $i + 1, 'label' => $e];
-    // Log::info("luOpt", $luOpt);
-    $ex = GlucoseCheck::where([ ['status', 'A'], ['user_id', $user->id], ['dinner', '<>', null] ])->distinct()->pluck('dinner');
-    foreach($ex as $i => $e) $diOpt[] = ['value' => $i + 1, 'label' => $e];
-    $ex = GlucoseCheck::where([ ['status', 'A'], ['user_id', $user->id], ['drink', '<>', null] ])->distinct()->pluck('drink');
-    foreach($ex as $i => $e) $drOpt[] = ['value' => $i + 1, 'label' => $e];
-    // Log::info("drOpt", $drOpt);
-    $ex = GlucoseCheck::where([ ['status', 'A'], ['user_id', $user->id], ['fruit', '<>', null] ])->distinct()->pluck('fruit');
-    foreach($ex as $i => $e) $frOpt[] = ['value' => $i + 1, 'label' => $e];
-    // Log::info("frOpt", $frOpt);
-    $ex = GlucoseCheck::where([ ['status', 'A'], ['user_id', $user->id], ['fruit', '<>', null] ])->distinct()->pluck('food');
-    foreach($ex as $i => $e) $foOpt[] = ['value' => $i + 1, 'label' => $e];
-    // Log::info("foOpt", $foOpt);
+    	$ex = GlucoseCheck::where([ ['status', 'A'], ['user_id', $user->id], ['exercise', '<>', null] ])->distinct()->pluck('exercise');
+    	foreach($ex as $i => $e) $exOpt[] = ['value' => $i + 1, 'label' => $e];
+    	// Log::info("exercise", $exOpt);
+    	$ex = GlucoseCheck::where([ ['status', 'A'], ['user_id', $user->id], ['breakfast', '<>', null] ])->distinct()->pluck('breakfast');
+    	foreach($ex as $i => $e) $brOpt[] = ['value' => $i + 1, 'label' => $e];
+    	// Log::info("brOpt", $brOpt);
+    	$ex = GlucoseCheck::where([ ['status', 'A'], ['user_id', $user->id], ['lunch', '<>', null] ])->distinct()->pluck('lunch');
+    	foreach($ex as $i => $e) $luOpt[] = ['value' => $i + 1, 'label' => $e];
+    	// Log::info("luOpt", $luOpt);
+    	$ex = GlucoseCheck::where([ ['status', 'A'], ['user_id', $user->id], ['dinner', '<>', null] ])->distinct()->pluck('dinner');
+    	foreach($ex as $i => $e) $diOpt[] = ['value' => $i + 1, 'label' => $e];
+    	$ex = GlucoseCheck::where([ ['status', 'A'], ['user_id', $user->id], ['drink', '<>', null] ])->distinct()->pluck('drink');
+    	foreach($ex as $i => $e) $drOpt[] = ['value' => $i + 1, 'label' => $e];
+    	// Log::info("drOpt", $drOpt);
+		$ex = GlucoseCheck::where([ ['status', 'A'], ['user_id', $user->id], ['fruit', '<>', null] ])->distinct()->pluck('fruit');
+		foreach($ex as $i => $e) $frOpt[] = ['value' => $i + 1, 'label' => $e];
+		// Log::info("frOpt", $frOpt);
+		$ex = GlucoseCheck::where([ ['status', 'A'], ['user_id', $user->id], ['fruit', '<>', null] ])->distinct()->pluck('food');
+		foreach($ex as $i => $e) $foOpt[] = ['value' => $i + 1, 'label' => $e];
+		// Log::info("foOpt", $foOpt);
 
 		return ['lst' => $dats, 'exOpt' => $exOpt, 'brOpt' => $brOpt, 'luOpt' => $luOpt, 'diOpt' => $diOpt, 'drOpt' => $drOpt, 'frOpt' => $frOpt, 'foOpt' => $foOpt, 'status' => "OK"];
 	}

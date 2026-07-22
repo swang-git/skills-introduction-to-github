@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 # Quasar App (yali)
+=======
+# Quasar App (golf)
+>>>>>>> f67d697ec603fc6e69dd4d286f3f63a3be8036be
 
 ## Install the dependencies
 

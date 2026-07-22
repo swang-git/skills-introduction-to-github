@@ -1,9 +1,16 @@
 const routes = [
   {
+<<<<<<< HEAD
     path: '/', component: () => import('@/layouts/MyLayout.vue'),
     children: [
       { path: '', component: () => import('@/pages/MyIndex.vue') },
       { name: 'PlayerList', path: 'PlayerList', component: () => import('@/pages/PlayerList.vue') },
+=======
+    path: '/', component: () => import('../../src/layouts/MyLayout.vue'),
+    children: [
+      { path: '', component: () => import('../../src/pages/MyIndex.vue') },
+      { name: 'PlayerList', path: 'PlayerList', component: () => import('../../src/pages/PlayerList.vue') },
+>>>>>>> f67d697ec603fc6e69dd4d286f3f63a3be8036be
       { path: 'TournamentList', component: () => import('../../src/pages/TournamentList.vue') },
       { path: 'Signup', component: () => import('../../src/pages/SignUp.vue') },
       { path: 'Signup/:tid', component: () => import('../../src/pages/SignUp.vue') },

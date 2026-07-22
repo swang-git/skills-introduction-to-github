@@ -68,7 +68,11 @@ import emitter from 'tiny-emitter/instance'
 // import { dayFunctions } from 'src/composables/dayFunctions';
 import { axiosFunctions } from '../src/composables/axiosFunctions'
 import { libFunctions } from '../src/composables/libFunctions'
+<<<<<<< HEAD
 const { $q } = libFunctions()
+=======
+const { $q, ENV_DEV } = libFunctions()
+>>>>>>> f67d697ec603fc6e69dd4d286f3f63a3be8036be
 const { gaxios, paxios } = axiosFunctions()
 const opened = ref(false)
 const statement = ref({})
@@ -104,7 +108,7 @@ function nextp () { pidx.value++; console.log(`pidx=${pidx.value}`)}
 function saveData () {
   // const inData = { positions: positions.value, totalVal: total_val.value, totalGL: total_gl.value }
   const inData = { positions: positions.value }
-  const path = process.env.API + '/bankstatementloader/saveData'
+  const path = ENV_DEV + '/bankstatementloader/saveData'
   paxios(path, inData)
 }
 function setData (da) {
@@ -167,7 +171,7 @@ function getData(stmt) {
   year.value = x[0]
   month.value = x[1]
   let yyyymm = x[0]+x[1]
-  const path = process.env.API + '/bankstatementloader/loadChaseBkg/' + yyyymm
+  const path = ENV_DEV + '/bankstatementloader/loadChaseBkg/' + yyyymm
   gaxios(path)
 }
 </script>

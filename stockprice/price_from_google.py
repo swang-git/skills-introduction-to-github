@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/Users/swang/myenv/bin/python
 
 # from pypdf import PdfReader
 # import pdfplumber
@@ -20,7 +20,7 @@ def is_number(s):
 
 
 def write_lines_to_file(date, stock, lines):
-    filename = "/sites/tmp/" + date + "_g_" + stock
+    filename = "/Users/swang/sites/tmp/" + date + "_g_" + stock
     with open(filename, 'w') as file:
         file.writelines(f"{i}. {line}\n" for i, line in enumerate(lines, start=1))
 
@@ -31,8 +31,12 @@ def check_number(name, n, stock, line):
     # else: print('check_number %s=%s'%(name, n))
 
 def get_txt_lines(date, stock):
+<<<<<<< HEAD
     ###txt_path = "/sites/webdata/docs/gstocks/" + date + '_' + stock + ".txt"
     txt_path = "/sites/webdata/docs/gstocks/" + date + '_' + stock
+=======
+    txt_path = "/Users/swang/sites/webdata/docs/gstocks/" + date + '_' + stock
+>>>>>>> f67d697ec603fc6e69dd4d286f3f63a3be8036be
     with open(txt_path, encoding='utf-8') as f:
         lines = f.readlines()          # list with '\n' still attached
         lines = [line.rstrip('\n') for line in lines]   # drop the newlines
@@ -130,25 +134,27 @@ def get_stock_quote_via_google_finance(date, stock):
     stock = stock.replace('NYSE:', '')
     return [stock, price, price_change, day_low, day_high, wk52_low, wk52_high]
 
-def is_weekend(d: datetime.date | None = None) -> bool:
+def is_weekend(d: datetime.date) -> bool:
     """Return True if *d* (default today) is Saturday or Sunday."""
     # d = d or datetime.date.today()
-    d = d or datetime.today()
+    #d = d or datetime.today()
     # print('week_date=[%s]'%d.weekday())
     return d.weekday() >= 5
 
-def is_holiday(d: datetime.now() | None = None) -> bool:
+def is_holiday(d: datetime.now()) -> bool:
     """Return True if *d* (default today) is a Holiday."""
     # d = d or datetime.date.today()
-    d = d or datetime.now().strftime('%Y-%m-%d')
+    #d = d or datetime.now().strftime('%Y-%m-%d')
+    ds = d.strftime('%Y-%m-%d')
     # print('now=[%s]'%d)
-    with open('/home/swang/.holidays.txt') as f: holidays = [line.rstrip('\n') for line in f]
-    return any(d in day for day in holidays)
+    with open('/Users/swang/.holidays.txt') as f: holidays = [line.rstrip('\n') for line in f]
+    return any(ds in day for day in holidays)
 
 #=========== main ============
-d = datetime.date
-if is_weekend(): print(f"{datetime.now():%Y-%m-%d %H:%M:%S}  –  It’s the weekend 🎉 - market closed. exit ..."); sys.exit(0)
-if is_holiday(): print(f"{datetime.now():%Y-%m-%d %H:%M:%S}  –  It’s the holiday 🎉 - market closed. exit ..."); sys.exit(0)
+d = datetime.today()
+##if is_weekend(d): print(f"{datetime.now():%Y-%m-%d %H:%M:%S}  –  It’s the weekend 🎉 - market closed. exit ..."); sys.exit(0)
+if d.weekday()>=5: print(f"{datetime.now():%Y-%m-%d %H:%M:%S}  –  It’s the weekend 🎉 - market closed. exit ..."); sys.exit(0)
+if is_holiday(d): print(f"{datetime.now():%Y-%m-%d %H:%M:%S}  –  It’s the holiday 🎉 - market closed. exit ..."); sys.exit(0)
 print('getting stock prices from "https://finance.google.com/finance?q={stock}&output=json" ...')
 # sys.exit(0)
 

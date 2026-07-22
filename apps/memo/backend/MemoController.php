@@ -25,10 +25,10 @@ class MemoController extends Controller
 	 * version [version]
 	 * @return [type] [description]
 	 */
-	public function index() {
-		// $this->middleware('auth');
-		// return view('fin');
-	}
+	// public function index() {
+	// 	// $this->middleware('auth');
+	// 	// return view('fin');
+	// }
   private function fmtLink($link, $swProp) {
     $lnk = '';
     $doc_dir = config('global.doc_dir');
@@ -49,10 +49,10 @@ class MemoController extends Controller
     }
     return $lnk;
   }
-	public function getList($swProp) {
-		$userId = Auth::user()->id;
+	public function getList($swProp) { Log::info("-fn-getList screenWidth/13=$swProp");
+		$user = Auth::user();
 		// Log::info('userId', [$userId, Auth::user()]);
-		$dats = Memo::select('id', 'user_id', 'date', 'tag', 'reminder', 'details', 'link')->where([ ['status', 'A'], ['user_id', $userId] ])->orderBy('date', 'desc')->get();
+		$dats = Memo::select('id', 'user_id', 'date', 'tag', 'reminder', 'details', 'link')->where([ ['status', 'A'], ['user_id', $user->id] ])->orderBy('date', 'desc')->get();
 		// Log::info('memo-getList', $dats->toArray());
 		foreach($dats as $d) {
 			$details = $this->en_de_cryptTxt($d->details, true);
@@ -62,7 +62,7 @@ class MemoController extends Controller
 			$d->date = substr($d->date, 0, 16);
       if ($d->link != null) $d->lnk = $this->fmtLink($d->link, $swProp); 
 		}
-		Log::info('memo-field', $dats[0]->toArray());
+		// Log::info('memo-field', $dats[0]->toArray());
 		// return Collect($dats);
 		return ['lst' => $dats, 'status' => "OK"];
 	}

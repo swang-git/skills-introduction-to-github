@@ -43,8 +43,8 @@ import ConfirmDialog from '../src/components/ConfirmDialog.vue'
 
 import { libFunctions } from '../src/composables/libFunctions'
 import { axiosFunctions } from '../src/composables/axiosFunctions'
-import { dayFunctions } from '../src/composables/dayFunctions'
-const { chwk1, chwk2 } = dayFunctions()
+// import { dayFunctions } from '../src/composables/dayFunctions'
+// const { chwk1, chwk2 } = dayFunctions()
 const { gaxios, paxios } = axiosFunctions()
 const { isIM, isDesk, buildApp, palist, ENV_DEV } = libFunctions()
 const opened = ref(false)

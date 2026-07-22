@@ -29,8 +29,13 @@
 import { ref, onMounted } from 'vue'
 import emitter from 'tiny-emitter/instance'
 import { axiosFunctions } from '../src/composables/axiosFunctions'
+<<<<<<< HEAD
+=======
+import { libFunctions } from '../src/composables/libFunctions'
+>>>>>>> f67d697ec603fc6e69dd4d286f3f63a3be8036be
 import ConfirmDialog from '../src/components/ConfirmDialog.vue'
 const { gaxios } = axiosFunctions()
+const { ENV_DEV } = libFunctions()
 
 const opened = ref(false)
 var postDate = null
@@ -79,7 +84,7 @@ function setPostDate (act) {
   // let podate = new Date().getFullYear() + '-' + lookup[0].replace('/', '-')
   // console.log(`-fn-setPostDate pid=${matched[0].id} postDate=${postDate}`)
   // console.log(`-fn-setPostDate pid=${matched.id} postDate=${postDate}`)
-  const path = process.env.API + '/bankstatementloader/setPostDate/' + matched.value.id + '/' + postDate
+  const path = ENV_DEV + '/bankstatementloader/setPostDate/' + matched.value.id + '/' + postDate
   gaxios(path)
   opened.value = false
 }

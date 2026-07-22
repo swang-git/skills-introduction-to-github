@@ -2,6 +2,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\tv\Recorded;
+use App\Models\tv\Record;
 use App\Models\tv\Oldrecorded;
 // use App\Models\tv\Channel;
 // use App\Models\tv\ChannelOldId;
@@ -63,6 +64,7 @@ class TvController extends Controller
 		if ($d->dsk == 'Default')	$d->dsk = null;
 		else if ($d->dsk == 'HomeTV')	$d->dsk = 'htv';
 		else if ($d->dsk == 'USBdisk')	$d->dsk = 'dtv';
+		// else if ($d->dsk == 'Golf')	$d->dsk = null;
 		return $d;
 	}
 	private function UTCnow() {  // or call GMT (Greenwich Time)
@@ -77,12 +79,14 @@ class TvController extends Controller
 		$upcoming = Oldrecorded::where([['oldrecorded.starttime', '>', $gmtnow], ['oldrecorded.endtime', '<', $this->UTCplus($hours)]])
 			->select('record.recordid as recordedid', 'channum', 'oldrecorded.starttime', 'oldrecorded.endtime', 'oldrecorded.endtime',
 				DB::raw('null as basename'), 'oldrecorded.title', 'oldrecorded.subtitle', 'oldrecorded.description',
-				DB::raw('null as filesize'), DB::raw('storagegroup as dsk'))
+				// DB::raw('null as filesize'), DB::raw('storagegroup as dsk'))
+				DB::raw('null as filesize'), DB::raw('null as dsk'))
 			->join('channel', 'channel.chanid', 'oldrecorded.chanid')
 			->join('record', 'record.recordid', 'oldrecorded.recordid')
 			->orderBy('starttime', 'desc')->get();
 
-		$datx = Recorded::where('watched', 0)
+		// $datx = Recorded::where('watched', 0)
+		$datx = Recorded::where('recgroup', 'Default')
 			->select('recordedid', 'channel.channum', 'starttime', 'endtime', 'basename', 'title', 'subtitle', 'description', 'filesize')
 			->join('channel', 'channel.chanid', 'recorded.chanid')
 			// ->select('recordedid', 'channel_old_id_ALL.channum', 'starttime', 'endtime', 'basename', 'title', 'subtitle', 'description', 'filesize')
@@ -107,11 +111,18 @@ class TvController extends Controller
 		return ['lst' => $dats, 'status' => "OK"];
 	}
 	public function del(Request $d) { //Log::info("tvmanager-del", $d->toArray());
-		Log::info("tvmanager-del file: $d->filename");
+		Log::info("tvmanager-del file: $d->filename, recordedid=$d->recordedid");
+		// if ($d->filename == '') {
+		// 	$rec = Record::find($d->recordedid);
+		// 	$rec->delete();
+		// 	return $this->getList();
+		// }
 		$recd = Recorded::find($d->recordedid);
-		$recd->watched = 2;
-		$recd->deletepending = true;
+		// $recd->watched = 2;
+		// $recd->deletepending = true;
 		$recd->recgroup = 'Deleted';
+		$recd->recgroupid = 3;
+		$recd->autoexpire = 9999;
 		$recd->bookmarkupdate = date('Y-m-d h:i:s', time());
 		$recd->update();
 		// Log::info("lastLine:[$lastLine], status=[$retval]");

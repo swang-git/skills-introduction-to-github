@@ -56,29 +56,45 @@ import { useRouter } from 'vue-router'
 const router = useRouter()
 
 import { axiosFunctions } from '../src/composables/axiosFunctions'
-const { gaxios, paxios } = axiosFunctions()
+const { paxios } = axiosFunctions()
 import { libFunctions } from '../src/composables/libFunctions'
+<<<<<<< HEAD
 const { isAdmin, userType, store, $q, ENV_DEV } = libFunctions()
+=======
+const { ENV_DEV, userType, $q } = libFunctions()
+>>>>>>> f67d697ec603fc6e69dd4d286f3f63a3be8036be
 
 //== data sections
 const name = ref(null)
-const usertype = ref(null)
+// const usertype = ref(null)
 const username = ref('swang71')
 const password = ref(null)
 const accept = ref(true)
 const opened = ref(false)
+<<<<<<< HEAD
 const appName = ref('')
 
 // console.log('-ST-LoginAdmin', process.env.API)
 console.log('-ST-LoginDialog', import.meta.env)
 emitter.on('open-LoginDialog', (app) => openIt(app))
+=======
+const appName = ref(null)
+
+// console.log('-ST-LoginAdmin', process.env.API)
+console.log('-ST-LoginDialog', import.meta.env)
+emitter.on('open-LoginDialog', (x) => openIt(x))
+>>>>>>> f67d697ec603fc6e69dd4d286f3f63a3be8036be
 
 // if (process.env.API === '/api') {
 //   username.value = 'swang71'
 //   password.value = 'Ybsjll11'
 // }
+<<<<<<< HEAD
 function openIt(app) {
   console.log(`-CK-LoginDialog-openIt app=${app}`)
+=======
+function openIt (app) {
+>>>>>>> f67d697ec603fc6e69dd4d286f3f63a3be8036be
   appName.value = app
   opened.value = true
 }
@@ -106,10 +122,12 @@ function login() {
   console.log('-fn-login')
   const args = {}
   const inData = {}
-  // inData.username = username.value
   inData.username = username.value
   inData.password = password.value
+<<<<<<< HEAD
   // const path = process.env.API + '/apps/loginAdmin'
+=======
+>>>>>>> f67d697ec603fc6e69dd4d286f3f63a3be8036be
   const path = ENV_DEV + '/apps/loginAdmin'
   paxios(path, inData)
 }
@@ -123,6 +141,7 @@ emitter.on('apps-loginAdmin', (da) => setLogin(da))
 function setLogin(da) {
   console.log('-CK-fn-setLogin', da)
   const user = da.user
+<<<<<<< HEAD
   // store.commit('apps/setUserType', user.usertype)
   store.userType = user.usertype
   $q.localStorage.set('userType', user.usertype)
@@ -136,6 +155,19 @@ function add() {
   console.log('-fn-add')
   // const path = process.env.API + '/users/add'
   const path = '/users/add'
+=======
+  // $store.commit('apps/setUserType', user.usertype)
+  // $q.localStorage.set('usertype', user.usertype)
+  userType.value = user.usertype
+  emitter.emit('user-type', user.usertype)
+  emitter.emit('open-app', appName.value)
+  console.log(`-CK-apps.loginAdmin userType=${userType.value} usertype=${user.usertype}`)
+}
+function add () {
+  console.log("-fn-add")
+  // const path = process.env.API + '/users/add'
+  const path = ENV_DEV +  '/users/add'
+>>>>>>> f67d697ec603fc6e69dd4d286f3f63a3be8036be
   const inData = {}
   inData.name = name.value
   inData.usertype = usertype.value

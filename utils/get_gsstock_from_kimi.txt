@@ -1,0 +1,21 @@
+1, find latest stock price, price change, today's high/low, 52-week high/low for MSFT, CSCO, DELL, CHTR, WBD, T&AT;
+2, put them in sql statement of MySql for table with columns:load_time, symbol,  price, price_change, low_52_week, high_52_week, day_low, day_high;
+3. for table stock_quotes and use US eastern time
+describe stock_quotes;
++--------------+---------------+------+-----+-------------------+-------------------+
+| Field        | Type          | Null | Key | Default           | Extra             |
++--------------+---------------+------+-----+-------------------+-------------------+
+| id           | int           | NO   | PRI | NULL              | auto_increment    |
+| load_time    | datetime      | NO   |     | NULL              |                   |
+| symbol       | varchar(8)    | NO   |     | NULL              |                   |
+| price        | decimal(12,3) | NO   |     | NULL              |                   |
+| price_change | decimal(12,3) | NO   |     | NULL              |                   |
+| low_52_week  | decimal(12,3) | NO   |     | NULL              |                   |
+| high_52_week | decimal(12,3) | NO   |     | NULL              |                   |
+| day_low      | decimal(12,3) | NO   |     | NULL              |                   |
+| day_high     | decimal(12,3) | NO   |     | NULL              |                   |
+| status       | char(1)       | NO   |     | A                 |                   |
+| created_at   | timestamp     | NO   |     | CURRENT_TIMESTAMP | DEFAULT_GENERATED |
+| updated_at   | datetime      | YES  |     | CURRENT_TIMESTAMP | DEFAULT_GENERATED |
++--------------+---------------+------+-----+-------------------+-------------------+
+12 rows in set (0.00 sec) 
