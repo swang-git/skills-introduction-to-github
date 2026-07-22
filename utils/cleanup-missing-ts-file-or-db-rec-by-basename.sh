@@ -6,21 +6,17 @@ fi
 
 basen=$1
 idx=$(expr index "$basen" 'v')
-#echo $idx
+# echo $idx
 if [ "$idx" -gt "0" ]; then
   basen=${basen:5}
 fi
-<<<<<<< HEAD
-#echo $basen
-if [[ $basen != *.ts ]]; then
-   basen="${basen}.ts"
-fi
-#echo $basen
-#exit
-=======
 # echo $basen
+
+if [[ $basen != *.ts ]]; then
+	basen="${basen}.ts"
+fi
+
 # exit
->>>>>>> f67d697ec603fc6e69dd4d286f3f63a3be8036be
 ##echo
 # echo "checking recorded file with basename = $basen"
 
@@ -57,11 +53,7 @@ else
   if [ "$record" -gt 0 ]; then
     ##_echo "Yes, record exists  for $basen in recorded table"
     ##mariadb -pYbsjll11 -b mythconverg -e "select recgroup,recgroupid,watched,recordedid,autoexpire,starttime,bookmarkupdate,LEFT(title,15) as title from recorded where basename='$basen'"
-<<<<<<< HEAD
-    mariadb -pYbsjll11 -b mythconverg -e "select recgroup,recgroupid as R,autoexpire as AutX,recordedid as Rcdid,recordid as Rcid,ROUND(filesize/1024/1024/1024,1) as '(GB)',SUBSTRING(CONVERT_TZ(starttime,'+00:00','America/New_York'),6,11) as starttime,SUBSTRING(CONVERT_TZ(endtime,'UTC','America/New_York'),6,11) as endtime,LEFT(title,45) as title from recorded where basename='$basen'"
-=======
-    mariadb -pYbsjll11 -b mythconverg -e "select recgroup,recgroupid as rg,recordedid as rcdedid,recordid as rcdid,watched,autoexpire as autoexp,ROUND(filesize/1024/1024/1024,1) as '(GB)',LEFT(starttime,16) as starttime,LEFT(endtime,16) as endtime,LEFT(title,35) as title from recorded where basename='$basen'"
->>>>>>> f67d697ec603fc6e69dd4d286f3f63a3be8036be
+    mariadb -pYbsjll11 -b mythconverg -e "select recgroup,recgroupid as R,recordedid as rcdedid,recordid as rcdid,watched,autoexpire as autoX,ROUND(filesize/1024/1024/1024,1) as '(GB)',SUBSTRING(CONVERT_TZ(starttime,'UTC','America/New_York'),6,11) as starttime,SUBSTRING(CONVERT_TZ(endtime,'UTC','America/New_York'),6,11) as endtime,LEFT(title,35) as title from recorded where basename='$basen'"
     if [ $fileEx = "Yes" ]; then
       ls -lh $FILE
     fi
