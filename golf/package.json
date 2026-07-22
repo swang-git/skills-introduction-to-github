@@ -3,10 +3,7 @@
   "version": "0.0.1",
   "description": "A Quasar Project",
   "productName": "Quasar App",
-<<<<<<< HEAD
-=======
   "author": "swang-git <swang71@comcast.net>",
->>>>>>> f67d697ec603fc6e69dd4d286f3f63a3be8036be
   "type": "module",
   "private": true,
   "scripts": {
@@ -19,10 +16,7 @@
   "dependencies": {
     "@quasar/extras": "^2.0.2",
     "axios": "^1.18.0",
-<<<<<<< HEAD
-=======
     "chart.js": "^4.5.1",
->>>>>>> f67d697ec603fc6e69dd4d286f3f63a3be8036be
     "chartjs": "^0.3.24",
     "chartjs-plugin-datalabels": "^2.2.0",
     "pinia": "^3.0.1",

@@ -1,11 +1,7 @@
 <template>
   <div class="bg-teal-9">
     <q-layout view="hHh Lpr lFr">
-<<<<<<< HEAD
-      <q-header v-if="curApp!='arts'" class="bg-teal-9 inset-shadow-down">
-=======
       <q-header v-if="curApp!='arts'" class="bg-teal-10 inset-shadow-down">
->>>>>>> f67d697ec603fc6e69dd4d286f3f63a3be8036be
         <q-toolbar style="margin-left:-5px">
           <!-- <q-btn v-if="isDesk" glossy @click="drawerClick()" round dense icon="img:icons/quasar-logo.svg" size="18px" /> -->
           <q-btn v-if="isDesk" glossy @click="openApp('/')" round dense icon="img:icons/quasar-logo.svg" size="18px" />
@@ -42,12 +38,8 @@
                 </div>
               </div>
               <div v-if="isDesk">
-<<<<<<< HEAD
-                <q-input dark borderless v-model="searchQuery" :label="curApp=='Expense' ? null : 'Quasar Version: ' + $q.version" input-class="text-right text-h6" class="absolute-bottom-right" dense @keyup="search()">
-=======
                 <!-- <q-input dark borderless v-model="searchQuery" :label="curApp=='Expense' ? null : 'Quasar Version: ' + $q.version" input-class="text-right text-h6" class="absolute-bottom-right" dense @keyup="search()"> -->
                 <q-input dark borderless v-model="searchQuery" :label="'Quasar Version: ' + $q.version" input-class="text-right text-h6" class="absolute-bottom-right" dense @keyup="search()">
->>>>>>> f67d697ec603fc6e69dd4d286f3f63a3be8036be
                   <template v-slot:append>
                     <q-icon v-if="searchQuery===''" name="search" />
                     <q-icon v-else name="clear" class="cursor-pointer" @click.stop.prevent="searchQuery='';search()" />
@@ -92,18 +84,11 @@
           </q-scroll-area>
         </q-drawer>
       </div> -->
-<<<<<<< HEAD
-      <div v-if="isDesk && !isIM && curApp!='tvmanager'">
-        <q-drawer v-model="drawer" :mini="isDesk ? true : !drawer || miniState" :width="230" :breakpoint="393" show-if-above class="bg-teal-9 text-h5 text-cyan-2">
-          <q-scroll-area class="fit" style="font-family:youyuan">
-            <q-list padding>
-=======
       <!-- <div v-if="isDesk && !isIM && curApp!='tvmanager'"> -->
       <div v-if="isDesk">
         <q-drawer v-model="drawer" :mini="isDesk ? true : !drawer || miniState" :width="230" :breakpoint="393" show-if-above class="q-pr-sm bg-teal-10 text-h5 text-cyan-2">
           <q-scroll-area class="fit" style="font-family:youyuan">
             <q-list>
->>>>>>> f67d697ec603fc6e69dd4d286f3f63a3be8036be
               <AppItem appl="日 常 消 费" colr="purple-9" iclr="yellow" size="27px" styl="margin: 0 0 0 1.5px" icon="monetization_on" @click="openApp('exlist')" />
               <AppItem appl="采 购 清 单" colr="indigo-9" iclr="white"  size="27px" styl="margin: 3pxpx 0 0 0" icon="add_shopping_cart" appn="shopping" />
               <AppItem appl="温 馨 提 示" colr="teal-9"   iclr="white"  size="27px" styl="margin: 0 0 0 1.5px" icon="schedule" @click="openApp('reminder')" />
@@ -114,15 +99,6 @@
               <AppItem appl="血 糖 控 制" colr="pink-7"   iclr="yellow" size="27px" styl="margin:-1px 0 0 0" icon="bloodtype" appn="glucosecheck" />
               <AppItem appl="月 报 分 析" colr="brown-9"  iclr="white"  size="25px" styl="margin:-6px 0 0 0" icon="报" @click="openApp('bankstatementloader')" />
               <AppItem appl="网 上 阅 读" colr="indigo-9" iclr="white"  size="25px" styl="margin:-6px 0 0 0" icon="文" appn="../arts" />
-<<<<<<< HEAD
-              <AppItem appl="娅 莉 画 展" colr="red-9"   iclr="yellow" size="25px" styl="margin:-6px 0 0 0" icon="画" appn="../yali" />
-              <AppItem appl="高 尔 夫 球" colr="green-9"  iclr="yellow" size="27px" styl="margin:-1px 0 0 0" icon="golf_course" @click="openApp('../golf')" />
-              <AppItem appl="跳 转 首 页" colr="blue-9"   iclr="grey"   size="25px" styl="margin:-9px 0 0 0" :icon="compVer" appn="/" />
-              <AppItem appl="英 汉 字 典" colr="brown-9"  iclr="yellow" size="25px" styl="margin:-1px 0 0 0" icon="translate" @click="openApp('dictionary')" />
-              <AppItem appl="法 定 假 日" colr="pink-9"   iclr="yellow" size="25px" styl="margin:-1px 0 0 0" icon="card_giftcard" appn="" @click="showHolidays()" />
-              <AppItem appl="健 康 检 查" colr="red" iclr="white"  size="25px" styl="margin:-7px 0 0 2px" icon="查" appn="htlist" />
-              <AppItem appl="电 视 列 表" colr="grey-9"   iclr="yellow" size="25px" styl="margin:-5px 0 0 0" icon="视" appn="tvmanager" />
-=======
               <AppItem appl="娅 莉 画 展" colr="red-9"    iclr="yellow" size="25px" styl="margin:-6px 0 0 0" icon="画" appn="../yali" />
               <AppItem appl="高 尔 夫 球" colr="green-9"  iclr="yellow" size="27px" styl="margin:-1px 0 0 0" icon="golf_course" @click="openApp('../golf')" />
               <AppItem appl="英 汉 字 典" colr="brown-9"  iclr="yellow" size="25px" styl="margin:-1px 0 0 0" icon="translate" @click="openApp('dictionary')" />
@@ -130,7 +106,6 @@
               <AppItem appl="跳 转 首 页" colr="blue-9"   iclr="yellow" size="25px" styl="margin-top:-9px" :icon="compVer" appn="/" />
               <AppItem appl="健 康 检 查" colr="red" iclr="white"  size="25px" styl="margin:-7px 0 0 2px" icon="查" appn="htlist" />
               <AppItem appl="电 视 列 表" colr="grey-9"   iclr="yellow" size="25px" styl="margin:-5px 0 0 0" icon="视" appn="tvmanager" v-if="isFedora" />
->>>>>>> f67d697ec603fc6e69dd4d286f3f63a3be8036be
               <!-- <AppItem appl="胰 流 报 告" colr="grey-9"   iclr="yellow" size="25px" styl="margin:-5px 0 0 0" icon="胰" appn="pfcheck" /> -->
               <!-- <AppItem appl="跳 转 首 页" colr="amber-9"                size="25px" styl="margin:-9px 0 0 0" icon="🏠" appn="/" /> -->
 
@@ -155,11 +130,7 @@
           <router-view />
         </q-page>
       </q-page-container>
-<<<<<<< HEAD
-      <q-footer class="bg-teal-9" v-if="/memo|reminder|expense|watcher|bankstatement|shopping|bank|dictionary|glucosecheck|PancreaticFluid/i.test(curApp)">
-=======
       <q-footer class="bg-teal-10" v-if="/memo|reminder|expense|watcher|bankstatement|shopping|bank|dictionary|glucosecheck|PancreaticFluid/i.test(curApp)">
->>>>>>> f67d697ec603fc6e69dd4d286f3f63a3be8036be
         <q-toolbar>
           <Pagination :pNumPages="compNumPages" :pItemsPerPage="compItemsPerPage" />
         </q-toolbar>
@@ -182,11 +153,7 @@ import { useRouter } from 'vue-router'
 import LoginDialog from '../../users/LoginDialog.vue'
 const router = useRouter()
 
-<<<<<<< HEAD
-const { isIM, isDesk, $q, AppAdmin, ENV_DEV } = libFunctions()
-=======
 const { isFedora, isIM, isDesk, $q, AppAdmin, ENV_DEV } = libFunctions()
->>>>>>> f67d697ec603fc6e69dd4d286f3f63a3be8036be
 const { yyyymmdd } = dayFunctions()
 const { getA1cDefinitions } = infoFunctions()
 
@@ -243,22 +210,10 @@ const cookieKeys = Object.keys(allCookies)
 audCookies.value = cookieKeys.find(key => /add_|upd_|del_/.test(key)) !== undefined
 
 //== computed
-<<<<<<< HEAD
-// import.meta.env.PRODUCT_VER = 'X'
-const compVer = computed(() => { return import.meta.env.VITE_BUILD_TAG })
-// const compVer = computed(() => { return process.env.VER })
-const compItemsPerPage = computed(() => { return itemsPerPage.value })
-const compNumPages = computed(() => { return Math.ceil(numItems.value / compItemsPerPage.value) })
-// const compVer = computed(() => { return process.env.VER })
-const weightUnit = computed(() => {
-  return wunit.value=='pond' ? '磅' : wunit.value=='kilo' ? '公' : wunit.value=='jing' ? '斤' : '磅'
-})
-=======
 const compVer = computed(() => { return import.meta.env.VITE_BUILD_TAG == null ? '试' : import.meta.env.VITE_BUILD_TAG })
 const compItemsPerPage = computed(() => { return itemsPerPage.value })
 const compNumPages = computed(() => { return Math.ceil(numItems.value / compItemsPerPage.value) })
 const weightUnit = computed(() => { return wunit.value=='pond' ? '磅' : wunit.value=='kilo' ? '公' : wunit.value=='jing' ? '斤' : '磅' })
->>>>>>> f67d697ec603fc6e69dd4d286f3f63a3be8036be
 
 //== functions
 function getTvShows (hours) {

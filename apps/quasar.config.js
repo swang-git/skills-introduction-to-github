@@ -9,10 +9,6 @@ export default defineConfig(ctx => {
   // load .env file manually
   // dotenv.config({ path: resolve(process.cwd(), '.env')})
   // console.log('===CK=== quasar.config.js starting ...', ctx)
-<<<<<<< HEAD
-=======
-  // console.log('===CK=== quasar.config.js starting ... import.meta.env', import.meta.env)
->>>>>>> f67d697ec603fc6e69dd4d286f3f63a3be8036be
   return {
     // https://v2.quasar.dev/quasar-cli-vite/prefetch-feature
     // preFetch: true,
@@ -72,10 +68,6 @@ export default defineConfig(ctx => {
         if (ctx.prod && !ctx.debug) {
           viteConf.build = {
             ...viteConf.build,
-<<<<<<< HEAD
-=======
-            // allowedHosts: ['devx', '127.0.0.1'],
->>>>>>> f67d697ec603fc6e69dd4d286f3f63a3be8036be
             // Use terser instead of esbuild for full comment removal
             minify: 'terser',
             terserOptions: {
@@ -119,20 +111,12 @@ export default defineConfig(ctx => {
     devServer: {
       // https: true,
       open: true, // opens browser window automatically
-<<<<<<< HEAD
-      port: ctx.mode.spa ? '8080' : ctx.mode.pwa ? 9080 : 9090,
-      proxy: {
-        '/api': {
-          // target: 'http://192.168.1.107',
-          target: 'http://localhost', // Your Fedora backend
-=======
       port: ctx.mode.spa ? '8080' : ctx.mode.pwa ? 9080 : ctx.mode.ssr ? 9090 : 9091,
       host: 'devx',
       allowedHosts: ['devx', '192.168.1.107', '127.0.0.1'],
       proxy: {
         '/api': {
           target: 'http://devx', // Your Fedora backend
->>>>>>> f67d697ec603fc6e69dd4d286f3f63a3be8036be
           changeOrigin: true,
           rewrite: path => path.replace(/^\/api/, '') // Only if backend doesn't expect /api
         }

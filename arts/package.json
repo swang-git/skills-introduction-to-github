@@ -1,16 +1,13 @@
 {
-<<<<<<< HEAD
   "name": "appx",
   "version": "0.0.1",
   "description": "A Quasar Project",
   "productName": "appx",
-=======
   "name": "arts",
   "version": "0.0.1",
   "description": "A Quasar Project",
   "productName": "Quasar App",
   "author": "swang-git <swang71@comcast.net>",
->>>>>>> f67d697ec603fc6e69dd4d286f3f63a3be8036be
   "type": "module",
   "private": true,
   "scripts": {

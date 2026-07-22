@@ -72,17 +72,10 @@ import PurchasedList from './PurchasedList.vue'
 import CCardReconcileSheet from './CCardReconcileSheet.vue'
 import GiftCardBalanceSheet from './GiftCardBalanceSheet.vue'
 import ScoreDisplay from './ScoreDisplay.vue'
-<<<<<<< HEAD
-import  ChartsProxy1 from './Charts/ChartsProxy1.vue'
-import  ChartsProxy2 from './Charts/ChartsProxy2.vue'
-import  ChartsProxy3 from './Charts/ChartsProxy3.vue'
-import  ExpDetailsPad from '../src/components/ExpDetailsPad.vue'
-=======
 import ChartsProxy1 from './Charts/ChartsProxy1.vue'
 import ChartsProxy2 from './Charts/ChartsProxy2.vue'
 import ChartsProxy3 from './Charts/ChartsProxy3.vue'
 import ExpDetailsPad from '../src/components/ExpDetailsPad.vue'
->>>>>>> f67d697ec603fc6e69dd4d286f3f63a3be8036be
 import { libFunctions } from '../src/composables/libFunctions'
 import { axiosFunctions } from '../src/composables/axiosFunctions'
 import { dayFunctions } from '../src/composables/dayFunctions'
@@ -179,11 +172,7 @@ function getAudClass(p) {
     return p.row.upd ? 'bg-cyan-9' : p.row.add ? 'bg-lime-9' : p.row.del ? 'bg-indigo-9' : p.expand ? 'bg-indigo-10' : 'bg-teal-10'
   }
 }
-<<<<<<< HEAD
 function checkBalance () {
-=======
-function checkBalance() {
->>>>>>> f67d697ec603fc6e69dd4d286f3f63a3be8036be
   // const path = process.env.API + '/exp/checkBalance/9'
   const path = ENV_DEV + '/exp/checkBalance/9'
   gaxios(path)
@@ -199,11 +188,7 @@ function showGolfSores(rw) {
 function showChart(ymc) {
   emitter.emit('open-ChartsProxy1', 'cats')
 }
-<<<<<<< HEAD
 function testDB () {
-=======
-function testDB() {
->>>>>>> f67d697ec603fc6e69dd4d286f3f63a3be8036be
   // const path = process.env.API + '/exp/testDB/' + '2022-02-16 13:00/15/55555'
   const path = ENV_DEV + '/exp/testDB/' + '2022-02-16 13:00/15/55555'
   gaxios(path)
@@ -388,15 +373,7 @@ function showDetailsInExp(p) {
   if (row.cats === 'Golf' && row.subc === 'Play') {
     // const path = process.env.API + '/exp/getScoreId'
     const path = ENV_DEV + '/exp/getScoreId'
-<<<<<<< HEAD
     const data = { courseId: row.payeId, playerId: row.user_id, teetime: row.date }
-=======
-    const data = {
-      courseId: row.payeId,
-      playerId: row.user_id,
-      teetime: row.date
-    }
->>>>>>> f67d697ec603fc6e69dd4d286f3f63a3be8036be
     paxios(path, data)
   }
   if (!p.expand && isDesk) clickedIdx.value = 0 // to make it fixed
@@ -413,11 +390,7 @@ function getScore() {
   const row = clickedRow.value
   // const path = process.env.API + '/exp/getScore'
   const path = ENV_DEV + '/exp/getScore'
-<<<<<<< HEAD
-  const data = { playerId:row.user_id, scoreId:scoreId.value }
-=======
   const data = { playerId: row.user_id, scoreId: scoreId.value }
->>>>>>> f67d697ec603fc6e69dd4d286f3f63a3be8036be
   paxios(path, data)
 }
 function setScore(da) {
@@ -489,18 +462,7 @@ function getCreditCardSpendings() {
   const endDay = bdays.split(' ~ ')[1]
   // console.log(`-CK-getCreditCardSpendings bdays=${bdays} startDay=${startDay} endDay=${endDay} e.date=${e.date}`)
   // const path = process.env.API + '/exp/getCreditCardSpendings/' + startDay + '/' + endDay + '/' + e.date
-<<<<<<< HEAD
   const path = ENV_DEV + '/exp/getCreditCardSpendings/' + startDay + '/' + endDay + '/' + e.date
-=======
-  const path =
-    ENV_DEV +
-    '/exp/getCreditCardSpendings/' +
-    startDay +
-    '/' +
-    endDay +
-    '/' +
-    e.date
->>>>>>> f67d697ec603fc6e69dd4d286f3f63a3be8036be
   ccardPayment = parseFloat(e.unip)
   ccardDueDay = e.date
   gaxios(path)
@@ -531,11 +493,7 @@ function setPurchasedList(plst) {
   // console.log('-CK-fn-purchasedList from exlist', plst)
   purchaselst.value = plst
 }
-<<<<<<< HEAD
 function getList () {
-=======
-function getList() {
->>>>>>> f67d697ec603fc6e69dd4d286f3f63a3be8036be
   // console.log(`-fn-getList process.env.API=${process.env.API}`)
   // const path = process.env.API + '/exp/getList'
   const path = ENV_DEV + '/exp/getList'
@@ -598,18 +556,12 @@ function setList(da) {
 //     delCookies.forEach(p => { p.del = true; palist.value.unshift(p) })
 //   }
 // }
-<<<<<<< HEAD
 function setFutureDate () {
   // if (futureDate.value === getFutureDate(Constants.PLUS_DAYS)) futureDate.value = getFutureDate(365 * 10)
   // else futureDate = getFutureDate(Constants.PLUS_DAYS)
   if (futureDate.value === getFutureDate(31)) futureDate.value = getFutureDate(365 * 10)
-=======
-function setFutureDate() {
   // if (futureDate.value === getFutureDate(Constants.PLUS_DAYS)) futureDate.value = getFutureDate(365 * 10)
   // else futureDate = getFutureDate(Constants.PLUS_DAYS)
-  if (futureDate.value === getFutureDate(31))
-    futureDate.value = getFutureDate(365 * 10)
->>>>>>> f67d697ec603fc6e69dd4d286f3f63a3be8036be
   else futureDate.value = getFutureDate(31)
 }
 

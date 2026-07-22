@@ -1,13 +1,5 @@
 <template>
-<<<<<<< HEAD
-  <q-dialog
-    v-model="opened"
-    :transition-show="action == 'add' ? 'slide-right' : 'rotate'"
-    :maximized="isIM"
-  >
-=======
   <q-dialog v-model="opened" :transition-show="action == 'add' ? 'slide-right' : 'rotate'" :maximized="isIM" >
->>>>>>> f67d697ec603fc6e69dd4d286f3f63a3be8036be
     <q-layout container class="bg-teal-10" :style="{ height: compHeight }">
       <LayoutHeader :tit="getTitle()" @do-action="doAction" :rbtn="iicon" />
       <LayoutFooter
@@ -35,113 +27,6 @@
               @upd-dt="setDateTime"
             />
           </div>
-<<<<<<< HEAD
-          <SelInput
-            :obj="row"
-            label="Select Paid with"
-            icon="money"
-            iColor="amber"
-            :optList="paymOptions"
-            @add-new-csp="handleUserSelection"
-          />
-          <SelInput
-            :obj="row"
-            label="Select Category"
-            icon="category"
-            iColor="pink"
-            :optList="catsOptions"
-            @get-subc-opt="getSubcOpt"
-          />
-          <SelInput
-            :obj="row"
-            label="Select Subcategory"
-            icon="category"
-            iColor="green-6"
-            :optList="subcOptions"
-            @get-paye-opt="getPayeOpt"
-          />
-          <SelInput
-            :obj="row"
-            label="Select Payee"
-            icon="store"
-            iColor="cyan-3"
-            :optList="payeOptions"
-            @add-new-paye="addNewPayee"
-          />
-
-          <div v-if="isGolfPlayRelated() || isGolfMembership()">
-            <div class="row">
-              <NumInput
-                class="col-6"
-                v-if="isFCCAutopay(row)"
-                :obj="row"
-                :showRight="true"
-                :rightIcon="true"
-                label="Fidelity CCard Payment"
-                mask="#.##"
-                icon="monetization_on"
-                iColor="orange"
-                @disable-gc="setGcard"
-              />
-              <NumInput
-                class="col-6"
-                v-else-if="isCCCAutopay(row)"
-                :obj="row"
-                :showRight="true"
-                :rightIcon="true"
-                label="Chase CCard Payment"
-                mask="#.##"
-                icon="monetization_on"
-                iColor="orange"
-                @disable-gc="setGcard"
-              />
-              <NumInput
-                class="col-6"
-                v-else
-                :obj="row"
-                label="Total Cost"
-                :rightIcon="true"
-                mask="#.##"
-                icon="monetization_on"
-                iColor="orange"
-                @disable-gc="setGcard"
-              />
-              <NumInput
-                v-if="isGolfPlay()"
-                class="col-6"
-                :obj="row"
-                :label="isIM ? 'W or L' : 'Won or Lost'"
-                :showRight="true"
-                :rightIcon="true"
-                mask=""
-                icon="paid"
-                iColor="yellow"
-              />
-            </div>
-            <!-- <div v-if="['Mercer County Golf Gift Card','Somerset County Golf Gift Card','Spooky Brook Golf Course'].includes(row.paym)" class="row"> -->
-            <div v-if="isGiftCard()" class="row">
-              <NumInput
-                class="col"
-                :obj="row"
-                label="Gift Card Balance"
-                mask="#.##"
-                :rightIcon="true"
-                icon="balance"
-                iColor="cyan-5"
-                :disable="gcDisable"
-              />
-              <NumInput
-                class="col"
-                :obj="row"
-                label="Gift Card Number"
-                mask="#"
-                :rightIcon="true"
-                icon="tag"
-                iColor="cyan-1"
-                :disable="gcDisable"
-                prefix=""
-              />
-=======
           <SelInput :obj="row" label="Select Paid with" icon="money" iColor="amber" :optList="paymOptions" @add-new-csp="handleUserSelection" />
           <SelInput :obj="row" label="Select Category" icon="category" iColor="pink" :optList="catsOptions" @get-subc-opt="getSubcOpt" />
           <SelInput :obj="row" label="Select Subcategory" icon="category" iColor="green-6" :optList="subcOptions" @get-paye-opt="getPayeOpt" />
@@ -158,107 +43,10 @@
             <div v-if="isGiftCard()" class="row">
               <NumInput class="col" :obj="row" label="Gift Card Balance" mask="#.##" :rightIcon="true" icon="balance" iColor="cyan-5" :disable="gcDisable" />
               <NumInput class="col" :obj="row" label="Gift Card Number" mask="#" :rightIcon="true" icon="tag" iColor="cyan-1" :disable="gcDisable" prefix="" />
->>>>>>> f67d697ec603fc6e69dd4d286f3f63a3be8036be
             </div>
           </div>
           <div v-else-if="isAutoGaso(row)" class="row">
             <div class="row">
-<<<<<<< HEAD
-              <NumInput
-                class="col-6"
-                :obj="row"
-                label="Total Cost"
-                iconSize="lg"
-                :rightIcon="true"
-                mask="#.##"
-                icon="monetization_on"
-                iColor="orange"
-                @disable-gc="setGcard"
-              />
-              <NumInput
-                class="col-6"
-                :obj="row"
-                label="Unit Price"
-                iconSize="lg"
-                :rightIcon="true"
-                mask="#.###"
-                icon="money"
-                iColor="orange"
-              />
-            </div>
-            <div class="row">
-              <NumInput
-                class="col"
-                :obj="row"
-                label="Quantities"
-                iconSize="sm"
-                :rightIcon="true"
-                prefix=""
-                mask="#.##"
-                icon="numbers"
-                iColor="yellow"
-                @calc-quan="calcQuan"
-              />
-              <NumInput
-                class="col"
-                :obj="row"
-                label="Miles Run"
-                iconSize="lg"
-                :rightIcon="true"
-                prefix=""
-                mask="#.#"
-                icon="directions_car"
-                iColor="grey-4"
-                @calc-mileage="calcGasMileage"
-              />
-            </div>
-          </div>
-          <div v-else>
-            <NumInput
-              v-if="isFCCAutopay(row)"
-              :obj="row"
-              label="Fidelity CCard Payment"
-              iconSize="lg"
-              :showRight="true"
-              :rightIcon="true"
-              mask="#.##"
-              icon="paid"
-              iColor="amber"
-              @disable-gc="setGcard"
-            />
-            <NumInput
-              v-else-if="isCCCAutopay(row)"
-              :obj="row"
-              label="Chase CCard Payment"
-              iconSize="lg"
-              :showRight="true"
-              :rightIcon="true"
-              mask="#.##"
-              icon="paid"
-              iColor="amber"
-              @disable-gc="setGcard"
-            />
-            <NumInput
-              v-else
-              :obj="row"
-              label="Total Cost"
-              iconSize="lg"
-              :showRight="true"
-              :rightIcon="true"
-              mask="#.##"
-              icon="paid"
-              iColor="teal-2"
-              @disable-gc="setGcard"
-            />
-          </div>
-          <div v-if="row.paym === 'Fidelity Credit Card' && showPostDate">
-            <datepicker
-              label="Set Post Date for Payment or Refund"
-              :date="row.post_date"
-              txsz="text-h6"
-              @upd-date="setPostDate"
-            />
-=======
               <NumInput class="col-6" :obj="row" label="Total Cost" iconSize="lg" :rightIcon="true" mask="#.##" icon="monetization_on" iColor="orange" @disable-gc="setGcard" />
               <NumInput class="col-6" :obj="row" label="Unit Price" iconSize="lg" :rightIcon="true" mask="#.###" icon="money" iColor="orange" />
             </div>
@@ -274,7 +62,6 @@
           </div>
           <div v-if="row.paym === 'Fidelity Credit Card' && showPostDate">
             <datepicker label="Set Post Date for Payment or Refund" :date="row.post_date" txsz="text-h6" @upd-date="setPostDate" />
->>>>>>> f67d697ec603fc6e69dd4d286f3f63a3be8036be
           </div>
         </q-page>
       </q-page-container>
@@ -345,24 +132,6 @@ console.log('-ST-exdar')
 //== emitter.on
 // emitter.on('open-exdar', (rw) => { console.table([rw.id, rw.payeId, rw.paye]); openIt(rw) })
 // emitter.on('del-row', (rowId) => { console.log(`-CK-del_row id=${rowId}`) })
-<<<<<<< HEAD
-emitter.on('del-row', rw => {
-  row.value = rw
-  del()
-})
-emitter.on('open-exdar', (rw, act) => {
-  openIt(rw, act)
-})
-emitter.on('exp-getGiftCardBalance', x => setGiftCardBalance(x))
-emitter.on('exp-getCatsCombo', x => setCatsCombo(x))
-emitter.on('num-input', x => openFloatPad(x))
-emitter.on('exp-getPurchasedList4Exdar', x => {
-  setPurchasedList(x.lst)
-})
-emitter.on('expense-addNewCSP', x => {
-  setNewCSP(x)
-})
-=======
 emitter.on('del-row', rw => { row.value = rw; del() })
 emitter.on('open-exdar', (rw, act) => { openIt(rw, act) })
 emitter.on('exp-getGiftCardBalance', x => setGiftCardBalance(x))
@@ -370,7 +139,6 @@ emitter.on('exp-getCatsCombo', x => setCatsCombo(x))
 emitter.on('num-input', x => openFloatPad(x))
 emitter.on('exp-getPurchasedList4Exdar', x => { setPurchasedList(x.lst) })
 emitter.on('expense-addNewCSP', x => { setNewCSP(x) })
->>>>>>> f67d697ec603fc6e69dd4d286f3f63a3be8036be
 
 //== computed
 const compHeight = computed(() => {
@@ -389,13 +157,7 @@ const compHeight = computed(() => {
   return parseInt(baseh + golfplay + autogaso) + 'px'
 })
 const compDate = computed(() => {
-<<<<<<< HEAD
-  return row.value.date === undefined
-    ? null
-    : getDay(row.value.date.substring(0, 10))
-=======
   return row.value.date === undefined ? null : getDay(row.value.date.substring(0, 10))
->>>>>>> f67d697ec603fc6e69dd4d286f3f63a3be8036be
 })
 // const compGcDisable = computed(() => { return gcDisable })
 const defaultYM = computed(() => {
@@ -493,13 +255,7 @@ function getFoote() {
 }
 function setPostDate(date) {
   row.value.post_date = date
-<<<<<<< HEAD
-  console.log(
-    `-fn-setPostDate post_date=${date} row.value.post_date=${row.value.post_date}`
-  )
-=======
   console.log( `-fn-setPostDate post_date=${date} row.value.post_date=${row.value.post_date}`)
->>>>>>> f67d697ec603fc6e69dd4d286f3f63a3be8036be
 }
 function isGolfPlay() {
   return row.value.cats === 'Golf' && row.value.subc === 'Play'
@@ -507,14 +263,7 @@ function isGolfPlay() {
 function isGolfPlayRelated() {
   const cats = row.value.cats
   const subc = row.value.subc
-<<<<<<< HEAD
-  const regex = new RegExp(
-    'Play|Tournament|Outing|Playof|Golf Balls|Range Balls|Membership|Driving Range',
-    'gi'
-  )
-=======
   const regex = new RegExp( 'Play|Tournament|Outing|Playof|Golf Balls|Range Balls|Membership|Driving Range', 'gi')
->>>>>>> f67d697ec603fc6e69dd4d286f3f63a3be8036be
   // const regex = new RegExp('Playof', 'i')
   const retval = row.value.cats === 'Golf' && regex.test(subc)
   // console.log(`-fn-isGolfPlayRelated()=${retval} cats=${cats} subc=${subc}`, regex, /Club Playoff/ig.test(subc))
@@ -527,23 +276,10 @@ function isGolfMembership() {
   return row.value.cats === 'Golf' && 'Membership' === subc
 }
 function isFCCAutopay() {
-<<<<<<< HEAD
-  return (
-    row.value.subc === 'Monthly Autopay' &&
-    row.value.paye === 'Fidelity Credit Card'
-  )
-}
-function isCCCAutopay() {
-  return (
-    row.value.subc === 'Monthly Autopay' &&
-    row.value.paye === 'Chase Credit Card'
-  )
-=======
   return ( row.value.subc === 'Monthly Autopay' && row.value.paye === 'Fidelity Credit Card')
 }
 function isCCCAutopay() {
   return ( row.value.subc === 'Monthly Autopay' && row.value.paye === 'Chase Credit Card')
->>>>>>> f67d697ec603fc6e69dd4d286f3f63a3be8036be
 }
 function isAutoGaso() {
   return row.value.cats === 'Auto' && row.value.subc === 'Gasoline'
@@ -865,9 +601,6 @@ function setNewCSP(da) {
     row.value.paymId = csp.id
   }
 }
-<<<<<<< HEAD
-function openIt(rw, act) {
-=======
 // function fmt2decimals(str) { // 120.2 => 120.20
 //   const num = parseFloat(str)
 //   if (isNaN(num)) return null
@@ -875,35 +608,11 @@ function openIt(rw, act) {
 // }
 function openIt(rw, act) {
   // console.log(`-fn-openIt act=${act} cost=${rw.cost} unip=${rw.unip}`, rw)
->>>>>>> f67d697ec603fc6e69dd4d286f3f63a3be8036be
   action.value = act
   row.value = rw
   iicon = null
   originalCost.value = row.value.cost
   // console.log(`-CK-fn-openIt id=${rw.id} payeId=${rw.payeId} paye=${rw.paye}`)
-<<<<<<< HEAD
-  if (
-    row.value.cats === 'Shopping' &&
-    row.value.subc === 'Grocery' &&
-    row.value.hasPlst
-  )
-    iicon = 'shopping_cart'
-  else if (
-    row.value.cats === 'Golf' &&
-    row.value.subc === 'Play' &&
-    row.value.hasScore
-  )
-    iicon = 'golf_course'
-  else if (
-    act === 'add' &&
-    row.value.cats === 'Banking' &&
-    row.value.subc === 'Monthly Autopay'
-  ) {
-    row.value.unip = row.value.unip.replace(/0$/, '')
-    row.value.date = row.value.date.addMonthsKeepDay(1)
-    setNoteAndLink()
-  }
-=======
   if (row.value.cats === 'Shopping' && row.value.subc === 'Grocery' && row.value.hasPlst) iicon = 'shopping_cart'
   else if (row.value.cats === 'Golf' && row.value.subc === 'Play' && row.value.hasScore) iicon = 'golf_course'
   // else if ( act === 'add' && row.value.cats === 'Banking' && row.value.subc === 'Monthly Autopay') {
@@ -911,7 +620,6 @@ function openIt(rw, act) {
   //   row.value.date = row.value.date.addMonthsKeepDay(1)
   //   setNoteAndLink()
   // }
->>>>>>> f67d697ec603fc6e69dd4d286f3f63a3be8036be
   // console.table(row)
   // console.log(`-fn-openIt-exdar-trimedUnip=${row.value.unip}`)
   showPostDate.value = false

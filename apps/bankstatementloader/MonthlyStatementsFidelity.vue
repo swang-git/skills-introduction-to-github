@@ -275,11 +275,7 @@ import emitter from 'tiny-emitter/instance'
 import { axiosFunctions } from '../src/composables/axiosFunctions'
 import { dayFunctions } from '../src/composables/dayFunctions'
 import { libFunctions } from '../src/composables/libFunctions'
-<<<<<<< HEAD
-const { $q } = libFunctions()
-=======
 const { $q, ENV_DEV } = libFunctions()
->>>>>>> f67d697ec603fc6e69dd4d286f3f63a3be8036be
 const { yyyymmdd } = dayFunctions()
 const { gaxios, paxios } = axiosFunctions()
 const opened = ref('')

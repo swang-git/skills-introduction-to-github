@@ -21,7 +21,6 @@ export function libFunctions() {
     return testX
   })
   //function desk () { return Platform.is.desktop && (Platform.is.platform === 'linux' || Platform.is.platform === 'win') && !Platform.has.touch }
-<<<<<<< HEAD
   function desk () { return Platform.is.desktop || Platform.is.ipad }
   function android () { return Platform.is.android }
   function mate () { return Platform.is.android }
@@ -50,94 +49,6 @@ export function libFunctions() {
   }
   function local () {
     const localhosts = /http:\/\/(prod|devx|divx|192.168.|localhost|127.0.0.1)/gi
-=======
-  function desk() {
-    return Platform.is.desktop || Platform.is.ipad
-  }
-  function android() {
-    return Platform.is.android
-  }
-  function mate() {
-    return Platform.is.android
-  }
-  function mate9() {
-    return Platform.userAgent.includes('windows') && Platform.has.touch
-  }
-  function iPad() {
-    return Platform.is.ipad
-  }
-  function IPhone() {
-    return Platform.is.iphone
-  }
-  function mobile() {
-    return Platform.is.mobile
-  }
-  function safari() {
-    return Platform.is.safari
-  }
-  function chromeExt() {
-    return Platform.is.chromeExt
-  }
-  function chrome() {
-    return Platform.is.chrome
-  }
-  function linux() {
-    return Platform.is.linux
-  }
-  function firefox() {
-    return Platform.is.mozilla
-  }
-  function touchable() {
-    return Platform.has.touch
-  }
-  function edge() {
-    return Platform.is.edge
-  }
-  function fone() {
-    return IPhone() || mate9()
-  }
-  function whatPlatform() {
-    console.log(
-      ' ==== platform',
-      Platform,
-      desk(),
-      Platform.userAgent.indexOf('HUAWEI'),
-      'not undefined = ',
-      !undefined
-    )
-  }
-  function showUserAgent() {
-    alert(Platform.userAgent)
-  }
-  function showPlatform() {
-    alert(
-      'isAndroid:' +
-        Platform.is.android +
-        ' isMobile:' +
-        Platform.is.mobile +
-        ' hasTouch:' +
-        Platform.has.touch +
-        ' Platform:' +
-        Platform.is.platform
-    )
-  }
-  function checkiPhone() {
-    alert('is iPhone ' + iPhone())
-  }
-  function checkMate9() {
-    alert('is Mate9 ' + mate9())
-  }
-  function checkFone() {
-    alert('is fone ' + fone())
-  }
-  function checkDesk() {
-    alert('is Desk ' + desk())
-  }
-  function local() {
-    const localhosts =
-      /http:\/\/(prod|devx|divx|192.168.|localhost|127.0.0.1)/gi
->>>>>>> f67d697ec603fc6e69dd4d286f3f63a3be8036be
-    // console.log('-lb-local', window.location.href, localhosts.test(window.location.href))
     return localhosts.test(window.location.href)
   }
   function isfedora() {
@@ -346,11 +257,7 @@ export function libFunctions() {
     else if (n.length === 2) return '0.' + n
     else if (n.length >= 3) return parseInt(n) / 100.0
   }
-<<<<<<< HEAD
   const ENV_DEV = import.meta.env.DEV ? '/api' : '' 
-=======
-  const ENV_DEV = import.meta.env.DEV ? '/api' : ''
->>>>>>> f67d697ec603fc6e69dd4d286f3f63a3be8036be
   return {
     getLineBackground,
     formatCurrency,
@@ -379,10 +286,6 @@ export function libFunctions() {
     dats,
     dalist,
     palist,
-<<<<<<< HEAD
-    ENV_DEV,
-=======
     ENV_DEV
->>>>>>> f67d697ec603fc6e69dd4d286f3f63a3be8036be
   }
 }

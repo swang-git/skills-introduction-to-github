@@ -87,11 +87,7 @@ import MatchedSpendsDialog from './MatchedSpendsDialog.vue'
 import CCardReconcileSheet from '../exp/CCardReconcileSheet.vue'
 import InfoDisplay from '../src/components/InfoDisplay.vue'
 const { gaxios, paxios } = axiosFunctions()
-<<<<<<< HEAD
-const { $q, BASE_URL } = libFunctions()
-=======
 const { $q, ENV_DEV } = libFunctions()
->>>>>>> f67d697ec603fc6e69dd4d286f3f63a3be8036be
 // const mapping = {"$": "X", ",": "Y"}
 
 const opened = ref('')
@@ -208,11 +204,7 @@ function getCreditCardSpendings () {
   if (fCCardSpendings.length > 0) {
     showCCardReconcileSheet()
   }
-<<<<<<< HEAD
-  const path = BASE_URL + '/expense/getCreditCardSpendings/' + openDate.value.addDays(-1) + '/' + closeDate.value + '/' + dueDate.value
-=======
   const path = ENV_DEV + '/expense/getCreditCardSpendings/' + openDate.value.addDays(-1) + '/' + closeDate.value + '/' + dueDate.value
->>>>>>> f67d697ec603fc6e69dd4d286f3f63a3be8036be
   gaxios(path)
 }
 function showCCardReconcileSheet () {
@@ -245,11 +237,7 @@ function getMatchedSpends (lookupspend) {
   // let bedate = openDate.value
   // let afdate = closeDate.value
   const cost = /RETURN/.test(lookingupSpend[3]) ? -lookingupSpend[4] : lookingupSpend[4]
-<<<<<<< HEAD
-  const path = BASE_URL + '/bankstatementloader/getMatchedSpends'
-=======
   const path = ENV_DEV + '/bankstatementloader/getMatchedSpends'
->>>>>>> f67d697ec603fc6e69dd4d286f3f63a3be8036be
   // console.log(`-fn-getMatchedSpends postDate=${postDate} bedate=${bedate} tranDate=${tranDate} afdate=${afdate} cost=${cost}`, lookupspend)
   const inData = {postDate:postDate, openDate:openDate.value.addDays(-1), closeDate:closeDate.value, cost:cost}
   paxios(path, inData)
@@ -406,13 +394,8 @@ function creditsDistr() {
 }
 function getCreditCardData() {
   console.log(`%c-fn-getCreditCardData`, 'color:lime');
-<<<<<<< HEAD
-  // const path = process.env.API + "/bankstatementloader/getCreditCardData/" + dueDate.value + "/" + bank.value
-  const path = BASE_URL + "/bankstatementloader/getCreditCardData/" + dueDate.value + "/" + bank.value
-=======
   // const path = ENV_DEV + "/bankstatementloader/getCreditCardData/" + dueDate.value + "/" + bank.value
   const path = ENV_DEV + "/bankstatementloader/getCreditCardData/" + dueDate.value + "/" + bank.value
->>>>>>> f67d697ec603fc6e69dd4d286f3f63a3be8036be
   gaxios(path)
 }
 function getStyle (i) {

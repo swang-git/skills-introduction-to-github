@@ -2,12 +2,8 @@
   "name": "apps",
   "version": "0.0.1",
   "description": "A Quasar Project",
-<<<<<<< HEAD
-  "productName": "QuasarApps",
-=======
   "productName": "Quasar App",
   "author": "swang-git <swang71@comcast.net>",
->>>>>>> f67d697ec603fc6e69dd4d286f3f63a3be8036be
   "type": "module",
   "private": true,
   "scripts": {
@@ -18,10 +14,7 @@
     "postinstall": "quasar prepare --silent"
   },
   "dependencies": {
-<<<<<<< HEAD
     "@quasar/cli": "^5.0.3",
-=======
->>>>>>> f67d697ec603fc6e69dd4d286f3f63a3be8036be
     "@quasar/extras": "^2.0.2",
     "axios": "^1.18.0",
     "chart.js": "^4.5.1",
@@ -32,21 +25,14 @@
     "tiny-emitter": "^2.1.0",
     "vue": "^3.5.22",
     "vue-i18n": "^11.3.0",
-<<<<<<< HEAD
-    "vue-router": "^5.0.6"
-=======
     "vue-router": "^5.0.6",
     "vuex": "^4.1.0"
->>>>>>> f67d697ec603fc6e69dd4d286f3f63a3be8036be
   },
   "devDependencies": {
     "@intlify/unplugin-vue-i18n": "^11.0.0",
     "@quasar/app-vite": "^3.2.0",
     "autoprefixer": "^10.4.27",
-<<<<<<< HEAD
-=======
     "dotenv": "^17.4.2",
->>>>>>> f67d697ec603fc6e69dd4d286f3f63a3be8036be
     "oxfmt": "^0.x",
     "oxlint": "^1.x",
     "postcss": "^8.5.8"

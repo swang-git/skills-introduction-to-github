@@ -5,17 +5,10 @@
 const routes = [
   {
     // path: '/', component: () =>  apps.includes(appname) ? import('layouts/AppsLayout') : import('layouts/GolfLayout.vue'),
-<<<<<<< HEAD
-    path: '/', component: () => import('@/layouts/MainLayout.vue'),
-    children: [
-      { path: '', component: () => import('@/pages/Index.vue') },
-      { path: 'exlist', component: () => import('@/../exp/exlist.vue') },
-=======
     path: '/', component: () => import('../../src/layouts/MainLayout.vue'),
     children: [
       { path: '', component: () => import('../../src/pages/Index.vue') },
       { path: 'exlist', component: () => import('../../exp/exlist.vue') },
->>>>>>> f67d697ec603fc6e69dd4d286f3f63a3be8036be
       { path: 'shopping', component: () => import('../../shopping/Shopping.vue') },
       { path: 'reminder', component: () => import('../../reminder/relist.vue') },
       { path: 'memo', component: () => import('../../memo/melist.vue') },

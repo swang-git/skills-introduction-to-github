@@ -123,10 +123,6 @@ function add () {
   opened.value = false
 }
 function upd () {
-<<<<<<< HEAD
-  console.log('-fn-upd', row.value)
-=======
->>>>>>> f67d697ec603fc6e69dd4d286f3f63a3be8036be
   const path = ENV_DEV + '/memo/upd'
   const data = {}
   data.swProp = screenwidth/13

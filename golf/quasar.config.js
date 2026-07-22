@@ -2,13 +2,8 @@
 // https://v2.quasar.dev/quasar-cli-vite/quasar-config-file
 
 import { defineConfig } from '#q-app'
-// import dotenv from 'dotenv'
-// import { resolve } from 'path'
 
-export default defineConfig(ctx => {
-  // load .env file manually
-  // dotenv.config({ path: resolve(process.cwd(), '.env')})
-  console.log('quasar.config.js starting ...')
+export default defineConfig((ctx) => {
   return {
     // https://v2.quasar.dev/quasar-cli-vite/prefetch-feature
     // preFetch: true,
@@ -32,17 +27,11 @@ export default defineConfig(ctx => {
       // 'roboto-font-latin-ext', // this or either 'roboto-font', NEVER both!
 
       'roboto-font', // optional, you are not bound to it
-      'material-icons' // optional, you are not bound to it
+      'material-icons', // optional, you are not bound to it
     ],
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-file#build
     build: {
-      base: './',
-      env: {
-        BUILD_VER: import.meta.env.VITE_BUILD_VER || '1.1.0'
-        // API: ctx.dev ? '' : '/api',
-        // VER: process.env.PRODUCT_VER || '1.0'
-      },
       target: {
         // browser: 'baseline-widely-available',
         // node: 'node22'
@@ -52,10 +41,29 @@ export default defineConfig(ctx => {
       // filenameBasedRouting: true,
 
       vueRouterMode: 'history', // available values: 'hash', 'history'
+
+      // quasar.config.js for Vite
+      // Vite uses 'base', not 'publicPath'
+      //base: '/' + (process.env.PRODUCT_NAME === undefined ? 'arts/' : process.env.PRODUCT_NAME),
+      // base: '/',
+      
+      // Env vars for Vite
+      // env: {
+      //   API: process.env.API_URL || '/api',
+      //   VER: process.env.PRODUCT_VER || '1.0'
+      // },
+
+      //publicPath: '/' + (process.env.PRODUCT_NAME  === undefined ? 'arts' : process.env.PRODUCT_NAME), // this will be injected into index.html, like
+      // productName: process.env.PRODUCT_NAME === undefined ? 'apps' : process.env.PRODUCT_NAME,
+      // appName: process.env.APP,
+      // env: ctx.dev ? { API: '/api', VER: process.env.PRODUCT_VER } : { API: '', VER: process.env.PRODUCT_VER },
+      // env: {
+      //    API: process.env.API_URL || '/api',
+      //     VER: process.env.PRODUCT_VER || '1.0'
+      // },
       // vueRouterBase,
       // vueDevtools,
-      // publicPath: '/' + (process.env.PRODUCT_NAME  === undefined ? 'apps' : process.env.PRODUCT_NAME), // this will be injected into index.html
-      // publicPath: '/' + (import.meta.env.PROD === false ? 'apps' : import.meta.env.PROD ), // this will be injected into index.html
+
       publicPath: '/golf/',
       // define: {},
       // defineEnv: {}
@@ -101,28 +109,31 @@ export default defineConfig(ctx => {
             ssr: ctx.modeName === 'ssr',
 
             // you need to set i18n resource including paths !
-            include: [ctx.appPaths.resolve.app('src/i18n')]
-          }
-        ]
-      ]
+            include: [ctx.appPaths.resolve.app('src/i18n')],
+          },
+        ],
+        //[
+        //  'vite-plugin-checker',
+        //  {
+        //    eslint: {
+        //      lintCommand: 'eslint -c ./eslint.config.js "./src*/**/*.{js,mjs,cjs,vue}"',
+        //      useFlatConfig: true,
+        //    },
+        //  },
+        //  { server: false },
+        //],
+      ],
     },
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-file#devserver
     devServer: {
       // https: true,
       open: true, // opens browser window automatically
-<<<<<<< HEAD
-      port: ctx.mode.spa ? '8080' : (ctx.mode.pwa ? 9080 : 9090),
-      proxy: {
-         '/api': {
-          // target: 'http://192.168.1.107', 
-=======
       host: 'devx',
       allowedHosts: ['devx', '192.168.1.107', '127.0.0.1'],
       port: ctx.mode.spa ? '8080' : (ctx.mode.pwa ? 9080 : 9090),
       proxy: {
          '/api': {
->>>>>>> f67d697ec603fc6e69dd4d286f3f63a3be8036be
           target: 'http://devx',  // Your Fedora backend
           changeOrigin: true,
           rewrite: (path) => path.replace(/^\/api/, '')  // Only if backend doesn't expect /api
@@ -145,7 +156,7 @@ export default defineConfig(ctx => {
       // directives: [],
 
       // Quasar plugins
-      plugins: ['LocalStorage', 'Notify', 'Dialog', 'Cookies']
+      plugins: ['LocalStorage', 'Notify', 'Dialog', 'Cookies'],
     },
 
     // animations: 'all', // --- includes all animations
@@ -171,7 +182,7 @@ export default defineConfig(ctx => {
       // (gets superseded if process.env.PORT is specified at runtime)
 
       middlewares: [
-        'render' // keep this as last one
+        'render', // keep this as last one
       ],
 
       // extendSSRPackageJson (pkgJson) {},
@@ -182,7 +193,7 @@ export default defineConfig(ctx => {
       // manualStoreHydration: true,
       // manualPostHydrationTrigger: true,
 
-      pwa: false
+      pwa: false,
       // pwaOfflineHtmlFilename: 'offline.html', // do NOT use index.html as name!
 
       // extendSSRGenerateSWOptions (cfg) {},
@@ -191,7 +202,7 @@ export default defineConfig(ctx => {
 
     // https://v2.quasar.dev/quasar-cli-vite/developing-pwa/configuring-pwa
     pwa: {
-      workboxMode: 'GenerateSW' // 'GenerateSW' or 'InjectManifest'
+      workboxMode: 'GenerateSW', // 'GenerateSW' or 'InjectManifest'
       // swFilename: 'sw.js',
       // manifestFilename: 'manifest.json',
       // extendPWAManifestJson (json) {},
@@ -208,7 +219,7 @@ export default defineConfig(ctx => {
 
     // https://v2.quasar.dev/quasar-cli-vite/developing-capacitor-apps/configuring-capacitor
     capacitor: {
-      hideSplashscreen: true
+      hideSplashscreen: true,
     },
 
     // https://v2.quasar.dev/quasar-cli-vite/developing-electron-apps/configuring-electron
@@ -239,8 +250,8 @@ export default defineConfig(ctx => {
       builder: {
         // https://www.electron.build/configuration
 
-        appId: 'apps'
-      }
+        appId: 'golf',
+      },
     },
 
     // https://v2.quasar.dev/quasar-cli-vite/developing-browser-extensions/configuring-bex
@@ -256,7 +267,7 @@ export default defineConfig(ctx => {
        *
        * @example [ 'my-script.ts', 'sub-folder/my-other-script.js' ]
        */
-      extraScripts: []
-    }
+      extraScripts: [],
+    },
   }
 })
