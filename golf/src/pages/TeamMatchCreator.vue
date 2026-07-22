@@ -102,26 +102,26 @@
 </template>
 <script setup>
 import emitter from 'tiny-emitter/instance'
-import DateTimePicker from '../components/DateTimePicker'
-import DateTimeIMPicker from '../components/DateTimeIMPicker'
-import sel from '../components/MySelection'
-import layoutFooter from '../components/LayoutFooter'
-import layoutHeader from '../components/LayoutHeader'
-import num from '../components/NumInput'
-import txt from '../components/TxtInput'
-import compDialog from '../components/DialogComponent'
-import ConfirmDialog from '../components/ConfirmDialog'
-import NumPad from '../components/NumPad'
-import TimeTable from '../components/TimeTable'
+import DateTimePicker from '../components/DateTimePicker.vue'
+import DateTimeIMPicker from '../components/DateTimeIMPicker.vue'
+import sel from '../components/MySelection.vue'
+import layoutFooter from '../components/LayoutFooter.vue'
+import layoutHeader from '../components/LayoutHeader.vue'
+import num from '../components/NumInput.vue'
+import txt from '../components/TxtInput.vue'
+import compDialog from '../components/DialogComponent.vue'
+import ConfirmDialog from '../components/ConfirmDialog.vue'
+import NumPad from '../components/NumPad.vue'
+import TimeTable from '../components/TimeTable.vue'
 import { ref, reactive, onMounted } from 'vue'
 import { useQuasar } from 'quasar'
-import { dayFunctions } from 'src/composables/dayFunctions'
-import { libFunctions } from 'src/composables/libFunctions'
-import { axiosFunctions } from 'src/composables/axiosFunctions'
+import { dayFunctions } from '../composables/dayFunctions'
+import { libFunctions } from '../composables/libFunctions'
+import { axiosFunctions } from '../composables/axiosFunctions'
 
 const $q = useQuasar()
 const { yyyymmddHHMM, getDay2 } = dayFunctions()
-const { isDesk, isIM } = libFunctions()
+const { isDesk, isIM, ENV_API } = libFunctions()
 const { gaxios, paxios } = axiosFunctions()
 const gameName = ref(null)
 const courseName = ref(null)
@@ -149,7 +149,7 @@ const emit = defineEmits(['upd-match'])
 // function section
 function getCourseList() {
   console.log('%c-fn-getCourseList', 'color:lime;font-size:medium')
-  const path = process.env.API + '/golf/CourseList'
+  const path = ENV_API + '/golf/CourseList'
   gaxios(path)
 }
 function getTeeboxList() {
@@ -157,12 +157,12 @@ function getTeeboxList() {
   setTmntFees()
   tmnt.mtee_id = undefined
   // if (tmnt.course_id === -1) addCourse.value.openIt()
-  const path = process.env.API + '/golf/TeeboxList/' + tmnt.course_id
+  const path = ENV_API + '/golf/TeeboxList/' + tmnt.course_id
   gaxios(path)
 }
 function getGameNameList() {
   console.log('-fn-getGameNameList() called')
-  const path = process.env.API + '/golf/GameNameList'
+  const path = ENV_API + '/golf/GameNameList'
   gaxios(path)
 }
 function openIt(inTmnt, act) {
@@ -215,7 +215,7 @@ function setDateTime(dt) {
   console.log(
     `tee time=${tmnt.start_at}, check if there are other appointments on the date=${date}`,
   )
-  const path = process.env.API + '/golf/checkReminder/' + date
+  const path = ENV_API + '/golf/checkReminder/' + date
   gaxios(path)
 }
 function isScheduled(x) {
@@ -244,7 +244,7 @@ function add() {
   if (!isCompleted()) return
   const inData = tmnt
   inData.id = 0
-  const path = process.env.API + '/golf/addTournament'
+  const path = ENV_API + '/golf/addTournament'
   paxios(path, inData)
   opened.value = false
   const tit = 'Following New Game Added'
@@ -262,7 +262,7 @@ function delFromDB() {
   inData.id = tmnt.id
   inData.gameId = tmnt.game_id
   inData.cleanupTplayers = 1
-  const path = process.env.API + '/golf/delTournament'
+  const path = ENV_API + '/golf/delTournament'
   opened.value = false
   paxios(path, inData)
 }
@@ -277,7 +277,7 @@ function upd() {
   console.log(`-fn-upd`, tmnt)
   if (!isCompleted()) return
   let inData = tmnt
-  const path = process.env.API + '/golf/updTournament'
+  const path = ENV_API + '/golf/updTournament'
   paxios(path, inData)
   tmnt.date = tmnt.start_at
   tmnt.tmntId = tmnt.id

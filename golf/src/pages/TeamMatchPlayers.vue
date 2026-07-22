@@ -58,9 +58,9 @@ import { ref, computed } from 'vue'
 import emitter from 'tiny-emitter/instance'
 // import InfoDialog from 'src/components/InfoDialog'
 // import MemberDialog from '../src/components/MemberDialog'
-import { libFunctions } from 'src/composables/libFunctions';
-import { axiosFunctions } from 'src/composables/axiosFunctions';
-import { cssFunctions } from 'src/composables/cssFunctions';
+import { libFunctions } from '../../src/composables/libFunctions';
+import { axiosFunctions } from '../../src/composables/axiosFunctions';
+import { cssFunctions } from '../../src/composables/cssFunctions';
 const props = defineProps({
   tplayers: { type: Array },
   paliases: { type: Array },
@@ -68,7 +68,7 @@ const props = defineProps({
 const emit = defineEmits([
   'move-to-grouping',
 ])
-const { isIM, isDesk } = libFunctions()
+const { isIM, isDesk, ENV_API } = libFunctions()
 const { gaxios } = axiosFunctions()
 const { getAvatar } = cssFunctions()
 const openSlots = ref(0)
@@ -94,7 +94,7 @@ function openIt (osls) {
   openSlots.value = osls
   selected.value = []
   opened.value = true
-  const path = process.env.API + '/golf/getMatchGroupingPlayers'
+  const path = ENV_API + '/golf/getMatchGroupingPlayers'
   gaxios(path)
 }
 function selectedPlayer(p) {

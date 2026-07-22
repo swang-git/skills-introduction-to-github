@@ -96,8 +96,8 @@
 import emitter from 'tiny-emitter/instance'
 import { ref } from 'vue'
 // import { useQuasar } from 'quasar'
-import { axiosFunctions } from 'src/composables/axiosFunctions';
-import { libFunctions } from 'src/composables/libFunctions';
+import { axiosFunctions } from '../../src/composables/axiosFunctions';
+import { libFunctions } from '../../src/composables/libFunctions';
 // const emit = defineEmits([
 //   // REQUIRED
 //   "ok",
@@ -105,7 +105,7 @@ import { libFunctions } from 'src/composables/libFunctions';
 //   "reset-grp-cpt",
 // ])
 const { paxios } = axiosFunctions()
-const { $q, store } = libFunctions()
+const { $q, store, ENV_API } = libFunctions()
 const name = ref('XYs TeamMatch')
 const username = ref('XYsAdmin')
 const password = ref('TM_XY_account')
@@ -165,7 +165,7 @@ function createAccount() {
   inData.password = password.value
   inData.usertype = usertype.value
   inData.email = email.value
-  const path = process.env.API + '/golf/createAccount'
+  const path = ENV_API + '/golf/createAccount'
   paxios(path, inData)
 }
 function show() {

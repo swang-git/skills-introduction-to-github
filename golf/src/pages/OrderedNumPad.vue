@@ -5,7 +5,7 @@
         <q-btn round dense color="yellow-9" v-close-popup icon="keyboard_arrow_left" />
         <q-toolbar-title style="font-size:20px"> Score for {{ groupOfTeam }} </q-toolbar-title>
       </q-toolbar>
-      <table style="y-overflow:auto;margin:auto">
+      <table style="overflow:auto;margin:auto">
           <q-tr><q-td v-for="i in [1, 2, 3, 4]" :key=i.x><q-btn size="xl" :color="getColor(i)" style="width:60px;height:60px" @click="setScore(i)">{{i}}</q-btn></q-td></q-tr>
           <q-tr><q-td v-for="i in [5, 6, 7, 8]" :key=i.x><q-btn size="xl" :color="getColor(i)" style="width:60px;height:60px" @click="setScore(i)">{{i}}</q-btn></q-td></q-tr>
           <q-tr><q-td v-for="i in [9,10,11]" :key=i.x><q-btn size="xl" :color="getColor(i)" style="width:60px;height:60px" @click="setScore(i)">{{i}}</q-btn></q-td>
@@ -16,7 +16,7 @@
 </template>
 <script setup>
 import { ref } from 'vue'
-import { libFunctions } from 'src/composables/libFunctions'
+import { libFunctions } from '../composables/libFunctions'
 const { store } = libFunctions()
 const score = ref({})
 const holeIdx = 0

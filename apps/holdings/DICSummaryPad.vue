@@ -33,7 +33,7 @@
 import { ref, onMounted } from 'vue'
 import { libFunctions } from '../src/composables/libFunctions'
 const { fmtcy } = libFunctions()
-import DicDetailsPad from './DICDetailsPad'
+import DicDetailsPad from './DICDetailsPad.vue'
 
 const tagz = ref(null)
 const taga = ref(null)

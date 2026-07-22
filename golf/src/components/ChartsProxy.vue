@@ -8,8 +8,8 @@
 <script setup>
 import { ref, createApp } from "vue";
 import emitter from "tiny-emitter/instance";
-import { libFunctions } from "src/composables/libFunctions";
-import TeamMatchPlayDataChart from "../pages/TeamMatchPlayDataChart";
+import { libFunctions } from "../../src/composables/libFunctions";
+import TeamMatchPlayDataChart from "../../src/pages/TeamMatchPlayDataChart.vue";
 defineProps({
   scores: { type: Array },
   name: { type: String },

@@ -3,7 +3,7 @@
   <q-card>
     <div class="text-h6 text-center bg-teal-10 text-white q-py-xs">{{ playerName }}'s Score</div>
     <q-card-section class="bg-teal-9 q-pa-sm">
-      <table style="y-overflow:auto;margin:auto" class="bg-teal-7">
+      <table style="overflow:auto;margin:auto" class="bg-teal-7">
         <tr><td v-for="i in [1, 2, 3, 8]"  :key=i.x><q-btn size="lg" color="teal-10" round :label="i" @click="setNumber(i)" /></td></tr>
         <tr><td v-for="i in [4, 5, 6, 9]" :key=i.x><q-btn size="lg" color="teal-10" round :label="i" @click="setNumber(i)" /></td></tr>
         <tr><td v-for="i in [7, 8, 9, 0]" :key=i.x><q-btn size="lg" color="teal-10" round :label="i" @click="setNumber(i)" /></td></tr>
@@ -55,7 +55,7 @@ export default {
         }
         const args = { vm: this }
         args.inData = this.player
-        args.path = process.env.API + '/golf/setPlayerScore'
+        args.path = ENV_API + '/golf/setPlayerScore'
         args.target = 'golf.setPlayerScore'
         this.axiosPost(args)
         this.opened = false

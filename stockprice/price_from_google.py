@@ -31,7 +31,8 @@ def check_number(name, n, stock, line):
     # else: print('check_number %s=%s'%(name, n))
 
 def get_txt_lines(date, stock):
-    txt_path = "/sites/webdata/docs/gstocks/" + date + '_' + stock + ".txt"
+    ###txt_path = "/sites/webdata/docs/gstocks/" + date + '_' + stock + ".txt"
+    txt_path = "/sites/webdata/docs/gstocks/" + date + '_' + stock
     with open(txt_path, encoding='utf-8') as f:
         lines = f.readlines()          # list with '\n' still attached
         lines = [line.rstrip('\n') for line in lines]   # drop the newlines

@@ -32,21 +32,21 @@
 <script setup>
 import emitter from 'tiny-emitter/instance'
 import { ref } from 'vue'
-import TxtInput from '../src/components/TxtInput'
-import NumInput from '../src/components/NumInput'
-import layoutHeader from '../src/components/LayoutHeader'
-import layoutFooter from '../src/components/LayoutFooter'
-import DatePicker from '../src/components/DatePicker'
-import LnkInput from '../src/components/LnkInput'
-import NotePad from '../src/components/NotePad'
-import ConfirmDialog from '../src/components/ConfirmDialog'
+import TxtInput from '../src/components/TxtInput.vue'
+import NumInput from '../src/components/NumInput.vue'
+import layoutHeader from '../src/components/LayoutHeader.vue'
+import layoutFooter from '../src/components/LayoutFooter.vue'
+import DatePicker from '../src/components/DatePicker.vue'
+import LnkInput from '../src/components/LnkInput.vue'
+import NotePad from '../src/components/NotePad.vue'
+import ConfirmDialog from '../src/components/ConfirmDialog.vue'
 
 import { libFunctions } from '../src/composables/libFunctions'
 import { axiosFunctions } from '../src/composables/axiosFunctions'
 import { dayFunctions } from '../src/composables/dayFunctions'
 const { chwk1, chwk2 } = dayFunctions()
 const { gaxios, paxios } = axiosFunctions()
-const { isIM, isDesk, buildApp, palist } = libFunctions()
+const { ENV_DEV, buildApp, palist } = libFunctions()
 const opened = ref(false)
 const action = ref(null)
 const row = ref({ datetime: null })
@@ -104,13 +104,13 @@ function lnk () {
 }
 function add () {
   console.log('-fn-add', row.value)
-  const path = process.env.API + '/reminder/add'
+  const path = ENV_DEV + '/reminder/add'
   paxios(path, row.value)
   opened.value = false
 }
 function upd () {
   console.log('-fn-upd', row.value)
-  const path = process.env.API + '/reminder/upd'
+  const path = ENV_DEV + '/reminder/upd'
   const inData = {}
   inData.id = row.value.id
   inData.due_date = row.value.due_date.substring(0, 10)
@@ -129,7 +129,7 @@ function del () {
 }
 function delFromDB () {
   console.log('-fn-del', row.value.id, row.value.tag)
-  const path = process.env.API + '/reminder/del'
+  const path = ENV_DEV + '/reminder/del'
   paxios(path, row.value)
   opened.value = false
 }

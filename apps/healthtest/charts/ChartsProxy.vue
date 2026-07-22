@@ -11,9 +11,9 @@
 <script setup>
 import { ref, createApp } from 'vue'
 import emitter from 'tiny-emitter/instance'
-import { libFunctions } from 'src/composables/libFunctions'
-import HTCharts from './charts'
-import ChartsGlucose from '../../glucosecheck/ChartClv'
+import { libFunctions } from '../../src/composables/libFunctions'
+import HTCharts from './charts.vue'
+import ChartsGlucose from '../../glucosecheck/ChartClv.vue'
 const props = defineProps({
   chdata: { type: Array },
   chname: { type: String },

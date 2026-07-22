@@ -40,24 +40,17 @@ class AppsController extends Controller {
     }
     return ['files' => $files, 'status' => "OK"];
   }
-  public function loginAdmin(Request $request) { Log::info("loginAdmin from frontend loginAdmin");
+  public function loginAdmin(Request $request) {
     $input = $request->all();
-    Log::info("login", $input);
-    if (auth()->attempt(array('username' => $input['username'], 'password' => $input['password']))) {
+    Log::info("loginAmin", $input);
+    $this->validate($request, [
+        // 'email' => 'required|email',
+        'email' => 'required|email',
+        'password' => 'required',
+    ]);
+
+    if (auth()->attempt(array('email' => $input['email'], 'password' => $input['password']))) {
         return ['user' => auth()->user(), 'status' => "OK"];
     }
   }
-  // public function loginAdmin(Request $request) {
-  //   $input = $request->all();
-  //   Log::info("loginAmin", $input);
-  //   $this->validate($request, [
-  //       // 'email' => 'required|email',
-  //       'email' => 'required|email',
-  //       'password' => 'required',
-  //   ]);
-
-  //   if (auth()->attempt(array('email' => $input['email'], 'password' => $input['password']))) {
-  //       return ['user' => auth()->user(), 'status' => "OK"];
-  //   }
-  // }
 }

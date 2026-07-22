@@ -83,14 +83,14 @@
 <script setup>
 import { ref, computed } from 'vue'
 import emitter from 'tiny-emitter/instance'
-import ItemPad from './ItemPad'
-import ConfirmDialog from '../src/components/ConfirmDialog'
+import ItemPad from './ItemPad.vue'
+import ConfirmDialog from '../src/components/ConfirmDialog.vue'
 
 import { axiosFunctions } from '../src/composables/axiosFunctions'
 import { libFunctions } from '../src/composables/libFunctions'
 import { dayFunctions } from '../src/composables/dayFunctions'
 const { gaxios, paxios } = axiosFunctions()
-const { isIM, isDesk } = libFunctions()
+const { ENV_DEV, isDesk } = libFunctions()
 const { yyyymmdd, today } = dayFunctions()
 
 //== data sections
@@ -174,7 +174,7 @@ function addToShoppingList (m) {
   m.status = 'S'
   m.payee_id = null
   m.date = (new Date()).yyyymmdd()
-  const path = process.env.API + '/shopping/addShoppingItem'
+  const path = ENV_DEV + '/shopping/addShoppingItem'
   paxios(path, m)
 }
 var deletedItem = null
@@ -193,7 +193,7 @@ function delShoppingItem (m) {
   console.log('-fn-delShoppingItem', m.name, m, m.class_id, parseInt(m.class_id) === parseInt(classId.value))
   return
   itemList.value.forEach(p => { if (p.item_id === m.item_id) p.status = 'A' })
-  const path = process.env.API + '/shopping/delShoppingItem'
+  const path = ENV_DEV + '/shopping/delShoppingItem'
   console.log(`-CK- del item from shoppingList m.name=${m.name}`)
   paxios(path, m)
   drawerL.value = false
@@ -211,7 +211,7 @@ function addPurchasedItem (item, fromCan=false) {
   item.payee_id = null
   item.status = 'A'
   if (item.costs === null) item.costs = 0.01
-  const path = process.env.API + '/shopping/addPurchasedItem'
+  const path = ENV_DEV + '/shopping/addPurchasedItem'
   // console.log('-fn- adding  purchased item', item.name, args.inData)
   paxios(path, item)
 }
@@ -231,7 +231,7 @@ function showItems4Class (clsOpt) {
 function openIt () {
   opened.value = true
   if (itemList.value.length > 0) return
-  const path = process.env.API + '/shopping/getShoppingList'
+  const path = ENV_DEV + '/shopping/getShoppingList'
   gaxios(path)
 }
 function openItemLookupDialog () {

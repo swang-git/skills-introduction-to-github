@@ -14,7 +14,7 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import emitter from 'tiny-emitter/instance'
-import SelOptionsWithSearch from './SelOptionsWithSearch'
+import SelOptionsWithSearch from './SelOptionsWithSearch.vue'
 const refSelOptionsWithSearch = ref(null)
 const emit = defineEmits(['set-opt', 'get-TeeboxList', 'do-action'])
 const props = defineProps([

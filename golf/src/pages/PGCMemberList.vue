@@ -149,7 +149,7 @@ export default {
         inData.push(x)
       })
       args.inData = inData
-      args.path = process.env.API + '/golf/addUnsignedTeamMatchPlayers'
+      args.path = ENV_API + '/golf/addUnsignedTeamMatchPlayers'
       args.target = 'golf.getTeamMatchPlayers'
       if (this.gameId < 10)  args.target = 'golf.getPGCGamePlayers'
       this.axiosPost(args)
@@ -178,7 +178,7 @@ export default {
       this.opened = true
     },
     getPGCMemberList () {
-      const path = process.env.API + '/golf/getPGCMemberList/' + this.year
+      const path = ENV_API + '/golf/getPGCMemberList/' + this.year
       this.gaxios(path)
     },
     setPGCMemberList (da) {

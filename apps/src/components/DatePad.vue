@@ -18,8 +18,8 @@
 import { libFunctions } from '../composables/libFunctions'
 const { opened } = libFunctions()
 const emit = defineEmits(['set-dat'])
-const date = null
-const postDate = null
+var date = null
+var postDate = null
 
 console.info(`-ST-DatePad date=${date}`)
 function openIt (d) {

@@ -40,21 +40,21 @@
       </div>
     </q-expansion-item>
   </div>
-  <PGCGameResults ref="refGameResults" />
-  <PGCGameGrouping ref="refGameGrouping" />
+  <PGCGameResults ref="ENV_APIameResults" />
+  <PGCGameGrouping ref="ENV_APIameGrouping" />
 </div>
 </template>
 <script setup>
 import emitter from 'tiny-emitter/instance'
 import { ref, onMounted } from 'vue'
-import { dayFunctions } from '../composables/dayFunctions'
+import { dayFunctions } from '../../src/composables/dayFunctions'
 const { today } = dayFunctions()
-import { libFunctions } from '../composables/libFunctions'
-const { $store, dats, dalist, isDesk, PGCsAdmin } = libFunctions()
-import { axiosFunctions } from '../composables/axiosFunctions'
+import { libFunctions } from '../../src/composables/libFunctions'
+const { $store, dats, dalist, isDesk, PGCsAdmin, ENV_API } = libFunctions()
+import { axiosFunctions } from '../../src/composables/axiosFunctions'
 const { gaxios } = axiosFunctions()
-import PGCGameResults from'./PGCGameResults'
-import PGCGameGrouping from './PGCGameGrouping'
+import PGCGameResults from'./PGCGameResults.vue'
+import PGCGameGrouping from './PGCGameGrouping.vue'
 const yearList = ref([])
 const year = ref(0)
 const tmntId = ref(0)
@@ -62,12 +62,12 @@ const gameId = ref(0)
 const gameStartAt = ref(null)
 var gameList = []
 var PGCPlayers = []
-const refGameGrouping = ref(null)
-const refGameResults = ref(null)
+const ENV_APIameGrouping = ref(null)
+const ENV_APIameResults = ref(null)
 
 onMounted(() => {
-  refGameGrouping
-  refGameResults
+  console.log(ENV_APIameGrouping)
+  console.log(ENV_APIameResults)
 })
 
 console.log('-ST-PGCGameList')
@@ -85,7 +85,7 @@ function isScoreDone (year, gameId) {
 }
 function getPGCGames () {
   console.log('-fn-getPGCGames')
-  const path = process.env.API + '/golf/getPGCGames/ALL'
+  const path = ENV_API + '/golf/getPGCGames/ALL'
   gaxios(path)
 }
 function setPGCGames (da) {
@@ -101,21 +101,21 @@ function setPGCGamePlayers (da) {
   if (PGCsAdmin && gameStartAt.value > today()) {
     console.log(`doGrouping`,da)
     PGCPlayers = da.PGCPlayers.filter(p => p.game_id === gameId.value)  // doGameGrouping
-    refGameGrouping.value.openIt(PGCPlayers, tmnt)
+    ENV_APIameGrouping.value.openIt(PGCPlayers, tmnt)
   } else if (PGCsAdmin && gameStartAt.value < today()) {
     if (gameId.value === 6) PGCPlayers = da.PGCPlayers  // enterGameScore
     else PGCPlayers = da.PGCPlayers.filter(p => p.game_id === gameId.value)  // enterGameScore
     console.log(`show game results with PGCsAdmin gameId=${gameId.value}`, PGCPlayers[0])
-    refGameResults.value.openIt(PGCPlayers, tmnt, gameStartAt.value < today())
+    ENV_APIameResults.value.openIt(PGCPlayers, tmnt, gameStartAt.value < today())
   } else {
     console.log(`show game results`, da)
     PGCPlayers = da.PGCPlayers // showGameResults
-    refGameResults.value.openIt(PGCPlayers, tmnt, gameStartAt.value < today())
+    ENV_APIameResults.value.openIt(PGCPlayers, tmnt, gameStartAt.value < today())
   }
 }
 function getPGCGamePlayers (year, tmntId, gameId) {
   console.log(`-fn-getPGCGamePlayers tmntId=${tmntId} gameId=${gameId} year=${year}`)
-  const path = process.env.API + '/golf/getPGCGamePlayers/' + tmntId + '/' + gameId + '/' + year
+  const path = ENV_API + '/golf/getPGCGamePlayers/' + tmntId + '/' + gameId + '/' + year
   gaxios(path)
 }
 function enterGameScore (yr, tId, gId, gStartAt) {

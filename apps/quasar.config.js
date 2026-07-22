@@ -1,100 +1,129 @@
-module.exports = function (ctx) { // can be async too
-  // console.log(ctx)
+// Configuration for your app
+// https://v2.quasar.dev/quasar-cli-vite/quasar-config-file
+
+import { defineConfig } from '#q-app'
+// import dotenv from 'dotenv'
+// import { resolve } from 'path'
+
+export default defineConfig(ctx => {
+  // load .env file manually
+  // dotenv.config({ path: resolve(process.cwd(), '.env')})
+  // console.log('===CK=== quasar.config.js starting ...', ctx)
   return {
-    boot: [
-      'pinia',
-      // 'i18n',
-      'axios',
-    ],
+    // https://v2.quasar.dev/quasar-cli-vite/prefetch-feature
+    // preFetch: true,
+
+    // app boot file (/src/boot)
+    // --> boot files are part of "main.js"
+    // https://v2.quasar.dev/quasar-cli-vite/boot-files
+    boot: ['i18n'],
+
+    // https://v2.quasar.dev/quasar-cli-vite/quasar-config-file#css
+    css: ['app.scss'],
+
+    // https://github.com/quasarframework/quasar/tree/dev/extras
     extras: [
-      // ctx.mode.pwa // we're adding only if working on a PWA
-      //   ? 'roboto-font'
-      //   : null
-      'roboto-font',
-      'material-icons'
+      // 'ionicons-v4',
+      // 'mdi-v7',
+      // 'fontawesome-v7',
+      // 'eva-icons',
+      // 'themify',
+      // 'line-awesome',
+      // 'roboto-font-latin-ext', // this or either 'roboto-font', NEVER both!
+
+      'roboto-font', // optional, you are not bound to it
+      'material-icons' // optional, you are not bound to it
     ],
-    css: [
-      ctx.mode.spa ? 'app.scss' : null, // looks for /src/css/app-spa.sass
-      // ctx.mode.cordova ? 'app-cordova.sass' : null  // looks for /src/css/app-cordova.sass
-    ],
+
+    // https://v2.quasar.dev/quasar-cli-vite/quasar-config-file#build
     build: {
-      target: {
-        // browser: [ 'es2019', 'edge88', 'firefox78', 'chrome87', 'safari13.1' ],
-        // node: 'node'
+      base: './',
+      env: {
+        // BUILD_VER: import.meta.env.VITE_BUILD_VER || '1.1.0'
+        // API: ctx.dev ? '' : '/api',
+        // VER: process.env.PRODUCT_VER || '1.0'
       },
+      target: {
+        // browser: 'baseline-widely-available',
+        // node: 'node22'
+      },
+
+      // https://v2.quasar.dev/quasar-cli-vite/page-routing-with-vue-router#filename-based-routing
+      // filenameBasedRouting: true,
 
       vueRouterMode: 'history', // available values: 'hash', 'history'
       // vueRouterBase,
       // vueDevtools,
-      // vueOptionsAPI: false,
-
-      // rebuildCache: true, // rebuilds Vite/linter/etc cache on startup
-
-      publicPath: '/' + process.env.PRODUCT_NAME  === undefined ? 'apps' : process.env.PRODUCT_NAME, // this will be injected into index.html, like
-      productName: process.env.PRODUCT_NAME === undefined ? 'apps' : process.env.PRODUCT_NAME,
-      appName: process.env.APP,
-      env: ctx.dev ? { API: '/api', VER: process.env.PRODUCT_VER } : { API: '', VER: process.env.PRODUCT_VER },
-
-      // publicPath: '/',
-      // analyze: true,
-      // env: {},
-      // rawDefine: {}
+      // publicPath: '/' + (process.env.PRODUCT_NAME  === undefined ? 'apps' : process.env.PRODUCT_NAME), // this will be injected into index.html
+      // publicPath: '/' + (import.meta.env.PROD === false ? 'apps' : import.meta.env.PROD ), // this will be injected into index.html
+      publicPath: '/apps/',
+      // define: {},
+      // defineEnv: {}
       // ignorePublicFolder: true,
       // minify: false,
-      // polyfillModulePreload: true,
       // distDir
 
       // extendViteConf (viteConf) {},
-      // viteVuePluginOptions: {},
-
-      scopeHoisting: true,
-      uglifyOptions: {
-        compress: {
-          // 在UglifyJs删除没有用到的代码时不输出警告
-          warnings: false,
-          // 删除所有的 `console` 语句，可以兼容ie浏览器
-          drop_console: true,
-          // 内嵌定义了但是只用到一次的变量
-          collapse_vars: true,
-          // 提取出出现多次但是没有定义成变量去引用的静态值
-          reduce_vars: true
-        },
-        output: {
-          // 最紧凑的输出
-          beautify: false,
-          // 删除所有的注释
-          comments: false
+      extendViteConf(viteConf) {
+        if (ctx.prod && !ctx.debug) {
+          viteConf.build = {
+            ...viteConf.build,
+            // Use terser instead of esbuild for full comment removal
+            minify: 'terser',
+            terserOptions: {
+              compress: {
+                drop_console: true, // remove all console.log / console.debug
+                drop_debugger: true
+              },
+              format: {
+                comments: false // DELETE ALL JS comments (critical for your need)
+              },
+              mangle: {
+                toplevel: true // aggressive variable renaming
+              }
+            }
+          }
         }
       },
-      // transpile: false,
+      // viteVuePluginOptions: {},
 
       vitePlugins: [
-        ['vite-plugin-checker', {
-          eslint: {
-            lintCommand: 'eslint "./**/*.{js,mjs,cjs,vue}"'
+        [
+          '@intlify/unplugin-vue-i18n/vite',
+          {
+            // if you want to use Vue I18n Legacy API, you need to set `compositionOnly: false`
+            // compositionOnly: false,
+
+            // if you want to use named tokens in your Vue I18n messages, such as 'Hello {name}',
+            // you need to set `runtimeOnly: false`
+            // runtimeOnly: false,
+
+            ssr: ctx.modeName === 'ssr',
+
+            // you need to set i18n resource including paths !
+            include: [ctx.appPaths.resolve.app('src/i18n')]
           }
-        }, { server: false }]
+        ]
       ]
     },
+
+    // https://v2.quasar.dev/quasar-cli-vite/quasar-config-file#devserver
     devServer: {
-      https: false,
-      host: 'devx',
-      // port: ctx.mode.spa ? '8080' : (ctx.mode.pwa ? 9080 : 9090),
-      proxy: [
-        {
-          context: ['/api'],
-          target: 'http://devx',
-          pathRewrite: { '^/api': '' },
-          // bypass: function (req, res, proxyOptions) {
-          //   if (req.headers.accept.indexOf('html') !== -1) {
-          //     console.log('Skipping proxy for browser request.');
-          //     return '/index.html';
-          //   }
-          // },
-        },
-      ],
+      // https: true,
+      open: true, // opens browser window automatically
+      port: ctx.mode.spa ? '8080' : ctx.mode.pwa ? 9080 : 9090,
+      proxy: {
+        '/api': {
+          // target: 'http://192.168.1.107',
+          target: 'http://localhost', // Your Fedora backend
+          changeOrigin: true,
+          rewrite: path => path.replace(/^\/api/, '') // Only if backend doesn't expect /api
+        }
+      },
+      vueDevTools: true
     },
-    // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#framework
+
+    // https://v2.quasar.dev/quasar-cli-vite/quasar-config-file#framework
     framework: {
       config: {},
 
@@ -109,43 +138,118 @@ module.exports = function (ctx) { // can be async too
       // directives: [],
 
       // Quasar plugins
-      plugins: [
-        'LocalStorage',
-        'SessionStorage',
-        'Notify',
-        'Dialog',
-        'Cookies'
-      ]
+      plugins: ['LocalStorage', 'Notify', 'Dialog', 'Cookies']
     },
-    client: {
-      // logging: 'info',
-      overlay: true,
-      progress: true,
-      // webSocketURL: {
-      //   // hostname: '0.0.0.0',
-      //   hostname: 'devx',
-      //   // pathname: '/ws',
-      //   password: 'Ybsjll11',
-      //   port: 80,
-      //   // port: 8080,
-      //   // protocol: 'ws',
-      //   username: 'swang71@comcast.net',
-      // },
-    },
-    // open: true,
-    // open: ['/exlist'],
-    // open: {
-    //   app: {
-    //     name: 'google-chrome',
-    //   }
-    // }
-    // compress: true,
-    // onListening: function (devServer) {
-    //   if (!devServer) {
-    //     throw new Error('webpack-dev-server is not defined');
-    //   }
-    //   const port = devServer.server.address().port;
-    //   console.log('Listening on port:', port);
+
+    // animations: 'all', // --- includes all animations
+    // https://v2.quasar.dev/options/animations
+    animations: [],
+
+    // https://v2.quasar.dev/quasar-cli-vite/quasar-config-file#sourcefiles
+    // sourceFiles: {
+    //   rootComponent: 'src/App.vue',
+    //   router: 'src/router/index',
+    //   store: 'src/store/index',
+    //   pwaRegisterServiceWorker: 'src-pwa/register-sw',
+    //   pwaServiceWorker: 'src-pwa/sw/custom-sw',
+    //   pwaManifestFile: 'src-pwa/manifest.json',
+    //   electronMain: 'src-electron/electron-main',
+    //   electronPreload: 'src-electron/electron-preload'
+    //   bexManifestFile: 'src-bex/manifest.json
     // },
+
+    // https://v2.quasar.dev/quasar-cli-vite/developing-ssr/configuring-ssr
+    ssr: {
+      prodPort: 3000, // The default port that the production server should use
+      // (gets superseded if process.env.PORT is specified at runtime)
+
+      middlewares: [
+        'render' // keep this as last one
+      ],
+
+      // extendSSRPackageJson (pkgJson) {},
+      // extendSSRWebserverConf (rolldownConf) {},
+
+      // manualStoreSerialization: true,
+      // manualStoreSsrContextInjection: true,
+      // manualStoreHydration: true,
+      // manualPostHydrationTrigger: true,
+
+      pwa: false
+      // pwaOfflineHtmlFilename: 'offline.html', // do NOT use index.html as name!
+
+      // extendSSRGenerateSWOptions (cfg) {},
+      // extendSSRInjectManifestOptions (cfg) {}
+    },
+
+    // https://v2.quasar.dev/quasar-cli-vite/developing-pwa/configuring-pwa
+    pwa: {
+      workboxMode: 'GenerateSW' // 'GenerateSW' or 'InjectManifest'
+      // swFilename: 'sw.js',
+      // manifestFilename: 'manifest.json',
+      // extendPWAManifestJson (json) {},
+      // useCredentialsForManifestTag: true,
+      // injectPWAMetaTags: false,
+      // extendPWACustomSWConf (rolldownConf) {},
+      // extendPWAGenerateSWOptions (cfg) {},
+      // extendPWAInjectManifestOptions (cfg) {},
+      // extendPWASwTsConfig (tsConfig) {}
+    },
+
+    // https://v2.quasar.dev/quasar-cli-vite/developing-cordova-apps/configuring-cordova
+    cordova: {},
+
+    // https://v2.quasar.dev/quasar-cli-vite/developing-capacitor-apps/configuring-capacitor
+    capacitor: {
+      hideSplashscreen: true
+    },
+
+    // https://v2.quasar.dev/quasar-cli-vite/developing-electron-apps/configuring-electron
+    electron: {
+      // extendElectronMainConf (rolldownConf) {},
+      // extendElectronPreloadConf (rolldownConf) {},
+      // extendElectronPackageJson (pkgJson) {},
+
+      // Electron preload scripts (if any) from /src-electron, WITHOUT file extension
+      preloadScripts: ['electron-preload'],
+
+      // specify the debugging port to use for the Electron app when running in development mode
+      inspectPort: 5858,
+
+      bundler: 'packager', // 'packager' or 'builder'
+
+      packager: {
+        // https://github.com/electron-userland/electron-packager/blob/master/docs/api.md#options
+        // OS X / Mac App Store
+        // appBundleId: '',
+        // appCategoryType: '',
+        // osxSign: '',
+        // protocol: 'myapp://path',
+        // Windows only
+        // win32metadata: { ... }
+      },
+
+      builder: {
+        // https://www.electron.build/configuration
+
+        appId: 'apps'
+      }
+    },
+
+    // https://v2.quasar.dev/quasar-cli-vite/developing-browser-extensions/configuring-bex
+    bex: {
+      // extendBexScriptsConf (rolldownConf) {},
+      // extendBexManifestJson (json) {},
+
+      /**
+       * The list of extra scripts (js/ts) not in your bex manifest that you want to
+       * compile and use in your browser extension. Maybe dynamic use them?
+       *
+       * Each entry in the list should be a relative filename to /src-bex/
+       *
+       * @example [ 'my-script.ts', 'sub-folder/my-other-script.js' ]
+       */
+      extraScripts: []
+    }
   }
-}
+})

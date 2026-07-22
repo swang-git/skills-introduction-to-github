@@ -77,7 +77,7 @@ import emitter from 'tiny-emitter/instance'
 import { libFunctions } from '../composables/libFunctions'
 const { isIM, $q, store } = libFunctions()
 
-import EnterPScoresDialog from 'pages/EnterPScoresDialog'
+import EnterPScoresDialog from './EnterPScoresDialog.vue'
 
 var scores = ref([])
 var searchQuery = ref('')

@@ -25,10 +25,10 @@ import { computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 const route = useRoute()
 const $router = useRouter()
-import { axiosFunctions } from 'src/composables/axiosFunctions'
+import { axiosFunctions } from '../../src/composables/axiosFunctions'
 const { paxios } = axiosFunctions()
-import { libFunctions } from 'src/composables/libFunctions'
-const { store, isLocal } = libFunctions()
+import { libFunctions } from '../../src/composables/libFunctions'
+const { store, isLocal, DEV_API } = libFunctions()
 // name: 'ArtsEdit'
 
 const flwIdx = computed(() => { return route.params.flwIdx })
@@ -72,8 +72,8 @@ function saveEdit () {
     inData.tit = tit.value
     inData.txt = txt.value
   }
-  const path = process.env.API + '/arts/updText'
-  console.log('-CK-inData', inData)
+  const path = DEV_API + '/arts/updText'
+  // console.log('-CK-inData', inData)
   paxios(path, inData)
   closeEdit()
 }

@@ -68,6 +68,7 @@ class recorded(Base):
     __tablename__ = 'recorded'
     recordedid = Column(Integer, primary_key=True)
     chanid = Column(Integer)
+    autoexpire = Column(Integer)
     starttime = Column(DateTime)
     endtime = Column(DateTime)
     title = Column(String(256))

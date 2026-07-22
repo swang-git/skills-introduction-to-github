@@ -1,20 +1,53 @@
 <template>
   <q-dialog v-model="opened" persistent :maximized="isIM" :full-height="isIM">
-    <q-layout container :style="{ height:isDesk ? '590px' : '500px', width:'344px' }" class="bg-teal-10">
+    <q-layout
+      container
+      :style="{ height: isDesk ? '590px' : '500px', width: '344px' }"
+      class="bg-teal-10"
+    >
       <q-header class="bg-teal-10 q-pa-xs">
         <q-toolbar>
-          <q-btn round glossy icon='keyboard_arrow_left' v-close-popup color="orange" style="margin-left:-10px" />
-          <q-btn round outline :label="compPlayers.length-selected.length" class="q-ml-sm">
-            <q-tooltip class="text-h6 text-grey-7 bg-yellow-4">Number of players to be added</q-tooltip>
+          <q-btn
+            round
+            glossy
+            icon="keyboard_arrow_left"
+            v-close-popup
+            color="orange"
+            style="margin-left: -10px"
+          />
+          <q-btn
+            round
+            outline
+            :label="compPlayers.length - selected.length"
+            class="q-ml-sm"
+          >
+            <q-tooltip class="text-h6 text-grey-7 bg-yellow-4"
+              >Number of players to be added</q-tooltip
+            >
           </q-btn>
           <q-btn round outline :label="selected.length" class="q-ml-sm">
-            <q-tooltip class="text-h6 text-grey-7 bg-yellow-4">Number of Players Selected</q-tooltip>
+            <q-tooltip class="text-h6 text-grey-7 bg-yellow-4"
+              >Number of Players Selected</q-tooltip
+            >
           </q-btn>
           <div class="q-pl-xl">
-            <q-input dark borderless v-model="searchTxt" input-class="text-right text-h6" dense :label="players.length + ' Players'">
+            <q-input
+              dark
+              borderless
+              v-model="searchTxt"
+              input-class="text-right text-h6"
+              dense
+              :label="players.length + ' Players'"
+            >
               <template v-slot:append>
                 <q-icon v-if="searchTxt === ''" name="search" size="md" />
-                <q-icon v-else name="clear" size="md" class="cursor-pointer" @click="searchTxt=''" />
+                <q-icon
+                  v-else
+                  name="clear"
+                  size="md"
+                  class="cursor-pointer"
+                  @click="searchTxt = ''"
+                />
               </template>
             </q-input>
           </div>
@@ -23,14 +56,30 @@
       <q-footer class="bg-teal-10">
         <q-toolbar no-shadow>
           <q-toolbar-title align="center">
-            <q-btn glossy color="amber-10" icon="add_circle" icon-right="add_circle" @click="addTplayers()" label="Add Selected to Tournament" />
+            <q-btn
+              glossy
+              color="amber-10"
+              icon="add_circle"
+              icon-right="add_circle"
+              @click="addTplayers()"
+              label="Add Selected to Tournament"
+            />
           </q-toolbar-title>
         </q-toolbar>
       </q-footer>
-      <div class="q-pa-sm bg-teal-9 text-body1 text-white" style="margin:50px 0 0 0">
-        <div v-for="(p) in compPlayers" :key=p.x class="q-gutter-sm">
-          <q-avatar size="33px"><img :src="getAvatar(p)"></q-avatar>
-          <q-checkbox v-model="selected" :val="p" :label="p.fullname" color="orange" style="margin:8px 0 0 -6px" />
+      <div
+        class="q-pa-sm bg-teal-9 text-body1 text-white"
+        style="margin: 50px 0 0 0"
+      >
+        <div v-for="p in compPlayers" :key="p.x" class="q-gutter-sm">
+          <q-avatar size="33px"><img :src="getAvatar(p)" /></q-avatar>
+          <q-checkbox
+            v-model="selected"
+            :val="p"
+            :label="p.fullname"
+            color="orange"
+            style="margin: 8px 0 0 -6px"
+          />
         </div>
       </div>
     </q-layout>
@@ -41,7 +90,7 @@ import { ref } from 'vue'
 import libs from '../mixins/libs'
 export default {
   mixins: [libs],
-  setup () {
+  setup() {
     return {
       // players: ref([ { player_id:1, gender:'F', fullname:'Wang, Shengli' }, { player_id:2, gender:'M', fullname:'Wang, Henry' } ]),
       selected: ref([]),
@@ -64,7 +113,7 @@ export default {
     addTplayers() {
       console.info('-fn-addTplayers', this.tmnt)
       const args = { vm: this.$parent }
-      let inData = { tmntId: this.tmntId, players:[] }
+      let inData = { tmntId: this.tmntId, players: [] }
       this.selected.forEach(p => {
         let x = {}
         x.tournament_id = this.tmnt.id
@@ -76,14 +125,20 @@ export default {
         inData.players.push(x)
       })
       args.inData = inData
-      args.path = process.env.API + '/golf/addTplayers'
+      args.path = ENV_API + '/golf/addTplayers'
       args.target = 'golf.getTplayers'
       this.axiosPost(args)
       this.opened = false
     },
     setNonTplayers() {
-      const rmlist = this.tplayers.map(p => { return p.playerId})
-      this.players = this.players.filter(p => !rmlist.includes(p.player_id)).sort((a, b) => { return a.fullname < b.fullname ? -1 : 1 })
+      const rmlist = this.tplayers.map(p => {
+        return p.playerId
+      })
+      this.players = this.players
+        .filter(p => !rmlist.includes(p.player_id))
+        .sort((a, b) => {
+          return a.fullname < b.fullname ? -1 : 1
+        })
       console.info('-fn-setNonTplayers', this.players[0])
     },
     openIt(tmnt, tplayers) {
@@ -98,17 +153,21 @@ export default {
     }
   },
   computed: {
-    compPlayers () {
-      var filterKey = this.searchTxt.length>0 && this.searchTxt.toLowerCase()
+    compPlayers() {
+      var filterKey = this.searchTxt.length > 0 && this.searchTxt.toLowerCase()
       // console.info('-cp-players', this.players)
       var data = this.players
-      if (filterKey.length>0) {
+      if (filterKey.length > 0) {
         var words = filterKey.split(' ')
         words.forEach(word => {
           data = data.filter(row => {
-            return Object.keys(row).filter(key => { return !['player_id', 'gender'].includes(key) }).some(key => {
-              return String(row[key]).toLowerCase().indexOf(word) >= 0
-            })
+            return Object.keys(row)
+              .filter(key => {
+                return !['player_id', 'gender'].includes(key)
+              })
+              .some(key => {
+                return String(row[key]).toLowerCase().indexOf(word) >= 0
+              })
           })
         })
       }

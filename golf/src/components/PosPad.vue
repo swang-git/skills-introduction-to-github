@@ -10,11 +10,11 @@
         <q-btn glossy round icon="save" color="primary" v-close-popup />  -->
       </q-card-actions>
       <q-card-section class="bg-teal-9 q-pa-sm">
-        <table v-if="gameId<6" style="y-overflow:auto;margin:auto" class="bg-teal-7">
+        <table v-if="gameId<6" style="overflow:auto;margin:auto" class="bg-teal-7">
           <q-tr><td v-for="i in ['G1', 'G2', 'G3', 'G4', 'G5']"  :key=i.x><q-btn size="17px" color="teal-10" round :label="i" @click="saveReward(i)" /></td></q-tr>
           <q-tr><td v-for="i in ['N1', 'N2', 'N3', 'LD', 'CP']" :key=i.x><q-btn size="17px" color="teal-10" round :label="i" @click="saveReward(i)" /></td></q-tr>
         </table>
-        <table v-else-if="gameId===6" style="y-overflow:auto;margin:auto" class="bg-teal-7">
+        <table v-else-if="gameId===6" style="overflow:auto;margin:auto" class="bg-teal-7">
           <q-tr><td v-for="i in ['P1', 'P2', 'P3', 'P4', 'P5']"  :key=i.x><q-btn size="17px" color="teal-10" round :label="i" @click="saveReward(i)" /></td></q-tr>
           <q-tr><td v-for="i in ['NP1', 'NP2', 'NP3', 'HIO']" :key=i.x><q-btn size="17px" color="teal-10" round :label="i" @click="saveReward(i)" /></td></q-tr>
         </table>
@@ -37,7 +37,7 @@ console.log('-ST-PosPad')
 function saveReward (w) {
   console.log(`-CK-fn-saveReward ${w}, ${this.player.name} ${this.player.note}`)
   player.pos = w
-  const path = process.env.API + '/golf/addPGCTplayer'  // update player's pos
+  const path = ENV_API + '/golf/addPGCTplayer'  // update player's pos
   paxios(path, player)
   opened.value = false
 }

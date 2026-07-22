@@ -47,7 +47,7 @@ const props = defineProps({
   colColor: { type: String },
   idx: { type: Number },
 })
-const fabOpen = true
+var fabOpen = true
 console.log('-ST-GridPropTable')
 let bgColor = ref('bg-teal-10')
 let rows = ref([])

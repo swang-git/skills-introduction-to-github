@@ -1,7 +1,7 @@
 <template>
 <div v-if="showMatchGrouped" class="justify-center">
   <q-card-actions v-if="matchDate" align="evenly" class="row q-py-xs text-cyan-1 text-h5 inset-shadow-down">
-    <q-btn round glossy @click="showTeamScore=!showTeamScore"><q-icon name="G" color="cyan-2" style="margin:-8px 0 0 0" /></q-btn>
+    <q-btn v-show="teamAScore!=null && teamBScore!=null" round glossy @click="showTeamScore=!showTeamScore"><q-icon name="G" color="cyan-2" style="margin:-8px 0 0 0" /></q-btn>
     <div class="text-center">{{ matchDate }} ({{ matchDate.chwk3() }})</div>
     <q-btn v-if="matchDate>=today()" glossy round icon="diversity_2" @click="doGrouping()"><b style="margin-top:-15px">{{ gsx }}</b></q-btn>
     <q-btn v-else flat round />
@@ -73,17 +73,16 @@ import { libFunctions } from '../composables/libFunctions'
 import { cssFunctions } from '../composables/cssFunctions'
 import { storeFunctions } from '../composables/storeFunctions'
 
-import TeamMatchKJGameDataPad from './TeamMatchKJGameDataPad'
-import TeamMatchGScoresDialog  from './TeamMatchGScoresDialog'
-import EnterPScoresDialog  from './EnterPScoresDialog'
-// import TeamMatchCreator  from './TeamMatchCreator'
-import TeamMatchTeamScorePad from './TeamMatchTeamScorePad'
-import TeamMatchPlayDataPad from './TeamMatchPlayDataPad'
+import TeamMatchKJGameDataPad from './TeamMatchKJGameDataPad.vue'
+import TeamMatchGScoresDialog  from './TeamMatchGScoresDialog.vue'
+import EnterPScoresDialog  from './EnterPScoresDialog.vue'
+import TeamMatchTeamScorePad from './TeamMatchTeamScorePad.vue'
+import TeamMatchPlayDataPad from './TeamMatchPlayDataPad.vue'
 // import TeamMatchList from './TeamMatchList'
 // import TeamMatchGrouping from './TeamMatchGrouping'
-import NewPlayerDialog from 'src/components/NewPlayerDialog'
+import NewPlayerDialog from '../components/NewPlayerDialog.vue'
 // import NewSimPlayerDialog from '../src/components/NewSimPlayerDialog'
-import GolfScorePad from '../components/GolfScorePad'
+import GolfScorePad from '../components/GolfScorePad.vue'
 // import Tooltip from '../src/components/Tooltip'
 
 //== data section
@@ -103,7 +102,7 @@ const emit = defineEmits([
 ])
 const gsx = ref(0)
 // const $q = useQuasar()
-const { store, SysAdmin, screenwidth } = libFunctions()
+const { store, SysAdmin, screenwidth, ENV_API } = libFunctions()
 // const app = getCurrentInstance()
 // const route = app.appContext.config.globalProperties.$route
 // const store = app.appContext.config.globalProperties.$store
@@ -269,7 +268,7 @@ function enterGStrokes (gi) {
   teeboxId.value = cInfo.teeboxId
   teetime.value= game.value.start_at
   tmntId.value = game.value.id
-  const path = process.env.API + '/golf/getGroupScores/' + tmntId.value + '/' + teetime.value + '/' + courseId.value + '/' + teeboxId.value
+  const path = ENV_API + '/golf/getGroupScores/' + tmntId.value + '/' + teetime.value + '/' + courseId.value + '/' + teeboxId.value
   gaxios(path)
   return
 }
@@ -327,7 +326,7 @@ function setGroupScores (da) {
 function getPlayerGameScores (p) {
   console.log('-fn-getPlayerGameScores for', p)
   player.value = p
-  const path = process.env.API + '/golf/getPlayerGameScores/' + p.player_id + '/' + props.gameId
+  const path = ENV_API + '/golf/getPlayerGameScores/' + p.player_id + '/' + props.gameId
   gaxios(path)
 }
 function setPlayerGameScores(da) {
@@ -413,7 +412,7 @@ function openTeamGroupPointPad(player, group, team) {
   emitter.emit('open-TeamMatchTeamScorePad', player)
 }
 function updTeamMatchTplayer (player) {
-  const path = process.env.API + '/golf/updTeamMatchTplayer'
+  const path = ENV_API + '/golf/updTeamMatchTplayer'
   paxios(path, player)
 }
 function getBGcolor (i) {

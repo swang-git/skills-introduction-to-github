@@ -9,8 +9,8 @@ import { ref, onMounted, createApp, reactive } from 'vue'
 import Chart from 'chart.js/auto'
 import ChartDataLabels from 'chartjs-plugin-datalabels'
 import cfg from './chart-cata-config.js'
-import AllButtons from './AllButtons'
-import { libFunctions } from 'src/composables/libFunctions'
+import AllButtons from './AllButtons.vue'
+import { libFunctions } from '../../src/composables/libFunctions'
 Chart.register(ChartDataLabels);
 const props = defineProps({
   data: { type: Array }
@@ -116,7 +116,7 @@ function setData () {
   config.data.datasets[1].pcts = pcts1
   config.data.total = totalSpending
   // const { fmtcy } = libFunctions()
-  myChart.options.plugins.title.text = '消 费 分 类 总 览（总支出: $' +  fmtcy(totalSpending) + '）'     
+  myChart.options.plugins.title.text = '消 费 分 类 总 览（总支出: $' +  fmtcy(totalSpending) + '）'
   // console.log(`%ctotalSpending=${this.totalSpending}`, 'color:red;font-size:12px')
   myChart.update()
 }

@@ -64,9 +64,9 @@ import emitter from 'tiny-emitter/instance'
 import { axiosFunctions } from '../src/composables/axiosFunctions'
 const { gaxios } = axiosFunctions()
 import { libFunctions } from '../src/composables/libFunctions'
-const { fmtcy, isDesk, isIM } = libFunctions()
-import Selection from '../src/components/Selection'
-import exdar from '../exp/exdar'
+const { ENV_DEV, isDesk } = libFunctions()
+import Selection from '../src/components/Selection.vue'
+import exdar from '../exp/exdar.vue'
 
 //== data sections
 const opened = ref(false)
@@ -99,7 +99,7 @@ const prevCardNum = computed(() => { return cardNums.value[cardIdx.value + 1] ==
 //== function sections
 function openIt () {
   console.log(`-fn-openIt`)
-  const path = process.env.API + '/exp/getGiftCards'
+  const path = ENV_DEV + '/exp/getGiftCards'
   gaxios(path)
 }
 function setGiftCards (da) {
@@ -132,7 +132,7 @@ function getGiftCardBalances () {
   console.log(`-CK-fn-getGiftCardBalances`)
   const currNum = currCardNum.value.slbl
   const prevNum = prevCardNum.value.slbl
-  const path = process.env.API + '/exp/getGiftCardBalances/' + paymId.value + '/' + currNum + '/' + prevNum
+  const path = ENV_DEV + '/exp/getGiftCardBalances/' + paymId.value + '/' + currNum + '/' + prevNum
   gaxios(path)
 }
 function setGiftCardBalances (da) {
@@ -183,7 +183,7 @@ function setSpending (da) {
 }
 function getSpending (spendId) {
   console.log(`-fn-getSpending`)
-  const path = process.env.API + '/exp/getSpending/' + spendId
+  const path = ENV_DEV + '/exp/getSpending/' + spendId
   gaxios(path)
 }
 </script>

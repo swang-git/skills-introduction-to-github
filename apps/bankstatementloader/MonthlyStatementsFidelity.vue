@@ -272,9 +272,9 @@
 <script setup>
 import { ref } from 'vue';
 import emitter from 'tiny-emitter/instance'
-import { axiosFunctions } from 'src/composables/axiosFunctions'
-import { dayFunctions } from 'src/composables/dayFunctions'
-import { libFunctions } from 'src/composables/libFunctions'
+import { axiosFunctions } from '../src/composables/axiosFunctions'
+import { dayFunctions } from '../src/composables/dayFunctions'
+import { libFunctions } from '../src/composables/libFunctions'
 const { $q } = libFunctions()
 const { yyyymmdd } = dayFunctions()
 const { gaxios, paxios } = axiosFunctions()

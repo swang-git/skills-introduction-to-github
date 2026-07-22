@@ -178,9 +178,9 @@ import { UserGuideTitles } from '../composables/UserGuideTitles'
 import emitter from 'tiny-emitter/instance'
 
 // import InfoDisplay from 'src/components/InfoDisplay'
-import TeamMatchPlayers from './TeamMatchPlayers'
+import TeamMatchPlayers from './TeamMatchPlayers.vue'
 // import KJNewPlayerDialog from '../components/KJNewPlayerDialog'
-import Tooltip from 'src/components/ToolTip'
+import Tooltip from '../../src/components/ToolTip.vue'
 
 //== data section
 const dev = false
@@ -205,7 +205,7 @@ const emit = defineEmits([
 const { shadow, condShadow, getTeeColor, teamColor, getAvatar, zhcharRegExp } = cssFunctions()
 const { grpScenario8, grpScenario, getABS } = groupFunctions()
 const { paxios } = axiosFunctions()
-var { pagename, year, screenwidth, store } = libFunctions()
+var { pagename, year, screenwidth, store, ENV_API } = libFunctions()
 pagename.value = 'TeamMatchGrouping'
 // const store = useStore()
 // const q = useQuasar()
@@ -229,7 +229,8 @@ const showMatchGrouping = ref(true)
 var groupedPlayer = {}
 
 //== computed section
-const paliases = computed(() => { console.log(`%cwxh's ALIAS alias=${props.aliases[14].alias}`,'color:lime;font-size:30px'); return props.aliases })
+// const paliases = computed(() => { console.log(`%cwxh's ALIAS alias=${props.aliases[14].alias}`,'color:lime;font-size:30px'); return props.aliases })
+const paliases = computed(() => { return props.aliases })
 const compHandicapFlag = computed(() => { return props.handicapFlag })
 const tpidsLen = computed(() => { return tpids.value.length })
 const openSlots = computed(() => { return grouped.value.length*4 - tpids.value.length })
@@ -350,7 +351,7 @@ function saveGrouping () {
   })
   const inData = { gsx:gsx.value, tmntIds:grouped.value.map(p => p.tmntId), tplayers:tplayers }
   // console.table(tplayers.sort((a, b) => a.grp - b.grp))
-  const path = process.env.API + '/golf/saveGrouping'
+  const path = ENV_API + '/golf/saveGrouping'
   paxios(path, inData)
   if (groupingDone.value) {
     showMatchGrouping.value = false
@@ -361,13 +362,13 @@ function saveGrouping () {
 // function XX_getKJAliases() {
 //   // console.log(`-CK-fn-getKJAliases gameId=${gameId} matchDate=${props.matchDate}`)
 //   if (paliases.value.MMs.length > 0) return
-//   const path = process.env.API + '/golf/getAliases/14/0'
+//   const path = ENV_API + '/golf/getAliases/14/0'
 //   gaxios(path)
 // }
 // function XX_getAliases() {
 //   console.log(`-CK-fn-getAliases gameId=${props.gameId} matchDate=${props.matchDate}`)
 //   if (paliases.value.JZs.length > 0) return
-//   const path = process.env.API + '/golf/getAliases/' + props.gameId + '/0'
+//   const path = ENV_API + '/golf/getAliases/' + props.gameId + '/0'
 //   gaxios(path)
 // }
 // function XX_setAliases(da) {
@@ -454,10 +455,10 @@ function moveToGrouped (p) {
   if (tpids.value.find(x => x === p.player_id) == undefined) tpids.value.push(p.player_id)
 
   p.year = year
-  const path = process.env.API + '/golf/moveToGrouped'
+  const path = ENV_API + '/golf/moveToGrouped'
   paxios(path, p)
   if (groupingDone.value) {
-    const path = process.env.API + '/golf/addupdMatchGroups'
+    const path = ENV_API + '/golf/addupdMatchGroups'
     const inData = { gsx:7, tmntIds:grouped.value.map(p => p.tmntId) }
     paxios(path, inData)
   }
@@ -487,7 +488,7 @@ function moveOutGrouped (g, p) {
   p.grp = -1
   g.players = g.players.filter(x => x.player_id != p.player_id)
   getLastGroup().players.push(p)
-  const path = process.env.API + '/golf/moveOutGrouped'
+  const path = ENV_API + '/golf/moveOutGrouped'
   p.tmntIds = grouped.value.map(x => x.tmntId)
   paxios(path, p)
   showGroupedPlaysers()
@@ -522,7 +523,7 @@ function moveToGrouping (p) {
   // activeP = p
   console.log(`-CK-fn-moveToGrouping openSlots=${openSlots.value}`)
   // if (props.gameId != 14) {
-  const path = process.env.API + '/golf/moveToGrouping'
+  const path = ENV_API + '/golf/moveToGrouping'
   paxios(path, p)
   // }
 }
@@ -531,10 +532,10 @@ function moveOutGrouping (g, p) {
   if (pi > -1) tpids.value.splice(pi, 1)
   g.players.forEach((x, i) => { if (x.player_id == p.player_id) g.players.splice(i, 1) })
   console.log(`-fn-moveOutGrouping pid=${p.id} openSlots=${openSlots.value} tpidsLen=${tpidsLen.value} grouped.length=${grouped.value.length}`, tpids.value, paliases.value)
-  const path = process.env.API + '/golf/moveOutGrouping'
+  const path = ENV_API + '/golf/moveOutGrouping'
   paxios(path, p)
   // if (props.gameId != 14) {
-  //   const path = process.env.API + '/golf/moveOutGrouping'
+  //   const path = ENV_API + '/golf/moveOutGrouping'
   //   paxios(path, p)
   // }
   // groupingDone.value = !getTplayers().map(x => x.team).includes('X')

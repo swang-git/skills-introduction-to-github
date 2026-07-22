@@ -138,18 +138,17 @@ class BankStatementController extends Controller
   // echo $lastFile ? "Last file: $lastFile" : "No matching files found";
 
 	private function getChaseBkgAssets() { Log::info("getChaseBkgAssets");
-    $last_bkg_pdf = $this->getLastMatchingFile(config('constants.DOC_DIR') . '/Chase/', '202*_bkg.pdf');
-    Log::info("last_bkg_pdf=$last_bkg_pdf");
+        $last_bkg_pdf = $this->getLastMatchingFile(config('constants.DOC_DIR') . '/Chase/', '202*_bkg.pdf');
+        Log::info("last_bkg_pdf=$last_bkg_pdf");
 
-		$loadTime = substr(StockQuote::where('status', 'A')->max('load_time'), 0, 10);
+		$loadTime = substr(StockQuote::where('status', 'A')->max('asof_time'), 0, 10);
 		$da = DB::table('stock_quotes as s')
-			->where('load_time', 'like', "%$loadTime%")
+			->where('asof_time', 'like', "%$loadTime%")
 			->where('m.symbol', '<>', 'BEKE')
 			->join('security_metas as m', 'm.symbol', 's.symbol')
 			->select('s.symbol', 's.price', 's.price_change', 'm.quantity')
-      ->orderBy('load_time', 'desc')
-      ->limit(6)
-			->get();
+            ->orderBy('asof_time', 'desc')
+            ->limit(6)->get();
 		$cnt = count($da);
 		Log::info("stocks: loadTime=$loadTime cnt=$cnt");
 		$begin_balance_stocks = 0;
@@ -163,23 +162,23 @@ class BankStatementController extends Controller
 		// $cash = 41745.24;
 		// $cash = 41482.49;
 		// $cash = 41844.12;
-    $loadMonth = substr(StockQuote::where('status', 'A')->max('load_time'), 0, 7);
+    $loadMonth = substr(StockQuote::where('status', 'A')->max('asof_time'), 0, 7);
     $cash = ChaseBkgCash::where([ ['status', 'A'], ['date', 'like', "$loadMonth%"] ])->value('cash');
     if (is_null($cash)) $cash = ChaseBkgCash::where('status', 'A')->orderByDesc('date')->limit(1)->value('cash');
     Log::info("loadMonth=$loadMonth cash=$cash");
 		$bkgd = StockQuote::select(DB::raw("1 as user_id") , DB::raw("'BKG' as bank"),
-				DB::raw("DATE_FORMAT(load_time, '%Y') as year"),
-				DB::raw("DATE_FORMAT(load_time, '%m') as month"),
+				DB::raw("DATE_FORMAT(asof_time, '%Y') as year"),
+				DB::raw("DATE_FORMAT(asof_time, '%m') as month"),
 				DB::raw("'985 10278' as primary_account"),
 				DB::raw("0 as tran_cnt"),
-				DB::raw("DATE_FORMAT(load_time, '%Y-%m-%d') as begin_date"),
+				DB::raw("DATE_FORMAT(asof_time, '%Y-%m-%d') as begin_date"),
 				DB::raw("'$loadTime' as end_date"),
-				// DB::raw("DATE_FORMAT(load_time, '%Y-%m-%d') as end_date"),
+				// DB::raw("DATE_FORMAT(asof_time, '%Y-%m-%d') as end_date"),
 				DB::raw("true as hideIt"),
 				DB::raw("$end_balance_stocks - $begin_balance_stocks as diff"),
 				DB::raw("$begin_balance_stocks + $cash as begin_balance"),
 				DB::raw("$end_balance_stocks + $cash as end_balance"))
-			->orderByDesc('load_time')->limit(1)->get();
+			->orderByDesc('asof_time')->limit(1)->get();
 		Log::info("bkgd=", $bkgd->toArray());
 		return [$bkgd, $end_balance_stocks, $cash, str($loadTime, 0, 10), $last_bkg_pdf];
 	}

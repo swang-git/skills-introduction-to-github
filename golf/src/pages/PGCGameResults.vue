@@ -51,7 +51,7 @@
 import { ref, computed, onMounted } from 'vue'
 // import emitter from 'tiny-emitter/instance'
 import { libFunctions } from '../composables/libFunctions'
-const { isDesk, PGCsAdmin } = libFunctions()
+const { isDesk, PGCsAdmin, ENV_API } = libFunctions()
 
 import { axiosFunctions } from '../composables/axiosFunctions'
 const { gaxios } = axiosFunctions()
@@ -61,12 +61,12 @@ const { getAvgColor, getAvatar } = cssFunctions()
 
 // import { dayFunctions } from '../composables/dayFunctions'
 
-import PosPad from 'src/components/PosPad'
-import GolfScorePad from '../components/GolfScorePad'
-import InfoDialog from 'src/components/InfoDialog'
-import layoutHeader from 'src/components/LayoutHeader'
+import PosPad from '../components/PosPad.vue'
+import GolfScorePad from '../components/GolfScorePad.vue'
+import InfoDialog from '../components/InfoDialog.vue'
+import layoutHeader from '../components/LayoutHeader.vue'
 
-const searchQuery = ''
+const searchQuery = ref('')
 const tmntExpired = ref(null)
 var showSorting = false
 const sortBy = ref('stroke')
@@ -85,9 +85,9 @@ const refInfoDialog = ref(null)
 const refGolfScorePad = ref(null)
 
 onMounted(() => {
-  refPosPad
-  refInfoDialog
-  refGolfScorePad
+  console.log(refPosPad)
+  console.log(refInfoDialog)
+  console.log(refGolfScorePad)
 })
 
 defineExpose({openIt})
@@ -103,7 +103,7 @@ const compTplayers = computed(() => {
   else if (sortBy.value === 'poy' && gameId < 6)    return PGCPlayers.filter(p => p.poy > 0).sort((a, b) => a.poy > b.poy ? -1 : 1)
   else if (sortBy.value === 'poy' && gameId === 6)    return PGCPlayers.filter(p => p.poy > 0).sort((a, b) => a.poy + a.poyg > b.poy + b.poyg ? -1 : 1)
   else if (sortBy.value === 'name') {
-    var filterKey = searchQuery.length > 0 && searchQuery.toLowerCase()
+    var filterKey = searchQuery.value.length > 0 && searchQuery.value.toLowerCase()
     let data = PGCPlayers
     if (filterKey.length > 0) {
       var words = filterKey.split(' ')
@@ -207,7 +207,7 @@ function calcPoyGamePoints () {
 }
 function savePoyg (p) {
   console.log(`poyg=${p.poyg} name=${p.name}`)
-  const path = process.env.API + '/golf/savePoyg/' + p.poyg + '/' + p.id
+  const path = ENV_API + '/golf/savePoyg/' + p.poyg + '/' + p.id
   gaxios(path)
 }
 function getCursor (p) {

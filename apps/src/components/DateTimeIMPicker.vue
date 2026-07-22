@@ -45,8 +45,8 @@ const props = defineProps({
 const emit = defineEmits(['upd-dt'])
 
 const showManualInput = ref(true)
-const dshow = true
-const tshow = false
+// const dshow = true
+// const tshow = false
 const datetime = ref(props.dateTime.replace('T', ' '))
 const showDate = ref(false)
 const showTime = ref(false)

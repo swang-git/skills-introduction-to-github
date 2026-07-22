@@ -52,7 +52,7 @@
 import { ref } from 'vue'
 import emitter from 'tiny-emitter/instance'
 // import { libFunctions } from 'src/composables/libFunctions';
-import ShadowBox from 'src/components/ShadowBox.vue';
+import ShadowBox from '../../src/components/ShadowBox.vue';
 const opened = ref(false)
 const courseName = ref(null)
 const tee = ref(null)

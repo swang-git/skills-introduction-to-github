@@ -58,13 +58,13 @@ import { Constants } from '../src/config.js'
 import { libFunctions } from '../src/composables/libFunctions'
 import { axiosFunctions } from '../src/composables/axiosFunctions'
 import { dayFunctions } from '../src/composables/dayFunctions'
-import ChartsProxy from './charts/ChartsProxy'
-import GridPropTable from '../src/components/GridPropTable'
-import htdar from './htdar'
+import ChartsProxy from './charts/ChartsProxy.vue'
+import GridPropTable from '../src/components/GridPropTable.vue'
+import htdar from './htdar.vue'
 
 //== data
 const chname = ref('Health Test Results')
-const { isIM, isDesk, buildApp, fmtcy, dalist, palist, $q } = libFunctions()
+const { isIM, isDesk, buildApp, fmtcy, dalist, palist, $q, ENV_DEV } = libFunctions()
 const { gaxios, paxios } = axiosFunctions()
 const { today, getFutureDate } = dayFunctions()
 
@@ -125,7 +125,7 @@ function showChart () {
   emitter.emit('open-ChartsProxy')
 }
 function testDB () { 
-  const path = process.env.API + '/exp/testDB/' + '2022-02-16 13:00/15/55555'
+  const path = ENV_DEV + '/exp/testDB/' + '2022-02-16 13:00/15/55555'
   gaxios(path)
 }
 function col(idx) {
@@ -211,12 +211,12 @@ function showDetails(p) {
     // console.log(`-fn-showDetails -CK- row.date=${row.date}`, typeof row.date)
     const date = row.date.yyyymmdd()
     const payeId = row.payeId
-    const path = process.env.API + '/exp/getPurchasedList/' + date + '/' + payeId
+    const path = ENV_DEV + '/exp/getPurchasedList/' + date + '/' + payeId
     gaxios(path)
   }
   scoreId.value = 0
   if (row.cats === 'Golf' && row.subc === 'Play') {
-    const path = process.env.API + '/exp/getScoreId'
+    const path = ENV_DEV + '/exp/getScoreId'
     const data = { courseId: row.payeId, playerId: row.user_id, teetime: row.date }
     paxios(path, data)
   }
@@ -225,8 +225,8 @@ function showDetails(p) {
 }
 function getList () {
   console.log('-CK-fn-tstlist/getList')
-  const path = process.env.API + '/healthtest/getList'
-  // const path = process.env.API + '/exp/getList'
+  const path = ENV_DEV + '/healthtest/getList'
+  // const path = ENV_DEV + '/exp/getList'
   gaxios(path)
 }
 function setList (da) {
@@ -280,7 +280,7 @@ function setList (da) {
 // }
 function setFutureDate () {
   if (futureDate.value === getFutureDate(Constants.PLUS_DAYS)) futureDate.value = getFutureDate(365 * 10)
-  else futureDate = getFutureDate(Constants.PLUS_DAYS)
+  else futureDate.value = getFutureDate(Constants.PLUS_DAYS)
 }
 
 const loadingTime = computed(() => { return ((new Date().getTime() - chkspeed) / 1000).toFixed(1) })

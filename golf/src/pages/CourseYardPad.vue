@@ -4,7 +4,7 @@
     <q-card-section>
       <div class="inset-shadow-down text-h5 text-center text-cyan-2">Yards for Hole {{ holeIdx }} (Par {{ hole(holeIdx) }})</div>
     </q-card-section>
-    <table style="y-overflow:auto;margin:auto">
+    <table style="overflow:auto;margin:auto">
       <q-tr>
         <td v-for="i in [1, 2, 3]" :key=i><q-btn size="xl" outline round :class="bgColor[i]" style="width:70px;height:70px" @click="setYard(i)">{{i}}</q-btn></td>
         <td><q-btn glossy round color="indigo-10" size="xl" icon="cancel" v-close-popup /></td>
@@ -26,7 +26,7 @@ import { storeFunctions } from '../composables/storeFunctions'
 const { hole } = storeFunctions()
 
 import { libFunctions } from '../composables/libFunctions'
-const { opened, store } = libFunctions()
+const { opened, store, ENV_API } = libFunctions()
 // const store = useStore()
 const holeIdx = ref(0)
 // const opened = ref(false)
@@ -45,7 +45,7 @@ function setYard (y) {
     let yards = JSON.parse(JSON.stringify(yardsx))
     store.yards = yards
     // console.log(`-CK-fn-setYard for hole holeIdx=${holeIdx.value}`, yardsx)
-    const path = process.env.API + '/golf/updCourseYardage'
+    const path = ENV_API + '/golf/updCourseYardage'
     let inData = { id: yardsx.id, yx: 'y' + holeIdx.value, yard: yardx }
     paxios(path, inData)
     if (holeIdx.value === 18) {

@@ -45,7 +45,7 @@ class TvController extends Controller
 		if (file_exists("/f36/bak/xtv/$d->basename")) { $d->filename = "/f36/bak/xtv/$d->basename"; $d->dsk="atv"; }
 		else if (file_exists("/btv/$d->basename")) { $d->filename = "/btv/$d->basename"; $d->dsk="btv"; }
 		else if (file_exists("/ctv/$d->basename")) { $d->filename = "/ctv/$d->basename"; $d->dsk="ctv"; }
-		else if (file_exists("/dtv/rec/$d->basename")) { $d->filename = "/dtv/rec/$d->basename"; $d->dsk="dtv"; }
+		else if (file_exists("/dtv/$d->basename")) { $d->filename = "/dtv/$d->basename"; $d->dsk="dtv"; }
 		else if (file_exists("/home/swang/htv/$d->basename")) { $d->filename = "/home/swang/htv/$d->basename"; $d->dsk="htv"; }
 		if (is_null($d->filesize)) return $d;
 		$d->filesize = round($d->filesize / 1024 / 1024 / 1024, 1);
@@ -60,7 +60,7 @@ class TvController extends Controller
 		$d->channum = str_replace('_', '-', $d->channum);
 		if (is_numeric($d->filesize) and !preg_match('/\./', $d->filesize))	$d->filesize = $d->filesize . ".0";
 		$d->duration = round((strtotime($d->endtime) - strtotime($d->starttime))/60, 0);
-		if ($d->dsk == 'Default')	$d->dsk = 'abc';
+		if ($d->dsk == 'Default')	$d->dsk = null;
 		else if ($d->dsk == 'HomeTV')	$d->dsk = 'htv';
 		else if ($d->dsk == 'USBdisk')	$d->dsk = 'dtv';
 		return $d;
@@ -75,7 +75,7 @@ class TvController extends Controller
 		// $upcoming = Oldrecorded::where('watched', 0)
 		$gmtnow = $this->UTCnow();
 		$upcoming = Oldrecorded::where([['oldrecorded.starttime', '>', $gmtnow], ['oldrecorded.endtime', '<', $this->UTCplus($hours)]])
-			->select('record.recordid as recordedid', 'channum', 'oldrecorded.starttime', 'oldrecorded.endtime',
+			->select('record.recordid as recordedid', 'channum', 'oldrecorded.starttime', 'oldrecorded.endtime', 'oldrecorded.endtime',
 				DB::raw('null as basename'), 'oldrecorded.title', 'oldrecorded.subtitle', 'oldrecorded.description',
 				DB::raw('null as filesize'), DB::raw('storagegroup as dsk'))
 			->join('channel', 'channel.chanid', 'oldrecorded.chanid')

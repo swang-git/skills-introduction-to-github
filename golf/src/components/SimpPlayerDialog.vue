@@ -52,7 +52,7 @@ const $q = useQuasar()
 import { axiosFunctions } from '../composables/axiosFunctions'
 const { paxios } = axiosFunctions()
 import { libFunctions } from '../composables/libFunctions'
-const { isIM, $store, dalist, isDesk, SysAdmin } = libFunctions()
+const { isIM, $store, dalist, isDesk, SysAdmin, ENV_API } = libFunctions()
 var year = (new Date()).getFullYear()
 const fees = ref(0)
 const mtype = ref('G')
@@ -119,7 +119,7 @@ function openIt (act, m, isCMember=true, gameId) {
 function addMember () {
   console.log('-fn-addMember')
   console.table(member)
-  const path = process.env.API + '/golf/addMember'
+  const path = ENV_API + '/golf/addMember'
   // emit('add-membership', mtype)
   member.type = mtype.value
   paxios(path, member)
@@ -128,7 +128,7 @@ function addMember () {
 function updMember () {
   console.log('-fn-updMember')
   console.table(member)
-  const path = process.env.API + '/golf/updMember'
+  const path = ENV_API + '/golf/updMember'
   // emit('add-membership', mtype)
   member.type = mtype
   paxios(path, member)
@@ -137,7 +137,7 @@ function updMember () {
 function saveMembership () {
   console.log('-fn-save membership')
   console.table(member)
-  const path = process.env.API + '/golf/addPGCMembership'
+  const path = ENV_API + '/golf/addPGCMembership'
   // emit('add-membership', mtype)
   member.type = mtype
   paxios(path, member)
@@ -150,10 +150,10 @@ function saveMember () {
   console.log('-fn-save member ')
   console.table(member)
   // const args = { vm: this }
-  let path = process.env.API + '/golf/updMember'
+  let path = ENV_API + '/golf/updMember'
   // args.target = 'golf.getMemberList'
   if (action === 'Create') {
-    path = process.env.API + '/golf/addMember'
+    path = ENV_API + '/golf/addMember'
     // args.target = 'golf.getMemberList'
     // args.target = 'new-pgc-member'
   }

@@ -10,8 +10,8 @@ import Chart from 'chart.js/auto'
 import ChartDataLabels from 'chartjs-plugin-datalabels'
 import emitter from 'tiny-emitter/instance'
 import cfg from './chart-ympi-config.js'
-import AllButtons from './AllButtons'
-import { libFunctions } from 'src/composables/libFunctions'
+import AllButtons from './AllButtons.vue'
+import { libFunctions } from '../../src/composables/libFunctions'
 Chart.register(ChartDataLabels)
 const props = defineProps({
   data: { type: Array } ,

@@ -329,16 +329,25 @@ trait RothActivityTrait {
     for ($i=$start; $i<$end; $i++) {
       $line = $lines[$i];
       $this->setActvFlag($line);
+      //Log::info("--XXXX actvFlg-- " . self::$actvFlag, [__LINE__]);
       if (self::$actvFlag == 'Core Fund Activity' and preg_match('/^\d\d\/\d\d$/', $line)) {
         // Log::info("Roth Actv Core Fund Activity dd/dd line $line");
         // $secs = "CORE";
         $date = $line;
-        $secs = $this->shortName($lines[$i + 4]);
-        $desc = $lines[$i + 1] .' '. $lines[$i + 2] .' '. $lines[$i + 3];
-        $quan = $this->cleanMoney($lines[$i + 6]);
-        $pric = $this->cleanMoney($lines[$i + 7]);
-        $amnt = $this->cleanMoney($lines[$i + 8]);
-        $balc = $this->cleanMoney($lines[$i + 9]);
+        if ($lines[$i + 2] == "Reinvestment") {
+          $secs = "CashRi";
+          $desc = $lines[$i + 1] .' '. $lines[$i + 2];
+          $quan = $this->cleanMoney($lines[$i + 5]);
+          $pric = $this->cleanMoney($lines[$i + 6]);
+          $amnt = $this->cleanMoney($lines[$i + 7]);
+          $balc = $this->cleanMoney($lines[$i + 8]);
+        } else {
+          $desc = $lines[$i + 1] .' '. $lines[$i + 2] .' '. $lines[$i + 3];
+          $quan = $this->cleanMoney($lines[$i + 6]);
+          $pric = $this->cleanMoney($lines[$i + 7]);
+          $amnt = $this->cleanMoney($lines[$i + 8]);
+          $balc = $this->cleanMoney($lines[$i + 9]);
+        }
         $x = [
           $date,
           $secs,
@@ -375,12 +384,18 @@ trait RothActivityTrait {
           $quan = '-';
           $pric = '-';
           $amnt = $this->cleanMoney($lines[$ni + 5]);
-        } else {
-          $desc = substr($lines[$ni], 9);  // 'somecusip Interest Earned'
-          $quan = $lines[$ni + 1];
-          $pric = $lines[$ni + 2];
-          $amnt = $this->cleanMoney($lines[$ni + 3]);
         }
+      } else if (self::$actvFlag == 'Hsa Debit Card Activity' and preg_match('/^\d\d\/\d\d$/', $line) and preg_match('/^\d\d\/\d\d$/', $lines[$i + 1])) {
+        Log::info("--XXXX actvFlg-- " . self::$actvFlag);
+        $date = $lines[$i + 1];
+        $secs = "CardSp";
+        $desc = $lines[$i + 2] .' '. $lines[$i + 3] .' '. $lines[$i + 4];
+        $quan = '-';
+        $pric = '-';
+        $addline  = 8;
+        if ($lines[$i + 2] == "COSTCO") $addline = 9;
+        $amnt = $this->cleanMoney($lines[$i + $addline]);
+
         $x = [
           $date,
           $secs,
@@ -391,6 +406,22 @@ trait RothActivityTrait {
         ];
         $activity[] = $x;
       }
+      // } else {
+      //     $desc = substr($lines[$ni], 9);  // 'somecusip Interest Earned'
+      //     $quan = $lines[$ni + 1];
+      //     $pric = $lines[$ni + 2];
+      //     $amnt = $this->cleanMoney($lines[$ni + 3]);
+      //   }
+      //   $x = [
+      //     $date,
+      //     $secs,
+      //     $desc,
+      //     $quan,
+      //     $pric,
+      //     $amnt,
+      //   ];
+      //   $activity[] = $x;
+
       //   // if (preg_match('/FDIC INSURED DEPOSIT/', $securityName)) $desc .= ' ' . $securityName;
       //   // $quantity = $lines[$i + 4];
       //   // $price = $lines[$i + 5];

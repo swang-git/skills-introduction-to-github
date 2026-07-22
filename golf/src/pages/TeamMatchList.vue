@@ -10,7 +10,7 @@
 <script setup>
 import emitter from 'tiny-emitter/instance'
 // import { libFunctions } from 'src/composables/libFunctions'
-import { dayFunctions } from 'src/composables/dayFunctions'
+import { dayFunctions } from '../../src/composables/dayFunctions'
 // const { isIM } = libFunctions()
 const { today } = dayFunctions()
 const props = defineProps({ matchList: Object })

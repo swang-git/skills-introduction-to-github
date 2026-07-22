@@ -26,11 +26,11 @@
 </template>
 <script setup>
 import emitter from 'tiny-emitter/instance'
-import { libFunctions } from 'src/composables/libFunctions'
-const { store } = libFunctions()
+import { libFunctions } from '../composables/libFunctions'
+const { store, ENV_API } = libFunctions()
 // const dats = []
 const daPack = []
-const nolocal = false
+const nolocal = ref(false)
 
 console.log(`-ST-ShowLogPage`)
 store.pageTitle = 'Golf Log List'
@@ -45,7 +45,7 @@ getLogPage()
 // })
 
 function getLogPage () {
-  const path = process.env.API + '/golf/loadLogPage'
+  const path = ENV_API + '/golf/loadLogPage'
   this.gaxios(path)
 }
 function setData (da) {

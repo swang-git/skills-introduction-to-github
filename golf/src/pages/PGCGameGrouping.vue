@@ -48,14 +48,14 @@ import { ref } from 'vue'
 import emitter from 'tiny-emitter/instance'
 import { libFunctions } from '../composables/libFunctions'
 import { dayFunctions } from '../composables/dayFunctions'
-const { isDesk, isIM, PGCsAdmin } = libFunctions()
+const { isDesk, isIM, PGCsAdmin, ENV_API } = libFunctions()
 const { getDay, getDay1 } = dayFunctions()
 import { axiosFunctions } from '../composables/axiosFunctions'
 const { paxios } = axiosFunctions()
-import PGCPlayerListPad from './PGCPlayerListPad'
-import PosPad from 'src/components/PosPad'
-import InfoDialog from 'src/components/InfoDialog'
-import LayoutHeader from 'src/components/LayoutHeader'
+import PGCPlayerListPad from './PGCPlayerListPad.vue'
+import PosPad from '../components/PosPad.vue'
+import InfoDialog from '../components/InfoDialog.vue'
+import LayoutHeader from '../components/LayoutHeader.vue'
 
 var showSorting = false
 // const sortBy = 'stroke'
@@ -103,7 +103,7 @@ function setTid (da) {
   console.log(`-setTid ${da.tid}, ${player.value.id}`)
 }
 // function updTeamMatchTplayer(player) {
-//   const path = process.env.API + '/golf/updTeamMatchTplayer'
+//   const path = ENV_API + '/golf/updTeamMatchTplayer'
 //   paxios(path, player)
 // }
 function rmPlayerFromGroup(p, pi, g) {
@@ -164,7 +164,7 @@ function addPGCTplayer (p) {
   if (!PGCsAdmin) return
   emitter.emit('add-to-list', p)
   emitter.emit('open-list')
-  const path = process.env.API + '/golf/addPGCTplayer'
+  const path = ENV_API + '/golf/addPGCTplayer'
   paxios(path, p);
 }
 function moveToBottom () {

@@ -1,73 +1,67 @@
 <template>
-<div class="bg-cyan-10" :class="iPhone ? 'q-pl-sm' : 'q-pl-xs'">
-<!-- <div class="bg-cyan-10 fixed q-pl-sm"> -->
-<div :style="isDesk ? {'width':'99.2%','height':'90vh', 'border':'cyan 1px solid'} : {'width':'390px','height':'970px'}">
-  <div v-for="(e, i) in palist" :key=e.id>
-    <div :style="getLineBackground(i)" :class="{ 'bg-purple-10':!e.hideIt }" class="q-px-xs">
-      <div class="row cursor-pointer;q-qx-sm" style="font-size:20.1px">
-        <div v-if="isDesk" class="q-pl-sm" @click="e.hideIt=true"><a :href="getDocLinkStr(e.date)" target="_blank" class="alnkclass">{{ e.date }}</a></div>
-        <div v-if="isDesk" class="q-pl-md" @click="e.hideIt=true;getPositions(e)">({{ e.date.chwk2() }})</div>
-        <div v-if="isDesk && e.dowjones>0" class="q-px-md text-right" @click="showIt(i)"> {{ formatCurrency(e.dowjones) }}
-          <q-tooltip class="text-h6 bg-accent">Dow Jones on {{ e.date }}</q-tooltip>
+<div style="display:grid;place-items:center" class="bg-teal-9">
+  <div style="margin:-1px 0 0 5px;width:796px;border:cyan solid 1px">
+    <div v-for="(e, i) in palist" :key=e.id>
+      <div :style="getLineBackground(i)" :class="{ 'bg-purple-10':!e.hideIt }" class="q-px-xs">
+        <div class="row cursor-pointer;q-qx-sm" style="font-size:20.1px">
+          <div v-if="isDesk" class="q-pl-sm" @click="e.hideIt=true"><a :href="getDocLinkStr(e.date)" target="_blank" class="alnkclass">{{ e.date }}</a></div>
+          <div v-if="isDesk" class="q-pl-md cursor-pointer" @click="e.hideIt=true; getMyPortfolios(e)">({{ e.date.chwk2() }})</div>
+          <div v-if="isDesk && e.dowjones>0" class="q-px-md text-right" @click="showIt(i)"> {{ formatCurrency(e.dowjones) }}
+            <q-tooltip class="text-h6 bg-accent">Dow Jones on {{ e.date }}</q-tooltip>
+          </div>
+          <div v-if="isDesk" class="q-pl-xs text-right" style="width:70px" @click="showIt(i)">{{ ((e.portfolio/invested(e) - 1) * 100).toFixed(2) }}%</div>
+          <div v-if="isDesk" class="q-pl-md text-right" style="width:124px" @click="showDar(e, 'upd')">{{ getWeight(e) }} / {{ getBMI(e) }}</div>
+          <div v-else class="text-left" style="width:111px" @click="showDar(e, 'upd')">{{ e.date }}</div>
+          <div v-if="isDesk" class="q-px-sm text-right" :class="{ 'text-green-3':e.dif>0, 'text-pink-2':e.dif<0 }" style="width:115px" @click="showDar(e, 'upd')"> {{ e.difs }} </div>
+          <div v-else class="q-px-sm text-right" :class="{ 'text-green-3':e.dif>0, 'text-pink-2':e.dif<0 }" style="width:110px" @click="showDar(e, 'upd')"> {{ e.difs }} </div>
+          <div v-if="isDesk" class="q-pl-sm text-center cursor-pointer" style="width:140px" @click="showDar(e, 'add')">{{ formatCurrency(e.portfolio) }}</div>
+          <div v-else class="q-pl-sm text-right cursor-pointer" style="width:130px" @click="showDar(e, 'add')">{{ formatCurrency(e.portfolio) }}</div>
+          <div class="q-pl-sm text-right"><q-icon :name="getIcon(i)" @click="showDar(e, 'add')" /></div>
         </div>
-        <div v-if="isDesk" class="q-pl-xs text-right"  @click="showIt(i)">{{ ((e.portfolio/invested(e) - 1) * 100).toFixed(2) }}%</div>
-        <div v-if="isDesk" class="q-pl-md text-right" style="width:124px" @click="showDar(e, 'upd')">{{ getWeight(e) }} / {{ getBMI(e) }}</div>
-        <div v-else class="text-left"style="width:111px" @click="showDar(e, 'upd')">{{ e.date }}</div>
-        <div v-if="isDesk" class="q-px-sm text-right" :class="{ 'text-green-3':e.dif>0, 'text-pink-2':e.dif<0 }" style="width:115px" @click="showDar(e, 'upd')"> {{ e.difs }} </div>
-        <div v-else class="q-px-sm text-right" :class="{ 'text-green-3':e.dif>0, 'text-pink-2':e.dif<0 }" style="width:110px" @click="showDar(e, 'upd')"> {{ e.difs }} </div>
-        <div v-if="isDesk" class="q-pl-sm text-center cursor-pointer" style="width:140px" @click="showDar(e, 'add')">{{ formatCurrency(e.portfolio) }}</div>
-        <div v-else class="q-pl-sm text-right cursor-pointer" style="width:130px" @click="showDar(e, 'add')">{{ formatCurrency(e.portfolio) }}</div>
-        <div class="q-pl-sm text-right"><q-icon :name="getIcon(i)" @click="showDar(e, 'add')" /></div>
+      </div>
+      <div :class="{ hidden: e.hideIt }" class="row q-pa-sm" style="color:yellow;font-size:18px">
+        <div class="q-pl-xs" :class="{ 'col-9':portfNote.length>0, 'col-10':portfNote.length<=0 }" style="font-size:18px;line-height:1.1">
+          <q-tr><td class="text-no-wrap text-right">公斤:</td><td class="q-pl-xs">{{ (e.kilo).toFixed(2) }}</td></q-tr>
+          <q-tr><td class="text-no-wrap text-right">市斤:</td><td class="q-pl-xs">{{ (e.kilo * 2).toFixed(2)  }}</td></q-tr>
+          <q-tr><td class="text-no-wrap text-right">英磅:</td><td class="q-pl-xs">{{ formatCurrency(getPondx(e)) }}</td></q-tr>
+          <q-tr v-if="e.dif !== 0"><td class="text-no-wrap text-right">日增:</td><td class="q-pl-xs" v-html="getColoredDiff(i)"></td></q-tr>
+          <q-tr><td class="text-no-wrap text-right">金额:</td><td class="q-pl-xs">{{ formatCurrency(e.portfolio) }}</td></q-tr>
+          <q-tr><td class="text-no-wrap text-right">投入:</td><td class="q-pl-xs">{{ formatCurrency(invested(e)) }}</td></q-tr>
+          <q-tr><td class="text-no-wrap text-right">净赚:</td><td class="q-pl-xs">{{ formatCurrency(e.portfolio - invested(e)) }}</td></q-tr>
+          <q-tr><td class="text-no-wrap text-right">增长:</td><td class="q-pl-xs">{{ formatCurrency(getPct(e)) }}% </td></q-tr>
+          <q-tr><td class="text-no-wrap text-right">DOW JONES: </td><td class="q-pl-xs">{{ formatCurrency(e.dowjones) }} </td></q-tr>
+          <q-tr><td class="text-no-wrap text-right">NASDAQ: </td><td class="q-pl-xs">{{ formatCurrency(e.nasdaq) }} </td></q-tr>
+          <q-tr><td class="text-no-wrap text-right">S&P 500: </td><td class="q-pl-xs">{{ formatCurrency(e.sp500) }} </td></q-tr>
+          <q-tr><td class="text-no-wrap text-right">FTSE 100: </td><td class="q-pl-xs">{{ formatCurrency(e.ftse100) }} </td></q-tr>
+          <q-tr><td class="text-no-wrap text-right">NIKKEI 225: </td><td class="q-pl-xs">{{ formatCurrency(e.nikkei) }} </td></q-tr>
+          <q-tr v-if="e.note!=null"><td class="text-cyan-2 text-h6 cursor-pointer" colspan="2" @click="showPNote(e)" v-html="e.note"></td></q-tr>
+          <q-tr><td class="text-no-wrap text-right">Link: </td><td class="q-pl-xs" v-html="getDocLink(e.date)" /></q-tr>
+          <q-tr v-if="e.date>=startedDate"><td class="text-no-wrap text-grey-5 text-right">注释: </td><td class="q-pl-xs text-grey-6">{{ startedNote }}</td></q-tr>
+        </div>
+        <div>
+          <q-fab v-model="fabOpen" flat icon="keyboard_arrow_down" direction="down">
+            <q-btn round glossy icon="note" @click="showPNote(e)">
+              <q-tooltip class="text-h6 bg-green-9">Daily Note - Optional(e.g. buy/sell/convert/pending)</q-tooltip>
+            </q-btn>
+            <!-- <q-btn round glossy color="red-10"    @click="showDar(e, 'del')" size="16px" icon="delete" /> -->
+            <q-btn round glossy color="indigo-10" @click="showDar(e, 'upd')" size="16px" icon="update" />
+            <q-btn round glossy color="green-10"  @click="showDar(e, 'add')" size="16px" icon="add_circle" />
+          </q-fab>
+        </div>
+        <div v-if="portfData.length>0" class="col-1">
+          <q-btn round glossy icon="assignment" @click="showPortf(ee)" />
+        </div>
+        <div :class="{ 'col-1':portfData.length>0, 'col-2':portfData.length<=0 }">
+          <q-btn size="md" round glossy icon="edit" @click="showDar(e, 'add')" />
+        </div>
       </div>
     </div>
-    <div :class="{ hidden: e.hideIt }" class="row q-pa-sm" style="color:yellow;font-size:18px">
-      <div class="q-pl-xs" :class="{ 'col-9':portfNote.length>0, 'col-10':portfNote.length<=0 }" style="font-size:18px;line-height:1.1">
-        <q-tr><td class="text-no-wrap text-right">公斤:</td><td class="q-pl-xs">{{ (e.kilo).toFixed(2) }}</td></q-tr>
-        <q-tr><td class="text-no-wrap text-right">市斤:</td><td class="q-pl-xs">{{ (e.kilo * 2).toFixed(2)  }}</td></q-tr>
-        <q-tr><td class="text-no-wrap text-right">英磅:</td><td class="q-pl-xs">{{ formatCurrency(getPondx(e)) }}</td></q-tr>
-        <q-tr v-if="e.dif !== 0"><td class="text-no-wrap text-right">日增:</td><td class="q-pl-xs" v-html="getColoredDiff(i)"></td></q-tr>
-        <q-tr><td class="text-no-wrap text-right">金额:</td><td class="q-pl-xs">{{ formatCurrency(e.portfolio) }}</td></q-tr>
-        <q-tr><td class="text-no-wrap text-right">投入:</td><td class="q-pl-xs">{{ formatCurrency(invested(e)) }}</td></q-tr>
-        <q-tr><td class="text-no-wrap text-right">净赚:</td><td class="q-pl-xs">{{ formatCurrency(e.portfolio - invested(e)) }}</td></q-tr>
-        <q-tr><td class="text-no-wrap text-right">增长:</td><td class="q-pl-xs">{{ formatCurrency(getPct(e)) }}% </td></q-tr>
-        <q-tr><td class="text-no-wrap text-right">DOW JONES: </td><td class="q-pl-xs">{{ formatCurrency(e.dowjones) }} </td></q-tr>
-        <q-tr><td class="text-no-wrap text-right">NASDAQ: </td><td class="q-pl-xs">{{ formatCurrency(e.nasdaq) }} </td></q-tr>
-        <q-tr><td class="text-no-wrap text-right">S&P 500: </td><td class="q-pl-xs">{{ formatCurrency(e.sp500) }} </td></q-tr>
-        <q-tr><td class="text-no-wrap text-right">FTSE 100: </td><td class="q-pl-xs">{{ formatCurrency(e.ftse100) }} </td></q-tr>
-        <q-tr><td class="text-no-wrap text-right">NIKKEI 225: </td><td class="q-pl-xs">{{ formatCurrency(e.nikkei) }} </td></q-tr>
-        <q-tr v-if="e.note!=null"><td class="text-cyan-2 text-h6 cursor-pointer" colspan="2" @click="showPNote(e)" v-html="e.note"></td></q-tr>
-        <q-tr><td class="text-no-wrap text-right">Link: </td><td class="q-pl-xs" v-html="getDocLink(e.date)" /></q-tr>
-        <q-tr v-if="e.date>=startedDate"><td class="text-no-wrap text-grey-5 text-right">注释: </td><td class="q-pl-xs text-grey-6">{{ startedNote }}</td></q-tr>
-      </div>
-      <div>
-         <q-fab v-model="fabOpen" flat icon="keyboard_arrow_down" direction="down">
-          <q-btn round glossy icon="note" @click="showPNote(e)">
-            <q-tooltip class="text-h6 bg-green-9">Daily Note - Optional(e.g. buy/sell/convert/pending)</q-tooltip>
-          </q-btn>
-          <!-- <q-btn round glossy color="red-10"    @click="showDar(e, 'del')" size="16px" icon="delete" /> -->
-          <q-btn round glossy color="indigo-10" @click="showDar(e, 'upd')" size="16px" icon="update" />
-          <q-btn round glossy color="green-10"  @click="showDar(e, 'add')" size="16px" icon="add_circle" />
-        </q-fab>
-      </div>
-      <!-- <div class="col-1">
-        <q-btn round glossy icon="note" @click="showPNote(e)">
-          <q-tooltip class="text-h6 bg-green-9">Daily Note - Optional(e.g. buy/sell/convert/pending)</q-tooltip>
-        </q-btn>
-      </div> -->
-      <div v-if="portfData.length>0" class="col-1">
-        <q-btn round glossy icon="assignment" @click="showPortf(ee)" />
-      </div>
-      <div :class="{ 'col-1':portfData.length>0, 'col-2':portfData.length<=0 }">
-        <q-btn size="md" round glossy icon="edit" @click="showDar(e, 'add')" />
-      </div>
-    </div>
-  </div>
   </div>
   <UserInput />
   <UserInputIM />
   <PortfolioDisplay />
   <PortfolioNote  />
-  <PortfolioPositions />
+  <PortfolioPositions @upd-weight-portfolio="updWkgPortf" />
   <ChartsProxy :chdata="dalist" :chname="chname" />
   <InfoDisplay ref="refInfoDisplay" />
 </div>
@@ -76,21 +70,21 @@
 import emitter from 'tiny-emitter/instance'
 import { ref, onMounted } from 'vue'
 
-import { libFunctions } from 'src/composables/libFunctions'
-import { dayFunctions } from 'src/composables/dayFunctions'
-import { axiosFunctions } from 'src/composables/axiosFunctions'
+import { libFunctions } from '../src/composables/libFunctions'
+import { dayFunctions } from '../src/composables/dayFunctions'
+import { axiosFunctions } from '../src/composables/axiosFunctions'
 
-import PortfolioPositions from './PortfolioPositions'
-import UserInput from './UserInput'
-import UserInputIM from './UserInputIM'
-import PortfolioNote from './PortfolioNote'
-import PortfolioDisplay from './PortfolioDisplay'
-import ChartsProxy from '../src/components/ChartsProxy'
-import InfoDisplay from '../src/components/InfoDisplay'
+import PortfolioPositions from './PortfolioPositions.vue'
+import UserInput from './UserInput.vue'
+import UserInputIM from './UserInputIM.vue'
+import PortfolioNote from './PortfolioNote.vue'
+import PortfolioDisplay from './PortfolioDisplay.vue'
+import ChartsProxy from '../src/components/ChartsProxy.vue'
+import InfoDisplay from '../src/components/InfoDisplay.vue'
 
-const fabOpen = true
-const { dalist, palist, buildApp, getLineBackground, formatCurrency, isDesk, iPhone, $q } = libFunctions()
-const { gaxios } = axiosFunctions()
+var fabOpen = true
+const { dalist, palist, buildApp, getLineBackground, formatCurrency, isDesk, iPhone, $q, ENV_DEV } = libFunctions()
+const { gaxios, paxios } = axiosFunctions()
 const { getDay2 } = dayFunctions()
 
 const annuityDate = '2020-07-10'
@@ -140,6 +134,13 @@ emitter.emit('items-per-page', itemsPerPage)
 // onMounted(() => refInfoDisplay.value)
 onMounted(() => { console.log(`-MT-refInfoDisplay=${refInfoDisplay.value}`) })
 
+function updWkgPortf (wkg, portf) {
+  console.log(`-fn-updWkgPortf wkg=${wkg} portf=${portf} rowId=${clickedRow.value.id}`, clickedRow.value)
+  clickedRow.value.portfolio = portf
+  clickedRow.value.kilo = wkg
+  const path = ENV_DEV + '/watcher/updWeightPortfolio'
+  paxios(path, clickedRow.value)
+}
 function compTotalValue(date, toalval) {
   console.log(`compTotalValue date=${date} total=${toalval}`)
 }
@@ -165,7 +166,7 @@ emitter.on('watcher-getList', (x) => setList(x))
 function setList (da) {
   dats.value = addPropToChartData(da.dats)
   // console.log(`-fn-setList 1st note=${dats.value[0].note}`)
-  // console.log(`-CK-setList actions`, da.actions)
+  console.log(`-CK-setList dats:`, dats.value)
   stocks.value = da.stocks
   actions.value = da.actions
   accounts.value = da.accnts
@@ -177,7 +178,7 @@ function setList (da) {
   // console.info('-CK-setList accntOpts:', accntOpts.value)
 }
 function getList () {
-  const path = process.env.API + '/watcher/getList'
+  const path = ENV_DEV + '/watcher/getList'
   gaxios(path)
 }
 function getDocLinkStr (date) {
@@ -256,7 +257,6 @@ function showIt (i) {
   // const rowOpened = !palist.value[i].hideIt
   // console.info('B hideIt', i, this.portfData.length, rowOpened, date, this.palist[i].hideIt, '[' + this.palist[i].date + ']', this.palist[i].dif)
   // if (rowOpened) {
-    // const path = process.env.API + '/watcher/getPortfolio/' + date
     // gaxios(path)
   // }
 }
@@ -266,9 +266,15 @@ function setPortfolio (da) {
   portfNote.value = da.pnote
   portfData.value = da.portf
 }
+emitter.on('watcher-getMyPortfolios', (x) => setPositions(x))
+function getMyPortfolios (row) {
+  const path = row.date >= '2026-04-24' ? ENV_DEV + '/watcher/getMyPortfolios/' + row.date : ENV_DEV + '/watcher/getPositions/' + row.date
+  clickedRow.value = row
+  gaxios(path)
+}
 emitter.on('watcher-getPositions', (x) => setPositions(x))
 function getPositions (row) {
-  const path = process.env.API + '/watcher/getPositions/' + row.date
+  const path = ENV_DEV + '/watcher/getPositions/' + row.date
   clickedRow.value = row
   gaxios(path)
 }
@@ -291,7 +297,8 @@ function setPositions (da) {
     // refInfoDisplay.value.openIt(tit, msg)
     emitter.emit('open-PortfolioPositions', da, clickedRow.value.portfolio)
   } else if (da.status == "OK") {
-    emitter.emit('open-PortfolioPositions', da, clickedRow.value.portfolio)
+    // console.log('-CK-clickedRow', clickedRow.value.weight)
+    emitter.emit('open-PortfolioPositions', da, clickedRow.value.portfolio, clickedRow.value.weight)
   } else {
     $q.dialog({title:'NO DATA FILE FOUND', message:da.status.substring(20)})
   }

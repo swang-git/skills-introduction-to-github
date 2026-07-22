@@ -1,7 +1,7 @@
 import { ref, computed } from 'vue'
 import emitter from 'tiny-emitter/instance.js'
 import { Platform, useQuasar } from 'quasar'
-import { useArtStore } from 'src/stores/art'
+import { useArtStore } from '../../src/stores/art'
 export function libFunctions() {
   const store = useArtStore()
   const $q = useQuasar()
@@ -227,6 +227,7 @@ export function libFunctions() {
     // getUsertype()
     // getList()
   }
+  const DEV_API = import.meta.env.DEV ? '/api' : ''
   return {
     userGuidePage,
     $q,
@@ -256,5 +257,6 @@ export function libFunctions() {
     dats,
     dalist,
     buildApp,
+    DEV_API,
   }
 }

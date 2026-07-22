@@ -43,19 +43,19 @@ import { libFunctions } from '../composables/libFunctions'
 // import { cssFunctions } from '../composables/cssFunctions'
 // import { storeFunctions } from '../composables/storeFunctions'
 
-import TeamGroupPointDetails from 'pages/TeamGroupPointDetails'
-import TeamMatchCreator  from './TeamMatchCreator'
-import TeamMatchList from './TeamMatchList'
-import TeamMatchGrouping from './TeamMatchGrouping'
-import TeamMatchGrouped from './TeamMatchGrouped'
-import InfoDisplay from '../components/InfoDisplay'
-import CourseInfo from '../components/CourseInfo'
-import KJNewPlayerDialog from '../components/KJNewPlayerDialog'
+import TeamGroupPointDetails from './TeamGroupPointDetails.vue'
+import TeamMatchCreator  from './TeamMatchCreator.vue'
+import TeamMatchList from './TeamMatchList.vue'
+import TeamMatchGrouping from './TeamMatchGrouping.vue'
+import TeamMatchGrouped from './TeamMatchGrouped.vue'
+import InfoDisplay from '../components/InfoDisplay.vue'
+import CourseInfo from '../components/CourseInfo.vue'
+import KJNewPlayerDialog from '../components/KJNewPlayerDialog.vue'
 // import Tooltip from 'src/components/ToolTip'
-import SelOptionsWithSearch from 'src/components/SelOptionsWithSearch'
+import SelOptionsWithSearch from '../components/SelOptionsWithSearch.vue'
 // import sel from 'src/components/Selection'
-import KjGameDataDisplay from './KjGameDataDisplay'
-import SimpPlayerDialog from '../components/SimpPlayerDialog'
+import KjGameDataDisplay from './KjGameDataDisplay.vue'
+import SimpPlayerDialog from '../components/SimpPlayerDialog.vue'
 
 //== data section
 // const $q = useQuasar()
@@ -69,7 +69,7 @@ const route = app.appContext.config.globalProperties.$route
 const { gaxios } = axiosFunctions()
 const { today, yyyymmddHHMM} = dayFunctions()
 // const { golfUserType, isLocal, isSysAdminCookie, searchQuery, dats, SysAdmin, JZsAdmin, KJsAdmin, ALsAdmin, iPhone11ProMax, mate60ProMax, iPhone13, screenwidth, isDesk, dalist, userGuidePage } = libFunctions()
-const { store, buildApp, isLocal, searchQuery, dats, SysAdmin, iPhone11ProMax, isDesk, dalist, userGuidePage } = libFunctions()
+const { store, buildApp, isLocal, searchQuery, dats, SysAdmin, iPhone11ProMax, isDesk, dalist, userGuidePage, ENV_API } = libFunctions()
 const groupingDone = ref(false)
 const tmnt = ref({})
 const gameId = ref(null)
@@ -165,17 +165,18 @@ function switchAliases (aliName) {
 }
 function getAliases (gameId) {
   console.log(`-fn-getAliases`)
-  const path = process.env.API + '/golf/getAliases/' + gameId
+  const path = ENV_API + '/golf/getAliases/' + gameId
   gaxios(path)
 }
 function setAliases (da) {
   console.log(`-fn-setAliases`)
-  da.gameId == 13 ? aliasesJZ = da.aliases : aliasesMM = da.aliases
+  if (da.gameId == 13) aliasesJZ = da.aliases
+  else aliasesMM = da.aliases
   aliases.value = gameId.value == 13 ? aliasesJZ : aliasesMM
 }
 function getHandicaps (gameId) {
   console.log(`-fn-getHandicaps`)
-  const path = process.env.API + `/golf/getHandicaps/${gameId}`
+  const path = ENV_API + `/golf/getHandicaps/${gameId}`
   gaxios(path)
 }
 function setHandicaps (da) {
@@ -195,8 +196,8 @@ function selectedPlayer (model, selectedOpt) {
   const mpId = selectedOpt.value
   kjPlayer = selectedOpt.label
   console.log(`-CK-fn-selectedPlayer name=${kjPlayer} mpId=${mpId}`)
-  let path = process.env.API + '/golf/getKjGameDataByMpId/' + mpId
-  if (/\d{4}-\d\d-\d\d/.test(kjPlayer)) path = process.env.API + '/golf/getKjGameDataByDate/' + kjPlayer
+  let path = ENV_API + '/golf/getKjGameDataByMpId/' + mpId
+  if (/\d{4}-\d\d-\d\d/.test(kjPlayer)) path = ENV_API + '/golf/getKjGameDataByDate/' + kjPlayer
   gaxios(path)
 }
 function showKjGamePlayers () {
@@ -205,7 +206,7 @@ function showKjGamePlayers () {
 }
 function getKjGamePlayers () {
   console.log(`-CK-fn-getKjGamePlayers gameId=${gameId.value}`)
-  const path = process.env.API + '/golf/getKjGamePlayers'
+  const path = ENV_API + '/golf/getKjGamePlayers'
   gaxios(path)
 }
 function setKjGamePlayers (da) {
@@ -220,7 +221,7 @@ function showKjGameData(da) {
 }
 // function getKjAliases() {
 //   // console.log(`-CK-fn-getKJAliases gameId=${gameId} matchDate=${props.matchDate}`)
-//   const path = process.env.API + '/golf/getAliases/14/0'
+//   const path = ENV_API + '/golf/getAliases/14/0'
 //   gaxios(path)
 // }
 function setKjAliases (da) {
@@ -300,22 +301,22 @@ function setPageTitle () {
   store.page = matchName.value
 }
 const getTournamentsByGameId = () => {
-  console.log(`%c-CK-fn-getTournaments`, 'color:pink;font-size:18px')
+  console.log(`%c-fn-getTournaments`, 'color:cyan;font-size:10px')
   setPageTitle()
   matchDate.value = null
-  const path = process.env.API + '/golf/getTournaments/' + gameId.value
+  const path = ENV_API + '/golf/getTournaments/' + gameId.value
   gaxios(path)
 }
 function setTournaments (da) {
   // daMatchList.value = da
   let showTmntId = da.tmntId
-  console.log(`%c-CK-fn-setTournaments`, 'color:red;font-size:18px', da)
+  console.log(`%c-CK-fn-setTournaments`, 'color:cyan;font-size:10px', da)
   da.matches.sort((a, b) => a.start_at > b.start_at ? 1 : -1)
   matches.value = da.matches
   // if (gameId.value == 14) {
   //   kjNewPlayer.value = da.kjNewPlayer
   //   if (kjNewPlayer.value.length > 0) {
-  //     const path = process.env.API + '/golf/getKjAliases/' + da.kjNewPlayer[0].game_date
+  //     const path = ENV_API + '/golf/getKjAliases/' + da.kjNewPlayer[0].game_date
   //     gaxios(path)
   //   }
   // }
@@ -376,7 +377,7 @@ function userSelectedMatchDate (match) {  // get all games in the match for the 
 }
 const getCourseInfo = (tmntId, courseId, teeboxId) => {
   console.log(`%c-fn-getCourseInfo tmntId=${tmntId} courseId=${courseId} teeboxId=${teeboxId}`, 'color: red; font-size:18px', 'games=', games.value)
-  const path = process.env.API + `/golf/getCourseInfo/${tmntId}/${courseId}/${teeboxId}`
+  const path = ENV_API + `/golf/getCourseInfo/${tmntId}/${courseId}/${teeboxId}`
   gaxios(path)
 }
 const setCourseInfo = (da) => {
@@ -401,7 +402,7 @@ const getTeamMatchPlayers = () => {
   tplayers.value = []
   groups.value = []
   const tmntId = 0
-  const path = process.env.API + '/golf/getTeamMatchPlayers/' + tmntId + '/' + gameId.value + '/' + matchDate.value
+  const path = ENV_API + '/golf/getTeamMatchPlayers/' + tmntId + '/' + gameId.value + '/' + matchDate.value
   gaxios(path)
 }
 function setTeamMatchPlayers (da) {

@@ -42,6 +42,7 @@ function getPropertyKey () { // used by reflection functions get/set and others
   if (props.label === 'Total Cost' || props.label === 'Cost') return 'cost'
   else if (props.label === 'FCard Pay') return 'unip' // parseFloat(props.obj.unip).toFixed(2)
   else if (props.label === 'Fidelity CCard Payment') return 'unip'
+  else if (props.label === 'Chase CCard Payment') return 'unip'
   else if (props.label === 'Unit Price' || props.label === '单价') return 'unip' 
   else if (props.label === 'Quantities' || props.label === '数量') return 'unip'
   else if (props.label === 'Miles Run') return 'mile'

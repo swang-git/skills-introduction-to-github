@@ -9,8 +9,8 @@ import { ref, reactive, onMounted } from 'vue'
 import Chart from 'chart.js/auto'
 import ChartDataLabels from 'chartjs-plugin-datalabels'
 import cfg from './chart-cats-config.js'
-import AllButtons from './AllButtons'
-import { libFunctions } from 'src/composables/libFunctions'
+import AllButtons from './AllButtons.vue'
+import { libFunctions } from '../../src/composables/libFunctions'
 Chart.register(ChartDataLabels)
 const props = defineProps({
   data: { type: Array },

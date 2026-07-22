@@ -59,18 +59,18 @@
 <script setup>
 import { ref } from 'vue'
 import { useQuasar } from 'quasar'
-import { libFunctions } from 'src/composables/libFunctions'
-import { axiosFunctions } from 'src/composables/axiosFunctions'
-import { cssFunctions } from 'src/composables/cssFunctions'
-import { storeFunctions } from 'src/composables/storeFunctions'
-import { dayFunctions } from 'src/composables/dayFunctions'
+import { libFunctions } from '../../src/composables/libFunctions'
+import { axiosFunctions } from '../../src/composables/axiosFunctions'
+import { cssFunctions } from '../../src/composables/cssFunctions'
+import { storeFunctions } from '../../src/composables/storeFunctions'
+import { dayFunctions } from '../../src/composables/dayFunctions'
 import emitter from 'tiny-emitter/instance'
-import EnterPStrokePad from 'pages/EnterPStrokePad'
-import HoleScoreButton from 'src/components/HoleScoreButton'
+import EnterPStrokePad from './EnterPStrokePad.vue'
+import HoleScoreButton from '../../src/components/HoleScoreButton.vue'
 const emit = defineEmits(['double-back9', 'set-pscore', 'open-InfoDisplay', 'open-EnterPStrokePad', 'player-pscore'])
 const $q = useQuasar()
 const { today } = dayFunctions()
-const { screenwidth, JZsAdmin, SysAdmin } = libFunctions()
+const { screenwidth, JZsAdmin, SysAdmin, ENV_API } = libFunctions()
 const { paxios, gaxios } = axiosFunctions()
 const { getFBClass } = cssFunctions()
 const { holes } = storeFunctions()
@@ -96,7 +96,7 @@ const doubleBack9 = () => {
   const pid = member.value.playerId
   const tid = member.value.tournamentId
   console.log(`-CK-fn-doubleBack9 pid=${pid} tid=${tid}`, member.value)
-  const path = process.env.API + '/golf/doubleBack9/' + pid + '/' + tid
+  const path = ENV_API + '/golf/doubleBack9/' + pid + '/' + tid
   gaxios(path)
 }
 function getTotalClass () {
@@ -108,7 +108,7 @@ function getTotalClass () {
 function updNotes () {
   console.log(`-fn-updNotes for ${member.value.name} ${member.value.note}, ${member.value.id}`, member)
   if (member.value.id > 0) {
-    const path = process.env.API + '/golf/updGScore'
+    const path = ENV_API + '/golf/updGScore'
     paxios(path, member.value)
   } else {
     const tit = 'No Score yet'
@@ -181,7 +181,7 @@ function setPStrokes (da) {
   return
 }
 function getPStrokes () {
-  const path = process.env.API + '/golf/getPStrokes'
+  const path = ENV_API + '/golf/getPStrokes'
   paxios(path, scoreMeta.value)
 }
 function openIt (sMeta, tmnt) {
@@ -238,7 +238,7 @@ function setScore (idx, scr) {
   return submitScore()
 }
 function submitScore () {
-  const path = process.env.API + (member.value.id > 0 ? '/golf/updGScore' : '/golf/insGScore')
+  const path = ENV_API + (member.value.id > 0 ? '/golf/updGScore' : '/golf/insGScore')
   console.log(`-fn-upd/insGScore path=${path} member`, member.value)
   paxios(path, member.value)
   emit('player-pscore', member.value.totalscore)

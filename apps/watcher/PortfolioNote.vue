@@ -32,7 +32,7 @@
             <q-input filled style="font-size:19px" class="col-2" label="Symbol" v-model="pn.symbol" dark @click="showStockList(i, 'stock')" />
             <q-input filled style="font-size:19px" class="col-2" label="Action" v-model="pn.action" dark @click="showActionList(i, 'action')" />
             <q-input filled style="font-size:19px" class="col-2" label="Price" v-model="pn.price" dark />
-            <q-input filled style="font-sizepx" class="col-2" label="Share" v-model="pn.share" dark />
+            <q-input filled style="font-size:10px" class="col-2" label="Share" v-model="pn.share" dark />
             <q-input filled style="font-size:19px" class="col-2" label="To Account" v-model="pn.taccount" dark @click="showOptList(i, 'taccnt')">
               <q-tooltip v-if="pn.taccount != null" class="text-h6 bg-cyan-9">{{ pn.txoltip }}</q-tooltip>
             </q-input>
@@ -49,14 +49,14 @@
 <script setup>
 import { ref } from 'vue'
 import emitter from 'tiny-emitter/instance'
-import ConfirmDialog from '../src/components/ConfirmDialog'
-import SelOptionsWithSearch from '../src/components/SelOptionsWithSearch'
+import ConfirmDialog from '../src/components/ConfirmDialog.vue'
+import SelOptionsWithSearch from '../src/components/SelOptionsWithSearch.vue'
 
 import { axiosFunctions } from '../src/composables/axiosFunctions'
 import { libFunctions } from '../src/composables/libFunctions'
 import { dayFunctions } from '../src/composables/dayFunctions'
 const { paxios } = axiosFunctions()
-const { isDesk } = libFunctions()
+const { isDesk, ENV_DEV } = libFunctions()
 const { today, chwk3 } = dayFunctions()
 
 const opened = ref(false)
@@ -112,7 +112,7 @@ function add () {
     delete p.txoltip
   })
   console.log('add pnote', pnote.value)
-  const path = process.env.API + '/watcher/addPNote'
+  const path = ENV_DEV + '/watcher/addPNote'
   paxios(path, pnote.value)
   opened.value = false
 }
@@ -122,7 +122,7 @@ function upd () {
     delete p.txoltip
   })
   console.log('upd pnote', pnote.value)
-  const path = process.env.API + '/watcher/updPNote'
+  const path = ENV_DEV + '/watcher/updPNote'
   paxios(path, pnote.value)
   opened.value = false
 }
@@ -134,7 +134,7 @@ function userConfirmed () {
 }
 function delPNote () {
   let inData = { date: date }
-  const path = process.env.API + '/watcher/delPNote'
+  const path = ENV_DEV + '/watcher/delPNote'
   paxios(path, inData)
 }
 function del () {

@@ -33,9 +33,9 @@ import { axiosFunctions } from '../src/composables/axiosFunctions'
 import { dayFunctions } from '../src/composables/dayFunctions'
 const { chwk1, chwk2, today } = dayFunctions()
 const { gaxios, paxios } = axiosFunctions()
-const { isIM, isDesk, buildApp, dalist, $q } = libFunctions()
+const { isIM, isDesk, buildApp, dalist, ENV_DEV } = libFunctions()
 
-import NumInput from '../src/components/NumInput'
+import NumInput from '../src/components/NumInput.vue'
 
 console.log(`-ST-ChnYears`)
 
@@ -55,14 +55,13 @@ console.log(`-CK-isDesk=${isDesk} isIM=${isIM}`)
 
 //======= functions =========
 function setYear() {
-  console.log(`-fn-setYear year=${year.value} row.year=${row.value.year}`)
-  row.value.year
+  // console.log(`-fn-setYear year=${year.value} row.year=${row.value.year}`)
   getList(row.value.year)
 }
 function getList(year) {
   console.log(`-fn-chnyears.getList year=${year}`)
   row.value.year = year
-  const path = process.env.API + '/chnyears/getList/' + year
+  const path = ENV_DEV + '/chnyears/getList/' + year
   gaxios(path)
 }
 function setList(da) {

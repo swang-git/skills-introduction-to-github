@@ -65,17 +65,17 @@
 <script setup>
 import { ref, computed } from 'vue'
 import emitter from 'tiny-emitter/instance'
-import EnterGStrokePad from 'pages/EnterGStrokePad'
-import TeamGroupPointsShow from 'pages/TeamGroupPointsShow'
+import EnterGStrokePad from './EnterGStrokePad.vue'
+import TeamGroupPointsShow from './TeamGroupPointsShow.vue'
 // import TeamGroupPointDetails from 'pages/TeamGroupPointDetails'
-import HoleScoreButtonG from 'src/components/HoleScoreButtonG'
-import { dayFunctions } from 'src/composables/dayFunctions'
-import { libFunctions } from 'src/composables/libFunctions'
-import { storeFunctions } from 'src/composables/storeFunctions'
-import { axiosFunctions } from 'src/composables/axiosFunctions'
+import HoleScoreButtonG from '../../src/components/HoleScoreButtonG.vue'
+import { dayFunctions } from '../../src/composables/dayFunctions'
+import { libFunctions } from '../../src/composables/libFunctions'
+import { storeFunctions } from '../../src/composables/storeFunctions'
+import { axiosFunctions } from '../../src/composables/axiosFunctions'
 const { paxios } = axiosFunctions()
 const { hole, yard, hcap, slope, rating, calcHL } = storeFunctions()
-const { screenwidth, SysAdmin, isMate } = libFunctions()
+const { screenwidth, SysAdmin, isMate, ENV_API } = libFunctions()
 const { today } = dayFunctions()
 
 const emit = defineEmits(['player-gscore', 'group-point', 'course-info'])
@@ -278,7 +278,7 @@ function setScore (idx, score, pid, tpid, pname) {
   // } else {
   //   setHoleScoreEnd.value = false
   // }
-  const path = process.env.API + (x.id == 0 ? '/golf/insGScore' : '/golf/updGScore')
+  const path = ENV_API + (x.id == 0 ? '/golf/insGScore' : '/golf/updGScore')
   x.tplayerId = tpid
   paxios(path, x)
   // console.log(`%c-CKs-setScore-${playerId.value} x.id=${x.id} ${x['h' + idx]} pIdx=${pIdx.value}`, 'color:red;font-size:16px')

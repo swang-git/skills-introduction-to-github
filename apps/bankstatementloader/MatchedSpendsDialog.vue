@@ -29,7 +29,7 @@
 import { ref, onMounted } from 'vue'
 import emitter from 'tiny-emitter/instance'
 import { axiosFunctions } from '../src/composables/axiosFunctions'
-import ConfirmDialog from '../src/components/ConfirmDialog'
+import ConfirmDialog from '../src/components/ConfirmDialog.vue'
 const { gaxios } = axiosFunctions()
 
 const opened = ref(false)

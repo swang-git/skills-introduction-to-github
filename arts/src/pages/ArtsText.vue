@@ -17,23 +17,34 @@
       </q-item-section>
     </q-item>
     <div class="arts-text" v-html="getArtTxt()" />
-    <hr v-if="flw.length>0">
-    <div v-for="(ff, i) in flwups" :key=ff.x >
+    <hr v-if="flw.length > 0" />
+    <div v-for="(ff, i) in flwups" :key="ff.x">
       <div class="arts-text" v-html="ff.txt" />
-      <div class="arts-sub" v-if="isLocal" style="cursor:pointer" @click="editFlw(i)">{{ff.sub}}</div>
-      <div class="arts-sub" v-else>{{ff.sub}}</div>
+      <div class="arts-sub" v-if="isLocal" style="cursor: pointer" @click="editFlw(i)">
+        {{ ff.sub }}
+      </div>
+      <div class="arts-sub" v-else>{{ ff.sub }}</div>
     </div>
-    <hr>
+    <hr />
     <br />
     <q-footer elevated bordered v-model="footerState">
       <q-toolbar class="bg-teal-9 glossy">
         <q-btn v-show="isLocal" round dense flat icon="edit" @click="editTxt" />
-        <span class="text-h6" style="white-space:nowrap">第 {{ readArticle }} 篇</span>
+        <span class="text-h6" style="white-space: nowrap">第 {{ readArticle }} 篇</span>
         <q-btn dense flat @click="toggleHeadEnd">
-          <q-knob :angle="90" v-model="readPercent" size="30px" :thickness="0.33" color="orange" track-color="white" />
+          <q-knob
+            :angle="90"
+            v-model="readPercent"
+            size="30px"
+            :thickness="0.33"
+            color="orange"
+            track-color="white"
+          />
         </q-btn>
         <q-toolbar-title />
-          <span class="cursor-pointer text-yellow text-h6 nowrap" @click="backToCont()">{{ getSub() }}</span>
+        <span class="cursor-pointer text-yellow text-h6 nowrap" @click="backToCont()">{{
+          getSub()
+        }}</span>
         <q-toolbar-title />
         <q-btn round dense glossy icon="help_outline" @click="showArtInfo" /> &nbsp;
         <q-btn v-if="prevQid" round dense flat icon="arrow_back" @click="showPrev" />
@@ -53,14 +64,14 @@ import { ref, computed, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 const route = useRoute()
 const $router = useRouter()
-import { libFunctions } from 'src/composables/libFunctions'
-const { isDesk, isIM, isLocal, $q, store} = libFunctions()
-import { axiosFunctions } from 'src/composables/axiosFunctions'
+import { libFunctions } from '../../src/composables/libFunctions'
+const { isDesk, isIM, isLocal, $q, store, DEV_API } = libFunctions()
+import { axiosFunctions } from '../../src/composables/axiosFunctions'
 const { gaxios } = axiosFunctions()
 // const { getScrollTarget, setVerticalScrollPosition, getScrollPosition } = scroll
 const { getScrollTarget, setVerticalScrollPosition } = scroll
 
-  // name: 'ArtsText'
+// name: 'ArtsText'
 
 const footerState = ref(true) // can be controlled by user input
 const art = ref({})
@@ -86,7 +97,7 @@ console.info('-ST-ArtsText')
 // getText('-cr-ArtsText')
 getText()
 
-function getText () {
+function getText() {
   tag.value = route.params.tag
   ymd.value = route.params.ymd
   qid.value = route.params.qid.trim()
@@ -95,7 +106,7 @@ function getText () {
   totalHeight.value = document.body.scrollHeight - window.innerHeight
   // console.warn(`totalHeight=${totalHeight.value}`)
   // setPrevNextQids()
-  const path = process.env.API + '/arts/getText/' + tag.value + '/' + ymd.value + '/' + qid.value
+  const path = DEV_API + '/arts/getText/' + tag.value + '/' + ymd.value + '/' + qid.value
   gaxios(path)
 }
 emitter.on('arts-getText', (da) => setText(da))
@@ -112,18 +123,22 @@ function setText(da) {
   ymd.value = route.params.ymd
   qid.value = route.params.qid
   // art.value.qids = store.clickedCont.links.map(p => p.qid)
+  // restyleImage()
+  add_api_for_testing()
   setPrevNextQids()
 }
 
 const flwups = computed(() => {
   if (isIM) {
     const re = /(.*)\d{4}-(.*):\d\d(\s+)/g
-    flw.value.forEach(ff => { ff.sub = ff.sub.replace(re, '$1$2$3') })
+    flw.value.forEach((ff) => {
+      ff.sub = ff.sub.replace(re, '$1$2$3')
+    })
   }
   return flw.value
 })
 
-function getArtTxt () {
+function getArtTxt() {
   return art.value.txt
 }
 // function getArtTxt () {
@@ -132,24 +147,32 @@ function getArtTxt () {
 //   // return art.value.modifiedTxt
 // }
 
-function
-openArtLink () {
+function openArtLink() {
   console.info(`lnk=${art.value.lnk}`)
-  openURL (art.value.lnk)
+  openURL(art.value.lnk)
   // window.location.href = art.value.lnk
   // $router.replace({ path: lnk })
 }
 
-function getSub () {
+function getSub() {
   const sub = art.value.sub
   if (!isDesk || sub === undefined) return null
-  else if (sub.search(/图片.*文章字数/) >= 0) return sub.replace(/^\d{4}-.*\d\d:\d\d:\d\d\s+作者:(.*)\s+(\d+)图片\s+文章字数:(.*)/, '$1 $2图 $3')
-  else if (sub.search('文章字数') >= 0) return sub.replace(/^\d{4}-.*\s+\d\d:\d\d:\d\d\s+作者:(.*)\s+文章字数:(.*)/, '$1$2')
-  else if (sub.indexOf('图片') >= 0) return sub.replace(/^\d{4}-.*\d\d:\d\d:\d\d\s+作者:(.*)\s+(\d+)图片\s+文章字数:(.*)/, '$1 $2图 $3')
+  else if (sub.search(/图片.*文章字数/) >= 0)
+    return sub.replace(
+      /^\d{4}-.*\d\d:\d\d:\d\d\s+作者:(.*)\s+(\d+)图片\s+文章字数:(.*)/,
+      '$1 $2图 $3',
+    )
+  else if (sub.search('文章字数') >= 0)
+    return sub.replace(/^\d{4}-.*\s+\d\d:\d\d:\d\d\s+作者:(.*)\s+文章字数:(.*)/, '$1$2')
+  else if (sub.indexOf('图片') >= 0)
+    return sub.replace(
+      /^\d{4}-.*\d\d:\d\d:\d\d\s+作者:(.*)\s+(\d+)图片\s+文章字数:(.*)/,
+      '$1 $2图 $3',
+    )
   else return sub.replace(/^\d{4}-.*\d\d:\d\d:\d\d\s+作者:(.*)/, '$1')
 }
 
-function toggleHeadEnd () {
+function toggleHeadEnd() {
   scrollElm.value = getScrollTarget(document.getElementById('pageId'))
   totalHeight.value = 10000 // fake the number to trigger the jump back and forth
   // console.warn(`=0=readPercent=${readPercent.value} articlePostion=${articlePosition.value} totalHeight=${totalHeight.value}`, scrollElm.value)
@@ -176,16 +199,19 @@ function toggleHeadEnd () {
   }
 }
 
-function editFlw (i) {
+function editFlw(i) {
   store.art = art.value
   store.flw = flw.value
   store.tag = tag.value
   store.ymd = ymd.value
   store.qid = qid.value
-  $router.push({ name: 'editFlw', params: { tag: tag.value, ymd: ymd.value, qid: qid.value, flwIdx: i } })
+  $router.push({
+    name: 'editFlw',
+    params: { tag: tag.value, ymd: ymd.value, qid: qid.value, flwIdx: i },
+  })
 }
 
-function editTxt () {
+function editTxt() {
   console.warn('store.art', art.value)
   store.art = art.value
   store.flw = flw.value
@@ -195,12 +221,12 @@ function editTxt () {
   $router.push({ name: 'editTxt', params: { tag: tag.value, ymd: ymd.value, qid: qid.value } })
 }
 
-function scrollHandler (scroll) {
+function scrollHandler(scroll) {
   // scrollElm.value = this.$ids.pageId
   // scrollElm.value = getScrollTarget(this.$ids.pageId)
   scrollElm.value = getScrollTarget(document.getElementById('pageId'))
   totalHeight.value = document.body.scrollHeight - window.innerHeight
-  var readPct = 100 * scroll.position.top / totalHeight.value
+  var readPct = (100 * scroll.position.top) / totalHeight.value
   // console.warn(`=S=docHeight=${document.documentElement.scrollHeight} document.body.scrollHeight=${document.body.scrollHeight}`, scroll)
   // console.info(' == readPct, totalHeight, scroll.position', readPct.toFixed(2), totalHeight.value, scroll.position.toFixed(2))
   if (isNaN(readPct) || readPct <= 0) {
@@ -219,7 +245,7 @@ function scrollHandler (scroll) {
   // console.info(`=S= readPercent=${readPercent.value} scroll.position.top=${scroll.position.top} articlePostion=${articlePosition.value} totalHeight=${totalHeight.value}`, scrollElm.value)
 }
 
-function showArtInfo () {
+function showArtInfo() {
   $q.notify({
     timeout: 10000,
     closeBtn: 'close',
@@ -231,12 +257,15 @@ function showArtInfo () {
     html: true,
     multiLine: true,
     // message: art.value.sub
-    message: '<strong style="font-family:youyuan">' + art.value.tit + '</strong><p><p style="font-family:stfangsong">' + art.value.sub
+    message:
+      '<strong style="font-family:youyuan">' +
+      art.value.tit +
+      '</strong><p><p style="font-family:stfangsong">' +
+      art.value.sub,
   })
 }
 
-
-function backToCont () {
+function backToCont() {
   const clickedCont = store.clickedCont
   // console.error('-CK-' clickedCont', clickedCont, $router)
   $router.replace({ path: clickedCont.key })
@@ -247,15 +276,15 @@ function backToCont () {
 watch(
   () => route.path, // Watch the `path` property of the route
   (newPath, oldPath) => {
-    console.log('Route changed from', oldPath, 'to', newPath);
+    console.log('Route changed from', oldPath, 'to', newPath)
     // You can perform any action here when the route changes
     // const path = process.env.API + '/arts/getCont' + newPath
     // gaxios(path)
     getText()
-  }
+  },
 )
 
-function getPrevQid () {
+function getPrevQid() {
   // console.log('-fn-getPrevQid', art.value.qids)
   // const qids = art.value.qids
   const qids = store.qids
@@ -263,7 +292,7 @@ function getPrevQid () {
   const pqids = qids.slice(0, idx)
   return pqids.pop()
 }
-function getNextQid () {
+function getNextQid() {
   console.log(`-fn-getNextQid qid=${qid.value}`, art.value.qids)
   // const qids = art.value.qids
   const qids = store.qids
@@ -271,14 +300,14 @@ function getNextQid () {
   const nqids = qids.slice(idx + 1)
   return nqids.shift()
 }
-function showPrev () {
+function showPrev() {
   // $router.replace({ name: 'text', params: { tag: prevTag.value, ymd: prevYmd.value, qid: prevQid.value } })
   qid.value = getPrevQid()
   console.log(`-fn-showPrev name:text, tag=${tag.value}, ymd=${ymd.value}, qid=${qid.value}`)
   $router.push({ path: '/' + tag.value + '/' + ymd.value + '/' + qid.value })
 }
 
-function showNext () {
+function showNext() {
   qid.value = getNextQid()
   console.log(`-fn-showNext name:text, tag=${tag.value}, ymd=${ymd.value}, qid=${qid.value}`)
   $router.push({ path: '/' + tag.value + '/' + ymd.value + '/' + qid.value })
@@ -312,7 +341,7 @@ function showNext () {
 //   getTextFromDB()
 // }
 
-function setPrevNextQids () {
+function setPrevNextQids() {
   console.info(`-fn-setPrevNextQids qid=[${qid.value}]`)
   if (store.qids.length <= 0) {
     prevQid.value = undefined
@@ -336,6 +365,28 @@ function setPrevNextQids () {
   console.log(`nextQid=${nextQid.value}`)
   store.topTit = art.value.tit
 }
+
+function add_api_for_testing() {
+  if (import.meta.env.PROD) return
+  console.log(`-fn-add_api_for_testing import.meta.env.PROD=${import.meta.env.PROD}`)
+  var re = /<img\s+src="\/daily_data/gi
+  // if (tag.value === 'PXWX') {
+  // art.value.modifiedTxt = art.value.txt.replace(re, '<img src="' + process.env.API + '/daily_data')
+  art.value.modifiedTxt = art.value.txt.replace(re, '<img src="' + DEV_API + '/daily_data')
+  art.value.txt = art.value.modifiedTxt
+  // re = 'style="max-width:600px;float:left;margin:9px 9px 0 0"'
+  // art.value.imgRestyled = art.value.modifiedTxt.replace(re, 'class="q-px-xs w-full"')
+  // art.value.imgRestyled = art.value.modifiedTxt.replace(re, 'style="width: 100%; height: auto"')
+  // art.value.imgRestyled = art.value.modifiedTxt.replace(re, 'style="width: 100%; height: auto; display: block"')
+  // art.value.imgRestyled = art.value.modifiedTxt.replace(re, 'style="width: 100vw; height: auto; max-width: 100%;"')
+  // art.value.imgRestyled = art.value.modifiedTxt.replace(re, 'style="width: 100%; max-width: 100%; height: auto;" native-context')
+  // art.value.txt = art.value.imgRestyled
+  // }
+  flw.value.forEach((f) => {
+    // f.txt = f.txt.replace(re, '<img src="' + process.env.API + '/daily_data')
+    f.txt = f.txt.replace(re, '<img src="/daily_data')
+  })
+
 
 // function setPrevNextQids () {
 //   console.info(`-fn-setPrevNextQids qid=[${qid.value}]`)
@@ -403,22 +454,31 @@ function setPrevNextQids () {
 //   // document.title = art.value.tit
 // }
 
-// function restyleImage () {
+// function restyleImage() {
+//   console.log(`-fn-restyleImage tag=${tag.value}`, art.value)
 //   if (process.env.API === '') return
 //   var re = /<img\s+src="\/daily_data/gi
-//   if (tag.value === 'PXWX') art.value.modifiedTxt = art.value.txt.replace(re, '<img src="' + process.env.API + '/daily_data')
-//   else art.value.txt = art.value.txt.replace(re, '<img src="' + process.env.API + '/daily_data')
-//   // else art.value.txt = art.value.txt.replace(re, '<img src="/daily_data')
-//   flw.value.forEach(f => {
+//   // if (tag.value === 'PXWX') {
+//   art.value.modifiedTxt = art.value.txt.replace(re, '<img src="' + process.env.API + '/daily_data')
+//   art.value.txt = art.value.modifiedTxt
+//   // re = 'style="max-width:600px;float:left;margin:9px 9px 0 0"'
+//   // art.value.imgRestyled = art.value.modifiedTxt.replace(re, 'class="q-px-xs w-full"')
+//   // art.value.imgRestyled = art.value.modifiedTxt.replace(re, 'style="width: 100%; height: auto"')
+//   // art.value.imgRestyled = art.value.modifiedTxt.replace(re, 'style="width: 100%; height: auto; display: block"')
+//   // art.value.imgRestyled = art.value.modifiedTxt.replace(re, 'style="width: 100vw; height: auto; max-width: 100%;"')
+//   // art.value.imgRestyled = art.value.modifiedTxt.replace(re, 'style="width: 100%; max-width: 100%; height: auto;" native-context')
+//   // art.value.txt = art.value.imgRestyled
+//   // }
+//   flw.value.forEach((f) => {
 //     f.txt = f.txt.replace(re, '<img src="' + process.env.API + '/daily_data')
 //   })
-//   // store.commit('arts/art', art.value)
-//   // store.commit('arts/flw', flw.value)
-//   // store.commit('arts/sub', art.value.sub)
-//   // console.warn(`=wn=restyleImage readPercent=${readPercent.value} totalHeight=${totalHeight.value}`)
-//   articlePosition.value = 'articleEnd' // this make sure show the begging of the article - check function toggleHeadEnd() in else block
-//   toggleHeadEnd()
-// }
+  // store.commit('arts/art', art.value)
+  // store.commit('arts/flw', flw.value)
+  // store.commit('arts/sub', art.value.sub)
+  // console.warn(`=wn=restyleImage readPercent=${readPercent.value} totalHeight=${totalHeight.value}`)
+  articlePosition.value = 'articleEnd' // this make sure show the begging of the article - check function toggleHeadEnd() in else block
+  toggleHeadEnd()
+}
 
 // function testing_restyleImage_repeated_img () {
 //   const rex = /<img src="(.*?)"\s+style=(.*?)0">/gi
@@ -500,6 +560,11 @@ function setPrevNextQids () {
 </script>
 
 <style>
+img {
+  max-width: 100% !important;
+  width: 100% !important;
+  height: auto !important;
+}
 .truncate {
   width: 350px;
   text-align: center;
@@ -535,37 +600,37 @@ div.arts-text {
 }
 .calcHeight {
   visibility: hidden;
-  position:absolute;
+  position: absolute;
 }
 html {
-    overflow: scroll;
-    overflow-x: hidden;
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-    /* -moz-overflow: hidden; */
+  overflow: scroll;
+  overflow-x: hidden;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  /* -moz-overflow: hidden; */
 }
 ::-webkit-scrollbar {
-    width: 0px;  /* Remove scrollbar space */
-    background: transparent;  /* Optional: just make scrollbar invisible */
+  width: 0px; /* Remove scrollbar space */
+  background: transparent; /* Optional: just make scrollbar invisible */
 }
 /* Optional: show position indicator in red */
 ::-webkit-scrollbar-thumb {
-    background: #FF0000;
+  background: #ff0000;
 }
 ::-moz-scrollbar {
-    width: 0px;  /* Remove scrollbar space */
-    background: transparent;  /* Optional: just make scrollbar invisible */
+  width: 0px; /* Remove scrollbar space */
+  background: transparent; /* Optional: just make scrollbar invisible */
 }
 /* Optional: show position indicator in red */
 ::-moz-scrollbar-thumb {
-    background: #FF0000;
+  background: #ff0000;
 }
 ::-ms-scrollbar {
-    width: 0px;  /* Remove scrollbar space */
-    background: transparent;  /* Optional: just make scrollbar invisible */
+  width: 0px; /* Remove scrollbar space */
+  background: transparent; /* Optional: just make scrollbar invisible */
 }
 /* Optional: show position indicator in red */
 ::-ms-scrollbar-thumb {
-    background: #FF0000;
+  background: #ff0000;
 }
 </style>

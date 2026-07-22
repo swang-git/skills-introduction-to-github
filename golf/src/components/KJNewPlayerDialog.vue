@@ -44,12 +44,12 @@
 import { ref, reactive } from 'vue'
 import emitter from 'tiny-emitter/instance'
 import { libFunctions } from '../composables/libFunctions'
-const { isIM, $q } = libFunctions()
+const { isIM, $q, ENV_API } = libFunctions()
 import { axiosFunctions } from '../composables/axiosFunctions'
 const { paxios } = axiosFunctions()
 
 const year = (new Date()).getFullYear()
-const fees = 0.0
+const fees = ref(0)
 var isClubMember = false
 const mtype = isClubMember ? 'G' : undefined
 var action = undefined
@@ -60,9 +60,9 @@ const chname = undefined
 const nkname = ref(null)
 const email = undefined
 const phone = undefined
-const gender = 'M'
-var member = reactive({})
 const opened = ref(false)
+var member = reactive({})
+const gender = ref('M')
 var gameId = null
 var aliases = null
 
@@ -85,7 +85,7 @@ function openIt (act, m, gId, paliases, isMember=false) {
 }
 function saveMember () {
   console.log('-fn-save Create player ', member)
-  const path = process.env.API + '/golf/addNewSimPlayer'
+  const path = ENV_API + '/golf/addNewSimPlayer'
   member.year = year
   member.act = action
   if (gameId > 0) member.team = gameId
@@ -107,13 +107,13 @@ function checkInput () {
   // console.log(nkname, aliases)
   member.lastname = lastname
   member.firstname = firstname
-  member.gender = gender
+  member.gender = gender.value
   member.gameId = gameId
   member.email = email
   member.phone = phone
   member.chname = chname
   member.alias = nkname.value
-  member.fees = fees
+  member.fees = fees.value
   member.type = mtype
   const m = member
   let isMemberInfoOK = true

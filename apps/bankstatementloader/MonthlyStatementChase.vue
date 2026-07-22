@@ -5,7 +5,7 @@
     <q-tr><td class="text-right q-px-md">Bank Name</td><td>{{ assets.bank }}</td></q-tr>
     <q-tr><td class="text-right q-px-md">Year</td><td>{{ assets.year }}</td></q-tr>
     <q-tr><td class="text-right q-px-md">Month</td><td>{{ assets.month }}</td></q-tr>
-    <q-tr><td class="text-right q-px-md">Begin Date</td><td>{{ assets.begin_date }}</td></q-tr>
+    <q-tr><td class="text-right q-px-md">Begin Date</td><td>{{ assets.begin_date}}</td></q-tr>
     <q-tr><td class="text-right q-px-md">End Date</td><td>{{ assets.end_date }}</td></q-tr>
     <q-tr><td class="text-right q-px-md">Begin Balance</td><td>{{ assets.begin_balance }}</td></q-tr>
     <!-- <q-tr><td class="text-right q-px-md">Begin Balance</td><td>{{ chk.begin_balance + sav.begin_balance }}</td></q-tr> -->
@@ -65,9 +65,9 @@
 <script setup>
 import { ref } from 'vue'
 import emitter from 'tiny-emitter/instance'
-import { dayFunctions } from 'src/composables/dayFunctions';
-import { axiosFunctions } from 'src/composables/axiosFunctions'
-import { libFunctions } from 'src/composables/libFunctions'
+import { dayFunctions } from '../src/composables/dayFunctions';
+import { axiosFunctions } from '../src/composables/axiosFunctions'
+import { libFunctions } from '../src/composables/libFunctions'
 const { $q } = libFunctions()
 const opened = ref('')
 const statement = ref({})
@@ -192,7 +192,7 @@ function loadStmt (da) {
     return
   }
   assets.value = da.assets
-  console.log(`-CK-loasStmt`, [assets.value.begin_date, assets.value.end_date])
+  console.log(`-CK-loasStmt`, [da])
   chk.value = da.chk
   console.log('chk.act=', chk.value.act[0])
   sav.value = da.sav

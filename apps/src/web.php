@@ -12,11 +12,32 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
+//Route::get('/drawings', [DrawingController::class, 'index']);
+
 // Route::view('/apps/watcher', 'apps/watcher')->middleware('auth');
+
+//Route::get('/apps/arts/{any?}', function ($any = '') {
+//    return redirect("/arts/{$any}", 301);
+//})->where('any', '.*');
+
+//Route::redirect('/apps/arts', '/arts', 301);
+//Route::redirect('/apps/arts/{any}', '/arts/$1', 301)->where('any', '.*');
+// THEN YOUR NORMAL ROUTES (without /apps)
+//Route::get('/arts/{any}', function () {
+ //   return view('arts'); // your SPA view
+//})->where('any', '.*');
+
+//Route::get('/apps/arts', function () { return view('arts'); });
+
+// Route::redirect('/yali', '/apps/yali', 301);
+// Route::redirect('/apps/yalipics/{any}', '/yali/$1', 301)->where('any', '.*');
 
 Route::get('/', function () { return view('welcome'); });
 // Route::get('/apps/getAttached/{dir}', 'AppsController@getAttached');
 // // Route::get('/apps/getAttached/{dir}', function () { Log::info('AppsController@getAttached'); });
+
+
 Route::group (
   array('prefix' => 'arts'), function () {
     // Route::view('/', 'arts');
@@ -44,6 +65,7 @@ Route::group (
       Route::get ('getStockPriceList', 'WatcherController@getStockPriceList');
       Route::get ('getPortfolio/{date}', 'WatcherController@getPortfolio');
       Route::post('upd', 'WatcherController@upd');
+      Route::post('updWeightPortfolio', 'WatcherController@updWeightPortfolio');
       Route::post('add', 'WatcherController@add');
       Route::post('del', 'WatcherController@del');
       Route::post('addPNote', 'WatcherController@addPNote');
@@ -51,6 +73,7 @@ Route::group (
       Route::post('delPNote', 'WatcherController@delPNote');
       // Route::get ('loadPositions/{date}', 'WatcherController@loadPositions');
       Route::get ('getPositions/{date}', 'WatcherController@getPositions');
+      Route::get ('getMyPortfolios/{date}', 'WatcherController@getMyPortfolios');
   }
 );
 // Route::group (
@@ -238,7 +261,7 @@ Route::group (
     // Route::view('apps/watcher', 'watcher');
     
 Route::view('/', 'golf');
-Route::view('golf/PlayerList', 'golf');
+//__Route::view('golf/PlayerList', 'golf');
 Route::view('golf/EnterScores', 'golf');
 Route::view('golf/PGCGroupList', 'golf');
 Route::view('golf/TournamentList', 'golf');
@@ -253,6 +276,7 @@ Route::view('golf/KJsMatch', 'golf');
 Route::view('golf/ALsMatch', 'golf');
 Route::view('golf/PGCGameList', 'golf');
 Route::view('golf/LoadLogPage', 'golf');
+// Route::view('yali/PicList', 'yali');
 
 Route::group (
   array('prefix' => 'golf'), function() {
@@ -411,9 +435,13 @@ Route::group (
   }
 );
 Route::group (
-  array('prefix' => 'yalipics'), function() {
-    Route::view('list', 'yalipics'); 
-    Route::get ('getList/{isIM}', 'YalipicsController@getList'); //->middleware('auth');
+  array('prefix' => 'yali'), function() {
+    Route::view('list', 'yali'); 
+    //Route::get ('getList/{isIM}', 'YaliController@getList'); //->middleware('auth');
+    Route::get('getPages/{page}/{per_page}', 'YaliController@getPages'); 
+    Route::get('removeDupFile/{fnm}/', 'YaliController@removeDupFile'); 
+    Route::get('undoRemovedDupFile/{fnm}/', 'YaliController@undoRemovedDupFile'); 
+    Route::get('getPixByYM/{ym}/', 'YaliController@getPixByYM'); 
   }
 );
 Route::group (
@@ -434,6 +462,12 @@ Route::group (
     Route::view('list', 'todo');
   }
 );
+// Route::group (
+//   array('prefix' => 'yali'), function() {
+//     // Route::view('list', 'yali');
+//     Route::get ('getList/{isIM}', 'YaliController@getList');
+//   }
+// );
 Route::group (  // set up here to show login page
   array('prefix' => 'apps'), function() {
     // Route::view('todo', 'apps')->middleware('auth');
@@ -455,7 +489,7 @@ Route::group (  // set up here to show login page
     Route::view('bankstatementloader', 'apps');
     Route::view('exlist', 'apps')->middleware('auth');
     Route::view('healthtest', 'apps')->middleware('auth');
-    Route::view('yalipics', 'apps');
+    // Route::view('yali', 'apps');
     Route::view('tvmanager', 'apps');
     Route::view('chnyears', 'apps');
     Route::view('pfcheck', 'apps');

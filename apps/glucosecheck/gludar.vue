@@ -1,6 +1,6 @@
 <template>
 <q-dialog v-model="opened" :transition-show="action=='upd' ? 'rotate' : 'slide-right'" persistent fullWidth :maximized="isIM">
-  <q-layout container class="bg-teal-10" :style="isDesk ? { 'height':'600px' } : { 'height':'670px' }">
+  <q-layout container class="bg-teal-10" :style="isDesk ? { 'height':'660px' } : { 'height':'670px' }">
     <LayoutHeader tit="Glucose Daily Check" @do-action="doAction" />
     <LayoutFooter :act=action tit="TIT_GLUCOSE" @do-action="doAction" class="q-pb-"/>
     <q-page-container v-if="isDesk">
@@ -22,6 +22,7 @@
         <TxtInput class="col-12" :obj="row" label="Breakfast" icon="egg" iColor="brown-6" :rightIcon="true" @click="openSelection('egg', 'Breakfast', brOpt)" />
         <TxtInput class="col-12" :obj="row" label="Lunch" icon="lunch_dining" iColor="yellow-9" :rightIcon="true" @click="openSelection('lunch_dining', 'Lunch', luOpt)" />
         <TxtInput class="col-12" :obj="row" label="Dinner" icon="dinner_dining" iColor="indigo-3" :rightIcon="true" @click="openSelection('dinner_dining', 'Dinner', diOpt)" />
+        <TxtInput class="col-12" :obj="row" label="Note" icon="note" iColor="cyan-3" :rightIcon="true" @click="openSelection('note', 'Note', diOpt)" />
         <div class="row">
           <TxtInput class="col-6" :obj="row" label="Drink" icon="local_bar" iColor="green" :rightIcon="true" @click="openSelection('local_bar', 'Drink', drOpt)" />
           <TxtInput class="col-6" :obj="row" label="Fruit" icon="apple" iColor="green-3" :rightIcon="true" @click="openSelection('apple', 'Fruit', frOpt)" />
@@ -45,6 +46,7 @@
       <TxtInput class="col-12" :obj="row" label="Breakfast" icon="egg" iColor="brown-6" :rightIcon="true" @click="openSelection('egg', 'Breakfast', brOpt)" />
       <TxtInput class="col-12" :obj="row" label="Lunch" icon="lunch_dining" iColor="yellow-9" :rightIcon="true" @click="openSelection('lunch_dining', 'Lunch', luOpt)" />
       <TxtInput class="col-12" :obj="row" label="Dinner" icon="dinner_dining" iColor="indigo-3" :rightIcon="true" @click="openSelection('dinner_dining', 'Dinner', diOpt)" />
+      <TxtInput class="col-12" :obj="row" label="Note" icon="note" iColor="cyan-3" :rightIcon="true" @click="openSelection('note', 'Note', diOpt)" />
       <div class="row">
         <TxtInput class="col-6" :obj="row" label="Drink" icon="local_bar" iColor="green" :rightIcon="true" @click="openSelection('local_bar', 'Drink', drOpt)" />
         <TxtInput class="col-6" :obj="row" label="Fruit" icon="apple" iColor="green-3" :rightIcon="true" @click="openSelection('apple', 'Fruit', frOpt)" />
@@ -62,26 +64,26 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import emitter from 'tiny-emitter/instance'
-import ConfirmDialog from '../src/components/ConfirmDialog'
-import TxtInput from '../src/components/TxtInput'
-import TxaInput from '../src/components/TxaInput'
-import NumInput from '../src/components/NumInput'
-import LayoutHeader from '../src/components/LayoutHeader'
-import LayoutFooter from '../src/components/LayoutFooter'
-import DateTimePicker from '../src/components/DateTimePicker'
-import DateTimeIMPicker from '../src/components/DateTimeIMPicker'
-import NumPadAuto from '../src/components/NumPadAuto'
-import NumPad from '../src/components/NumPad'
-import SelRevOption from '../src/components/SelRevOption'
-import TxtPad from '../src/components/TxtPad'
-import gludarInfo from './gludar_m_info'
+import ConfirmDialog from '../src/components/ConfirmDialog.vue'
+import TxtInput from '../src/components/TxtInput.vue'
+// import TxaInput from '../src/components/TxaInput.vue'
+import NumInput from '../src/components/NumInput.vue'
+import LayoutHeader from '../src/components/LayoutHeader.vue'
+import LayoutFooter from '../src/components/LayoutFooter.vue'
+import DateTimePicker from '../src/components/DateTimePicker.vue'
+import DateTimeIMPicker from '../src/components/DateTimeIMPicker.vue'
+import NumPadAuto from '../src/components/NumPadAuto.vue'
+import NumPad from '../src/components/NumPad.vue'
+import SelRevOption from '../src/components/SelRevOption.vue'
+import TxtPad from '../src/components/TxtPad.vue'
+import gludarInfo from './gludar_m_info.vue'
 
 import { axiosFunctions } from '../src/composables/axiosFunctions'
 const { gaxios, paxios } = axiosFunctions()
 import { dayFunctions } from '../src/composables/dayFunctions'
 const { yyyymmddHHMM, yyyymmdd } = dayFunctions()
 import { libFunctions } from '../src/composables/libFunctions'
-const { isDesk, isIM } = libFunctions()
+const { isDesk, isIM, ENV_DEV } = libFunctions()
 
 const opened = ref(false)
 const action = ref(null)
@@ -104,11 +106,6 @@ console.log('-ST-gludar')
 emitter.on('open-gludar', (rw, act, exOpt, brOpt, luOpt, diOpt, drOpt, frOpt, foOpt) => openIt(rw, act, exOpt, brOpt, luOpt, diOpt, drOpt, frOpt, foOpt))
 
 //== function section
-// function XXXsetBloodPressureFone (x) {
-//   console.log(`setBloodPressure=${x}`)
-//   row.value.bloodPressure = x
-// }
-
 function setDateTime (dt) {
   row.value.datetime = dt
   dtTimeDone.value = true
@@ -123,7 +120,8 @@ function setNum (flg, n) {
   console.log(`-fn-setNum flag=${flg} n=${n}`)
   if (flg == 'GL') {
     row.value.glucose = n
-    showNumPad('WT', '当日体重')
+    // showNumPad('WT', '当日体重')
+    openSelection('bloodtype', 'Check Type', tyOpt)
   } else if (flg == 'WT') {
     row.value.weight = n
   }
@@ -148,8 +146,11 @@ function setSelectedOpt (model, opt) {
   else if (model == 'Dinner') row.value.dinner = opt.label
   else if (model == 'Drink') row.value.drink = opt.label
   else if (model == 'Fruit') row.value.fruit = opt.label
-  else if (model == 'Check Type') row.value.type = opt.label
-  else if (model == 'Food') row.value.food = opt.label
+  else if (model == 'Check Type') {
+    row.value.type = opt.label
+    showNumPad('WT', '当日体重')
+  } else if (model == 'Food') row.value.food = opt.label
+  else if (model == 'Notes') row.value.note = opt.label
 }
 function openSelection (icon, model, opts) {
   console.log(`-fn-openSelection`, opts)
@@ -239,7 +240,7 @@ function showInfo () {
 function add () {
   convType()
   console.log('-fn-add', row.value)
-  const path = process.env.API + '/glucosecheck/add'
+  const path = ENV_DEV + '/glucosecheck/add'
   const inData = row.value
   if (isDesk) setBloodPressure()
   paxios(path, inData)
@@ -254,7 +255,7 @@ function convType () {
 function upd () {
   convType()
   console.log('-fn-upd', row.value)
-  const path = process.env.API + '/glucosecheck/upd'
+  const path = ENV_DEV + '/glucosecheck/upd'
   if (isDesk) setBloodPressure()
   const inData = row.value
   paxios(path, inData)
@@ -270,8 +271,7 @@ function del () {
 }
 function delFromDB () {
 console.log('-fn-del', row.value.id)
-  const path = process.env.API + '/glucosecheck/del'
-  const inData = row.value
+  const path = ENV_DEV + '/glucosecheck/del'
   paxios(path, row.value)
   opened.value = false
 }

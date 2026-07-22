@@ -45,18 +45,18 @@ import { ref, computed, onMounted } from 'vue'
 import emitter from 'tiny-emitter/instance'
 
 import { libFunctions } from '../composables/libFunctions'
-const { $q, store, dalist, isDesk, SysAdmin, dats, searchQuery, buildApp } = libFunctions()
+const { $q, store, dalist, isDesk, SysAdmin, dats, searchQuery, buildApp, ENV_API } = libFunctions()
 import { axiosFunctions } from '../composables/axiosFunctions'
 const { gaxios } = axiosFunctions()
 // import { dayFunctions } from '../composables/dayFunctions'
 // const { yyyymmdd } = dayFunctions()
 
-import MemberDialog from '../components/MemberDialog'
-import ScoreList from 'pages/ScoreList'
-import PlayRoundsDialog from 'pages/PlayRoundsDialog'
+import MemberDialog from '../components/MemberDialog.vue'
+import ScoreList from './ScoreList.vue'
+import PlayRoundsDialog from './PlayRoundsDialog.vue'
 // import EnterPScoresDialog from 'pages/EnterPScoresDialog'
 // var golf_usertype = null
-const sortby = 'none'
+const sortby = ref('none')
 // var removeId = -1
 // const clickedMember = {}
 // const scores = []
@@ -68,9 +68,9 @@ const refPlayRoundsDialog = ref(null)
 const refScoreList = ref(null)
 
 onMounted(() => {
-  refMemberDialog
-  refPlayRoundsDialog
-  refScoreList
+  console.log(refMemberDialog)
+  console.log(refPlayRoundsDialog)
+  console.log(refScoreList)
 })
 
 console.log('-ST-PlayerList with pageTitle:"' + store.pageTitle + '"', store.page)
@@ -98,15 +98,15 @@ function setMemberList (da) {
   // emitter.emit('dats', dats)
 }
 function doSorting () {
-  if (sortby === 'club') {
-    console.log('-Ck-fn-doSoring', sortby, membersBak.length)
+  if (sortby.value === 'club') {
+    console.log('-Ck-fn-doSoring', sortby.value, membersBak.length)
     var members = members.filter((p) => p.cidx > 0)
     members = members.slice().sort((a, b) => {
       a = parseFloat(a.cidx)
       b = parseFloat(b.cidx)
       return (a === b ? 0 : a > b ? 1 : -1)
     })
-  } else if (sortby === 'net') {
+  } else if (sortby.value === 'net') {
     members = members.filter((p) => p.nidx > 0)
     members = members.slice().sort((a, b) => {
       a = parseFloat(a.nidx)
@@ -119,7 +119,7 @@ function doSorting () {
   // console.log('-Ck-doSoring', sortby, members.length)
 }
 function getScores (member) {
-  const path = process.env.API + '/golf/Scores/' + member.id
+  const path = ENV_API + '/golf/Scores/' + member.id
   gaxios(path)
 }
 function playARound (member) {
@@ -156,7 +156,7 @@ function delMember (m) {
     cancel: 'Cancel'
   }).onOk(() => {
     console.log('-CK-fn-delMember YES')
-    const path = process.env.API + '/golf/delMember/' + m.id + '/' + m.mid
+    const path = ENV_API + '/golf/delMember/' + m.id + '/' + m.mid
     gaxios(path)
   }).onCancel(() => { console.log('-CK-fn-delMember Cancelled') })
 }
@@ -169,7 +169,7 @@ function updMemberList (newMember) {
 //   console.log('-CK-memPerformance show member performance curve')
 // }
 function getMemberList () {
-  const path = process.env.API + '/golf/getMemberList'
+  const path = ENV_API + '/golf/getMemberList'
   gaxios(path)
 }
 function getAvatar (m) {

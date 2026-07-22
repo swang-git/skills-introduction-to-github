@@ -1,73 +1,74 @@
 <template>
-<div class="q-px-xs fixed" style="width:800px;border:cyan solid 1px">
-  <div class="row q-pl-xs q-pr-sm text-h6 text-amber">
-    <div class="col-5">
-      <q-option-group dense :options="storeOpt" type="checkbox" v-model="chkdStores" @update:model-value="showItemsInChkdStores()" :disable="storeOpt.length==1" />
+  <div style="place-items:center">
+    <div class="q-px-xs fixed" style="width:800px;border:cyan solid 1px">
+      <div class="row q-pl-xs q-pr-sm text-h6 text-amber">
+        <div class="col-5">
+          <q-option-group dense :options="storeOpt" type="checkbox" v-model="chkdStores" @update:model-value="showItemsInChkdStores()" :disable="storeOpt.length==1" />
+        </div>
+        <div class="col-3 text-right q-pr-xs">{{ date }} 采购单</div>
+        <div class="col-4 text-right q-pr-xs">Total {{ compSpent }}: $ {{ compTotal }}</div>
+      </div>
+      <q-table class="sh-sticky-header-table" :rows="palist" :columns="columns"
+        card-class="bg-teal-9 text-white" dense auto-width row-key="name"
+        :pagination="{rowsPerPage:rwsPerPage}" hide-pagination :separator="separator">
+        <template v-slot:header-cell-name="props">
+          <q-th :props="props"> 共采购 {{palist.length}} 种商品 </q-th>
+        </template>
+        <template v-slot:body="p">
+          <q-tr :props="p" v-if="isEdit">
+            <q-td key="name"  :props="p" :class="getTXTcolor(p.row)" @click="delPurchasedItemDialog(p.row)">{{ p.row.name }}</q-td>
+            <q-td key="price" :props="p" class="edt" @click="openNumPad('price', p.row)">{{ p.row.price }}</q-td>
+            <q-td key="units" :props="p" class="edt" @click="openNumPad('units', p.row)">{{ p.row.units }}</q-td>
+            <q-td key="uni"   :props="p" class="edt" @click="openUniPad('uni',   p.row)">{{ p.row.uni }}</q-td>
+            <q-td key="tax"   :props="p" class="edt" @click="openTaxPad('tax',   p.row)">{{ p.row.tax }}</q-td>
+            <q-td key="disct" :props="p" class="edt" @click="openNumPad('disct', p.row)">{{ p.row.disct }}</q-td>
+            <q-td key="costs" :props="p" class="edt" @click="openNumPad('costs', p.row)">{{ p.row.costs }}</q-td>
+          </q-tr>
+          <q-tr :props="p" v-else>
+            <q-td key="name"  :props="p" :class="getTXTcolor(p.row)">{{ p.row.name }}</q-td>
+            <q-td key="price" :props="p">{{ p.row.price }}</q-td>
+            <q-td key="units" :props="p">{{ p.row.units }}</q-td>
+            <q-td key="uni"   :props="p"><span class="q-mr-sm">{{ p.row.uni }}</span></q-td>
+            <q-td key="tax"   :props="p">{{ p.row.tax }}</q-td>
+            <q-td key="disct" :props="p">{{ p.row.disct }}</q-td>
+            <q-td key="costs" :props="p">{{ p.row.costs }}</q-td>
+          </q-tr>
+        </template>
+      </q-table>
+      <div class="q-pt-xs" style="width:794px;margin-left:-2px">
+        <q-btn-group spread glossy class="col-12">
+          <q-btn dense no-wrap color="teal-8" label="select purchase dates" icon-right="history" @click="showSelOpt('Date')" />
+          <q-btn :class="{'text-red':!isEdit, 'text-amber':isEdit}" icon="update" @click="isEdit=!isEdit" style="max-width:40px" />
+          <q-btn dense no-wrap color="teal-9" label="select purchased itms" icon="history" @click="showSelOpt('Item')" />
+          <q-btn dense no-wrap color="teal-8" label="select store" icon-right="store" @click="showStoreList()" />
+        </q-btn-group>
+        <PUCPad @upd-item="updItem" @restore-num="restoreNum" />
+        <UniPad @upd-item="updItem" />
+        <TaxPad @upd-item="updItem" />
+        <SelOptPad @selected-opt="setSelectedOpt" />
+        <StoreList @get-this-date-purchases="getList" />
+      </div>
+      <q-option-group v-model="separator" inline class="text-h6 text-white" :options="[
+          { label: 'Horizontal', value: 'horizontal' },
+          { label: 'Vertical', value: 'vertical' },
+          { label: 'Cell', value: 'cell' },
+          { label: 'None', value: 'none' },
+        ]"
+      />
     </div>
-    <div class="col-3 text-right q-pr-xs">{{ date }} 采购单</div>
-    <div class="col-4 text-right q-pr-xs">Total {{ compSpent }}: $ {{ compTotal }}</div>
-  </div>
-  <q-table class="sh-sticky-header-table" :rows="palist" :columns="columns"
-    card-class="bg-teal-9 text-white" dense auto-width row-key="name"
-    :pagination="{rowsPerPage:rwsPerPage}" hide-pagination :separator="separator">
-    <template v-slot:header-cell-name="props">
-      <q-th :props="props"> 共采购 {{palist.length}} 种商品 </q-th>
-    </template>
-    <template v-slot:body="p">
-      <q-tr :props="p" v-if="isEdit">
-        <q-td key="name"  :props="p" :class="getTXTcolor(p.row)" @click="delPurchasedItemDialog(p.row)">{{ p.row.name }}</q-td>
-        <q-td key="price" :props="p" class="edt" @click="openNumPad('price', p.row)">{{ p.row.price }}</q-td>
-        <q-td key="units" :props="p" class="edt" @click="openNumPad('units', p.row)">{{ p.row.units }}</q-td>
-        <q-td key="uni"   :props="p" class="edt" @click="openUniPad('uni',   p.row)">{{ p.row.uni }}</q-td>
-        <q-td key="tax"   :props="p" class="edt" @click="openTaxPad('tax',   p.row)">{{ p.row.tax }}</q-td>
-        <q-td key="disct" :props="p" class="edt" @click="openNumPad('disct', p.row)">{{ p.row.disct }}</q-td>
-        <q-td key="costs" :props="p" class="edt" @click="openNumPad('costs', p.row)">{{ p.row.costs }}</q-td>
-      </q-tr>
-      <q-tr :props="p" v-else>
-        <q-td key="name"  :props="p" :class="getTXTcolor(p.row)">{{ p.row.name }}</q-td>
-        <q-td key="price" :props="p">{{ p.row.price }}</q-td>
-        <q-td key="units" :props="p">{{ p.row.units }}</q-td>
-        <q-td key="uni"   :props="p"><span class="q-mr-sm">{{ p.row.uni }}</span></q-td>
-        <q-td key="tax"   :props="p">{{ p.row.tax }}</q-td>
-        <q-td key="disct" :props="p">{{ p.row.disct }}</q-td>
-        <q-td key="costs" :props="p">{{ p.row.costs }}</q-td>
-      </q-tr>
-    </template>
-  </q-table>
-  <div class="q-pt-xs" style="width:794px;margin-left:-2px">
-    <q-btn-group spread glossy class="col-12">
-      <q-btn dense no-wrap color="teal-8" label="select purchase dates" icon-right="history" @click="showSelOpt('Date')" />
-      <q-btn :class="{'text-red':!isEdit, 'text-amber':isEdit}" icon="update" @click="isEdit=!isEdit" style="max-width:40px" />
-      <q-btn dense no-wrap color="teal-9" label="select purchased itms" icon="history" @click="showSelOpt('Item')" />
-      <q-btn dense no-wrap color="teal-8" label="select store" icon-right="store" @click="showStoreList()" />
-    </q-btn-group>
-    <PUCPad @upd-item="updItem" @restore-num="restoreNum" />
-    <UniPad @upd-item="updItem" />
-    <TaxPad @upd-item="updItem" />
-    <SelOptPad @selected-opt="setSelectedOpt" />
-    <StoreList @get-this-date-purchases="getList" />
-  </div>
-  <q-option-group v-model="separator" inline class="text-h6 text-white" :options="[
-      { label: 'Horizontal', value: 'horizontal' },
-      { label: 'Vertical', value: 'vertical' },
-      { label: 'Cell', value: 'cell' },
-      { label: 'None', value: 'none' },
-    ]"
-  />
-</div>
-</template>
+  </div>˚</template>
 <script setup>
 import { ref, computed } from 'vue'
 import { libFunctions } from '../src/composables/libFunctions'
 import { axiosFunctions } from '../src/composables/axiosFunctions'
 const { gaxios, paxios } = axiosFunctions()
-const { buildApp, isDesk, isIM, palist, $q } = libFunctions()
+const { buildApp, ENV_DEV, isIM, palist, $q } = libFunctions()
 import emitter from 'tiny-emitter/instance'
-import PUCPad from './PUCPad'
-import UniPad from './UniPad'
-import TaxPad from './TaxPad'
-import SelOptPad from '../src/components/SelOptPad'
-import StoreList from './StoreList'
+import PUCPad from './PUCPad.vue'
+import UniPad from './UniPad.vue'
+import TaxPad from './TaxPad.vue'
+import SelOptPad from '../src/components/SelOptPad.vue'
+import StoreList from './StoreList.vue'
 
 console.log('-ST-Shopping')
 buildApp('采购记录', 'Shopping')
@@ -186,7 +187,7 @@ function getStyle (col) {
 }
 function getClass (col, row) {
   if (col === 'name') {
-    return getTXTcolor(row) + ' ellipsis' 
+    return getTXTcolor(row) + ' ellipsis'
   }
 }
 function test_sortZhArray () { // testing chinese char sorting
@@ -259,7 +260,7 @@ function setList (da) {
   }
 }
 function getList () {
-  const path = process.env.API + '/shopping/getThisDatePurchases/' + date.value
+  const path = ENV_DEV + '/shopping/getThisDatePurchases/' + date.value
   gaxios(path)
 }
 emitter.on('shopping-getPurchasedDate', (da) => {
@@ -273,7 +274,7 @@ emitter.on('shopping-getPurchasedDate', (da) => {
   }
 })
 function getPurchasedDate () {
-  const path = process.env.API + '/shopping/getPurchasedDate/' + selectedItemId.value
+  const path = ENV_DEV + '/shopping/getPurchasedDate/' + selectedItemId.value
   gaxios(path)
 }
 function updDate (d) {
@@ -312,14 +313,14 @@ function delPurchasedItemDialog (item) {
 }
 function updPurchasedItem (item) {
   // console.log('-dg-updPurchasesItem', item)
-  const path = process.env.API + '/shopping/addPurchasedItem'
+  const path = ENV_DEV + '/shopping/addPurchasedItem'
   paxios(path, item)
 }
 var candidateItem = null
 function delPurchasedItem (item) {
   item.status = 'D'
   // console.log('-dg-delPurchasedItem', item)
-  const path = process.env.API + '/shopping/delPurchasedItem/' + item.id
+  const path = ENV_DEV + '/shopping/delPurchasedItem/' + item.id
   gaxios(path)
   candidateItem = item
 }

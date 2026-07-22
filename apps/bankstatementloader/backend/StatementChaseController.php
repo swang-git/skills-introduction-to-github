@@ -65,6 +65,7 @@ class StatementChaseController extends Controller {
         break;
       }
     }
+    Log::info("-CK-assets", $assets);
     return $assets;
   }
   private function getSection($line, $section) { //Log::info("getSection $line $section");
@@ -131,9 +132,9 @@ class StatementChaseController extends Controller {
         $patt = '#^(\d{2}/\d{2})\s+(.*?)\s+([+-]?\d{1,3}(?:,\d{3})*\.\d\d)\s+([+-]?\d{1,3}(?:,\d{3})*\.\d\d)$#x'; // no change for # x
         preg_match($patt, $line, $m);
         $date = $m[1];
-        $desc = $m[2];                
-        $amnt = $this->cleanMoney($m[3]);                
-        $balc = $this->cleanMoney($m[4]);                
+        $desc = $m[2];
+        $amnt = $this->cleanMoney($m[3]);
+        $balc = $this->cleanMoney($m[4]);
         $act[] = [$date, $desc, $amnt, $balc];
       } else if (preg_match('/IN CASE OF ERRORS OR QUESTIONS ABOUT YOUR ELECTRONIC FUNDS TRANSFERS:/', $line)) {
         $sav['act'] = $act;
@@ -188,9 +189,9 @@ class StatementChaseController extends Controller {
         $patt = '#^(\d{2}/\d{2})\s+(.*?)\s+([+-]?\d{1,3}(?:,\d{3})*\.\d\d)\s+([+-]?\d{1,3}(?:,\d{3})*\.\d\d)$#x'; // no change for # x
         preg_match($patt, $line, $m);
         $date = $m[1];
-        $desc = $m[2];          
+        $desc = $m[2];
         $amnt = $this->cleanMoney($m[3]);
-        $balc = $this->cleanMoney($m[4]);       
+        $balc = $this->cleanMoney($m[4]);
         $act[] = [$date, $desc, $amnt, $balc];
         // Log::info("===== chk nos $section", $this->nos);
       } else if ($section == 'chase_savings') {
@@ -200,8 +201,8 @@ class StatementChaseController extends Controller {
     }
     return $chk;
   }
-  public function loadMonthlyStatement($ymon) { Log:info("loadMonthlyStatements $ymon");
-    $docRoot = "/sites/webdata/docs/Chase/";
+  public function loadMonthlyStatement($ymon) { Log:info("loadMonthlyStatementon");
+    $docRoot = "/Users/swang/sites/webdata/docs/Chase";
     $fullpath = "$docRoot/{$ymon}.pdf";
     if (!file_exists($fullpath)) {
       Log::info("$fullpath not exist");
@@ -221,8 +222,9 @@ class StatementChaseController extends Controller {
     $assets = $this->getAssets($lines, $ymon);
     $chk = $this->getCheckingData($lines);
     $sav = $this->getSavingsData($lines);
-    Log::info('chk return', $chk);
-    Log::info('SAV return', $sav);
+    Log::info('ASSETS:', $assets);
+    Log::info('CHK:', $chk);
+    Log::info('SAV:', $sav);
     return ['assets' => $assets, 'chk' => $chk, 'sav' => $sav, 'status' => "OK"];
   }
 }

@@ -11,10 +11,10 @@
 <script setup>
 import { ref } from 'vue'
 import emitter from 'tiny-emitter/instance'
-import { libFunctions } from 'src/composables/libFunctions'
-import { dayFunctions } from 'src/composables/dayFunctions'
-import ChartPaye from './ChartPaye'
-import ChartSubc from './ChartSubc'
+import { libFunctions } from '../../src/composables/libFunctions'
+import { dayFunctions } from '../../src/composables/dayFunctions'
+import ChartPaye from './ChartPaye.vue'
+import ChartSubc from './ChartSubc.vue'
 const { isDesk, isIM } = libFunctions()
 const { getNextPrevMonth } = dayFunctions()
 const props = defineProps({

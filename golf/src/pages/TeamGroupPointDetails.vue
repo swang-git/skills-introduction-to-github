@@ -34,8 +34,8 @@
 <script setup>
 import { ref, computed } from 'vue'
 import emitter from 'tiny-emitter/instance'
-import { cssFunctions } from 'src/composables/cssFunctions'
-import { storeFunctions } from 'src/composables/storeFunctions'
+import { cssFunctions } from '../../src/composables/cssFunctions'
+import { storeFunctions } from '../../src/composables/storeFunctions'
 const { getStrokePadClass } = cssFunctions()
 const { hole, yard, hcap, calcHL, getScoreName } = storeFunctions()
 const holeIdx = ref(null)

@@ -19,20 +19,19 @@
 <script setup>
 import { ref } from 'vue'
 import emitter from 'tiny-emitter/instance'
-import { libFunctions } from 'src/composables/libFunctions'
-import { dayFunctions } from 'src/composables/dayFunctions'
-import { axiosFunctions } from 'src/composables/axiosFunctions'
-import ConfirmDialog from '../src/components/ConfirmDialog'
-import NumInput from '../src/components/NumInput'
-import LnkInput from '../src/components/LnkInput'
-import NotePad from '../src/components/NotePad'
-import DateTimePicker from '../src/components/DateTimePicker'
-import LayoutHeader from '../src/components/LayoutHeader'
-// import LayoutFooter from '../src/components/LayoutFooter'
-import LayoutFooter from '../src/components/LayoutFooter'
+import { libFunctions } from '../src/composables/libFunctions'
+import { dayFunctions } from '../src/composables/dayFunctions'
+import { axiosFunctions } from '../src/composables/axiosFunctions'
+import ConfirmDialog from '../src/components/ConfirmDialog.vue'
+import NumInput from '../src/components/NumInput.vue'
+import LnkInput from '../src/components/LnkInput.vue'
+import NotePad from '../src/components/NotePad.vue'
+import DateTimePicker from '../src/components/DateTimePicker.vue'
+import LayoutHeader from '../src/components/LayoutHeader.vue'
+import LayoutFooter from '../src/components/LayoutFooter.vue'
 
 //== data
-const { isDesk, screenwidth } = libFunctions()
+const { ENV_DEV, screenwidth } = libFunctions()
 const { yyyymmddHHMM } = dayFunctions()
 const { paxios, gaxios } = axiosFunctions()
 const opened = ref(false)
@@ -92,7 +91,7 @@ function add () {
   row.value.swProp = screenwidth/13
   row.value.datetime = yyyymmddHHMM(new Date())
   console.log('-fn-add', row.value)
-  const path = process.env.API + '/pfcheck/add'
+  const path = ENV_DEV + '/pfcheck/add'
   const data = row.value
   // data.link = Array.isArray(row.value.link) ? row.value.link.join('@') : row.value.link
   data.note = row.value.note
@@ -103,7 +102,7 @@ function add () {
 function upd () {
   // row.value.datetime = row.value.datetime.substring(0, 10)
   console.log('-fn-upd', row.value)
-  const path = process.env.API + '/pfcheck/upd'
+  const path = ENV_DEV + '/pfcheck/upd'
   const data = {}
   data.swProp = screenwidth/13
   data.id = row.value.id
@@ -121,7 +120,7 @@ function del () {
 }
 function delFromDB () {
 console.log('-fn-del', row.value.id, row.value.vol)
-  const path = process.env.API + '/pfcheck/del/' + row.value.id
+  const path = ENV_DEV + '/pfcheck/del/' + row.value.id
   // const data = row
   // paxios(path, data)
   gaxios(path)

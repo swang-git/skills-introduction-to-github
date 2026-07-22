@@ -26,7 +26,7 @@ import { ref, computed } from 'vue'
 import emitter from 'tiny-emitter/instance'
 import { libFunctions } from '../composables/libFunctions'
 const { isIM } = libFunctions()
-import TxtPad from './TxtPad'
+import TxtPad from './TxtPad.vue'
 
 const props = defineProps(['label', 'obj'])
 const emit = defineEmits(['upd-link'])

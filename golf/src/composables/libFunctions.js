@@ -1,8 +1,8 @@
 import { ref, computed } from 'vue'
-import emitter from 'tiny-emitter/instance.js'
+import emitter from 'tiny-emitter/instance'
 // import { useStore } from 'vuex'
 import { Platform, useQuasar } from 'quasar'
-import { useGolfStore } from 'src/stores/golf'
+import { useGolfStore } from '../../src/stores/golf'
 export function libFunctions() {
   // const $store = useStore()
   const store = useGolfStore()
@@ -228,6 +228,8 @@ export function libFunctions() {
   // function ALsAdmin () { return store.usertype === 'ALsAdmin' }
   // function PGCsAdmin () { return store.usertype === 'PGCsAdmin' }
   // function PGCsAdmin () { return store.usertype === 'PGCsAdmin' }
+
+  const ENV_API=import.meta.env.DEV ? '/api' : ''
   return {
     userGuidePage,
     $q,
@@ -257,5 +259,6 @@ export function libFunctions() {
     dats,
     dalist,
     buildApp,
+    ENV_API,
   }
 }

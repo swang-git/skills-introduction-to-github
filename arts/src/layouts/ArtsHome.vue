@@ -40,7 +40,7 @@
             <q-btn round glossy icon="img:/arts/icons/quasar-logo.svg" />
           </q-item-section>
           <q-item-section class="text-h6 text-lime" style="font-family:youyuan" v-if="!isIM">
-            <q-tooltip class="bg-teal text-h4 text-pink">Build Version: {{ compVer }}</q-tooltip>
+            <q-tooltip class="bg-teal text-h4 text-pink">Build Tag: {{ compVer }}</q-tooltip>
             Quasar Version: {{ $q.version }}
           </q-item-section>
         </q-item>
@@ -59,10 +59,10 @@ import { useRoute, useRouter } from 'vue-router'
 const route = useRoute()
 const $router = useRouter()
 import emitter from 'tiny-emitter/instance'
-import { libFunctions } from 'src/composables/libFunctions'
-import { axiosFunctions } from 'src/composables/axiosFunctions'
+import { libFunctions } from '../../src/composables/libFunctions'
+import { axiosFunctions } from '../../src/composables/axiosFunctions'
 const { gaxios } = axiosFunctions()
-const { isDesk, isFone, isIM, store } = libFunctions()
+const { isDesk, isFone, isIM, store, DEV_API } = libFunctions()
 
 // name: 'ArtsHome',
 const clickedIdx = ref(-1)
@@ -113,11 +113,12 @@ function goHome () {
 }
 
 function getList () {
-  const path = process.env.API + '/arts/getList'
+  console.log(`-fn-getList DEV_API=[${DEV_API}]`)
+  const path = DEV_API + '/arts/getList'
   gaxios(path)
 }
 
-const compVer = computed(() => { return process.env.VER })
+const compVer = computed(() => { return import.meta.env.VITE_BUILD_TAG })
 const isTextPage = computed(() => { return route.name === 'text' })
 </script>
 

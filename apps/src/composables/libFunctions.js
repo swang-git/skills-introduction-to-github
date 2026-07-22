@@ -4,7 +4,7 @@ import { ref, computed } from 'vue'
 // const router = useRouter()
 import { Platform, useQuasar } from 'quasar'
 import emitter from 'tiny-emitter/instance'
-import { useAppsStore } from 'stores/apps'
+import { useAppsStore } from '../../src/stores/apps'
 // export function libFunctions(initialSearchQuery='', initialDats=[], initialGolfUserType='') {
 export function libFunctions() {
   const $q = useQuasar()
@@ -41,6 +41,10 @@ export function libFunctions() {
   function checkMate9 () { alert('is Mate9 ' + mate9()) }
   function checkFone () { alert('is fone ' + fone()) }
   function checkDesk () { alert('is Desk ' + desk()) }
+  function isfedora () {
+    const hostPatt = /http:\/\/(fedora|192.168.1.110)/gi
+    return hostPatt.test(window.location.href)
+  }
   function local () {
     const localhosts = /http:\/\/(prod|devx|divx|192.168.|localhost|127.0.0.1)/gi
     // console.log('-lb-local', window.location.href, localhosts.test(window.location.href))
@@ -65,6 +69,7 @@ export function libFunctions() {
   const iPhone = IPhone()
   const iPhone13 = iphone13()
   const iPhone17 = iphone17()
+  const isFedora = isfedora()
 
   const firstOnPage = computed(() => { return (curPage.value - 1) * itemsPerPage.value })
   emitter.on('dats', (x) => dats.value = x)
@@ -115,7 +120,8 @@ export function libFunctions() {
     emitter.on('search', (txt) => { searchQuery.value = txt; console.log('search', txt) })
     // emitter.emit('cur-tit', tit + ' ' + app)
     emitter.emit('cur-tit', tit)
-    emitter.emit('cur-app', tit + ' ' + app, 'EMIT-FROM libs')
+    // emitter.emit('cur-app', tit + ' ' + app, 'EMIT-FROM libs')
+    emitter.emit('cur-app', tit, app)
     // emitter.emit('items-per-page', this.itemsPerPage)
     // emitter.on('items-per-page', (itpp) => { console.log('-fn-buildApp.on-itemsPerPage', itpp); itemsPerPage.value = itpp })
     emitter.on('items-per-page', (itpp) => itemsPerPage.value = itpp)
@@ -198,6 +204,7 @@ export function libFunctions() {
     else if (n.length === 2) return '0.' + n
     else if (n.length >= 3) return (parseInt(n) / 100.00)
   }
+  const ENV_DEV = import.meta.env.DEV ? '/api' : '' 
   return {
     getLineBackground,formatCurrency,fmtcy,fmtpt,deepClone,decimal2,isAdmin,userType,
     buildApp,opened,
@@ -211,10 +218,12 @@ export function libFunctions() {
     AppAdmin,
     isDesk,
     isIM,
+    isFedora,
     isFone,
     searchQuery,
     dats,
     dalist,
     palist,
+    ENV_DEV,
   }
 }

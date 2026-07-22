@@ -102,13 +102,17 @@ for file in files:
 # sys.exit(0)
 # now = datetime.strptime(ctm, '%Y-%m-%d %H:%M:%S')
 # print('current time is %s'%now)
-for idx, rec in enumerate(session.query(recorded).filter(recorded.watched == 0).order_by(recorded.starttime.desc()).limit(limitNum)):
+for idx, rec in enumerate(session.query(recorded).filter(recorded.autoexpire == 0).order_by(recorded.starttime.desc()).limit(limitNum)):
     # stm = datetime.strftime(rec.starttime + timedelta(hours=-5), '%m-%d %H:%M') # winter time
     delta = calendar.timegm(datetime.now(tz=UTC).timetuple()) - calendar.timegm(datetime.now().timetuple())
-    stm = datetime.strftime(rec.starttime + timedelta(hours=-round(delta/60/60)), '%m-%d %H:%M')  # work with daylight time saving
-    durationMinutes = str(minuteDiff(rec.starttime, rec.endtime))
-    etm = datetime.strftime(rec.starttime + timedelta(hours=-round(delta/60/60) + int(durationMinutes)/60), '%m-%d %H:%M')[6:]
-    tem = datetime.strptime(str(rec.starttime + timedelta(hours=-round(delta/60/60) + int(durationMinutes)/60)), '%Y-%m-%d %H:%M:%S')
+    recsttm = rec.starttime
+    stmx = timedelta(hours=-round(delta/60/60))  # work with daylight time saving
+    stmxx = datetime.strptime(recsttm, "%Y-%m-%d %H:%M:%S")  + stmx
+    stm = datetime.strftime(stmxx, '%m-%d %H:%M') # work with daylight time saving
+    durationMinutes = str(minuteDiff(recsttm, rec.endtime))
+
+    etm = datetime.strftime(datetime.strptime(recsttm, "%Y-%m-%d %H:%M:%S") + timedelta(hours=-round(delta/60/60) + int(durationMinutes)/60), '%m-%d %H:%M')[6:]
+    tem = datetime.strptime(recsttm, "%Y-%m-%d %H:%M:%S") + timedelta(hours=-round(delta/60/60) + int(durationMinutes)/60)
     diff = (now - tem).total_seconds()
     # print('minuteDiff is %d' % (int(diff)/60))
     if diff < 0: etm = fgcolor('green', etm)
@@ -139,8 +143,8 @@ for idx, rec in enumerate(session.query(recorded).filter(recorded.watched == 0).
     # chanid = str(rec.chanid)[1:3] + '-' + str(rec.chanid)[4:]
     chanid = str(rec.chanid)
     head = str(idx+1)
-    if idx+1 < 10: head = '00' + str(idx+1)
-    elif idx+1 < 100: head = '0' + str(idx+1)
+    if idx+1 < 10: head = '0' + str(idx+1)
+    ##__elif idx+1 < 100: head = '0' + str(idx+1)
     ## dst = channum + ' ' + stm + ' ' + fsz + ' ' + durationMinutes + 'm 《' + tit + '》'
     dst = channum + ' ' + stm + ' ~ ' + etm + ' ' + fsz + ' ' + durationMinutes + 'm ' + tit
     # dst = head + ' ' + channum + ' ' + stm + ' ' + fsz + ' 《' + tit + '》'
@@ -152,7 +156,7 @@ for idx, rec in enumerate(session.query(recorded).filter(recorded.watched == 0).
     # print(idx+1, recordedfile, ' ==> ', dst)
     os.chdir(videodir)
     # print(head, recordedfile, ' ==> ', fgcolor('red', dst))
-    print(head, recordedfile, ' ==> ', dst)
+    print(head, recordedfile, '==>', dst)
     os.symlink(recordedfile, dst)
 for misf in misfiles: print(misf)
 # print('==== ended link-myth-title.py')

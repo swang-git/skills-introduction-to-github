@@ -240,7 +240,7 @@ class ExpenseController extends Controller {
 			}
 		}
 	}
-	public function getList($spendId=0) { Log::info('exp->getList()');
+	public function getList($spendId=0) { Log::info("exp->getList($spendId)");
 		// $this->resetGolfPlayPayeeId($spendId);
 		$date30 = mktime(0, 0, 0, date("m"), date("d") + 30, date("Y")); // keep this for referencing
 		$mdate = Date('Y-m-d', $date30); // not used - just for referencing
@@ -276,7 +276,7 @@ class ExpenseController extends Controller {
 			}
 			if ($d->note != null) $d->height++;
 		}
-		// Log::info("get_spendings for userId $userId:", [$dats[0]->id]);
+		//Log::info("get_spendings for userId $userId:");
 		return ['lst' => $dats, 'status' => "OK"];
 	}
 	public function getCatsCombo($catId, $subId) {
@@ -330,7 +330,7 @@ class ExpenseController extends Controller {
 		$nd['subcat_id'] = $d['subcId'];
 		$nd['payee_id'] = $d['payeId'];
 		$nd['paymethod_id'] = $d['paymId'];
-		$nd['totalpaid'] = preg_match('/Refund|Trade in|Credit/', $subc) ? -abs($d->cost) : abs($d->cost);
+		$nd['totalpaid'] = preg_match('/Refund|Trade in|Credit|Property Tax Relief/', $subc) ? -abs($d->cost) : abs($d->cost);
 		$nd['unitprice'] = $d['unip'];
 		$nd['quantity'] = $d['quan'];
 		$nd['miles'] = $d['mile'];

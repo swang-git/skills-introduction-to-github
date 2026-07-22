@@ -38,9 +38,9 @@
 <script setup>
 import { ref, reactive, computed } from 'vue'
 import emitter from 'tiny-emitter/instance'
-import exdar from '../exp/exdar'
-import { axiosFunctions } from 'src/composables/axiosFunctions'
-import { libFunctions } from 'src/composables/libFunctions'
+import exdar from '../exp/exdar.vue'
+import { axiosFunctions } from '../src/composables/axiosFunctions'
+import { libFunctions } from '../src/composables/libFunctions'
 // import { dayFunctions } from 'src/composables/dayFunctions'
 // const { yyyymmddHHMM } = dayFunctions()
 
@@ -60,7 +60,7 @@ const posY = ref(-30)
 const draggingCard = ref(false)
 
 const { paxios, gaxios } = axiosFunctions()
-const { isIM, isDesk, fmtcy } = libFunctions()
+const { isIM, isDesk, fmtcy, ENV_DEV } = libFunctions()
 
 const compResidual = computed(() => { return Math.abs(residual.value) < 0.0001 ? 'Done' : fmtcy(residual.value) })
 // const compResidual = computed(() => { return Math.abs(residual.value) < 0.01 ? 'Done' : residual.value.toFixed(2) })
@@ -72,8 +72,8 @@ function setSpendingDetails (da) {
 }
 function getSpendingDetails (sid) {
   console.log(`-fn-CK-getSpendingDetails for spendId=${sid}`)
-  const path = process.env.API + '/expense/getSpending/' + sid
-  // const path = process.env.API + '/bankstatementloader/getSpending/' + sid
+  const path = ENV_DEV + '/expense/getSpending/' + sid
+  // const path = ENV_DEV + '/bankstatementloader/getSpending/' + sid
   gaxios(path)
 }
 function toggleRecon (e) {
@@ -129,7 +129,7 @@ function setReconcile (e) {
   }
   const inData = { Id: e.id, reconciledAt: e.checked ? ccardDueDay : null }
   // console.info('setReconcile for', e.checked, e.cost, residual.value, args, e)
-  const path = process.env.API + '/expense/setReconcile'
+  const path = ENV_DEV + '/expense/setReconcile'
   paxios(path, inData)
 }
 </script>

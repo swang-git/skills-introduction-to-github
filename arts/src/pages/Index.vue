@@ -1,6 +1,6 @@
 <template>
   <q-page class="flex flex-center">
-    <img alt="VK logo" src="~assets/vk-logo.png">
+    <img alt="vk-logo" src="../assets/vk-logo.png">
     <q-footer>
       <q-toolbar class="bg-teal-10 glossy" style="height:30px">
         <q-toolbar-title class="row" style="padding:22px 0 0 10px">

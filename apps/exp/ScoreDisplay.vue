@@ -51,17 +51,19 @@
 <script setup>
 import emitter from 'tiny-emitter/instance'
 import { ref } from 'vue'
-import InfoDisplay from 'app/src/components/InfoDisplay'
-import HoleScoreButton from './HoleScoreButton';
-import { cssFunctions } from 'src/composables/cssFunctions'
+import InfoDisplay from '../src/components/InfoDisplay.vue'
+import HoleScoreButton from './HoleScoreButton.vue';
+import { cssFunctions } from '../src/composables/cssFunctions'
+import { libFunctions } from '../src/composables/libFunctions'
 const { getFBClass, getTotalClass } = cssFunctions()
+const { ENV_DEV } = libFunctions()
 var score = {}
 var tmnt = {}
 var scoreId = 0
 var f9total = null
 var b9total = null
 var member = {}
-var selectedHole = -1
+// var selectedHole = -1
 var opened = ref(false)
 
 console.log('-ST-ScoreDisplay')
@@ -75,7 +77,7 @@ function showHoleInfo (i) {
   emitter.emit('open-InfoDisplay', tit, msg)
 }
 function updTotalScoreAndNote () {
-  const path = process.env.API + '/golf/updTotalScoreAndNote'
+  const path = ENV_DEV + '/golf/updTotalScoreAndNote'
   const inData = { scoreId:member.scoreId, note:member.note, totalScore:f9total + b9total }
   paxios(path)
   opened.value = false

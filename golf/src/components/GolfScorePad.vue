@@ -22,7 +22,7 @@
 <script setup>
 import { ref } from 'vue'
 import emitter from 'tiny-emitter/instance'
-import { axiosFunctions } from 'src/composables/axiosFunctions'
+import { axiosFunctions } from '../../src/composables/axiosFunctions'
 // import InfoDisplay from '../src/components/InfoDisplay' // parent import this already
 const { paxios } = axiosFunctions()
 console.info('-ST-GolfScorePad')
@@ -67,7 +67,7 @@ function setPScore (i) {
   //   player.value.pscore = ''
   } else if (player.value.pscore >= 58 && player.value.pscore <= 127 || player.value.pscore == null) {
     console.log(`-fn-setPScore psocre = ${player.value.pscore}`)
-    const path = process.env.API + '/golf/saveTplayerScore'
+    const path = ENV_API + '/golf/saveTplayerScore'
     paxios(path, player.value)
     opened.value = false
   }

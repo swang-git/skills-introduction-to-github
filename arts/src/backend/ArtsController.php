@@ -78,7 +78,7 @@ class ArtsController extends Controller
 			$pagetit = $this->get_cn_tit($tag) . " (" . $this->get_cn_ymd($ymd) . ")";
 		}
 		// foreach($arts as $a) { unset($a->tag); }
-		$xymd = HomePage::where('tag', $tag)->select('ymd')->orderBy('ymd', 'desc')->take(100)->get();          //dd(Collect($ymds));
+		$xymd = HomePage::where('tag', $tag)->select('ymd')->orderBy('ymd', 'desc')->take(77777)->get();          //dd(Collect($ymds));
 		$ymds = [];
       	foreach($xymd as $x) $ymds[] = $x->ymd;
 		$pagetit = $this->get_cn_tit($tag) . " (" .$this->get_cn_ymd($ymd) . ")";
