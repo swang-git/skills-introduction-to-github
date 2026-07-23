@@ -89,28 +89,6 @@ class MyPortfolio(Base):
 # Auto-create table in MySQL (if not exists)
 # Base.metadata.create_all(bind=engine)
 
-<<<<<<< HEAD
-# =============================================================================
-# 3. YOUR EXACT CSV → DB COLUMN MAPPING
-# =============================================================================
-CSV_TO_DB_MAP = {
-    "Account Number": "account",
-    "Account Name": "account_name",
-    "Symbol": "symbol",
-    "Description": "company",
-    "Quantity": "quantity",
-    "Last Price": "price",
-    "Last Price Change": "price_change",
-    "Current Value": "current_value",
-    "Today's Gain/Loss Dollar": "today_gl",
-    "Today's Gain/Loss Percent": "today_gl_pct",
-    "Total Gain/Loss Dollar": "total_gl",
-    "Total Gain/Loss Percent": "total_gl_pct",
-    "Percent Of Account": "pct_of_account",
-    "Cost Basis Total": "total_cost",
-    "Average Cost Basis": "cost_per_share",
-    "Type": "type"
-=======
 # # =============================================================================
 # # 3.0 YOUR EXACT CSV → DB COLUMN MAPPING -- All upper case for the first char of every word
 # # =============================================================================
@@ -174,7 +152,6 @@ CSV_TO_DB_MAP = {
     "cost basis total": "total_cost",
     "average cost basis": "cost_per_share",
     "type": "type"
->>>>>>> f67d697ec603fc6e69dd4d286f3f63a3be8036be
 }
 
 # =============================================================================
