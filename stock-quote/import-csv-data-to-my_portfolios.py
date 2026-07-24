@@ -141,7 +141,7 @@ def import_portfolio_csv(db, csv_file_path, dict, asof_time: datetime):
 # RUN THE SCRIPT
 # =============================================================================
 if __name__ == "__main__":
-    logFile = getLogFile('csv', subdays)
+    logFile = getLogFile('csv', subdays, database)
     tee = TeeToFileAndScreen(logFile, 'w')
     rootdir = "/Users/swang/sites/webdata/docs/Portfolio/"
     today = date.today()

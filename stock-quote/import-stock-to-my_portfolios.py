@@ -224,7 +224,7 @@ def get_stock_data(symb):
 # RUN THE SCRIPT __mail__
 # =============================================================================
 if __name__ == "__main__":
-    logFile = getLogFile('skq', 0)
+    logFile = getLogFile('skq', 0, database)
     tee = TeeToFileAndScreen(logFile, 'w')
     # print('===== Starting import stock data to my_portfolios =====', file=sys.stderr)
     print('===== Starting import stock data to my_portfolios =====')
