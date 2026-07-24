@@ -370,7 +370,7 @@ def get_basis_price(meta_dict, symb):
     return basis_price
 
 def getLogFile(tag, dyx):
-    return '/Users/swang/tmp/logs/cn/import-' + tag + '_' + str(abs(dyx)) + '_' + wkdayname() + '.log'
+    return '/Users/swang/tmp/logs/cn/import-' + tag + '-' + str(abs(dyx)) + '-' + wkdayname() + '.log'
 
 def wkdayname(): return date.fromtimestamp(time.time()).strftime('%a')
 
