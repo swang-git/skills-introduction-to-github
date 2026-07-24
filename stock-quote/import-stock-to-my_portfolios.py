@@ -7,6 +7,7 @@ from datetime import datetime, date, timedelta
 from decimal import Decimal
 
 from Utils import padsp, get_data_from_table, build_dict, get_meta, get_quantity, get_total_cost, get_basis_price
+from Utils import getLogFile, TeeToFileAndScreen
 from MyPortfolio_Models import get_connection, MyPortfolio, HealthRecord, StockQuote
 
 import argparse
@@ -223,6 +224,8 @@ def get_stock_data(symb):
 # RUN THE SCRIPT __mail__
 # =============================================================================
 if __name__ == "__main__":
+    logFile = getLogFile('skq', 0)
+    tee = TeeToFileAndScreen(logFile, 'w')
     # print('===== Starting import stock data to my_portfolios =====', file=sys.stderr)
     print('===== Starting import stock data to my_portfolios =====')
     # sys.exit(0)
@@ -265,5 +268,6 @@ if __name__ == "__main__":
     print('===== ENDED import stock data to my_portfolios =====')
     cursor.close()
     conn.close()
+    tee.close()
     sys.exit(0)
     #####################

@@ -1,7 +1,7 @@
 from datetime import date, datetime, timedelta
 from sty import ef, rs, FgRegister
 from mysql.connector import Error
-
+import time, sys
 from constants import spx
 
 def displaySec(sec, sp):
@@ -368,3 +368,36 @@ def get_basis_price(meta_dict, symb):
     basis_price = meta_dict[symb]['basis_price']
     # print("basis_price=[%s]"%basis_price)
     return basis_price
+
+def getLogFile(tag, dyx):
+    return '/Users/swang/tmp/logs/cn/import-' + tag + '_' + str(abs(dyx)) + '_' + wkdayname() + '.log'
+
+def wkdayname(): return date.fromtimestamp(time.time()).strftime('%a')
+
+class TeeToFileAndScreen(object):
+    def __getattr__(self, key): return None
+
+    def __init__(self, name, mode):
+        self.file = open(name, mode)
+        self.stdout = sys.stdout
+        sys.stdout = self
+
+    def close(self):
+        if self.stdout is not None:
+            sys.stdout = self.stdout
+            self.stdout = None
+        if self.file is not None:
+            self.file.close()
+            self.file = None
+
+    def write(self, data):
+        self.file.write(data)
+        self.stdout.write(data)
+
+    def flush(self):
+        self.file.flush()
+        self.stdout.flush()
+
+    def __del__(self):
+        self.close()
+
