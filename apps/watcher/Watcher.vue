@@ -1,6 +1,6 @@
 <template>
 <div style="display:grid;place-items:center" class="bg-teal-9">
-  <div style="margin:-1px 0 0 5px;width:796px;border:cyan solid 1px">
+  <div style="margin:-1px 0 0 5px;width:812px;border:cyan solid 1px">
     <div v-for="(e, i) in palist" :key=e.id>
       <div :style="getLineBackground(i)" :class="{ 'bg-purple-10':!e.hideIt }" class="q-px-xs">
         <div class="row cursor-pointer;q-qx-sm" style="font-size:20.1px">
@@ -297,8 +297,9 @@ function setPositions (da) {
     // refInfoDisplay.value.openIt(tit, msg)
     emitter.emit('open-PortfolioPositions', da, clickedRow.value.portfolio)
   } else if (da.status == "OK") {
-    // console.log('-CK-clickedRow', clickedRow.value.weight)
-    emitter.emit('open-PortfolioPositions', da, clickedRow.value.portfolio, clickedRow.value.weight)
+    console.log(`-CK-clickedRow weight=${clickedRow.value.weight} gluWeight=${da.gluWeight}`)
+    // emitter.emit('open-PortfolioPositions', da, clickedRow.value.portfolio, clickedRow.value.weight)
+    emitter.emit('open-PortfolioPositions', da, clickedRow.value.portfolio, da.gluWeight)
   } else {
     $q.dialog({title:'NO DATA FILE FOUND', message:da.status.substring(20)})
   }

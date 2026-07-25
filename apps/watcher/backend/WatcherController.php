@@ -11,6 +11,7 @@ use App\Models\watcher\PortfolioAction;
 use App\Models\watcher\FidelityPosition;
 use App\Models\watcher\FidelityPositionView;
 use App\Models\expense\Spend;
+use App\Models\glucosecheck\GlucoseCheck;
 
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
@@ -32,24 +33,27 @@ class WatcherController extends Controller {
         $ccEnd3 = $x[0].'-'.($x[1]+1).'-3'; Log::info("-CK-WatcherController/getpositions $date start=$ccSta3 end=$ccEnd3");
         $ccBalance = Spend::where([['status', 'A'], ['cat_id', 15], ['purchasedon', '>', $ccSta3], ['purchasedon', '<=', $ccEnd3]])->orderByDesc('purchasedon')->limit(1)->value('unitprice');
         $ccDueDate = Spend::where([['status', 'A'], ['cat_id', 15], ['purchasedon', '>', $ccSta3], ['purchasedon', '<=', $ccEnd3]])->max('purchasedon');
-        $today_sec_cnt = MyPortfolio::where('asof_time', $date)->count('*');
-        Log::info("today security count for $date: $today_sec_cnt");
+        // $today_sec_cnt = MyPortfolio::where('asof_time', $date)->count('*');
         // if ($today_sec_cnt == 0) return
         // $this->loadPositions($date);
         $pos = DB::select("CALL get_my_portfolios(?)", [$date]); // union data from stock_quotes
-        return ['positions' => $pos, 'ccBalance' => $ccBalance, 'ccDueDate' => $ccDueDate, 'status' => 'OK'];
+        // $weight = GlucoseCheck::where([['status', 'A'], ['user_id', Auth::user()->id], ['datetime', 'like', "%${date}%"]])->orderByDesc('datetime')->limit(1)->value('weight');
+        $weight = GlucoseCheck::where([['status', 'A'], ['user_id', Auth::user()->id], ['datetime', 'like', "%${date}%"]])->limit(1)->value('weight');
+        Log::info("-CK- glu-weight on $date in glucose_check=$weight");
+        return ['positions' => $pos, 'ccBalance' => $ccBalance, 'ccDueDate' => $ccDueDate, 'gluWeight' => $weight, 'status' => 'OK'];
     }
-    public function getPositions($date) { //Log::info("WatcherController/getpositions $date");
+    public function getPositions($date) { Log::info("-fn-WatcherController/getPositions $date");
         $x = explode('-', $date);
         $ccSta3 = $x[0].'-'.$x[1].'-1';
         $ccEnd3 = $x[0].'-'.($x[1]+1).'-3'; Log::info("-CK-WatcherController/getpositions $date start=$ccSta3 end=$ccEnd3");
         $ccBalance = Spend::where([['status', 'A'], ['cat_id', 15], ['purchasedon', '>', $ccSta3], ['purchasedon', '<=', $ccEnd3]])->orderByDesc('purchasedon')->limit(1)->value('unitprice');
         $ccDueDate = Spend::where([['status', 'A'], ['cat_id', 15], ['purchasedon', '>', $ccSta3], ['purchasedon', '<=', $ccEnd3]])->max('purchasedon');
         $today_sec_cnt = FidelityPosition::where('date', $date)->count('*');
-        Log::info("today security count for $date: $today_sec_cnt");
         // if ($today_sec_cnt == 0) return
         $this->loadPositions($date);
         $pos = DB::select("CALL get_positions(?)", [$date]); // union data from stock_quotes
+        // $weight = GlucoseCheck::where([['status', 'A'], ['user_id', Auth::user()->id] ])->value('weight')->orderBy('datetime', 'desc')->limit(1);
+        // Log::info("-CK-today security count for $date: $today_sec_cnt, weight=$weight");
         return ['positions' => $pos, 'ccBalance' => $ccBalance, 'ccDueDate' => $ccDueDate, 'status' => 'OK'];
     }
     public function loadPositions($date) { Log::info("-CK-WatcherController/Loading positions $date");
