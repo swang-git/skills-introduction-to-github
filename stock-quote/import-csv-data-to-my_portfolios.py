@@ -3,7 +3,7 @@
 import sys, os, csv
 from datetime import datetime, timedelta, date
 
-from Utils import get_data_from_table, build_dict, get_52_week_low, get_52_week_high, padsp
+from Utils import get_data_from_table, build_dict, get_52_week_low, get_52_week_high, padsp, TeeToFileAndScreen, getLogFile
 from MyPortfolio_Models import get_connection, CSV_TO_DB_MAP, TYPE_CONVERTERS, MyPortfolio
 # from MyPortfolio_Models import get_connection, Csv_To_Db_Map, Csv_to_db_map, TYPE_CONVERTERS, MyPortfolio
 
@@ -14,6 +14,8 @@ parser.add_argument('-d', '--db', type=str, required=True, help='upsert csv data
 args = parser.parse_args()
 database = args.db
 subdays = args.sub_days
+# logFile = getLogFile('csv', subdays)
+# tee = TeeToFileAndScreen(logFile, 'w')
 print("database:%s, subdays:%i"%(database,subdays))
 # sys.exit(0)
 
@@ -139,6 +141,8 @@ def import_portfolio_csv(db, csv_file_path, dict, asof_time: datetime):
 # RUN THE SCRIPT
 # =============================================================================
 if __name__ == "__main__":
+    logFile = getLogFile('csv', subdays, database)
+    tee = TeeToFileAndScreen(logFile, 'w')
     rootdir = "/Users/swang/sites/webdata/docs/Portfolio/"
     today = date.today()
     theday = today + timedelta(days=subdays)
@@ -162,6 +166,7 @@ if __name__ == "__main__":
     import_portfolio_csv(db, csv_data_file, dict, ASOF_TIME)
     cursor.close()
     conn.close()
+    tee.close()
 
     # with open(data_csv, 'r', encoding='utf-8-sig') as csv_file:
     #     # Read rows as dictionaries

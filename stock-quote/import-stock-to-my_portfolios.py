@@ -7,6 +7,7 @@ from datetime import datetime, date, timedelta
 from decimal import Decimal
 
 from Utils import padsp, get_data_from_table, build_dict, get_meta, get_quantity, get_total_cost, get_basis_price
+from Utils import getLogFile, TeeToFileAndScreen
 from MyPortfolio_Models import get_connection, MyPortfolio, HealthRecord, StockQuote
 
 import argparse
@@ -88,14 +89,14 @@ def save_to_myp_table(db, stocks, datx):
             # Update all fields
             for key, value in datx[symb].items():
                 setattr(existing, key, value)
-            print(f"🔄 Updated |{adjsp} {symb} | As-of: {asof} | price: {price} | price change: {price_change} | 52wk_low: {low} | 52wk_high: {high}")
+            print(f"🔄 Upd |{adjsp} {symb} | As-of: {asof} | price: {price} | change: {price_change} | 52wk_low: {low} | 52wk_high: {high}")
         else:
             # Create new record (NO __init__ needed!)
             new_record = MyPortfolio(**datx[symb])
             db.add(new_record)
             # price = padsp(f"{da_price:.2f}", 7)
             # price_change = padsp(f"{da_price_change:.2f}", 6)
-            print(f"✅ Added   |{adjsp} {symb} | As-of: {asof} | price: {price} | price change: {price_change} | 52wk_low: {low} | 52wk_high: {high}")
+            print(f"✅ Add |{adjsp} {symb} | As-of: {asof} | price: {price} | change: {price_change} | 52wk_low: {low} | 52wk_high: {high}")
 
     # Save all changes
     db.commit()
@@ -122,7 +123,7 @@ def save_to_stock_quotes_table(db, stocks, datx):
             # Update all fields
             for key, value in datx[symb].items():
                 setattr(existing, key, value)
-            print(f"🔄 Updated |{adjsp} {symb} | As-of: {asof} | price: {price} | price change: {price_change} | 52wk_low: {low} | 52wk_high: {high}")
+            print(f"🔄 Upd |{adjsp} {symb} | As-of: {asof} | price: {price} | change: {price_change} | 52wk_low: {low} | 52wk_high: {high}")
         else:
             # Create new record (NO __init__ needed!)
             # new_record = StockQuote(**datx[symb])
@@ -137,7 +138,7 @@ def save_to_stock_quotes_table(db, stocks, datx):
             db.add(new_record)
             price = padsp(f"{da_price:.2f}", 7)
             price_change = padsp(f"{da_price_change:.2f}", 6)
-            print(f"✅ Added   |{adjsp} {symb} | As-of: {asof} | price: {price} | price change: {price_change} | 52wk_low: {low} | 52wk_high: {high}")
+            print(f"✅ Add |{adjsp} {symb} | As-of: {asof} | price: {price} | change: {price_change} | 52wk_low: {low} | 52wk_high: {high}")
 
     # Save all changes
     db.commit()
@@ -171,7 +172,7 @@ def import_indices(db, date):
         # Update all fields
         for key, value in dbx.items():
             setattr(existing, key, value)
-        print(f"🔄 Updated | date: {date} | Dow Jones: {dowj} | Nasdaq: {nasd} | SP500: {sp500}")
+        print(f"🔄 Upd | date: {date} | Dow Jones: {dowj} | Nasdaq: {nasd} | SP500: {sp500}")
     else:
         # Create new record (NO __init__ needed!)
         latest_record = db.query(HealthRecord).order_by(HealthRecord.date.desc()).first()
@@ -181,7 +182,7 @@ def import_indices(db, date):
         dbx['weight'] = latest_weight
         new_record = HealthRecord(**dbx)
         db.add(new_record)
-        print(f"✅ Added   | date: {date} | Dow Jones: {dowj} | Nasdaq: {nasd} | SP500: {sp500}")
+        print(f"✅ Add | date: {date} | Dow Jones: {dowj} | Nasdaq: {nasd} | SP500: {sp500}")
     # Save all changes
     db.commit()
     print(f"🎉 Indices imported successfully!")
@@ -223,6 +224,8 @@ def get_stock_data(symb):
 # RUN THE SCRIPT __mail__
 # =============================================================================
 if __name__ == "__main__":
+    logFile = getLogFile('skq', 0, database)
+    tee = TeeToFileAndScreen(logFile, 'w')
     # print('===== Starting import stock data to my_portfolios =====', file=sys.stderr)
     print('===== Starting import stock data to my_portfolios =====')
     # sys.exit(0)
@@ -265,5 +268,6 @@ if __name__ == "__main__":
     print('===== ENDED import stock data to my_portfolios =====')
     cursor.close()
     conn.close()
+    tee.close()
     sys.exit(0)
     #####################
