@@ -1,4 +1,4 @@
-#!/Users/swang/myenv/bin/python3
+#!/usr/bin/python
 import sys
 import os
 import time
