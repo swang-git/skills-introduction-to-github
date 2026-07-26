@@ -32,7 +32,7 @@ def wkdayname():
 
 
 def getLogFile(tag, dyx):
-    logFile = '/home/swang/tmp/logs/cn/load' + tag + \
+    logFile = '/Users/swang/tmp/logs/cn/load' + tag + \
         '_' + str(abs(dyx)) + '_' + wkdayname() + '.log'
     return logFile
 
@@ -220,14 +220,14 @@ class Img:
         #     # imgfile += hashlib.md5(lnk.encode('utf')).hexdigest() + '.png'
         # else: imgfile += imgfilename
 
-        savroot = "/sites/webdata"
+        savroot = "/Users/swang/sites/webdata"
         savpath = "/daily_data/" + self.tag + "/" + \
             str(self.year) + "/" + str(self.ymd) + "/images/"
         os.makedirs(savroot + savpath, exist_ok=True)
         savfile = savpath + imgfile
         dlout(4, 'QID', self.qid)
         if self.qid == 'testing':
-            tofile = "/home/swang/tmp/" + self.tag + "_" + self.ymd + "_" + imgfile
+            tofile = "/Users/swang/tmp/" + self.tag + "_" + self.ymd + "_" + imgfile
         else:
             tofile = savroot + savfile
 
@@ -401,7 +401,7 @@ def get_vdocomp(vdo):
 
 
 def get_fin_filename(tag):
-    return "/home/swang/tmp/" + tag + datetime.fromtimestamp(time.time()).strftime('%Y%m%d')
+    return "/Users/swang/tmp/" + tag + datetime.fromtimestamp(time.time()).strftime('%Y%m%d')
     # return "/home/swang/tmp/" + tag + "_market_" + datetime.fromtimestamp(time.time()).strftime('%Y%m%d')
     # return "/home/swang/tmp/" + tag + "_market_" + datetime.fromtimestamp(time.time()).strftime('%Y%m%d_%H_%M_%S')
 
