@@ -5,7 +5,7 @@
 </div>
 </template>
 <script setup>
-import { ref, onMounted, createApp, reactive } from 'vue'
+import { ref, onMounted, reactive } from 'vue'
 import Chart from 'chart.js/auto'
 import ChartDataLabels from 'chartjs-plugin-datalabels'
 import cfg from './chart-cata-config.js'
