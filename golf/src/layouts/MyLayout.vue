@@ -294,7 +294,7 @@ function addNewCourse() {
 }
 function setUserType(da) {
   // console.log('-CK-fn-setUsertype', da.usertype)
-  store.userType = da.usertype
+  store.usertype = da.usertype
   // console.log(`-CK-fn-setUserType match Login JZsAdmin=${JZsAdmin.value} SysAdmin=${SysAdmin.value} PGCsAdmin=${PGCsAdmin.value} usertype=${da.usertype}`)
 }
 function getUserType() {
@@ -305,7 +305,7 @@ function logout() {
   const path = ENV_API + '/golf/logout'
   gaxios(path)
   emitter.emit('golf-usertype', null)
-  store.userType = null
+  store.usertype = null
   $q.notify({
     color: 'yellow',
     textColor: 'red-10',
@@ -461,10 +461,11 @@ function setTitle(tit) {
 }
 // === main ===
 userGuidePage.value = 'Home'
-getUserType()
+//getUserType()
 // getUserGuideId()
 document.title = 'Golf'
 </script>
+
 <style>
 html {
   overflow: scroll;
