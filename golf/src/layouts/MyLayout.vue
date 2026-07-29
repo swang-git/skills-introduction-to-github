@@ -221,11 +221,9 @@ const { yyyymmdd } = dayFunctions()
 const oneHour = 1000 * 60 * 60
 const curApp = ref(null)
 
-emitter.on('golf-getUserType', x => setUserType(x))
-// emitter.on('golf-usertype', (x) => { golfUserType.value = x })
-
 store.pageTitle = 'Princeton SU Golf Club'
 
+emitter.on('golf-getUserType', x => setUserType(x))
 emitter.on('golf-getPGCRules', x => setPGCRules(x))
 emitter.on('golf-delTournament', x => reloadMatches(x.gameId))
 emitter.on('golf-updTournament', x => reloadMatches(x.gameId))
@@ -294,7 +292,7 @@ function addNewCourse() {
 }
 function setUserType(da) {
   // console.log('-CK-fn-setUsertype', da.usertype)
-  store.userType = da.usertype
+  store.usertype = da.usertype
   // console.log(`-CK-fn-setUserType match Login JZsAdmin=${JZsAdmin.value} SysAdmin=${SysAdmin.value} PGCsAdmin=${PGCsAdmin.value} usertype=${da.usertype}`)
 }
 function getUserType() {
@@ -305,7 +303,7 @@ function logout() {
   const path = ENV_API + '/golf/logout'
   gaxios(path)
   emitter.emit('golf-usertype', null)
-  store.userType = null
+  store.usertype = null
   $q.notify({
     color: 'yellow',
     textColor: 'red-10',
@@ -461,7 +459,7 @@ function setTitle(tit) {
 }
 // === main ===
 userGuidePage.value = 'Home'
-getUserType()
+// getUserType()
 // getUserGuideId()
 document.title = 'Golf'
 </script>
