@@ -16,7 +16,7 @@ database = args.db
 subdays = args.sub_days
 # logFile = getLogFile('csv', subdays)
 # tee = TeeToFileAndScreen(logFile, 'w')
-print("database:%s, subdays:%i"%(database,subdays))
+##_print("database:%s, subdays:%i"%(database,subdays))
 # sys.exit(0)
 
 # # =============================================================================
@@ -147,7 +147,7 @@ if __name__ == "__main__":
     today = date.today()
     theday = today + timedelta(days=subdays)
     csvfile = 'snapshot_' + theday.strftime('%Y%m%d') + '.csv'
-    print('--subdays=[%d]'%subdays)
+    ##_print('--subdays=[%d]'%subdays)
     # if subdays < 0: csvfile = 'snapshot_' + (today - timedelta(days=-subdays)).strftime('%Y%m%d') + '.csv'
     csv_data_file = rootdir + csvfile
     if os.path.exists(csv_data_file):

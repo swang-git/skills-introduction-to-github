@@ -140,11 +140,7 @@ class BankStatementController extends Controller
 	// $lastFile = getLastMatchingFile('/path/to/directory', 'prefix_*.txt');
 	// echo $lastFile ? "Last file: $lastFile" : "No matching files found";
 
-<<<<<<< HEAD
-	private function getChaseBkgAssets() { Log::info("getChaseBkgAssets");
-=======
 	private function getChaseBkgAssets() { Log::info("-fn-getChaseBkgAssets");
->>>>>>> f67d697ec603fc6e69dd4d286f3f63a3be8036be
         $last_bkg_pdf = $this->getLastMatchingFile(config('constants.DOC_DIR') . '/Chase/', '202*_bkg.pdf');
         Log::info("last_bkg_pdf=$last_bkg_pdf");
 
@@ -165,17 +161,6 @@ class BankStatementController extends Controller
 			$begin_balance_stocks += ($d->price - $d->price_change) * $d->quantity;
 			$end_balance_stocks += $d->price * $d->quantity;
 		}
-<<<<<<< HEAD
-		// $cash = 40465.51;
-		// $cash = 41745.24;
-		// $cash = 41482.49;
-		// $cash = 41844.12;
-    $loadMonth = substr(StockQuote::where('status', 'A')->max('asof_time'), 0, 7);
-    $cash = ChaseBkgCash::where([ ['status', 'A'], ['date', 'like', "$loadMonth%"] ])->value('cash');
-    if (is_null($cash)) $cash = ChaseBkgCash::where('status', 'A')->orderByDesc('date')->limit(1)->value('cash');
-    Log::info("loadMonth=$loadMonth cash=$cash");
-		$bkgd = StockQuote::select(DB::raw("1 as user_id") , DB::raw("'BKG' as bank"),
-=======
 		$loadMonth = substr(StockQuote::where('status', 'A')->max('asof_time'), 0, 7);
 		$cash = ChaseBkgCash::where([ ['status', 'A'], ['date', 'like', "$loadMonth%"] ])->value('cash');
 		if (is_null($cash)) $cash = ChaseBkgCash::where('status', 'A')->orderByDesc('date')->limit(1)->value('cash');
@@ -184,7 +169,6 @@ class BankStatementController extends Controller
 				DB::raw("'fakeId' as id"), 
 				DB::raw("1 as user_id"), 
 				DB::raw("'BKG' as bank"),
->>>>>>> f67d697ec603fc6e69dd4d286f3f63a3be8036be
 				DB::raw("DATE_FORMAT(asof_time, '%Y') as year"),
 				DB::raw("DATE_FORMAT(asof_time, '%m') as month"),
 				DB::raw("'985 10278' as primary_account"),
