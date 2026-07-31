@@ -426,9 +426,11 @@ function getClass (col, row) {
       if      (80  <= gluc && gluc < 155) return bgc + 'text-center text-green-4'
       else if (155 <= gluc && gluc < 170) return bgc + 'text-center text-green-3'
       else if (170 <= gluc && gluc < 180) return bgc + 'text-center text-blue'
-      else if (180 <= gluc && gluc < 190) return bgc + 'text-center text-amber'
-      else if (190 <= gluc && gluc < 200) return bgc + 'text-center text-amber-4'
-      else if (200 <= gluc && gluc < 999) return bgc + 'text-center text-pink-4'
+      else if (180 <= gluc && gluc < 190) return bgc + 'text-center text-amber-2'
+      else if (190 <= gluc && gluc < 200) return bgc + 'text-center text-amber-5'
+      else if (200 <= gluc && gluc < 210) return bgc + 'text-center text-amber-9'
+      else if (210 <= gluc && gluc < 220) return bgc + 'text-center text-pink-4'
+      else if (220 <= gluc && gluc < 999) return bgc + 'text-center text-pink-6'
     }
   } else return 'text-right'
 }
