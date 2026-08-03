@@ -20,7 +20,7 @@
     "chartjs": "^0.3.24",
     "chartjs-plugin-datalabels": "^2.2.0",
     "pinia": "^3.0.1",
-    "quasar": "^2.23.3",
+    "quasar": "^2.23.4",
     "tiny-emitter": "^2.1.0",
     "vue": "^3.5.22",
     "vue-i18n": "^11.3.0",

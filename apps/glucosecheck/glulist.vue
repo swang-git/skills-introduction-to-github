@@ -27,20 +27,7 @@
         <q-toggle v-model="visibleColumnsFone" val="glucose" label="血糖量" />
         <q-toggle v-model="visibleColumnsFone" val="a1cp" label="%" />
       </div>
-      <!-- <q-select
-        v-model="visibleColumnsDesk" multiple borderless dense options-dense
-        emit-value map-options
-        option-value="name" style="min-width: 150px"
-        :display-value="$q.lang.table.columns"
-        :options="columns"
-      /> -->
     </div>
-    <!-- <div v-if="isIM" class="row q-pl-md">
-      <q-btn flat round dense color="accent" :icon="props.inFullscreen ? 'fullscreen_exit' : 'fullscreen'" @click="props.toggleFullscreen" class="q-pr-xs" />
-      <q-btn flat round icon="donut_small" color="cyan" @click="props.toggleFullscreen();showA1xChart()" class="float-right" />
-      <q-btn flat round icon="equalizer" color="blue" @click="props.toggleFullscreen();showA1pChart()" class="float-right" />
-      <q-btn flat round icon="trending_down" color="pink" @click="props.toggleFullscreen();showEagChart()" class="float-right" />
-    </div> -->
   </template>
 
   <template v-slot:header="props">
@@ -50,7 +37,7 @@
   </template>
 
   <template v-slot:body="p">
-    <q-tr :props="p" style="cursor:grab">
+    <q-tr :props="p" style="cursor:grab; line-height:1.11">
       <q-td v-for="col in p.cols" :key=col @click="showExpend(col.name, p)" :style="getStyle(col.name)" :class="getClass(col.name, p.row)">{{ getValue(col, p.row) }}</q-td>
     </q-tr>
     <q-tr v-show="p.expand" :props="p">
@@ -157,7 +144,7 @@ const gluSections = ref([])
 const gludata = ref([])
 const lastClickedRow = ref({row:{id:0}})
 const clickedIdx = ref(0)
-const rowsPerPageDesk = 23
+const rowsPerPageDesk = 26
 const rowsPerPageIM = 13
 const dats = ref([])
 const exOpt = ref([])
@@ -406,7 +393,7 @@ function getStyle (col) {
 // function between (x, a, b) { return x >= a && x < b }
 function getClass (col, row) {
   // console.log(`-CK-row.id = ${row.id} clickedIex = ${clickedIdx.value}`)
-  const bgc = row.id == lastClickedRow.value.row.id ? 'bg-indigo-9 ' : ''
+  let bgc = row.id == lastClickedRow.value.row.id ? 'bg-indigo-9 ' : ''
   if (col == 'datetime') return bgc + 'cursor-pointer text-no-wrap;text-center'
   else if (col === 'week') return bgc + 'text-center text-no-wrap'
   else if (col === 'food') return bgc + 'text-cyan-2 cursor-pointer text-no-wrap ellipsis'
@@ -434,30 +421,6 @@ function getClass (col, row) {
     }
   } else return 'text-right'
 }
-// function getClass (col, row) {
-//   // console.log(`-CK-row.id = ${row.id} clickedIex = ${clickedIdx.value}`)
-//   const bgc = row.id == lastClickedRow.value.row.id ? 'bg-indigo-9 ' : ''
-//   if (col == 'datetime') return bgc + 'cursor-pointer text-no-wrap;text-center'
-//   else if (col === 'week') return bgc + 'text-center text-no-wrap'
-//   else if (col === 'food') return bgc + 'text-cyan-2 cursor-pointer text-no-wrap ellipsis'
-//   else if (col === 'food' || col === 'datetime') return bgc + 'text-left text-no-wrap cursor-pointer'
-//   else if (col === 'drink' || col === 'fruit' || col === 'a1cp') return bgc + 'text-center text-no-wrap'
-//   else if (col === 'glucose' && row.typeC === '空腹') {
-//     if      (between(row.glucose,  10, 100)) return bgc + 'text-center text-green-9'  // between(x, a, b) = []; between(x, a, b, true) = ()
-//     else if (between(row.glucose, 101, 125)) return bgc + 'text-center text-green-7'
-//     else if (between(row.glucose, 126, 140)) return bgc + 'text-center text-green-5'
-//     else if (between(row.glucose, 141, 155)) return bgc + 'text-center text-blue'
-//     else if (between(row.glucose, 156, 190)) return bgc + 'text-center text-pink-4'
-//     else if (between(row.glucose, 191, 999)) return bgc + 'text-center text-pink-8'
-//   } else if (col === 'glucose' && /^餐[一二三]$/.test(row.typeC)) { 
-//     if      (between(row.glucose,  10, 155)) return bgc + 'text-center text-green-9'
-//     else if (between(row.glucose, 156, 170)) return bgc + 'text-center text-green-4'
-//     else if (between(row.glucose, 171, 180)) return bgc + 'text-center text-blue'
-//     else if (between(row.glucose, 181, 195, false)) return bgc + 'text-center text-red'
-//     else if (between(row.glucose, 196, 999)) return bgc + 'text-center text-pink-4'
-//   }
-//   else return 'text-right'
-// }
 function showExpend (col, p) {
   console.log(`%c-fn-showExpand col=${col} row.id=${p.row.id}, lastRowId=${lastClickedRow.value.row.id}`, 'color: red;font-size:18px')
   if (isDesk) return showExpendDesk(col, p)
