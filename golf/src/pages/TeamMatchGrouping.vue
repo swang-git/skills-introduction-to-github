@@ -104,32 +104,24 @@
     </q-btn>
   </q-card-actions>
 
-  <q-card-actions v-if="openSlots>=1" align="left">
-    <q-btn glossy class="text-cyan-1" icon="person" color="cyan-10" no-caps label="Select No-Alias-Player" @click="showPlayerList" />
-    <!-- <q-btn outline round color="cyan-2" :label="openSlots" /> -->
-    <span v-if="openSlots===1" class="q-pl-md text-h5 text-cyan-2"><strong>{{ openSlots }}</strong> open</span>
-    <span v-else class="q-pl-md text-h5 text-cyan-2"><strong>{{ openSlots }}</strong> opens</span>
-  </q-card-actions>
-
   <!--show aliases -->
   <q-card v-if="openSlots>0" class="bg-teal-10">
+    <div class="q-pl-md text-h5 text-cyan-2 cursor-pointer" @click="showPlayerList"><b>{{ openSlots }}</b> {{ slotAvailable }}</div>
     <q-card-section v-if="gameId==14 && lastHandicapDate" class="q-pa-none">
       <div class="text-h6 text-center text-cyan-2">Handicaps Updated on {{ lastHandicapDate }}</div>
     </q-card-section>
-    <q-card-actions class="row" align="between">
+    <q-card-actions class="row" align="between" style="font-family:stzhongsong">
       <div :class="shadow('round-66')" style="padding:15px 0 0 9px;font-size:24px;color:red" @click="switchAliases">{{ aliName }}</div>
-      <!-- <div v-for="p in paliases[aliName].filter(p => !tpids.includes(p.player_id))" :key="p"> -->
-      <!-- <div :class="shadow('round-66')" style="padding:15px 0 0 9px;font-size:24px" @click="switchAliases">JZs</div> -->
       <div v-for="p in paliases.filter(p => !tpids.includes(p.player_id))" :key="p">
-        <div v-if="(zhcharRegExp.test(p.alias) && p.alias.length==1)" :class="shadow('round-66')" style="font-size:36px;font-family:stzhongsong" @click="moveToGrouped(p)">
+        <div v-if="(cnChar.test(p.alias) && p.alias.length==1)" :class="shadow('round-66')" style="font-size:36px" @click="moveToGrouped(p)">
           <div style="margin:-4px 0 0 0px">{{ p.alias }}</div>
           <q-tooltip class="text-white text-h6 bg-indigo-9">{{ p.handicap }} {{ p.name }}</q-tooltip>
         </div>
-        <div v-else-if="zhcharRegExp.test(p.alias)" :class="shadow('round-66')" style="font-size:23px;font-family:stzhongsong" @click="moveToGrouped(p)">
+        <div v-else-if="cnChar.test(p.alias)" :class="shadow('round-66')" style="font-size:23px" @click="moveToGrouped(p)">
           <div style="margin:4px 0 0 -4px">{{ p.alias }}</div>
           <q-tooltip class="text-white text-h6 bg-indigo-9">{{ p.handicap }} {{ p.name }}</q-tooltip>
         </div>
-        <div v-else-if="p.alias!=null && p.alias.length==2" :class="shadow('round-66')" style="font-family:stzhongsong" @click="moveToGrouped(p)">
+        <div v-else-if="p.alias!=null && p.alias.length==2" :class="shadow('round-66')" @click="moveToGrouped(p)">
           <div>{{ p.alias }}</div>
           <q-tooltip class="text-white text-h6 bg-indigo-9">{{ p.handicap }} {{ p.name }}</q-tooltip>
         </div>
@@ -151,36 +143,30 @@
         </div>
         <div v-else-if="(p.alias!=null && p.alias.length>=6)" :class="shadow('round-66')" style="font-size:16px" @click="moveToGrouped(p)">
           <div style="margin:10px 0 0 -3px">{{ p.alias }}</div>
-          <!-- <q-tooltip class="text-white text-h6 bg-indigo-9">{{ p.handicap }} {{ p.name }}</q-tooltip> -->
         </div>
         <div v-else :class="shadow('round-66')" style="font-size:15px">{{ p.alias }}</div>
       </div>
+      <RoundButton size="23px" icon="people" clas="q-ma-xs" colr="blue-10" ttip="Players List" @click="showPlayerList" />
     </q-card-actions>
   </q-card>
-  <!-- <q-btn-group glossy spread>
-    <q-btn v-if="openSlots===1" color="cyan-10" no-caps :label="'Show Player List (' + openSlots + ' open)'" @click="showPlayerList" />
-    <q-btn v-else-if="openSlots>1" color="cyan-10" no-caps :label="'Show Player List (' + openSlots + ' opens)'" @click="showPlayerList" />
-  </q-btn-group> -->
   <TeamMatchPlayers :tplayers="getTplayers()" :paliases="aliases" @move-to-grouping="moveToGrouping" />
-  <!-- <KJNewPlayerDialog ref="refKJNewPlayerDialog" /> -->
-  <!-- <KJNewPlayerDialog /> -->
 </div>
 </template>
 <script setup>
 import { ref, computed } from 'vue'
-// import { useQuasar } from 'quasar'
-// import { useStore } from 'vuex'
 import { axiosFunctions } from '../composables/axiosFunctions'
 import { cssFunctions } from '../composables/cssFunctions'
 import { groupFunctions } from '../composables/groupFunctions'
 import { libFunctions } from '../composables/libFunctions'
 import { UserGuideTitles } from '../composables/UserGuideTitles'
 import emitter from 'tiny-emitter/instance'
-
-// import InfoDisplay from 'src/components/InfoDisplay'
 import TeamMatchPlayers from './TeamMatchPlayers.vue'
-// import KJNewPlayerDialog from '../components/KJNewPlayerDialog'
 import Tooltip from '../../src/components/ToolTip.vue'
+import RoundButton from '../../src/components/RoundButton.vue'
+
+const { shadow, condShadow, getTeeColor, teamColor, getAvatar, cnChar } = cssFunctions()
+const { grpScenario8, grpScenario, getABS } = groupFunctions()
+const { paxios } = axiosFunctions()
 
 //== data section
 const dev = false
@@ -200,11 +186,6 @@ const emit = defineEmits([
   'switch-aliases',
   'switch-handicap',
 ])
-// const tabs = { MatchGroupingPlayers, InfoDisplay }
-// const currentTab = ref('MatchGroupingPlayers')
-const { shadow, condShadow, getTeeColor, teamColor, getAvatar, zhcharRegExp } = cssFunctions()
-const { grpScenario8, grpScenario, getABS } = groupFunctions()
-const { paxios } = axiosFunctions()
 var { pagename, year, screenwidth, store, ENV_API } = libFunctions()
 pagename.value = 'TeamMatchGrouping'
 // const store = useStore()
@@ -234,8 +215,10 @@ const paliases = computed(() => { return props.aliases })
 const compHandicapFlag = computed(() => { return props.handicapFlag })
 const tpidsLen = computed(() => { return tpids.value.length })
 const openSlots = computed(() => { return grouped.value.length*4 - tpids.value.length })
+const slotAvailable = computed(() => { return openSlots.value === 1 ? 'Open' : 'Opens' })
+
 // const tplayers = computed(() => {
-//   let players = []
+  //   let players = []
 //   grouped.value.forEach(gx => {
 //     players = players.concat(gx.players)
 //   })

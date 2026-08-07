@@ -6,6 +6,7 @@ export function cssFunctions() {
   // const store = app.appContext.config.globalProperties.$store
   const { store } = libFunctions()
   const shadow = (classname) => { return classname + ' inset-shadow-down' }
+  const fsznm = (sz, nm) => { return 'font-size:' + sz + ';font-family:' + nm }
   const getAvatar = (m) => { return m.gender === 'F' ? 'icons/girl.png' : 'icons/boy.png' }
   const teamColor = (p) => { return /A\d/.test(p.team) ? 'bg-blue-9' : 'bg-red-9' }
   const getNature = (gender) => { return gender === 'M' ? 'nature_people' : 'nature' }
@@ -42,7 +43,7 @@ export function cssFunctions() {
     const r2 = xal>0 ? cls1 : xal<0 ? cls2 : cls3
     return r1 + r2
   }
-  const zhcharRegExp = new RegExp('[\u3040-\u30ff\u3400-\u4dbf\u4e00-\u9fff\uf900-\ufaff\uff66-\uff9f]')
+  const cnChar = RegExp('[\u3040-\u30ff\u3400-\u4dbf\u4e00-\u9fff\uf900-\ufaff\uff66-\uff9f]')
   function getStrokePadClass (scoreName) {
     // console.log(`-fn-getStrokePadClass-${scoreName}`)
     if (scoreName === 0) return '_zero'
@@ -105,13 +106,14 @@ export function cssFunctions() {
   }
   return {
     shadow,getGScoreClass,getScoreName,getScoreClass,getGScoreClass11,getGScoreClassM,
+    fsznm,
     getAvatar,
     teamColor,
     condShadow,
     getTeeColor,
     getNature,
-    zhcharRegExp,
     getAvgColor,
     getGSColor,getStrokePadClass,getFBClass,
+    cnChar,
   }
 }
