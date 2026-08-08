@@ -118,7 +118,7 @@ const { isIM, isDesk, buildApp, palist, ENV_DEV } = libFunctions()
 import redar from './redar.vue'
 import InfoDisplay from '../src/components/InfoDisplay.vue'
 
-const rowsPerPageDesk = 23
+const rowsPerPageDesk = 22
 const rowsPerPageIM = 13
 
 var lastClickedP = { key:0, pageIndex: 0 }
