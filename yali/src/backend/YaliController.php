@@ -46,7 +46,7 @@ class YaliController extends Controller
     /**
      * Scan filesystem and paginate results
      */
-    public function getPages($page, $perPage) {
+    public function getPages($page, $perPage) { Log::info("-fn-getPages page=$page, perPage=$perPage");
         // Get all drawing files
         $allFiles = $this->getDrawingFiles();
         $total = count($allFiles);
@@ -64,6 +64,12 @@ class YaliController extends Controller
         // Manual slice for pagination
         $offset = ($page - 1) * $perPage;
         $pageFiles = array_slice($allFiles, $offset, $perPage);
+
+        $pdiff = $perPage - count($pageFiles);
+        if ($pdiff > 0) {
+            $addingFiles = array_slice($allFiles, 0, $pdiff);
+            $pageFiles = array_merge($addingFiles, $pageFiles);
+        }
         
         // Build response items
         $items = array_map(function ($file) {
