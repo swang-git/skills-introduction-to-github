@@ -87,7 +87,7 @@ function showSysInfo() {
 }
 function openApp(app) {
   if (['../golf', '../arts', '../yali'].includes(app)) {
-    //logout()
+    logout()
     window.location.href = ENV_DEV + app
   } else if ([
       'glucosecheck',

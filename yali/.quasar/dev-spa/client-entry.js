@@ -86,10 +86,9 @@ async function start ({
   
   app.use(router)
 
-  
     
           app.mount('#q-app')
-      
+    
 }
 
 createQuasarApp(createApp, quasarUserOptions)

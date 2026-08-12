@@ -70,17 +70,17 @@ export function addPreFetchHooks ({ router, store, publicPath }) {
       ))
       .map(m => m.c.__c !== void 0 ? m.c.__c.preFetch : m.c.preFetch)
 
-        if (appPrefetch !== false) {
+    if (appPrefetch !== false) {
       preFetchList.unshift(appPrefetch)
       appPrefetch = false
     }
-    
+
     if (preFetchList.length === 0) return
 
     let redirectArg = null
     const redirect = url => { redirectArg = url }
 
-    
+
     for (let i = 0; redirectArg === null && i < preFetchList.length; i++) {
       try {
         await preFetchList[i]({
@@ -91,13 +91,13 @@ export function addPreFetchHooks ({ router, store, publicPath }) {
           publicPath
         })
       } catch (e) {
-                if (redirectArg !== null) return redirectArg
+        if (redirectArg !== null) return redirectArg
         console.error(e)
         return
       }
     }
 
-    
+
     if (redirectArg !== null) return redirectArg
   })
 }
