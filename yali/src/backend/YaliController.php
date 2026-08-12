@@ -51,7 +51,7 @@ class YaliController extends Controller
         $allFiles = $this->getDrawingFiles();
         $total = count($allFiles);
         $years = [];
-        $ms = [];
+        $yms = [];
         forEach($allFiles as $file) {
             $year = date('Y', filemtime($file));
             $ym = date('Y.m', filemtime($file));
