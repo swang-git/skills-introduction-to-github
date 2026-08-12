@@ -1,55 +1,15 @@
 <template>
   <q-dialog v-model="opened" full-width>
     <!-- <div class="q-pa-sm bg-cyan-10" style="border: solid cyan 4px" :style="rowId<=0 ? { 'height':'830px' } : { 'height':'1060px' }"> -->
-    <div
-      class="q-pa-sm bg-cyan-10"
-      style="border: solid cyan 4px;height:'830px"
-    >
-      <q-btn
-        round
-        icon="close"
-        glossy
-        color="amber-10"
-        v-close-popup
-        class="float-right"
-        style="z-index: 10; margin: -1px 0 0 -100px"
-      />
-      <q-table
-        flat
-        bordered
-        dense
-        title="User List"
-        :rows="rows"
-        :columns="columns"
-        row-key="id"
-        :rows-per-page-options="[10, 20, 30]"
-        hide-pagination
-        class="bg-teal-10 text-white text-h6"
-      >
+    <div class="q-pa-sm bg-cyan-10" style="border: solid cyan 4px;height:'830px">
+      <q-btn round icon="close" glossy color="amber-10" v-close-popup class="float-right" style="margin:-1px 0 0 -100px" z-index:10 />
+      <q-table flat bordered dense title="User List" :rows="rows" :columns="columns" row-key="id"
+        :rows-per-page-options="[10, 20, 30]" hide-pagination class="bg-teal-10 text-white text-h6">
         <template v-slot:body="props">
-          <q-tr
-            key="id"
-            :props="props"
-            @click="openUserInput(props.row)"
-            class="cursor-pointer"
-          >
-            <q-td
-              ><q-radio
-                size="70px"
-                keep-color
-                v-model="rowId"
-                :val="props.row.id"
-                checked-icon="task_alt"
-                unchecked-icon="panorama_fish_eye"
-                :color="
-                  props.row.id % 3 == 0
-                    ? 'yellow'
-                    : props.row.id % 3 == 1
-                      ? 'green'
-                      : 'pink'
-                "
-                @click="cloneIt(props.row)"
-            /></q-td>
+          <q-tr key="id" :props="props" @click="openUserInput(props.row)" class="cursor-pointer">
+            <q-td ><q-radio size="70px" keep-color v-model="rowId" :val="props.row.id" checked-icon="task_alt" unchecked-icon="panorama_fish_eye"
+                 :color=" props.row.id % 3 == 0 ? 'yellow' : props.row.id % 3 == 1 ? 'green' : 'pink'" @click="cloneIt(props.row)" />
+            </q-td>
             <q-td key="name" :props="props">{{ props.row.name }}</q-td>
             <q-td key="username" :props="props">{{ props.row.username }}</q-td>
             <q-td key="usertype" :props="props">{{ props.row.usertype }}</q-td>
@@ -58,7 +18,7 @@
         </template>
       </q-table>
     </div>
-    <UserInput />
+    <!-- <UserInput /> -->
   </q-dialog>
 </template>
 
@@ -67,8 +27,8 @@ import { ref, computed, onMounted } from 'vue'
 import emitter from 'tiny-emitter/instance'
 import { axiosFunctions } from '../src/composables/axiosFunctions'
 const { gaxios, paxios } = axiosFunctions()
-import TxtInput from '../src/components/TxtInput.vue'
-import ConfirmDialog from '../src/components/ConfirmDialog.vue'
+// import TxtInput from '../src/components/TxtInput.vue'
+// import ConfirmDialog from '../src/components/ConfirmDialog.vue'
 const opened = ref(false)
 const rows = ref([])
 const rowId = ref(null)

@@ -19,7 +19,7 @@ echo dumping database $target_file $argv
 ##__mysqldump -uswang -pYbsjll11 -B $db --routines > $target_file &
 mariadb-dump -uswang -pYbsjll11 -B $db --routines > $target_file &
 
-#if [ $db == "prod" ]; then
-#  mariadb-dump -uswang -pYbsjll11 -B $db --routines | mariadb -uswang -pYbsjll11 -hfedora
-#fi
-
+if [ $db == "prod" ]; then
+  mariadb-dump -uswang -pYbsjll11 -B $db --routines | mariadb -uswang -pYbsjll11 -hfedora
+  #mysqldump -uswang -pYbsjll11 -B $db --routines | mysql -uswang -pYbsjll11 -hmaci
+fi

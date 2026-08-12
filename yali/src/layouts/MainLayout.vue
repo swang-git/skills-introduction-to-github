@@ -49,9 +49,9 @@
           <q-card class="bg-teal-10" style="margin-top:10px">
             <q-card-actions align="between">
               <RoundButton size="16px" icon="头" clas="q-pb-sm" colr="red-10" iclr="yellow" ttip="just show the first page" @click="getFirstPage" />
-              <RoundButton size="16px" icon="chevron_left"  colr="indigo-10" iclr="yellow" ttip="appending next page(on end)" @click="getPrevYM" />
+              <RoundButton size="16px" icon="chevron_left"  colr="indigo-10" iclr="yellow" ttip="show previous month" @click="getPrevYM" />
               <q-btn v-if="ym!=null" size="24px" :label="total"  colr="teal-10" />
-              <RoundButton size="16px" icon="chevron_right" colr="indigo-10" iclr="yellow" ttip="preppend the prev page(on top)" @click="getNextYM" />
+              <RoundButton size="16px" icon="chevron_right" colr="indigo-10" iclr="yellow" ttip="show next mouth" @click="getNextYM" />
               <RoundButton size="16px" icon="尾" clas="q-pb-sm" colr="red-10" iclr="yellow" ttip="just the last page" @click="getLastPage" />
             </q-card-actions>
           </q-card>

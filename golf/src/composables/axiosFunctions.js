@@ -12,18 +12,12 @@ export function axiosFunctions() {
     x.shift()
     if (x[0] === 'api') target = x[1] + '-' + x[2]
     else target = x[0] + '-' + x[1]
-    // console.log(`gaxios path=${path}`)
     const pathx = path.replace(/^\/api\/\w+\/(.*)/, '$1')
-    console.log(`%cGATH:${pathx}`, 'font-size:10px;font-weight:600;color:yellow;font-size:medium')
+    console.log(`%cGATH:${pathx}`, 'font-size:10px;font-weight:200;color:yellow')
 
-    axios
-      .get(path)
-      .then((response) => {
+    axios.get(path).then((response) => {
         const da = response.data
-        console.log(
-          `%cGTGT:${target}(${da.status})`,
-          'font-size:10px;font-weight:600;color:yellow;font-size:medium',
-        )
+        console.log(`%cGTGT:${target}(${da.status})`, 'font-weight:300;color:yellow;font-size:10px')
         // console.log(`-CK-fn-target=${target} axios return status=${da.status}`, da)
         if (da.status === 'FAILED') {
           notifyFunc(path, target, da.errmsg)
@@ -31,11 +25,11 @@ export function axiosFunctions() {
           emitter.emit(target, da)
           return
         }
-      })
-      .catch((error) => {
+      }).catch((error) => {
         notifyFunc(path, target, error)
       })
   }
+
   function paxios(path, data) {
     // console.log(`-fn-paxios path=${path}`, data)
     console.log(`%cPATH:${path}`, 'font-size:10px;font-weight:600;color:lime;font-size:medium')

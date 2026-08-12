@@ -27,12 +27,19 @@
     <RoundButton size="20px" icon="PG" colr="green-10" clas="q-ma-xs q-pb-sm" ttip="PGC Game List of Expired Games with scores(regular users)" @click="openApp('PGCGameList')" />
     <RoundButton size="20px" icon="PR" colr="green-10" clas="q-ma-xs q-pb-sm" ttip="PGC Game Rules" @click="showPGCRules()" />
     <RoundButton size="20px" icon="card_giftcard" clas="q-ma-xs" colr="pink-10"   ttip="Holidays" @click="showHolidays" />
+<<<<<<< HEAD
     <RoundButton size="20px" icon="DV" clas="q-ma-xs q-pb-sm" colr="blue-10"   ttip="device detect" @click="showDeviceType" />
+=======
+>>>>>>> 1913d63fc5e98c5673b1fd63b5a465bdd6787fc2
     <RoundButton size="20px" icon="monitor" clas="q-ma-xs q-pb-sm" colr="green-10" ttip="Show Log" @click="openApp('LoadLogPage')" v-if="JZsAdmin" />
     <RoundButton size="20px" icon="login"  colr="green-10" clas="q-ma-xs" ttip='Admin Login'  @click="login()" v-if="!(JZsAdmin || SysAdmin || PGCsAdmin)" />
     <RoundButton size="20px" icon="logout" colr="brown-10" clas="q-ma-xs" ttip='SysAdmin Logout' @click="logout()" v-else-if="SysAdmin" />
     <RoundButton size="20px" icon="logout" colr="red" clas="q-ma-xs" ttip='PGCsAdmin Logout' @click="logout()" v-else-if="PGCsAdmin" />
     <RoundButton size="20px" icon="logout" colr="blue-10" clas="q-ma-xs" ttip='JZsAdmin Logout' @click="logout()" v-else-if="JZsAdmin" />
+<<<<<<< HEAD
+=======
+    <RoundButton size="20px" icon="D" clas="q-ma-xs q-pb-sm" colr="amber-10"   ttip="device detect" @click="showDeviceType" />
+>>>>>>> 1913d63fc5e98c5673b1fd63b5a465bdd6787fc2
     <RoundButton size="20px" icon="question_mark" colr="blue-10" clas="q-ma-xs" ttip='App Details for Each Button' @click="opened=!opened" />
     <q-btn size="20px" round glossy icon="info" class="q-ma-xs" color="green-10" ttip='System Information' @click="showSysInfo" />
       <!-- <b style="margin-top:-21px" class="text-cyan-2 text-h6">{{ compVer }}</b>
