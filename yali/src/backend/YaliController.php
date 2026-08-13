@@ -12,7 +12,7 @@ class YaliController extends Controller
 {
     // private string $disk = 'public';
     // private string $drawingsPath = 'drawings';
-    // private string $drawingsPath = '/Users/swang/webdata/pics/yali/thumbnails';
+    // private string $drawingsPath = '/sites/webdata/pics/yali/thumbnails';
     // private string $thumbnailsPath = 'thumbnails';
     
     /**
@@ -51,7 +51,7 @@ class YaliController extends Controller
         $allFiles = $this->getDrawingFiles();
         $total = count($allFiles);
         $years = [];
-        $ms = [];
+        $yms = [];
         forEach($allFiles as $file) {
             $year = date('Y', filemtime($file));
             $ym = date('Y.m', filemtime($file));
@@ -109,7 +109,7 @@ class YaliController extends Controller
      * move dulicated file to dup_files and dump_files/thumbnails
      */
     public function removeDupFile($dupFile) { Log::info("remove duplicate file[$dupFile]\n");
-        $picsDir = '/Users/swang/sites/webdata/pics';
+        $picsDir = '/sites/webdata/pics';
         $yaliDir = "$picsDir/yali";
         $dupFilesDir = "$picsDir/dup_files";
         $thumbnailsDir = "$yaliDir/thumbnails";
@@ -124,7 +124,7 @@ class YaliController extends Controller
      * reverse the "move dulicated file to dup_files and dump_files/thumbnails"
      */
     public function undoRemovedDupFile($dupFile) { Log::info("undo removed duplicate file[$dupFile]\n");
-        $picsDir = '/Users/swang/sites/webdata/pics';
+        $picsDir = '/sites/webdata/pics';
         $yaliDir = "$picsDir/yali";
         $dupFilesDir = "$picsDir/dup_files";
         $thumbnailsDir = "$yaliDir/thumbnails";
@@ -150,7 +150,7 @@ class YaliController extends Controller
         // Log::log("-CK-files", $files);
         
         // Filter to images only
-        $picdir = "/Users/swang/sites/webdata/pics/yali";
+        $picdir = "/sites/webdata/pics/yali";
         // if ($isIM) $picdir = "/sites/webdata/pics/yaliIM";
 		$thumbnails = [];
 		$thumbnaildir = "$picdir/thumbnails";
