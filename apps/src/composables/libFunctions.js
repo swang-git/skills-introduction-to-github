@@ -11,46 +11,46 @@ export function libFunctions() {
   const store = useAppsStore()
   const searchQuery = ref('')
   const dats = ref([])
-  const testX = ref(0)
+  // const testX = ref(0)
   const curPage = ref(1)
   const itemsPerPage = ref(null)
   const screen_height = $q.screen.height
   const screen_width = $q.screen.width
 
-  const compTestX = computed(() => {
-    return testX
-  })
+  // const compTestX = computed(() => {
+  //   return testX
+  // })
   //function desk () { return Platform.is.desktop && (Platform.is.platform === 'linux' || Platform.is.platform === 'win') && !Platform.has.touch }
   function desk () { return Platform.is.desktop || Platform.is.ipad }
-  function android () { return Platform.is.android }
-  function mate () { return Platform.is.android }
   function mate9 () { return Platform.userAgent.includes('windows') && Platform.has.touch }
   function iPad () { return Platform.is.ipad }
   function IPhone () { return Platform.is.iphone }
-  function mobile () { return Platform.is.mobile }
-  function safari () { return Platform.is.safari }
-  function chromeExt () { return Platform.is.chromeExt }
-  function chrome () { return Platform.is.chrome }
-  function linux () { return Platform.is.linux }
-  function firefox () { return Platform.is.mozilla }
-  function touchable () { return Platform.has.touch }
-  function edge () { return Platform.is.edge }
   function fone () { return IPhone() || mate9() }
-  function whatPlatform () { console.log(' ==== platform', Platform, desk(), Platform.userAgent.indexOf('HUAWEI'), 'not undefined = ', !undefined) }
-  function showUserAgent () { alert(Platform.userAgent) }
-  function showPlatform () { alert('isAndroid:' + Platform.is.android + ' isMobile:' + Platform.is.mobile + ' hasTouch:' + Platform.has.touch + ' Platform:' + Platform.is.platform) }
-  function checkiPhone () { alert('is iPhone ' + iPhone()) }
-  function checkMate9 () { alert('is Mate9 ' + mate9()) }
-  function checkFone () { alert('is fone ' + fone()) }
-  function checkDesk () { alert('is Desk ' + desk()) }
+  // function android () { return Platform.is.android }
+  // function mate () { return Platform.is.android }
+  // function mobile () { return Platform.is.mobile }
+  // function safari () { return Platform.is.safari }
+  // function chromeExt () { return Platform.is.chromeExt }
+  // function chrome () { return Platform.is.chrome }
+  // function linux () { return Platform.is.linux }
+  // function firefox () { return Platform.is.mozilla }
+  // function touchable () { return Platform.has.touch }
+  // function edge () { return Platform.is.edge }
+  // function whatPlatform () { console.log(' ==== platform', Platform, desk(), Platform.userAgent.indexOf('HUAWEI'), 'not undefined = ', !undefined) }
+  // function showUserAgent () { alert(Platform.userAgent) }
+  // function showPlatform () { alert('isAndroid:' + Platform.is.android + ' isMobile:' + Platform.is.mobile + ' hasTouch:' + Platform.has.touch + ' Platform:' + Platform.is.platform) }
+  // function checkiPhone () { alert('is iPhone ' + iPhone()) }
+  // function checkMate9 () { alert('is Mate9 ' + mate9()) }
+  // function checkFone () { alert('is fone ' + fone()) }
+  // function checkDesk () { alert('is Desk ' + desk()) }
   function isfedora () {
     const hostPatt = /http:\/\/(fedora|192.168.1.110)/gi
     return hostPatt.test(window.location.href)
   }
-  function local () {
-    const localhosts = /http:\/\/(prod|devx|divx|192.168.|localhost|127.0.0.1)/gi
-    return localhosts.test(window.location.href)
-  }
+  // function local () {
+  //   const localhosts = /http:\/\/(prod|devx|divx|192.168.|localhost|127.0.0.1)/gi
+  //   return localhosts.test(window.location.href)
+  // }
   function isfedora() {
     const hostPatt = /http:\/\/(fedora|192.168.1.110)/gi
     return hostPatt.test(window.location.href)
@@ -130,18 +130,18 @@ export function libFunctions() {
     return data
   })
 
-  const doGroup = computed(() => {
-    return golfUserType.value === 'doGroup'
-  })
-  const SysAdmin = computed(() => {
-    return golfUserType.value === 'SysAdmin' || userType.value === 'yadmin'
-  })
-  const JZsAdmin = computed(() => {
-    return golfUserType.value === 'JZsAdmin'
-  })
-  const PGCsAdmin = computed(() => {
-    return golfUserType.value === 'PGCsAdmin'
-  })
+  // const doGroup = computed(() => {
+  //   return golfUserType.value === 'doGroup'
+  // })
+  // const SysAdmin = computed(() => {
+  //   return golfUserType.value === 'SysAdmin' || userType.value === 'yadmin'
+  // })
+  // const JZsAdmin = computed(() => {
+  //   return golfUserType.value === 'JZsAdmin'
+  // })
+  // const PGCsAdmin = computed(() => {
+    // return golfUserType.value === 'PGCsAdmin'
+  // })
   const isAdmin = computed(() => {
     return userType.value === 'yadmin'
   })
@@ -158,10 +158,10 @@ export function libFunctions() {
   })
   const screenwidth = ScreenWidth()
   const screenheight = ScreenHeight()
-  const golfUserType = computed({
-    get: () => store.usertype,
-    set: val => (store.userType = val)
-  })
+  // const golfUserType = computed({
+  //   get: () => store.usertype,
+  //   set: val => (store.userType = val)
+  // })
   function buildApp(tit, app) {
     // console.log(`-fn-buildApp() tit=${tit}, curApp=${app}`)
     emitter.on('search', txt => {
@@ -229,8 +229,8 @@ export function libFunctions() {
     // const dec = val.substring(pos+1, pos+3)
     // if (dec.length < 2) return val + '0'
     // else if (dec.length >= 2) return val.substring(0, pos+3)
-    console.log(`n=${n} val=${val} dec=${dec}`)
-    return val
+    // console.log(`n=${n} val=${val} dec=${dec}`)
+    // return val
   }
   function deepClone(obj) {
     if (Array.isArray(obj)) {
@@ -279,7 +279,6 @@ export function libFunctions() {
     AppAdmin,
     isDesk,
     isIM,
-    isFedora,
     isFone,
     isFedora,
     searchQuery,

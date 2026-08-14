@@ -55,7 +55,7 @@ Route::group (
 // Route::permanentRedirect('/arts', '/apps/arts');
 Route::group (
     array('prefix' => 'watcher'), function() {
-      Route::view('', 'watcher')->middleware('auth');
+      Route::view('', 'watcher'); //->middleware('auth');
       Route::view('gain-percent-chart', 'watcher')->middleware('auth');
       Route::view('gain-loss-chart', 'watcher')->middleware('auth');
       Route::view('weight-chart', 'watcher')->middleware('auth');
@@ -91,26 +91,37 @@ Route::prefix('reminder')
   ->missing(fn() => ['success' => false, 'message' => 'The requested location does not exist'])
   ->controller(ReminderController::class)
   ->group(function() {
-    Route::get('getList', 'getList')->middleware('auth');
-    Route::post('add', 'add')->middleware('auth');
-    Route::post('upd', 'upd')->middleware('auth');
-    Route::post('del', 'del')->middleware('auth');
-  }
-);
+      Route::get('getList', 'getList')->middleware('auth');
+      Route::post('add', 'add')->middleware('auth');
+      Route::post('upd', 'upd')->middleware('auth');
+      Route::post('del', 'del')->middleware('auth');
+    }
+  );
 
-Route::group (
-  array('prefix' => 'memo'), function() {
-    Route::view('list',    'memo')->middleware('auth');
-    Route::get ('getList/{screenwidthD13}', 'MemoController@getList'); //->middleware('auth');
-    Route::post('add', 'MemoController@add');
-    Route::post('upd', 'MemoController@upd');
-    Route:: get('del/{id}', 'MemoController@del');
-  }
-);
+Route::prefix('memo')
+  ->missing(fn() => ['success' => false, 'message' => 'The requested location does not exist'])
+  ->controller(MemoController::class)
+  ->group(function() {
+      Route::get('getList/{swd13}', 'getList'); //->middleware('auth');
+      Route::post('add', 'add');//->middleware('auth');
+      Route::post('upd', 'upd');//->middleware('auth');
+      Route::get('del/{id}', 'del');//->middleware('auth');
+    }
+  );
+
+// Route::group (
+//   array('prefix' => 'memo'), function() {
+//     Route::view('list',    'memo')->middleware('auth');
+//     Route::get ('getList/{screenwidthD13}', 'MemoController@getList'); //->middleware('auth');
+//     Route::post('add', 'MemoController@add');
+//     Route::post('upd', 'MemoController@upd');
+//     Route:: get('del/{id}', 'MemoController@del');
+//   }
+// );
 Route::group (
   array('prefix' => 'pfcheck'), function() {
     Route::view('list',   'pfcheck');              //->middleware('auth');
-    Route::get('getList/{screenwidthD13}', 'PFController@getList'); //->middleware('auth');
+    Route::get('getList/{screenwidthD13}', 'PFController@getList')->middleware('auth');
     Route::post('add',    'PFController@add');
     Route::post('upd',    'PFController@upd');
     Route::get('del/{id}','PFController@del');
@@ -261,7 +272,7 @@ Route::group (
     // Route::view('apps/watcher', 'watcher');
     
 Route::view('/', 'golf');
-//__Route::view('golf/PlayerList', 'golf');
+Route::view('golf/PlayerList', 'golf');
 Route::view('golf/EnterScores', 'golf');
 Route::view('golf/PGCGroupList', 'golf');
 Route::view('golf/TournamentList', 'golf');
@@ -305,8 +316,8 @@ Route::group (
     Route::get('getTournamentPlayersWithScores/{tid}', 'GolfController@getTournamentPlayersWithScores');
     Route::post('insGameScore', 'GolfController@insGameScore');
     Route::post('updGameScore', 'GolfController@updGameScore');
-    Route::get('updPosition/{tpid}/{pos}', 'GolfController@updPosition')->middleware('auth:auth:');
-    Route::get('calcPosition', 'GolfController@calcPosition')->middleware('auth:auth:');
+    Route::get('updPosition/{tpid}/{pos}', 'GolfController@updPosition');//->middleware('auth:auth:');
+    Route::get('calcPosition', 'GolfController@calcPosition');//->middleware('auth:auth:');
     Route::get('getExCourse',  'GolfController@getExCourse');
     Route::get('UnexpiredTournaments/{gameName}', 'GolfController@getUnexpiredTournaments');
     Route::get('CourseDetails/{courseId}', 'GolfController@getCourseDetails');
@@ -331,7 +342,7 @@ Route::group (
     Route::post('updTplayerActivity', 'GolfController@updTplayerActivity');
     Route::get ('getCourseHandicaps/{courseId}', 'GolfController@getCourseHandicaps');
     Route::post('getCourseYardages', 'GolfController@getCourseYardages');
-    Route::get ('getPlayerCount', 'GolfController@getPlayerCount');
+    Route::get ('getPlayerCount', 'GolfController@getPlayerCount'); //->middleware('auth');
     Route::post('login', 'GolfController@login');
     Route::post('createAccount', 'GolfController@createAccount');
     Route::get ('logout', 'GolfController@logout');
@@ -473,11 +484,11 @@ Route::group (  // set up here to show login page
     // Route::view('todo', 'apps')->middleware('auth');
     Route::view('apps', 'apps')->middleware('auth');
     Route::view('glucosecheck', 'apps')->middleware('auth');
-    // Route::view('expense', 'apps')->middleware('auth');
+    Route::view('expense', 'apps')->middleware('auth');
     Route::view('shopping', 'apps')->middleware('auth');
     Route::view('reminder', 'apps')->middleware('auth');
-    Route::view('dictionary', 'apps');
     Route::view('memo', 'apps')->middleware('auth');
+    Route::view('dictionary', 'apps')->middleware('auth');
     Route::view('watcher', 'apps')->middleware('auth');
     Route::view('bankstatement', 'apps')->middleware('auth');
     Route::view('holdings', 'apps')->middleware('auth');
@@ -492,7 +503,7 @@ Route::group (  // set up here to show login page
     // Route::view('yali', 'apps');
     Route::view('tvmanager', 'apps');
     Route::view('chnyears', 'apps');
-    Route::view('pfcheck', 'apps');
+    Route::view('pfcheck', 'apps')->middleware('auth');
   }
 );
 
@@ -512,7 +523,7 @@ Route::get('/auth/getUsertype', function() {
 });
 // Route::get('/apps/golf', 'HomeController@golf')->name('apps/golf');
 
-Route::get('/logout', function() {
+Route::get('apps/logout', function() {
   // $usertype = auth()->user()->usertype;
   // Log::info("logout usertype=$usertype");
   // return Auth::logout(); 
@@ -520,11 +531,14 @@ Route::get('/logout', function() {
   $user = auth()->user();
   Log::info("logout user=$user");
   return ['status' => "OK"];
-  // 'HomeController@index';
+  // 'MemoController@getList';
+  // return Route::view('', 'apps');
+  // return '';
 });
 // Route::get('/login',  function() { return Auth::login(); });
 // Route::get('/login', 'HomeController@loginAdmin');
 // Route::get('/auth/login',  function() { return 'auth/LoginController@loginAdmin' }); 
+// Route::get('/auth/login',  'auth/LoginController@login'); 
 // Route::post('/apps/loginAdmin',  'Auth/LoginController@login'); 
 Route::post('/apps/loginAdmin', 'AppsController@loginAdmin'); 
 // Route::post('/login', 'Auth/LoginController@loginAdmin'); 
@@ -559,8 +573,8 @@ Route::post('/apps/loginAdmin', 'AppsController@loginAdmin');
 // Route::get('/users', [UserController::class, 'getUserList'])->name('users.getUserList');
 
 Route::group (
-  array('prefix' => 'users'), function() {
-    Route::get ('getUserList', 'UserController@getUserList'); //->middleware('auth');
+  array('prefix' => 'users'), function() { Log::info('calling users from web.php');
+    Route::get ('getUserList', 'UserController@getUserList')->middleware('auth');
     Route::get ('del/{id}', 'UserController@deleteById'); //->middleware('auth');
     Route::post('upd', 'UserController@updateUser'); //->middleware('auth');
     Route::post('add', 'UserController@store')->middleware('auth');

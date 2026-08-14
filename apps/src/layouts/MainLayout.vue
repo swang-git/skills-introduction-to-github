@@ -4,8 +4,8 @@
       <q-header v-if="curApp!='arts'" class="bg-teal-10 inset-shadow-down">
         <q-toolbar style="margin-left:-5px">
           <!-- <q-btn v-if="isDesk" glossy @click="drawerClick()" round dense icon="img:icons/quasar-logo.svg" size="18px" /> -->
-          <q-btn v-if="isDesk" glossy @click="openApp('/')" round dense icon="img:icons/quasar-logo.svg" size="18px" />
-          <q-btn v-else to="/" round dense glossy color="blue"><q-icon name="🏠" style="margin:-8px 0 0 -2px" /></q-btn>
+          <q-btn v-if="isDesk" glossy @click="openApp('/apps')" round dense icon="img:icons/quasar-logo.svg" size="18px" />
+          <q-btn v-else to="/apps" round dense glossy color="blue"><q-icon name="🏠" style="margin:-8px 0 0 -2px" /></q-btn>
           <!-- <q-btn v-else to="/" round dense glossy color="blue"><q-icon :name="compVer" style="margin:-0px 0 0 0" /></q-btn> -->
           <q-toolbar-title>
             <div class="row q-pt-sm no-wrap">
@@ -185,9 +185,10 @@ emitter.on('num-items', (x) => numItems.value = x)
 emitter.on('items-per-page', (x) => { itemsPerPage.value = x ; console.log(`-CK-itemsPerPage=${itemsPerPage.value}`) })
 emitter.on('win-lost', (x) => { flipShow(x) })
 emitter.on('weight-unit', (x) => { wunit.value = x })
+// emitter.emit('apps-logout')
 
 //== main
-console.log(`-ST-MainLayout curApp=${curApp.value} window.location.href=${window.location.href} BUILD_TAG=${import.meta.env.VITE_BUILD_TAG}`)
+console.log(`-ST-MainLayout AppAdmin=${AppAdmin.value} curApp=${curApp.value} window.location.href=${window.location.href} BUILD_TAG=${import.meta.env.VITE_BUILD_TAG}`)
 // console.timeStamp('-ST-MainLayout curApp=${curApp.value}')
 wunit.value = $q.localStorage.getItem('weightUnit')
 if (isIM) {
@@ -259,16 +260,16 @@ function setTitle (tit) {
 function openApp (app) {
   console.log(`-fn-openApp, app=${app} AppAdmin=${AppAdmin.value} drawer=${drawer} numItems=${numItems.value} itemsPerPage=${itemsPerPage.value}`)
   curApp.value = app
-  if (app == '../golf') {
-    emitter.emit('apps-logout')
-    // router.push({ path: ENV_DEV + app })
-    window.location.href='/golf'
-    return
-  }
+  // if (app == '../golf') {
+  //   emitter.emit('apps-logout')
+  //   // router.push({ path: ENV_DEV + app })
+  //   window.location.href='/golf'
+  //   return
+  // }
   if ([
-      '../arts', 
-      '../yali', 
-      '../golf',
+      // '../arts', 
+      // '../yali', 
+      // '../golf',
       'exlist',
       'reminder',
       'memo',
@@ -284,7 +285,11 @@ function openApp (app) {
       console.log(`-CK-openApp AppAdmin=${AppAdmin.value}`)
       login(app)
   } else {
-    router.replace({ path: app })  // this is just navigating no loading
+    console.log(`-CK-openApp app=${app} AppAdmin=${AppAdmin.value}`)
+    // router.replace({ path: app })  // this is just navigating no loading
+    // router.push({ path: app })  // this is just navigating no loading
+    // emitter.emit('apps-logout')
+    window.location.href = ENV_DEV + app
   }
 }
 function login (app) {

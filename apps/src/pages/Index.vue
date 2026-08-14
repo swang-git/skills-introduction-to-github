@@ -60,10 +60,11 @@ const refUserList = ref(null)
 const compVer = computed(() => { return import.meta.env.VITE_BUILD_TAG == null ? '测' : import.meta.env.VITE_BUILD_TAG })
 
 console.log(`-ST-Index bg-img=${getBackgroundImg().backgroundImage} isFedora=${isFedora}`)
-// console.log(`-ST-Index AppAdmin=${AppAdmin.value}`)
+// logout()
 buildApp('Apps Home', '家庭应用')
 emitter.on('user-type', (x) => userType.value = x)
 emitter.on('open-app', (x) => openApp(x))
+// emitter.on('apps-logout', () => logout())
 onMounted(() => {
   console.log(refUserList.value)
   console.log(refPlatformDataPad.value)
@@ -87,7 +88,10 @@ function showSysInfo() {
 }
 function openApp(app) {
   if (['../golf', '../arts', '../yali'].includes(app)) {
-    logout()
+    // logout()
+    AppAdmin.value = false
+    console.log(`-CK-openApp ${app}`)
+    // router.replace({ path: app })
     window.location.href = ENV_DEV + app
   } else if ([
       'glucosecheck',
@@ -104,10 +108,10 @@ function openApp(app) {
       'pfcheck',
     ].includes(app) && !AppAdmin.value
   ) {
-      login(app)
-  } else {
-    router.replace({ path: app })
+    return login(app)
+  } else { 
     console.log(`-CK-openApp ${app}`)
+    router.replace({ path: app })
   }
 }
 function login(app) {
@@ -118,13 +122,14 @@ function showHolidays() {
   console.log('-CK-fn-showHolidays')
   emitter.emit('open-Holidays')
 }
-emitter.on('apps-logout', () => logout())
+// emitter.on('apps-logout', () => logout())
 function logout() {
   console.log(`-fn-logout AppAdmin=${AppAdmin.value}`)
   const path = ENV_DEV + '/apps/logout'
   userType.value = null
   $q.localStorage.set('userType', null)
   store.userType = null
+  // AppAdmin.value = false
   window.location.href = ENV_DEV + '/apps'
   gaxios(path)
 }

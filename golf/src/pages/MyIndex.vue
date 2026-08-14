@@ -202,8 +202,8 @@ const router = useRouter()
 const q = useQuasar()
 
 const opened = ref(false)
-const mcount = ref(0)
-const fcount = ref(0)
+const mcount = ref(241)
+const fcount = ref(37)
 const refPlatformDataPad = ref(null)
 
 const pageTitle = ref('Princeton SU Golf Club')
@@ -211,7 +211,9 @@ console.log('-ST-MyIndex')
 // let golf_usertype = q.localStorage.getItem('golf_usertype')
 store.page = 'home'
 store.pageTitle = pageTitle.value
+
 getPlayerCount()
+
 // emitter.on('golf-usertype', (x) => golf_usertype = x)
 // emitter.on('golf-logout', () => golf_usertype = null)
 emitter.on('golf-getPlayerCount', (x) => {mcount.value = x.mcnt;fcount.value = x.fcnt})
@@ -233,6 +235,7 @@ function showSysInfo () {
   refPlatformDataPad.value.openIt()
 }
 function getPlayerCount () {
+  // store.usertype = null
   const path = ENV_API + '/golf/getPlayerCount'
   console.log(`-fn-getPlayerCount path=${path}`, import.meta.env)
   gaxios(path)
