@@ -21,5 +21,5 @@ mariadb-dump -uswang -pYbsjll11 -B $db --routines > $target_file &
 
 if [ $db == "prod" ]; then
   mariadb-dump -uswang -pYbsjll11 -B $db --routines | mariadb -uswang -pYbsjll11 -hfedora
-  #mysqldump -uswang -pYbsjll11 -B $db --routines | mysql -uswang -pYbsjll11 -hmaci
+  mysqldump -uswang -pYbsjll11 -B $db --routines | mysql -uswang -pYbsjll11 -hmaci
 fi
