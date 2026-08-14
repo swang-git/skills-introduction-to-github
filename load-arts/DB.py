@@ -235,6 +235,9 @@ def addDailyDatWX(art):
 
 
 def addDailyDatWW(art):
+    if len(art.qid) == 3036184_777 or art.txt is None or art.txt == '':
+         print('art.tit is bad, skipping, return', art.tag, art.qid, art.tit, art.tim, art.lnk)
+         return
     # if len(art.txt) < 0 or art.txt is None or art.txt == '':
     #     print('NO_TXT NO_ADDING, return', art.tag, art.qid, art.tit, art.tim, art.lnk)
     #     return
