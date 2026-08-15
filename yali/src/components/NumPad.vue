@@ -16,15 +16,15 @@
     </div>
   </q-dialog>
   <!-- Only render if GLOBAL state is open -->
-  <!-- <div v-if="numPadStore.isOpen" class="numpad"> -->
-    <!-- Singleton NumPad -->
-  <!-- </div> -->
+  <div v-if="numPadStore.isOpen" class="numpad">
+    Singleton NumPad
+  </div>
 </template>
 <script setup>
 import { ref } from 'vue'
 import emitter from 'tiny-emitter/instance'
-// import { useNumPadStore } from '../../src/stores/numPadStore'
-// const numPadStore = useNumPadStore()
+import { useNumPadStore } from '../../src/stores/numPadStore'
+const numPadStore = useNumPadStore()
 
 const opened = ref(false)
 const padTit = ref(null) // numPad title
@@ -58,10 +58,9 @@ function setNumber(n) {
 }
 function setPicIdx() {
   console.log(`-fn-setPicIdx keyedId=${keyedIn.value} flag=${flag.value}`)
-  // if (flag.value == 'YALI_PIX_PIDX') emit('pix-pidx', parseInt(keyedIn.value) - 1)
-  // if (flag.value == 'YALI_PIX_PAGE') emit('jump-page', parseInt(keyedIn.value))
-  // if (flag.value == 'YALI_PER_PAGE') emit('per-page', parseInt(keyedIn.value))
-  emit(flag.value, parseInt(keyedIn.value))
+  if (flag.value == 'YALI_PIX_PIDX') emit('pix-pidx', parseInt(keyedIn.value) - 1)
+  if (flag.value == 'YALI_PIX_PAGE') emit('jump-page', parseInt(keyedIn.value))
+  if (flag.value == 'YALI_PER_PAGE') emit('per-page', parseInt(keyedIn.value))
   opened.value = false
 }
 // function setSpeed() {

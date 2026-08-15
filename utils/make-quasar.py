@@ -1,4 +1,4 @@
-#!/Users/swang/myenv/bin/python3
+#!/usr/bin/python
 import sys
 import os
 import shutil
@@ -14,7 +14,7 @@ args = parser.parse_args()
 verstr = '普林斯顿中美高尔夫俱乐部王胜利'
 # print(args); sys.exit(0)
 env = args.environment
-bldtag = verstr[randint(0, 14)]
+ver = verstr[randint(0, 14)]
 app = args.programName
 # modern = args.modern
 appx = ' ' + app + ' '
@@ -23,9 +23,9 @@ appx = ' ' + app + ' '
 app_js =  os.path.join(app, 'js')
 app_fonts =  os.path.join(app, 'fonts')
 ##home_dir = "/home/swang/"
-home_dir = "/Users/swang/sites/"
+home_dir = "/sites/"
 ##home_dir = "/sites/"
-sites = "/Users/swang/sites/"
+sites = "/sites/"
 ##sites = "/home/sites/"
 app_dir = home_dir + "projects/" + app
 dist_dir = app_dir + "/dist/spa"
@@ -75,8 +75,8 @@ print_header(ptxt)
 # sys.exit(0)
 
 # PRODUCT_NAME will used in quasar.conf.js to inject app.XXXXX.js/css and vendor.XXXXX.js/css etc. into index.template.html for index.html copied to public/PRODUCT_NAME(i.e. golf) folder
-# buildstr = "PRODUCT_NAME=" + app + " PRODUCT_VER=" + ver + " quasar build " + build_options
-buildstr = "PRODUCT_NAME=" + app + " VITE_BUILD_TAG=" + bldtag + " quasar build " + build_options
+###buildstr = "PRODUCT_NAME=" + app + " PRODUCT_VER=" + ver + " quasar build " + build_options
+buildstr = "PRODUCT_NAME=" + app + " VITE_BUILD_TAG=" + ver + " quasar build " + build_options
 exit_code = os.WEXITSTATUS(os.system(buildstr))
 # exit_code = os.WEXITSTATUS(os.system("PRODUCT_NAME={app} quasar build " + build_options))
 if exit_code != 0:
@@ -99,13 +99,13 @@ print(' -- remove ', app_dist_dir)
 if os.path.exists(app_dist_dir): shutil.rmtree(app_dist_dir)
 print(' -- copy dist files to : ', app_dist_dir)
 shutil.copytree(dist_dir, app_dist_dir)
-### exit_code = os.WEXITSTATUS(os.system("chcon -Rt httpd_sys_content_rw_t " + app_dist_dir))
+exit_code = os.WEXITSTATUS(os.system("chcon -Rt httpd_sys_content_rw_t " + app_dist_dir))
 
 ptxt = fgcolor('green', '║') + ' App ' + bgcolor('li_green', fgcolor('da_blue', underline(boldit(appx))))
 if env == 'devx':
-    ptxt+= ' built ' + fg.green + 'SUCCESSFULLY in ' + fg.rs + env + ' with OPTIONS' + build_options + ' and Version ' + bldtag
+    ptxt+= ' built ' + fg.green + 'SUCCESSFULLY in ' + fg.rs + env + ' with OPTIONS' + build_options + ' and Version ' + ver
 elif env == 'prod':
-    ptxt+= ' built ' + fg.green + 'SUCCESSFULLY in ' + fg.rs + env + ' with version ' + bldtag
+    ptxt+= ' built ' + fg.green + 'SUCCESSFULLY in ' + fg.rs + env + ' with version ' + ver
 print_tailer(ptxt)
 sys.exit(0)
 

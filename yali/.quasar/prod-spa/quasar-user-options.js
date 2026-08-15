@@ -11,6 +11,6 @@
  * Boot files are your "main.js"
  **/
 
-import {LocalStorage,Notify,Dialog,Cookies} from 'quasar'
+import {Notify,Dialog} from 'quasar'
 
-export default { config: {},plugins: {LocalStorage,Notify,Dialog,Cookies} }
+export default { config: {},plugins: {Notify,Dialog} }

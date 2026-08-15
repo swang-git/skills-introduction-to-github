@@ -48,6 +48,8 @@ export function axiosFunctions() {
       console.log(`%cPTGT:${target}(${da.status})`, "font-size:14px;font-weight:600;color:lime")
       emitter.emit(target, da)
       if (da.status === 'FAILED') notifyFunc(path, target, da.errmsg)
+      if (da.status != 'OK') console.log(`path=${path} target=${target}`, da.errmsg)
+
     }).catch(error => { notifyFunc(path, target, error) })
   }
   const notifyFunc = (path, target, error) => {

@@ -4,9 +4,9 @@ import os
 import time
 import json
 from datetime import date
-import requests
+####import requests
 # from lxml import html
-from urllib import request
+####from urllib import request
 import re
 # sys.path.append(os.path.join(os.path.dirname(sys.path[0])))
 from os.path import dirname

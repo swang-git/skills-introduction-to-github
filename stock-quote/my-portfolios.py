@@ -1,7 +1,6 @@
-#!/Users/swang/myenv/bin/python
+#!/usr/bin/python
 import sys
 import argparse
-import warnings
 
 from Utils import boldIt, redIt, greenIt, yellowIt, drawTopHeader, showHeaderCxt, drawBotHeader, dispRow, drawBotLine, drawBotLineDownTick, drawBotLineUpTick
 from Models import dbsession, MyPortfolio
@@ -12,17 +11,14 @@ fg = FgRegister()
 parser = argparse.ArgumentParser()
 parser.add_argument("sub_days", metavar='int', type=int, nargs='?', default='0', help='sub days from today(must be < 0), default 0 for today')
 # optional arguments
-parser.add_argument('-m', '--mfmt', type=int, default=1, help='show money format by default show float number -m 0')
 parser.add_argument('-d', '--db', type=str, default='prod', help='check quotes in this database default database: prod')
 args = parser.parse_args()
 sub_days = args.sub_days
-money_format = args.mfmt
 if sub_days > 0:
-    warnings.warn("sub_days must negative, %s given, exiting..."%sub_days)
+    print("sub_days must negative, %s given, exiting..."%sub_days)
     sys.exit(1)
 database = args.db
-##warnings.warn("sub_days=%d db=%s money_format:%s"%(sub_days, database, money_format))
-# sys.exit(0)
+# print("sub_days=%d db=%s"%(sub_days, database))
 
 def get_formated_data(diff):
     sdiff = f"{diff:,.2f}"  #currency format like 2,550.45
@@ -52,7 +48,7 @@ if __name__=="__main__":
     
     cdiff1, difflen1 = get_formated_data(diff1)
     cdiff2, difflen2 = get_formated_data(diff2)
-    cdiff = 3*' ' + 'G/L(compare to preday): ' + cdiff1 + ' G/L(by price change): ' + cdiff2
+    cdiff = 3*' ' + 'G/L(compare to preday):' + cdiff1 + ' G/L(by price change):' + cdiff2
     
     tablename = database + '.MyPortfolio'
 
@@ -69,23 +65,16 @@ if __name__=="__main__":
     portfy = totalValy - stockValy
     portft = totalValt - stockValt
     tpdiff = portft - portfy
-    if money_format:
-        prtfy = f"{portfy:,.2f}"
-        prtft = f"{portft:,.2f}"
-    else:
-        prtfy = f'{portfy}'
-        prtft = f'{portft}'
+    prtfy = f"{portfy:,.2f}"
+    prtft = f"{portft:,.2f}"
     TPdiff =  f"{tpdiff}"
     if tpdiff == 0: TPdiff = boldIt(yellowIt(TPdiff))
     elif tpdiff > 0: TPdiff = boldIt(greenIt(TPdiff))
-    elif tpdiff < 0:
-        TPdiff = f"{-1*tpdiff}" if money_format else -1*tpdiff
+    elif pdiff < 0:
+        TPdiff = f"{-1*tpdiff}"
         TPdiff = boldIt(redIt(TPdiff))
-    TPdiffExp = f'{prtft}' + ' - ' + f'{prtfy}'
-    if money_format:
-        bline1 = '║ '+dday+' Market Value: '+f"{totalValy:,.2f}"+' Stock Value: '+f"{stockValy:,.2f}"+'   Prev Portf: '+prtfy+' Today Portf: '+prtft
-    else:
-        bline1 = '║ '+dday+' Market Value: ' + f"{totalValy}" + ' Stock Value: ' + f"{stockValy}" + '   Prev Portf: ' + prtfy + ' Today Portf: ' + prtft
+    TPdiffExp = prtft + ' - ' + prtfy
+    bline1 = '║ '+dday+' Market Value:'+f"{totalValy:,.2f}"+' Stock Value:'+f"{stockValy:,.2f}"+'   Prev Portf:'+prtfy+' Today Portf:'+prtft
     bline2 = TPdiffExp + ' = ' + TPdiff
     print(bline1 + (sum(tabw) + len(tabw) - len(bline1) - len(bline2) + 18)*' ' + bline2 + ' ║')
 
@@ -95,10 +84,7 @@ if __name__=="__main__":
     for row in rowst: dispRow(tabw, row)
     drawBotLineUpTick(tabw)
     dday = rowst[0].asof_time.strftime('%Y-%m-%d')
-    if money_format:
-        lline1 = '║ ' + dday + ' Market Value: ' + f"{totalValt:,.2f}" + ' Stock Value: ' + f"{stockValt:,.2f}" + cdiff
-    else:
-        lline1 = '║ ' + dday + ' Market Value: ' + f'{totalValt}' + ' Stock Value: ' + f'{stockValt}' + cdiff
+    lline1 = '║ ' + dday + ' Market Value:' + f"{totalValt:,.2f}" + ' Stock Value:' + f"{stockValt:,.2f}" + cdiff
     lline2 = 'data from ' + tablename
     print(lline1 + (sum(tabw) + len(tabw) - len(lline1) - len(lline2) + 37)*' ' + lline2 + ' ║')
     drawBotLine(tabw)

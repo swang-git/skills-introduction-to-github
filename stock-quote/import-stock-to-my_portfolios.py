@@ -1,25 +1,37 @@
 #!/Users/swang/myenv/bin/python
 
-# from sqlalchemy import func
 import yfinance as yf
 import sys, pprint, time
 from datetime import datetime, date, timedelta
 from decimal import Decimal
+# from dataclasses import dataclass
+
+# @dataclass
+# class StockQ:
+#     pass
+#     # asof_time: datetime
+#     # symbo: str
+#     # price: float
+#     # price_change: float
+#     # low_52_week: float
+#     # high_52_week: float
+
+# data = {"name": "Bob", "age": 35}
+# obj = User(**data)
+# print(obj.name)  # Bob
 
 from Utils import padsp, get_data_from_table, build_dict, get_meta, get_quantity, get_total_cost, get_basis_price
-from Utils import getLogFile, TeeToFileAndScreen
-from MyPortfolio_Models import get_connection, MyPortfolio, HealthRecord, StockQuote
+from MyPortfolio_Models import get_connection, CSV_TO_DB_MAP, TYPE_CONVERTERS, MyPortfolio, HealthRecord, StockQuote
 
 import argparse
 parser = argparse.ArgumentParser()
 parser.add_argument('-t', '--test', action="store_true", help='for testing get data from database(instead of yfinance)')
-parser.add_argument('-s', '--subd', default="0 = today", help='get the dated csv file - default 0 is today, -1 yestoday, etc')
 parser.add_argument('-d', '--db', type=str, default='devx', help='upsert stock quotes to table and upsert csv data to my_portfolios')
 # parser.add_argument('-d', '--db', type=str, required=True, help='upsert stock quotes to database DB<devx/prod> table:my_portfolios')
 args = parser.parse_args()
 database = args.db
 testing = args.test
-print("database:[%s]"%database)
+print("database:", database)
 print('testing...') if testing else None
 # sys.exit(0)
 
@@ -75,8 +87,8 @@ def save_to_myp_table(db, stocks, datx):
         asof = datx[symb]["asof_time"]
         # redx = MyPortfolio(**datx[symb])
         # pprint.pprint(redx.__dict__)
-        price = padsp(f"{datx[symb]['price']:.2f}", 7)
-        price_change = padsp(f"{datx[symb]['price_change']:.2f}", 6)
+        price = padsp(datx[symb]['price'], 7)
+        price_change = padsp(datx[symb]['price_change'], 6)
         low = padsp(datx[symb]['low_52_week'], 7)
         high = padsp(datx[symb]['high_52_week'], 7)
         # --------------------------
@@ -89,18 +101,16 @@ def save_to_myp_table(db, stocks, datx):
             # Update all fields
             for key, value in datx[symb].items():
                 setattr(existing, key, value)
-            print(f"🔄 Upd |{adjsp} {symb} | As-of: {asof} | price: {price} | change: {price_change} | 52wk_low: {low} | 52wk_high: {high}")
+            print(f"🔄 Updated |{adjsp} {symb} | As-of: {asof} | price: {price} | price change: {price_change} | 52wk_low: {low} | 52wk_high: {high}")
         else:
             # Create new record (NO __init__ needed!)
             new_record = MyPortfolio(**datx[symb])
             db.add(new_record)
-            # price = padsp(f"{da_price:.2f}", 7)
-            # price_change = padsp(f"{da_price_change:.2f}", 6)
-            print(f"✅ Add |{adjsp} {symb} | As-of: {asof} | price: {price} | change: {price_change} | 52wk_low: {low} | 52wk_high: {high}")
+            print(f"✅ Added   |{adjsp} {symb} | As-of: {asof} | price: {price} | price change: {price_change} | 52wk_low: {low} | 52wk_high: {high}")
 
     # Save all changes
     db.commit()
-    print(f"🎉 my_portfolios data added/updated successfully!")
+    print(f"🎉 myp data added/updated successfully!")
 
 def save_to_stock_quotes_table(db, stocks, datx):
     for num, symb in enumerate(stocks):
@@ -109,8 +119,8 @@ def save_to_stock_quotes_table(db, stocks, datx):
         # redx = MyPortfolio(**datx[symb])
         # pprint.pprint(datx[symb].__dict__)
 
-        price = padsp(f"{datx[symb]['price']:.2f}", 7)
-        price_change = padsp(f"{datx[symb]['price_change']:.2f}", 6)
+        price = padsp(datx[symb]['price'], 7)
+        price_change = padsp(datx[symb]['price_change'], 6)
         low = padsp(datx[symb]['low_52_week'], 7)
         high = padsp(datx[symb]['high_52_week'], 7)
         # --------------------------
@@ -123,29 +133,27 @@ def save_to_stock_quotes_table(db, stocks, datx):
             # Update all fields
             for key, value in datx[symb].items():
                 setattr(existing, key, value)
-            print(f"🔄 Upd |{adjsp} {symb} | As-of: {asof} | price: {price} | change: {price_change} | 52wk_low: {low} | 52wk_high: {high}")
+            print(f"🔄 Updated |{adjsp} {symb} | As-of: {asof} | price: {price} | price change: {price_change} | 52wk_low: {low} | 52wk_high: {high}")
         else:
             # Create new record (NO __init__ needed!)
             # new_record = StockQuote(**datx[symb])
             dtsx = datx[symb]
             asof_time = dtsx["asof_time"]
             symbol = dtsx["symbol"]
-            da_price = dtsx["price"]
-            da_price_change = dtsx["price_change"]
+            price = dtsx["price"]
+            price_change = dtsx["price_change"]
             low_52_week = dtsx["low_52_week"]
             high_52_week = dtsx["high_52_week"]
-            new_record = StockQuote(asof_time, symbol, da_price, da_price_change, low_52_week, high_52_week)
+            new_record = StockQuote(asof_time, symbol, price, price_change, low_52_week, high_52_week)
             db.add(new_record)
-            price = padsp(f"{da_price:.2f}", 7)
-            price_change = padsp(f"{da_price_change:.2f}", 6)
-            print(f"✅ Add |{adjsp} {symb} | As-of: {asof} | price: {price} | change: {price_change} | 52wk_low: {low} | 52wk_high: {high}")
+            print(f"✅ Added   |{adjsp} {symb} | As-of: {asof} | price: {price} | price change: {price_change} | 52wk_low: {low} | 52wk_high: {high}")
 
     # Save all changes
     db.commit()
     print(f"🎉 stock_quotes data added/updated successfully!")
 
 def import_indices(db, date):
-    print("-fn- import_indices -- get data from yf to database[%s] date[%s]"%(database, date), file=sys.stderr)
+    print("-fn- import_indices -- get data from yf")
     indices = {
         "DOW_JONES": "^DJI",
         "NASDAQ": "^IXIC",
@@ -155,12 +163,8 @@ def import_indices(db, date):
     }
     dbx = {}
     for name, ticker in indices.items():
-        if testing:
-            dbx[name] = 7777.77
-        else:
-            info = yf.Ticker(ticker).info
-            dbx[name] = info.get("regularMarketPrice")
-
+        info = yf.Ticker(ticker).info
+        dbx[name] = info.get("regularMarketPrice")
     dbx['date'] = date
 
     existing = db.query(HealthRecord).filter(HealthRecord.date == date).first()
@@ -172,17 +176,12 @@ def import_indices(db, date):
         # Update all fields
         for key, value in dbx.items():
             setattr(existing, key, value)
-        print(f"🔄 Upd | date: {date} | Dow Jones: {dowj} | Nasdaq: {nasd} | SP500: {sp500}")
+        print(f"🔄 Updated | date: {date} | Dow Jones: {dowj} | Nasdaq: {nasd} | SP500: {sp500}")
     else:
         # Create new record (NO __init__ needed!)
-        latest_record = db.query(HealthRecord).order_by(HealthRecord.date.desc()).first()
-        latest_portfolio = latest_record.portfolio # would be from last business day
-        latest_weight = latest_record.weight # would be from last business day
-        dbx['portfolio'] = latest_portfolio
-        dbx['weight'] = latest_weight
         new_record = HealthRecord(**dbx)
         db.add(new_record)
-        print(f"✅ Add | date: {date} | Dow Jones: {dowj} | Nasdaq: {nasd} | SP500: {sp500}")
+        print(f"✅ Added   | date: {date} | Dow Jones: {dowj} | Nasdaq: {nasd} | SP500: {sp500}")
     # Save all changes
     db.commit()
     print(f"🎉 Indices imported successfully!")
@@ -216,7 +215,7 @@ def get_stock_data(symb):
         # If API fails: keep all missing values as NULL
         pass
 
-    print("sleeping for 2 second", file=sys.stderr)
+    print("sleeping for 2 second")
     time.sleep(2)
     return data
 
@@ -224,11 +223,7 @@ def get_stock_data(symb):
 # RUN THE SCRIPT __mail__
 # =============================================================================
 if __name__ == "__main__":
-    logFile = getLogFile('skq', 0, database)
-    tee = TeeToFileAndScreen(logFile, 'w')
-    # print('===== Starting import stock data to my_portfolios =====', file=sys.stderr)
     print('===== Starting import stock data to my_portfolios =====')
-    # sys.exit(0)
 
     db, conn = get_connection(database)
     cursor = conn.cursor()
@@ -236,8 +231,7 @@ if __name__ == "__main__":
     today = date.today()
     ASOF_TIME = datetime(today.year, today.month, today.day, 16, 30, 0)
 
-    # if not testing: import_indices(db, today)
-    import_indices(db, today)
+    if not testing: import_indices(db, today)
 
     meta_dict = get_meta(cursor)
     datx = {}
@@ -268,6 +262,4 @@ if __name__ == "__main__":
     print('===== ENDED import stock data to my_portfolios =====')
     cursor.close()
     conn.close()
-    tee.close()
     sys.exit(0)
-    #####################

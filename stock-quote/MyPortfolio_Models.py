@@ -32,8 +32,6 @@ class HealthRecord(Base):
     SP500 = Column(DECIMAL(12, 3), nullable=False)
     FTSE100 = Column(DECIMAL(12, 3), nullable=False)
     NIKKEI = Column(DECIMAL(12, 3), nullable=False)
-    weight = Column(DECIMAL(12, 6), nullable=False)
-    portfolio = Column(DECIMAL(12, 3), nullable=False)
 
 # =============================================================================
 # 2. MYSQL TABLE MODEL: MyPortfolio (YOUR EXACT SCHEMA)
@@ -63,7 +61,6 @@ class MyPortfolio(Base):
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     asof_time = Column(DATETIME, nullable=False, index=True)
-    updated_at = Column(DATETIME, nullable=False)
     account = Column(VARCHAR(9), nullable=False, index=True)
     
     account_name = Column(VARCHAR(30), nullable=True)  # 允许空
@@ -89,69 +86,26 @@ class MyPortfolio(Base):
 # Auto-create table in MySQL (if not exists)
 # Base.metadata.create_all(bind=engine)
 
-# # =============================================================================
-# # 3.0 YOUR EXACT CSV → DB COLUMN MAPPING -- All upper case for the first char of every word
-# # =============================================================================
-# Csv_To_Db_Map = {
-#     "Account Number": "account",
-#     "Account Name": "account_name",
-#     "Symbol": "symbol",
-#     "Description": "company",
-#     "Quantity": "quantity",
-#     "Last Price": "price",
-#     "Last Price Change": "price_change",
-#     "Current Value": "current_value",
-#     "Today's Gain/Loss Dollar": "today_gl",
-#     "Today's Gain/Loss Percent": "today_gl_pct",
-#     "Total Gain/Loss Dollar": "total_gl",
-#     "Total Gain/Loss Percent": "total_gl_pct",
-#     "Percent Of Account": "pct_of_account",
-#     "Cost Basis Total": "total_cost",
-#     "Average Cost Basis": "cost_per_share",
-#     "Type": "type"
-# }
-
-# # =============================================================================
-# # 3.1 YOUR EXACT CSV → DB COLUMN MAPPING -- All upper case for the first char of every header
-# # =============================================================================
-# Csv_to_db_map = {
-#     "Account number": "account",
-#     "Account name": "account_name",
-#     "Symbol": "symbol",
-#     "Description": "company",
-#     "Quantity": "quantity",
-#     "Last price": "price",
-#     "Last price change": "price_change",
-#     "Current value": "current_value",
-#     "Today's gain/loss dollar": "today_gl",
-#     "Today's gain/loss percent": "today_gl_pct",
-#     "Total gain/loss dollar": "total_gl",
-#     "Total gain/loss percent": "total_gl_pct",
-#     "Percent of account": "pct_of_account",
-#     "Cost basis total": "total_cost",
-#     "Average cost basis": "cost_per_share",
-#     "Type": "type"
-# }
 # =============================================================================
-# 3.2 YOUR EXACT CSV → DB COLUMN MAPPING -- all lower case of every header
+# 3. YOUR EXACT CSV → DB COLUMN MAPPING
 # =============================================================================
 CSV_TO_DB_MAP = {
-    "account number": "account",
-    "account name": "account_name",
-    "symbol": "symbol",
-    "description": "company",
-    "quantity": "quantity",
-    "last price": "price",
-    "last price change": "price_change",
-    "current value": "current_value",
-    "today's gain/loss dollar": "today_gl",
-    "today's gain/loss percent": "today_gl_pct",
-    "total gain/loss dollar": "total_gl",
-    "total gain/loss percent": "total_gl_pct",
-    "percent of account": "pct_of_account",
-    "cost basis total": "total_cost",
-    "average cost basis": "cost_per_share",
-    "type": "type"
+    "Account Number": "account",
+    "Account Name": "account_name",
+    "Symbol": "symbol",
+    "Description": "company",
+    "Quantity": "quantity",
+    "Last Price": "price",
+    "Last Price Change": "price_change",
+    "Current Value": "current_value",
+    "Today's Gain/Loss Dollar": "today_gl",
+    "Today's Gain/Loss Percent": "today_gl_pct",
+    "Total Gain/Loss Dollar": "total_gl",
+    "Total Gain/Loss Percent": "total_gl_pct",
+    "Percent Of Account": "pct_of_account",
+    "Cost Basis Total": "total_cost",
+    "Average Cost Basis": "cost_per_share",
+    "Type": "type"
 }
 
 # =============================================================================

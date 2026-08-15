@@ -31,11 +31,9 @@ interface ImportMetaEnv {
   readonly _?: string;
   readonly MOTD_SHOWN?: string;
   readonly HOME?: string;
-  readonly SSH_ASKPASS?: string;
   readonly LANG?: string;
   readonly LS_COLORS?: string;
   readonly SSH_CONNECTION?: string;
-  readonly SYSTEMD_EDITOR?: string;
   readonly MOZ_GMP_PATH?: string;
   readonly XDG_SESSION_CLASS?: string;
   readonly SELINUX_ROLE_REQUESTED?: string;
@@ -49,7 +47,6 @@ interface ImportMetaEnv {
   readonly SSH_CLIENT?: string;
   readonly DEBUGINFOD_URLS?: string;
   readonly DEBUGINFOD_IMA_CERT_PATH?: string;
-  readonly KDEDIRS?: string;
   readonly XDG_DATA_DIRS?: string;
   readonly PATH?: string;
   readonly SELINUX_LEVEL_REQUESTED?: string;

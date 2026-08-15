@@ -1,7 +1,7 @@
 from datetime import date, datetime, timedelta
 from sty import ef, rs, FgRegister
-from mysql.connector import Error
-import time, sys
+##from mysql.connector import Error
+
 from constants import spx
 
 def displaySec(sec, sp):
@@ -29,7 +29,7 @@ fg = FgRegister()
 # print(type(fg))
 # import pprint
 # pprint.pprint(fg.__dict__)
-def XXcolorShow(sp, sec):
+def colorShow(sp, sec):
     # print("total_gl=[%s]"%sec.total_gl)
     # print('====sec:', sec.change, sec.price)
     prlow = '--' if sec.low_52_week == 0 or sec.low_52_week == None else float(sec.price) - float(sec.low_52_week)
@@ -111,12 +111,7 @@ def XXcolorShow(sp, sec):
     print(ptxt)
     # sys.stdout.flush()
 
-def boldIt(str): 
-    # if "fg.red" in str: print(str)
-    # if 'fg.red' in str: return 
-    # else: return str
-    return ef.bold + str + rs.bold_dim
-
+def boldIt(str): return ef.bold + str + rs.bold_dim
 def redIt(str): return fg.red + str + fg.rs
 def greenIt(str): return fg.green + str + fg.rs
 def yellowIt(str): return fg.yellow + str + fg.rs
@@ -201,7 +196,7 @@ def dispRow(tabw, row):
     idx += 1; rowstr += padsp(row.symbol, tabw[idx]-1) + spx + ' │'
     idx += 1; rowstr += boldIt(tag.center(tabw[idx])) + '│'
     idx += 1; rowstr += (tabw[idx]*' ' if row.price_change == None else boldIt(procCol(tabw[idx], row.price_change, False, 3))) + '│'
-    idx += 1; rowstr += (tabw[idx]*' ' if row.price == None else procCol(tabw[idx], row.price, True, 3)) + '│'
+    idx += 1; rowstr += (tabw[idx]*' ' if row.price == None else boldIt(procCol(tabw[idx], row.price, True, 3))) + '│'
     idx += 1; rowstr += (tabw[idx]*' ' if row.today_gl == None else boldIt(procCol(tabw[idx], row.today_gl))) + '│'
     idx += 1; rowstr += (tabw[idx]*' ' if row.pct_of_account == 0 else procCol(tabw[idx], row.pct_of_account, True, 3)) + '│'
     idx += 1; rowstr += (tabw[idx]*' ' if row.quantity == None else procCol(tabw[idx], row.quantity, True, 3)) + '│'    ## Shares 
@@ -211,6 +206,12 @@ def dispRow(tabw, row):
     idx += 1; rowstr += padsp('', tabw[idx]) + '│' if row.low_52_week == None else boldIt(procCol(tabw[idx], row.price - row.low_52_week, False)) + '│'
     idx += 1; rowstr += padsp('', tabw[idx]) + '║' if row.high_52_week == None else boldIt(procCol(tabw[idx], row.high_52_week - row.price, False)) + '║'
     print(rowstr)
+
+# def drawBotLine(tabw):
+#     clsline = ' ╟' 
+#     for w in tabw[:-1]: clsline += w * '━' + '┷'
+#     clsline += tabw[-1] * '━' + '╢'
+#     print(clsline)
 
 def drawBotLineDownTick(tabw):
     sprline = spx + '╟' 
@@ -368,37 +369,3 @@ def get_basis_price(meta_dict, symb):
     basis_price = meta_dict[symb]['basis_price']
     # print("basis_price=[%s]"%basis_price)
     return basis_price
-
-def getLogFile(tag, dyx, db):
-    ddx = str(abs(dyx)) if dyx <= 0 else dyx
-    return '/Users/swang/tmp/logs/cn/import-' + tag + '-' + ddx + '-' + db + '-' + wkdayname() + '.log'
-
-def wkdayname(): return date.fromtimestamp(time.time()).strftime('%a')
-
-class TeeToFileAndScreen(object):
-    def __getattr__(self, key): return None
-
-    def __init__(self, name, mode):
-        self.file = open(name, mode)
-        self.stdout = sys.stdout
-        sys.stdout = self
-
-    def close(self):
-        if self.stdout is not None:
-            sys.stdout = self.stdout
-            self.stdout = None
-        if self.file is not None:
-            self.file.close()
-            self.file = None
-
-    def write(self, data):
-        self.file.write(data)
-        self.stdout.write(data)
-
-    def flush(self):
-        self.file.flush()
-        self.stdout.flush()
-
-    def __del__(self):
-        self.close()
-

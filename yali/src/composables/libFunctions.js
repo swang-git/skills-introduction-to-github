@@ -27,7 +27,6 @@ export function libFunctions() {
   // function mate () { return Platform.is.android }
   function mate9 () { return Platform.userAgent.includes('windows') && Platform.has.touch }
   function iPad () { return Platform.is.ipad }
-  function android () { return Platform.is.android }
   function IPhone () { return Platform.is.iphone }
   // function mobile () { return Platform.is.mobile }
   // function safari () { return Platform.is.safari }
@@ -80,7 +79,6 @@ export function libFunctions() {
   const iPhone17 = iphone17()
   const isLocal = local()
   const isAdmin = admin()
-  const isHarmony6 = android()
 
   const firstOnPage = computed(() => { return (curPage.value - 1) * itemsPerPage.value })
   emitter.on('dats', (x) => dats.value = x)
@@ -232,7 +230,6 @@ export function libFunctions() {
     isDesk,
     isIM,
     isFone,
-    isHarmony6,
     searchQuery,
     dats,
     dalist,

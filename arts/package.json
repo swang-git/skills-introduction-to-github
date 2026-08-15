@@ -1,9 +1,8 @@
 {
-  "name": "arts",
+  "name": "appx",
   "version": "0.0.1",
   "description": "A Quasar Project",
-  "productName": "Quasar App",
-  "author": "swang-git <swang71@comcast.net>",
+  "productName": "appx",
   "type": "module",
   "private": true,
   "scripts": {
@@ -14,10 +13,11 @@
     "postinstall": "quasar prepare --silent"
   },
   "dependencies": {
-    "@quasar/extras": "^2.0.2",
+    "@quasar/cli": "^5.0.6",
+    "@quasar/extras": "^2.0.3",
     "axios": "^1.18.0",
     "pinia": "^3.0.1",
-    "quasar": "^2.23.3",
+    "quasar": "^2.24.0",
     "tiny-emitter": "^2.1.0",
     "vue": "^3.5.22",
     "vue-i18n": "^11.3.0",
@@ -25,7 +25,7 @@
   },
   "devDependencies": {
     "@intlify/unplugin-vue-i18n": "^11.0.0",
-    "@quasar/app-vite": "^3.3.0",
+    "@quasar/app-vite": "^3.5.0",
     "autoprefixer": "^10.4.27",
     "oxfmt": "^0.x",
     "oxlint": "^1.x",

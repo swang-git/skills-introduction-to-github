@@ -8,12 +8,12 @@ db=$1
 dd=`date +%a`
 ##_target_file=/f36/bak/db/dumpz_${dd}_${db}.sql.gz
 ##_target_file=/home/swang/bak/db/dumpz_${dd}_${db}.sql.gz
-target_file=/run/media/swang/Seagate/BAK/db/dumpz_${dd}_${db}.sql.gz
+##target_file=/run/media/swang/Seagate/BAK/db/dumpz_${dd}_${db}.sql.gz
+target_file=/home/swang/bak/db/dumpz_${dd}_${db}.sql.gz
 
 echo dumping database $target_file $argv
 
-mariadb-dump -B $db --routines -pYbsjll11 | gzip > $target_file &
-###__mysqldump -B $db --routines -pYbsjll11 | gzip > $target_file &
+mysqldump -B $db --routines -pYbsjll11 | gzip > $target_file &
 #mysqldump -uswang -pVVKKll11## -B $db --routines | gzip > $target_file &
 # if [ $db = "golf" ]; then
 #   mysqldump -uswang -pVVKKll11## -B $db --skip-comments --skip-opt --complete-insert --add-drop-table | gzip > $target_file & // dump file too big

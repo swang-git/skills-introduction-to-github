@@ -3,7 +3,7 @@
 
 import { defineConfig } from '#q-app'
 
-export default defineConfig((ctx) => {
+export default defineConfig(ctx => {
   return {
     // https://v2.quasar.dev/quasar-cli-vite/prefetch-feature
     // preFetch: true,
@@ -27,7 +27,7 @@ export default defineConfig((ctx) => {
       // 'roboto-font-latin-ext', // this or either 'roboto-font', NEVER both!
 
       'roboto-font', // optional, you are not bound to it
-      'material-icons', // optional, you are not bound to it
+      'material-icons' // optional, you are not bound to it
     ],
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-file#build
@@ -41,26 +41,6 @@ export default defineConfig((ctx) => {
       // filenameBasedRouting: true,
 
       vueRouterMode: 'history', // available values: 'hash', 'history'
-
-      // quasar.config.js for Vite
-      // Vite uses 'base', not 'publicPath'
-      //base: '/' + (process.env.PRODUCT_NAME === undefined ? 'yali/' : process.env.PRODUCT_NAME),
-      // base: '/',
-      
-      // Env vars for Vite
-      // env: {
-      //   API: process.env.API_URL || '/api',
-      //   VER: process.env.PRODUCT_VER || '1.0'
-      // },
-
-      //publicPath: '/' + (process.env.PRODUCT_NAME  === undefined ? 'yali' : process.env.PRODUCT_NAME), // this will be injected into index.html, like
-      // productName: process.env.PRODUCT_NAME === undefined ? 'apps' : process.env.PRODUCT_NAME,
-      // appName: process.env.APP,
-      // env: ctx.dev ? { API: '/api', VER: process.env.PRODUCT_VER } : { API: '', VER: process.env.PRODUCT_VER },
-      // env: {
-      //    API: process.env.API_URL || '/api',
-      //     VER: process.env.PRODUCT_VER || '1.0'
-      // },
       // vueRouterBase,
       // vueDevtools,
 
@@ -73,14 +53,15 @@ export default defineConfig((ctx) => {
 
       // extendViteConf (viteConf) {},
       // viteVuePluginOptions: {},
+
       extendViteConf(viteConf) {
         if (ctx.prod && !ctx.debug) {
           viteConf.build = {
-            ...viteConf.build,
-            // Use terser instead of esbuild for full comment removal
-            minify: 'terser',
-            terserOptions: {
-              compress: {
+           ...viteConf.build,
+           // Use terser instead of esbuild for full comment removal
+           minify: 'terser',
+           terserOptions: {
+             compress: {
                 drop_console: true, // remove all console.log / console.debug
                 drop_debugger: true
               },
@@ -109,36 +90,16 @@ export default defineConfig((ctx) => {
             ssr: ctx.modeName === 'ssr',
 
             // you need to set i18n resource including paths !
-            include: [ctx.appPaths.resolve.app('src/i18n')],
-          },
-        ],
-        //[
-        //  'vite-plugin-checker',
-        //  {
-        //    eslint: {
-        //      lintCommand: 'eslint -c ./eslint.config.js "./src*/**/*.{js,mjs,cjs,vue}"',
-        //      useFlatConfig: true,
-        //    },
-        //  },
-        //  { server: false },
-        //],
-      ],
+            include: [ctx.appPaths.resolve.app('src/i18n')]
+          }
+        ]
+      ]
     },
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-file#devserver
     devServer: {
       // https: true,
-      open: true, // opens browser window automatically
-      host: 'devx',
-      allowedHosts: ['devx', '192.168.1.107', '127.0.0.1'],
-      port: ctx.mode.spa ? '8080' : (ctx.mode.pwa ? 9080 : 9090),
-      proxy: {
-         '/api': {
-          target: 'http://devx',  // Your Fedora backend
-          changeOrigin: true,
-          rewrite: (path) => path.replace(/^\/api/, '')  // Only if backend doesn't expect /api
-        }
-      }
+      open: true // opens browser window automatically
     },
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-file#framework
@@ -156,7 +117,7 @@ export default defineConfig((ctx) => {
       // directives: [],
 
       // Quasar plugins
-      plugins: ['LocalStorage', 'Notify', 'Dialog', 'Cookies'],
+      plugins: ['Notify', 'Dialog']
     },
 
     // animations: 'all', // --- includes all animations
@@ -182,7 +143,7 @@ export default defineConfig((ctx) => {
       // (gets superseded if process.env.PORT is specified at runtime)
 
       middlewares: [
-        'render', // keep this as last one
+        'render' // keep this as last one
       ],
 
       // extendSSRPackageJson (pkgJson) {},
@@ -193,7 +154,7 @@ export default defineConfig((ctx) => {
       // manualStoreHydration: true,
       // manualPostHydrationTrigger: true,
 
-      pwa: false,
+      pwa: false
       // pwaOfflineHtmlFilename: 'offline.html', // do NOT use index.html as name!
 
       // extendSSRGenerateSWOptions (cfg) {},
@@ -202,7 +163,7 @@ export default defineConfig((ctx) => {
 
     // https://v2.quasar.dev/quasar-cli-vite/developing-pwa/configuring-pwa
     pwa: {
-      workboxMode: 'GenerateSW', // 'GenerateSW' or 'InjectManifest'
+      workboxMode: 'GenerateSW' // 'GenerateSW' or 'InjectManifest'
       // swFilename: 'sw.js',
       // manifestFilename: 'manifest.json',
       // extendPWAManifestJson (json) {},
@@ -219,7 +180,7 @@ export default defineConfig((ctx) => {
 
     // https://v2.quasar.dev/quasar-cli-vite/developing-capacitor-apps/configuring-capacitor
     capacitor: {
-      hideSplashscreen: true,
+      hideSplashscreen: true
     },
 
     // https://v2.quasar.dev/quasar-cli-vite/developing-electron-apps/configuring-electron
@@ -250,8 +211,8 @@ export default defineConfig((ctx) => {
       builder: {
         // https://www.electron.build/configuration
 
-        appId: 'yali',
-      },
+        appId: 'yali'
+      }
     },
 
     // https://v2.quasar.dev/quasar-cli-vite/developing-browser-extensions/configuring-bex
@@ -267,7 +228,7 @@ export default defineConfig((ctx) => {
        *
        * @example [ 'my-script.ts', 'sub-folder/my-other-script.js' ]
        */
-      extraScripts: [],
-    },
+      extraScripts: []
+    }
   }
 })

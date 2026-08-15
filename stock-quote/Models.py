@@ -5,7 +5,7 @@ from sqlalchemy.orm import sessionmaker
 import requests
 from bs4 import BeautifulSoup
 from datetime import datetime
-from tabulate import tabulate
+###from tabulate import tabulate
 import platform
 import sys
 

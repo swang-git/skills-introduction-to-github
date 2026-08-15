@@ -12,14 +12,8 @@ if [ $dd -eq 0 ]; then
   ##echo "new value for dd=$dd"
 fi
 d0=$(($dd%2))
-target_file=/Users/swang/bak/db/dump_${d0}_${db}.sql
+target_file=/Users/swang/BAK/db/dump_${d0}_${db}.sql
 
 echo dumping database $target_file $argv
 
-##__mysqldump -uswang -pYbsjll11 -B $db --routines > $target_file &
-mariadb-dump -uswang -pYbsjll11 -B $db --routines > $target_file &
-
-#if [ $db == "prod" ]; then
-#  mariadb-dump -uswang -pYbsjll11 -B $db --routines | mariadb -uswang -pYbsjll11 -hfedora
-#fi
-
+mysqldump -uswang -pYbsjll11 -B $db --routines > $target_file &

@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 # appx (appx)
-=======
-# Quasar App (arts)
->>>>>>> f67d697ec603fc6e69dd4d286f3f63a3be8036be
 
 ## Install the dependencies
 

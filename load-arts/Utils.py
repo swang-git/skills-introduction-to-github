@@ -256,11 +256,8 @@ class Img:
 
                     # req = urllib.request.Request(lnk, headers = headers)
                     # resp = urllib.request.urlopen(req)
-                    ctx = ssl.create_default_context()
-                    ctx.check_hostname = False
-                    ctx.verify_mode = ssl.CERT_NONE
                     req = Request(lnk, headers=headers)
-                    resp = urlopen(req, timeout=60, context=ctx)
+                    resp = urlopen(req, timeout=60)
                     respData = resp.read()
                     with open(tofile, 'wb') as img_file:
                         img_file.write(respData)

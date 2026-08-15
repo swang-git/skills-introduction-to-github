@@ -2,28 +2,81 @@
   <q-layout view="hHh Lpr fFf" container style="height: 1530px">
     <q-header elevated class="bg-cyan-8">
       <q-toolbar>
-        <q-btn v-if="isDesk" @click="drawer = !drawer" round glossy color="indigo-9" dense><q-icon :name="compVer" style="margin-top:-6px" /></q-btn>
-        <!-- <q-btn v-if="isDesk" flat @click="drawer = !drawer" round dense><q-icon name="compVer" /></q-btn> -->
-        <q-btn v-else to="/" round dense glossy color="blue-6" ><q-icon name="🏠" style="margin: -12px 0 0 0"/></q-btn>
-        <q-toolbar-title class="cursor-pointer" @click="reloadPage()">{{ pageTitle }}</q-toolbar-title>
-        <!-- <q-input v-if="showSearch" :style="isIM ? { width: '90px' } : { width: '200px' }" dark v-model="searchQuery" :label="'Quasar Version: ' + $q.version" class="text-right text-h6" dense @keyup="search()"> -->
-        <q-input :style="isIM ? { width: '90px' } : { width: '200px' }" dark v-model="searchQuery" :label="'Quasar Version: ' + $q.version" class="text-right text-h6" dense @keyup="search()">
+        <q-btn
+          v-if="isDesk"
+          flat
+          @click="drawer = !drawer"
+          round
+          dense
+          icon="menu"
+        />
+        <q-btn v-else to="/" round dense glossy color="blue-6"
+          ><q-icon name="🏠" style="margin: -12px 0 0 0"
+        /></q-btn>
+        <q-toolbar-title class="cursor-pointer" @click="reloadPage()">{{
+          pageTitle
+        }}</q-toolbar-title>
+        <q-input
+          v-if="showSearch"
+          :style="isIM ? { width: '90px' } : { width: '200px' }"
+          dark
+          borderless
+          v-model="searchQuery"
+          class="text-right text-h6"
+          dense
+          @keyup="search()"
+        >
           <template v-slot:append>
             <q-icon v-if="searchQuery === ''" name="search" />
             <q-icon v-else name="clear" class="cursor-pointer" @click=" searchQuery = ''; search()" />
           </template>
         </q-input>
-        <q-btn v-if="pageTitle == 'Course Details' && SysAdmin" class="q-px-sm q-mx-sm" glossy dense icon="golf_course" label="Add New Course" color="red" @click="addNewCourse()" />
+        <q-btn
+          v-if="pageTitle == 'Course Details' && SysAdmin"
+          class="q-px-sm q-mx-sm"
+          glossy
+          dense
+          icon="golf_course"
+          label="Add New Course"
+          color="red"
+          @click="addNewCourse()"
+        />
         <q-btn round dense icon="help" @click="showUserGuide()" />
         <!-- <q-btn round dense icon="devices" @click="refPlatformDataPad.openIt()" /> -->
-        <q-btn v-if="SysAdmin && updateUserGuide" outline rounded dense icon-right="update" :label="isDesk ? 'update user guide' : 'user guide'" @click="updateUserGuide()" class="q-pl-sm" />
+        <q-btn
+          v-if="SysAdmin && updateUserGuide"
+          outline
+          rounded
+          dense
+          icon-right="update"
+          :label="isDesk ? 'update user guide' : 'user guide'"
+          @click="updateUserGuide()"
+          class="q-pl-sm"
+        />
       </q-toolbar>
     </q-header>
-    <q-drawer v-if="isDesk" v-model="drawer" :width="210" :breakpoint="400" show-if-above :style="{ background: 'white', color: 'black', fontSize: '18px' }">
-      <q-scroll-area style="height: calc(100% - 200px); margin-top: 200px; border-right: 1px solid #ddd;">
+    <q-drawer
+      v-if="isDesk"
+      v-model="drawer"
+      :width="210"
+      :breakpoint="400"
+      show-if-above
+      :style="{ background: 'white', color: 'black', fontSize: '18px' }"
+    >
+      <q-scroll-area
+        style="
+          height: calc(100% - 200px);
+          margin-top: 200px;
+          border-right: 1px solid #ddd;
+        "
+      >
         <q-list padding>
           <!-- <q-item clickable v-ripple to='/PlayerList'> // impacted by style in the other components  -->
-          <q-item clickable v-ripple @click="openApp('PlayerList', 'Player List')">
+          <q-item
+            clickable
+            v-ripple
+            @click="openApp('PlayerList', 'Player List')"
+          >
             <q-item-section avatar>
               <q-icon name="person" color="orange-9" size="30px" />
             </q-item-section>
@@ -31,7 +84,11 @@
           </q-item>
 
           <!-- <q-item clickable v-ripple to='/TournamentList'> -->
-          <q-item clickable v-ripple @click="openApp('TournamentList', 'Tournament List')">
+          <q-item
+            clickable
+            v-ripple
+            @click="openApp('TournamentList', 'Tournament List')"
+          >
             <q-item-section avatar>
               <q-icon name="assignment" color="blue" size="26px" />
             </q-item-section>
@@ -39,14 +96,22 @@
           </q-item>
 
           <!-- <q-item clickable v-ripple to='/CourseDetails'> -->
-          <q-item clickable v-ripple @click="openApp('CourseDetails', 'Course Details')">
+          <q-item
+            clickable
+            v-ripple
+            @click="openApp('CourseDetails', 'Course Details')"
+          >
             <q-item-section avatar>
               <q-icon name="golf_course" color="green-9" size="30px" />
             </q-item-section>
             <q-item-section> Golf Courses </q-item-section>
           </q-item>
 
-          <q-item clickable v-ripple @click="openApp('Signup', 'Sign up Games')">
+          <q-item
+            clickable
+            v-ripple
+            @click="openApp('Signup', 'Sign up Games')"
+          >
             <q-item-section avatar>
               <q-icon name="assignment" color="pink" size="30px" />
             </q-item-section>
@@ -65,28 +130,44 @@
           </q-item-section>
         </q-item> -->
 
-          <q-item clickable v-ripple @click="openApp('JZsMatch', 'JZ\'s Match', 13)">
+          <q-item
+            clickable
+            v-ripple
+            @click="openApp('JZsMatch', 'JZ\'s Match', 13)"
+          >
             <q-item-section avatar>
               <q-icon name="img:icons/JZ.png" size="30px" />
             </q-item-section>
             <q-item-section> JZ's Match </q-item-section>
           </q-item>
 
-          <q-item clickable v-ripple @click="openApp('KJsMatch', 'KJ\'s Match', 14)">
+          <q-item
+            clickable
+            v-ripple
+            @click="openApp('KJsMatch', 'KJ\'s Match', 14)"
+          >
             <q-item-section avatar>
               <q-icon name="img:icons/KJ.png" size="30px" />
             </q-item-section>
             <q-item-section> KJ's Match </q-item-section>
           </q-item>
 
-          <q-item clickable v-ripple @click="openApp('ALsMatch', 'AL\'s Match', 16)">
+          <q-item
+            clickable
+            v-ripple
+            @click="openApp('ALsMatch', 'AL\'s Match', 16)"
+          >
             <q-item-section avatar>
               <q-icon name="img:icons/AL.png" size="30px" />
             </q-item-section>
             <q-item-section> AL's Match </q-item-section>
           </q-item>
 
-          <q-item clickable v-ripple @click="openApp('PGCGroupList', 'PGC Group List')">
+          <q-item
+            clickable
+            v-ripple
+            @click="openApp('PGCGroupList', 'PGC Group List')"
+          >
             <q-item-section avatar>
               <q-icon name="img:icons/PGC.png" color="cyan-9" size="30px" />
             </q-item-section>
@@ -94,14 +175,24 @@
             <q-item-section v-else> Groups </q-item-section>
           </q-item>
 
-          <q-item clickable v-ripple @click=" openApp('PGCGameList', 'Club Outings, Tournaments and PlayOff')">
+          <q-item
+            clickable
+            v-ripple
+            @click="
+              openApp('PGCGameList', 'Club Outings, Tournaments and PlayOff')
+            "
+          >
             <q-item-section avatar>
               <q-icon name="img:icons/PGC.png" color="blue" size="30px" />
             </q-item-section>
             <q-item-section> Games </q-item-section>
           </q-item>
 
-          <q-item clickable v-ripple @click="openApp('PGCGameRules', 'PGC Game Rules')">
+          <q-item
+            clickable
+            v-ripple
+            @click="openApp('PGCGameRules', 'PGC Game Rules')"
+          >
             <q-item-section avatar>
               <q-icon name="img:icons/PGC.png" color="green-10" size="30px" />
             </q-item-section>
@@ -116,71 +207,123 @@
           </q-item>
 
           <q-item v-if="SysAdmin" clickable v-ripple>
-            <q-item-section avatar ><q-icon name="settings" color="grey-0" size="30px" /></q-item-section>
+            <q-item-section avatar
+              ><q-icon name="settings" color="grey-0" size="30px"
+            /></q-item-section>
             <q-item-section class="text-no-wrap">SysAdmin On</q-item-section>
           </q-item>
           <q-item v-if="SysAdmin" clickable v-ripple>
-            <q-item-section avatar ><q-icon name="settings" color="grey-0" size="30px" /></q-item-section>
+            <q-item-section avatar
+              ><q-icon name="settings" color="grey-0" size="30px"
+            /></q-item-section>
             <q-item-section class="text-no-wrap">Maintainence</q-item-section>
           </q-item>
           <q-item v-if="SysAdmin" clickable v-ripple @click="logout()">
-            <q-item-section avatar ><q-icon name="logout" color="green-9" size="30px" /></q-item-section>
+            <q-item-section avatar
+              ><q-icon name="logout" color="green-9" size="30px"
+            /></q-item-section>
             <q-item-section class="text-no-wrap">Sys Logout</q-item-section>
           </q-item>
           <q-item v-if="JZsAdmin" clickable v-ripple @click="logout()">
-            <q-item-section avatar ><q-icon name="logout" color="green-9" size="30px" /></q-item-section>
+            <q-item-section avatar
+              ><q-icon name="logout" color="green-9" size="30px"
+            /></q-item-section>
             <q-item-section class="text-no-wrap">JZs Logout</q-item-section>
           </q-item>
           <q-item v-if="KJsAdmin" clickable v-ripple @click="logout()">
-            <q-item-section avatar ><q-icon name="logout" color="green-9" size="30px" /></q-item-section>
+            <q-item-section avatar
+              ><q-icon name="logout" color="green-9" size="30px"
+            /></q-item-section>
             <q-item-section class="text-no-wrap">KJs Logout</q-item-section>
           </q-item>
           <q-item v-if="ALsAdmin" clickable v-ripple @click="logout()">
-            <q-item-section avatar ><q-icon name="logout" color="green-9" size="30px" /></q-item-section>
+            <q-item-section avatar
+              ><q-icon name="logout" color="green-9" size="30px"
+            /></q-item-section>
             <q-item-section class="text-no-wrap">ALs Logout</q-item-section>
           </q-item>
           <q-item v-if="PGCsAdmin" clickable v-ripple @click="logout()">
-            <q-item-section avatar><q-icon name="logout" color="green-9" size="30px" /></q-item-section>
+            <q-item-section avatar
+              ><q-icon name="logout" color="green-9" size="30px"
+            /></q-item-section>
             <q-item-section class="text-no-wrap">PGCs Logout</q-item-section>
           </q-item>
           <q-item v-else-if="doGroup" clickable v-ripple @click="logout()">
-            <q-item-section avatar><q-icon name="logout" color="pink" size="30px" /></q-item-section>
+            <q-item-section avatar
+              ><q-icon name="logout" color="pink" size="30px"
+            /></q-item-section>
             <q-item-section class="text-no-wrap">DoGroup Logout</q-item-section>
           </q-item>
-          <q-item v-else-if=" !(SysAdmin || JZsAdmin || KJsAdmin || ALsAdmin || PGCsAdmin)" clickable v-ripple @click="showLoginDialog()">
-            <q-item-section avatar><q-icon name="login" color="green" size="30px" /></q-item-section>
+          <q-item
+            v-else-if="
+              !(SysAdmin || JZsAdmin || KJsAdmin || ALsAdmin || PGCsAdmin)
+            "
+            clickable
+            v-ripple
+            @click="showLoginDialog()"
+          >
+            <q-item-section avatar
+              ><q-icon name="login" color="green" size="30px"
+            /></q-item-section>
             <q-item-section>System Login</q-item-section>
           </q-item>
-          <q-item v-if="SysAdmin" clickable v-ripple @click="showRegisterDialog()">
-            <q-item-section avatar><q-icon name="app_registration" color="accent" size="30px" /></q-item-section>
+          <q-item
+            v-if="SysAdmin"
+            clickable
+            v-ripple
+            @click="showRegisterDialog()"
+          >
+            <q-item-section avatar
+              ><q-icon name="app_registration" color="accent" size="30px"
+            /></q-item-section>
             <q-item-section class="text-no-wrap">Create Account</q-item-section>
           </q-item>
 
-          <q-item v-if="JZsAdmin" clickable v-ripple @click="openApp('LoadLogPage', 'Show Log Page', 'Golf Logs')" >
+          <q-item
+            v-if="JZsAdmin"
+            clickable
+            v-ripple
+            @click="openApp('LoadLogPage', 'Show Log Page', 'Golf Logs')"
+          >
             <q-item-section avatar>
               <q-icon name="monitor" color="red" size="30px" />
             </q-item-section>
             <q-item-section> Show Logs </q-item-section>
           </q-item>
 
-          <q-item v-if="compVer=='开'" clickable v-ripple @click="openApp('DevTest', 'Testing New', 'Testing New')">
+          <q-item
+            v-if="compVer == undefined"
+            clickable
+            v-ripple
+            @click="openApp('DevTest', 'Testing New', 'Testing New')"
+          >
             <q-item-section avatar>
               <q-icon name="developer_mode" color="indigo" size="30px" />
             </q-item-section>
             <q-item-section> Testing New </q-item-section>
           </q-item>
 
-          <!-- <div class="row text-grey text-h6 q-pl-xl">
-            <q-icon :name="compVer" /><span class="q-pl-md">{{ $q.version }}</span>
-          </div> -->
+          <div class="row text-grey-3 text-h5 q-pl-md">
+            <q-icon :name="compVer" />
+            <span class="q-pl-sm">{{ $q.version }}</span>
+          </div>
         </q-list>
       </q-scroll-area>
 
-      <q-img class="absolute-top cursor-pointer" src="icons/club-logo-full.png" style="height: 170px" @click="goHome">
+      <q-img
+        class="absolute-top cursor-pointer"
+        src="icons/club-logo-full.png"
+        style="height: 170px"
+        @click="goHome"
+      >
         <div class="absolute-bottom bg-transparent">
           <q-item clickable v-ripple @click="goHome" />
-          <q-avatar size="38px" class="q-mb-sm"><img src="icons/boy.png" /></q-avatar>
-          <q-avatar size="38px" class="q-mb-sm" style="padding: 0 0 0 105px"><img src="icons/girl.png" /></q-avatar>
+          <q-avatar size="38px" class="q-mb-sm"
+            ><img src="icons/boy.png"
+          /></q-avatar>
+          <q-avatar size="38px" class="q-mb-sm" style="padding: 0 0 0 105px"
+            ><img src="icons/girl.png"
+          /></q-avatar>
         </div>
       </q-img>
     </q-drawer>
@@ -215,15 +358,31 @@ import { dayFunctions } from '../../src/composables/dayFunctions'
 // import { useStore } from 'vuex'
 // const store = useStore()
 const $q = useQuasar()
-const { store, JZsAdmin, KJsAdmin, ALsAdmin, SysAdmin, isIM, isDesk, PGCsAdmin, doGroup, pagename, userGuidePage } = libFunctions()
+// const { store, golfUserType, JZsAdmin, KJsAdmin, ALsAdmin, SysAdmin, isIM, isDesk, PGCsAdmin, doGroup, pagename, userGuidePage } = libFunctions()
+const {
+  store,
+  JZsAdmin,
+  KJsAdmin,
+  ALsAdmin,
+  SysAdmin,
+  isIM,
+  isDesk,
+  PGCsAdmin,
+  doGroup,
+  pagename,
+  userGuidePage,
+  DEV_API
+} = libFunctions()
 const { yyyymmdd } = dayFunctions()
 
 const oneHour = 1000 * 60 * 60
 const curApp = ref(null)
 
+emitter.on('golf-getUserType', x => setUserType(x))
+// emitter.on('golf-usertype', (x) => { golfUserType.value = x })
+
 store.pageTitle = 'Princeton SU Golf Club'
 
-emitter.on('golf-getUserType', x => setUserType(x))
 emitter.on('golf-getPGCRules', x => setPGCRules(x))
 emitter.on('golf-delTournament', x => reloadMatches(x.gameId))
 emitter.on('golf-updTournament', x => reloadMatches(x.gameId))
@@ -241,24 +400,24 @@ emitter.on('num-items', x => (numItems.value = x))
 const { gaxios } = axiosFunctions()
 const { ENV_API } = libFunctions()
 
-const compVer = computed(() => { return import.meta.env.VITE_BUILD_TAG==undefined ? '开' : import.meta.env.VITE_BUILD_TAG })
+const compVer = computed(() => { return import.meta.env.VITE_BUILD_TAG })
 // const pagename = computed({
 //   get: () => store.state.golf.page,
 //   set: val => store.commit('golf/setPage', val)
 // })
-// const showSearch = computed(() => {
-//   return (
-//     [
-//       'PGCGames',
-//       'PlayerList',
-//       'tournmaentList',
-//       'grouping',
-//       'team_match_top',
-//       'JZsMatch',
-//       'LoadLogPage'
-//     ].indexOf(pagename.value) >= 0
-//   )
-// })
+const showSearch = computed(() => {
+  return (
+    [
+      'PGCGames',
+      'PlayerList',
+      'tournmaentList',
+      'grouping',
+      'team_match_top',
+      'JZsMatch',
+      'LoadLogPage'
+    ].indexOf(pagename.value) >= 0
+  )
+})
 const pageTitle = computed(() => {
   return store.pageTitle
 })
@@ -280,7 +439,7 @@ const gcinfo = ref(false)
 const appname = ref(null)
 const refPlatformDataPad = ref(false)
 
-// console.log(`-CK-showSearch=${showSearch.value}`)
+console.log(`-CK-showSearch=${showSearch.value}`)
 console.log(`-CK-pageTitle=${pageTitle.value}`)
 onMounted(() => {
   refPlatformDataPad
@@ -292,7 +451,7 @@ function addNewCourse() {
 }
 function setUserType(da) {
   // console.log('-CK-fn-setUsertype', da.usertype)
-  store.usertype = da.usertype
+  store.userType = da.usertype
   // console.log(`-CK-fn-setUserType match Login JZsAdmin=${JZsAdmin.value} SysAdmin=${SysAdmin.value} PGCsAdmin=${PGCsAdmin.value} usertype=${da.usertype}`)
 }
 function getUserType() {
@@ -303,7 +462,7 @@ function logout() {
   const path = ENV_API + '/golf/logout'
   gaxios(path)
   emitter.emit('golf-usertype', null)
-  store.usertype = null
+  store.userType = null
   $q.notify({
     color: 'yellow',
     textColor: 'red-10',
@@ -459,11 +618,10 @@ function setTitle(tit) {
 }
 // === main ===
 userGuidePage.value = 'Home'
-// getUserType()
+getUserType()
 // getUserGuideId()
 document.title = 'Golf'
 </script>
-
 <style>
 html {
   overflow: scroll;
