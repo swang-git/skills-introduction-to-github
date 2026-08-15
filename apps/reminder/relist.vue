@@ -34,7 +34,8 @@
       <q-td class="bg-cyan-8" :colspan="isDesk ? 4 : 3">
         <table style="margin:-7px 0 -6px -16px;width:105%">
           <q-tr><td style="min-width:52px">{{ cols[2].label }}</td>
-            <td v-if="/今|明|后/.test(getVal(p.row,2)) && !/PXW/.test(p.row.tag)" class="bg-teal-10">
+            <!-- <td v-if="/今|明|后/.test(getVal(p.row,2)) && !/PXW/.test(p.row.tag)" class="bg-teal-10"> -->
+            <td v-if="/今/.test(getVal(p.row,2)) && !/PXW/.test(p.row.tag)" class="bg-teal-10">
               <b v-if="isDesk" class="vertical-center text-h5 q-px-xs text-bold">就 是</b>
               <b class="text-red text-h4 text-bold">{{getVal(p.row,2)}}</b>
               <b class="vertical-top q-pl-sm text-bold text-h5"> ~ 马 上 到 期</b>

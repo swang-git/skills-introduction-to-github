@@ -28,3 +28,8 @@ mysqldump -B $db --routines -pYbsjll11 | gzip > $target_file &
 # mysqldump golf alias_handicap_KJ_view -uswang -pVVKKll11##|mysql -B golf_dev -pVVKKll11##
 # mysqldump golf alias_handicap_view -uswang -pVVKKll11##|mysql -B golf_dev -pVVKKll11##
 # mysqldump golf match_player_handicaps_view -uswang -pVVKKll11##|mysql -B golf_dev -pVVKKll11##
+
+if [ $db == "golf" ]; then
+   mariadb-dump -uswang -pYbsjll11 -B $db --routines | mariadb -uswang -pYbsjll11 -hmacmini
+fi
+

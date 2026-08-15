@@ -43,7 +43,8 @@ class GolfController extends Controller {
 	private $gross_ranks = [];
 
 	public function __construct() {
-		$nologs = ['/golf/getUserType', '/golf/getPlayerCount', '/golf/updGScore', '/golf/insGScore', '/golf/getPStrokes'];
+		// $nologs = ['/golf/getUserType', '/golf/getPlayerCount', '/golf/updGScore', '/golf/insGScore', '/golf/getPStrokes'];
+		$nologs = ['/golf/getUserType', '/golf/updGScore', '/golf/insGScore', '/golf/getPStrokes'];
 		// Log::info($_SERVER["REQUEST_URI"], $_SERVER);
 		// Log::info('$_SERVER["REMOTE_ADDR"]=' . $_SERVER['REMOTE_ADDR'] . ' $_SERVER["REQUEST_URI"]=' . $_SERVER['REQUEST_URI'], $nologs);
 		if (isset($_SERVER["REQUEST_URI"]) and in_array($_SERVER["REQUEST_URI"], $nologs)) return;

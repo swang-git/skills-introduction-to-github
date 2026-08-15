@@ -16,27 +16,27 @@
   </transition>
   <!-- <q-card-actions class="row" style="margin:auto;margin-top:-370px" :align="isDesk ? 'between' : 'evenly'"> -->
   <q-card-actions class="row" style="margin:auto;margin-top:-370px" align="between">
-    <RoundButton size="20px" icon="PL" clas="q-ma-xs q-pb-sm" colr="amber-9" ttip="Player List" @click="openApp('PlayerList')" />
+    <RoundButton size="20px" icon="PL" clas="q-ma-xs q-pb-sm" colr="amber-10" ttip="Player List" @click="openApp('PlayerList')" />
     <RoundButton size="20px" icon="TL" clas="q-ma-xs q-pb-sm" colr="teal-10" ttip="All Club Games" @click="openApp('TournamentList')" />
-    <RoundButton size="20px" icon="img:icons/hole_in_one.png" clas="q-ma-xs q-pb-sm" colr="green-9"  ttip="Golf Course Details" @click="openApp('CourseDetails')" />
-    <RoundButton size="20px" icon="SG" colr="pink" clas="q-ma-xs q-pb-sm"   ttip="Game Registration" @click="openApp('Signup')" />
-    <RoundButton size="20px" icon="JZ" colr="blue-9" clas="q-ma-xs q-pb-sm" ttip="JZ's Match" @click="openApp('JZsMatch')" />
+    <RoundButton size="20px" icon="img:icons/hole_in_one.png" clas="q-ma-xs q-pb-sm" colr="green-10"  ttip="Golf Course Details" @click="openApp('CourseDetails')" />
+    <RoundButton size="20px" icon="SG" colr="pink-10" clas="q-ma-xs q-pb-sm"   ttip="Game Registration" @click="openApp('Signup')" />
+    <RoundButton size="20px" icon="JZ" colr="blue-10" clas="q-ma-xs q-pb-sm" ttip="JZ's Match" @click="openApp('JZsMatch')" />
     <RoundButton size="20px" icon="KJ" colr="red-10" clas="q-ma-xs q-pb-sm" ttip="MM's Match" @click="openApp('KJsMatch')" />
     <RoundButton size="20px" icon="AL" colr="indigo-10" clas="q-ma-xs q-pb-sm" ttip="AL's Match" @click="openApp('ALsMatch')" />
     <RoundButton size="20px" icon="GL" colr="green-10" clas="q-ma-xs q-pb-sm" ttip="(Admin)PGC Game Grouping, Entering Scores, etc." @click="openApp('PGCGroupList')" />
     <RoundButton size="20px" icon="PG" colr="green-10" clas="q-ma-xs q-pb-sm" ttip="PGC Game List of Expired Games with scores(regular users)" @click="openApp('PGCGameList')" />
     <RoundButton size="20px" icon="PR" colr="green-10" clas="q-ma-xs q-pb-sm" ttip="PGC Game Rules" @click="showPGCRules()" />
-    <RoundButton size="20px" icon="card_giftcard" clas="q-ma-xs" colr="pink"   ttip="Holidays" @click="showHolidays" />
-    <RoundButton size="20px" icon="DV" clas="q-ma-xs q-pb-sm" colr="blue-10"   ttip="device detect" @click="showDeviceType" />
-    <RoundButton size="20px" icon="monitor" clas="q-ma-xs q-pb-sm" colr="green" ttip="Show Log" @click="openApp('LoadLogPage')" v-if="JZsAdmin" />
-    <RoundButton size="20px" icon="login"  colr="green-9" clas="q-ma-xs" ttip='Admin Login'  @click="login()" v-if="!(JZsAdmin || SysAdmin || PGCsAdmin)" />
-    <RoundButton size="20px" icon="logout" colr="brown-9" clas="q-ma-xs" ttip='SysAdmin Logout' @click="logout()" v-else-if="SysAdmin" />
+    <RoundButton size="20px" icon="card_giftcard" clas="q-ma-xs" colr="pink-10"   ttip="Holidays" @click="showHolidays" />
+    <RoundButton size="20px" icon="monitor" clas="q-ma-xs q-pb-sm" colr="green-10" ttip="Show Log" @click="openApp('LoadLogPage')" v-if="JZsAdmin" />
+    <RoundButton size="20px" icon="login"  colr="green-10" clas="q-ma-xs" ttip='Admin Login'  @click="login()" v-if="!(JZsAdmin || SysAdmin || PGCsAdmin)" />
+    <RoundButton size="20px" icon="logout" colr="brown-10" clas="q-ma-xs" ttip='SysAdmin Logout' @click="logout()" v-else-if="SysAdmin" />
     <RoundButton size="20px" icon="logout" colr="red" clas="q-ma-xs" ttip='PGCsAdmin Logout' @click="logout()" v-else-if="PGCsAdmin" />
-    <RoundButton size="20px" icon="logout" colr="blue-9" clas="q-ma-xs" ttip='JZsAdmin Logout' @click="logout()" v-else-if="JZsAdmin" />
+    <RoundButton size="20px" icon="logout" colr="blue-10" clas="q-ma-xs" ttip='JZsAdmin Logout' @click="logout()" v-else-if="JZsAdmin" />
+    <RoundButton size="20px" icon="W" clas="q-ma-xs q-pb-sm" colr="amber-10"   ttip="device detect" @click="showDeviceType" />
     <RoundButton size="20px" icon="question_mark" colr="blue-10" clas="q-ma-xs" ttip='App Details for Each Button' @click="opened=!opened" />
-    <q-btn size="20px" round glossy icon="info" class="q-ma-xs" color="green-10" ttip='System Information' @click="showSysInfo">
-      <b style="margin-top:-21px" class="text-cyan-2 text-h6">{{ compVer }}</b>
-    </q-btn>
+    <q-btn size="20px" round glossy icon="info" class="q-ma-xs" color="green-10" ttip='System Information' @click="showSysInfo" />
+      <!-- <b style="margin-top:-21px" class="text-cyan-2 text-h6">{{ compVer }}</b>
+    </q-btn> -->
   </q-card-actions>
   <div>
     <q-dialog v-model="opened" :maximized="isIM">
@@ -202,16 +202,18 @@ const router = useRouter()
 const q = useQuasar()
 
 const opened = ref(false)
-const mcount = ref(0)
-const fcount = ref(0)
+const mcount = ref(241)
+const fcount = ref(37)
 const refPlatformDataPad = ref(null)
 
 const pageTitle = ref('Princeton SU Golf Club')
-console.log('-ST-Index')
+console.log('-ST-MyIndex')
 // let golf_usertype = q.localStorage.getItem('golf_usertype')
 store.page = 'home'
 store.pageTitle = pageTitle.value
+
 getPlayerCount()
+
 // emitter.on('golf-usertype', (x) => golf_usertype = x)
 // emitter.on('golf-logout', () => golf_usertype = null)
 emitter.on('golf-getPlayerCount', (x) => {mcount.value = x.mcnt;fcount.value = x.fcnt})
@@ -233,7 +235,9 @@ function showSysInfo () {
   refPlatformDataPad.value.openIt()
 }
 function getPlayerCount () {
+  // store.usertype = null
   const path = ENV_API + '/golf/getPlayerCount'
+  console.log(`-fn-getPlayerCount path=${path}`, import.meta.env)
   gaxios(path)
 }
 function openApp(app) {

@@ -1,12 +1,10 @@
 <template>
   <!-- <div style="display:grid;place-items:center;height:100vh;width:800px;margin:-5px 0 0 0"> -->
 <div style="width:99.2%">
-  <q-table class="sh-sticky-header-table-blue" 
-    v-model:rows="palist" dark dense wrap-cells
-    :columns="engVer ? columnsE : columnsC" 
+  <q-table class="sh-sticky-header-table-blue" v-model:rows="palist" dark dense wrap-cells
+    :columns="engVer ? columnsE : columnsC" row-key="datetime" 
     :visible-columns="isIM ? visibleColumnsFone : visibleColumnsDesk"
-    row-key="datetime" 
-    :style="isIM ? { width:'402px' } : { }" style="border:1px solid cyan"
+    :style="isIM ? { width:'402px' } : { }" style="border-left:1px solid cyan;border-right:1px solid cyan"
     :pagination="isIM ? { rowsPerPage:rowsPerPageIM } : { rowsPerPage:rowsPerPageDesk }" hide-pagination
     :separator="separator" :faVal="faVal"
   >
@@ -29,20 +27,7 @@
         <q-toggle v-model="visibleColumnsFone" val="glucose" label="血糖量" />
         <q-toggle v-model="visibleColumnsFone" val="a1cp" label="%" />
       </div>
-      <!-- <q-select
-        v-model="visibleColumnsDesk" multiple borderless dense options-dense
-        emit-value map-options
-        option-value="name" style="min-width: 150px"
-        :display-value="$q.lang.table.columns"
-        :options="columns"
-      /> -->
     </div>
-    <!-- <div v-if="isIM" class="row q-pl-md">
-      <q-btn flat round dense color="accent" :icon="props.inFullscreen ? 'fullscreen_exit' : 'fullscreen'" @click="props.toggleFullscreen" class="q-pr-xs" />
-      <q-btn flat round icon="donut_small" color="cyan" @click="props.toggleFullscreen();showA1xChart()" class="float-right" />
-      <q-btn flat round icon="equalizer" color="blue" @click="props.toggleFullscreen();showA1pChart()" class="float-right" />
-      <q-btn flat round icon="trending_down" color="pink" @click="props.toggleFullscreen();showEagChart()" class="float-right" />
-    </div> -->
   </template>
 
   <template v-slot:header="props">
@@ -52,7 +37,7 @@
   </template>
 
   <template v-slot:body="p">
-    <q-tr :props="p" style="cursor:grab">
+    <q-tr :props="p" style="cursor:grab; line-height:1.11">
       <q-td v-for="col in p.cols" :key=col @click="showExpend(col.name, p)" :style="getStyle(col.name)" :class="getClass(col.name, p.row)">{{ getValue(col, p.row) }}</q-td>
     </q-tr>
     <q-tr v-show="p.expand" :props="p">
@@ -159,7 +144,7 @@ const gluSections = ref([])
 const gludata = ref([])
 const lastClickedRow = ref({row:{id:0}})
 const clickedIdx = ref(0)
-const rowsPerPageDesk = 23
+const rowsPerPageDesk = 26
 const rowsPerPageIM = 13
 const dats = ref([])
 const exOpt = ref([])
@@ -408,7 +393,7 @@ function getStyle (col) {
 // function between (x, a, b) { return x >= a && x < b }
 function getClass (col, row) {
   // console.log(`-CK-row.id = ${row.id} clickedIex = ${clickedIdx.value}`)
-  const bgc = row.id == lastClickedRow.value.row.id ? 'bg-indigo-9 ' : ''
+  let bgc = row.id == lastClickedRow.value.row.id ? 'bg-indigo-9 ' : ''
   if (col == 'datetime') return bgc + 'cursor-pointer text-no-wrap;text-center'
   else if (col === 'week') return bgc + 'text-center text-no-wrap'
   else if (col === 'food') return bgc + 'text-cyan-2 cursor-pointer text-no-wrap ellipsis'
@@ -418,45 +403,24 @@ function getClass (col, row) {
     const gluc = row.glucose
     const type = row.typeC
     if (type === '空腹') {
-      if      (10  <= gluc && gluc < 100) return bgc + 'text-center text-green-9'
-      else if (100 <= gluc && gluc < 125) return bgc + 'text-center text-green-7'
-      else if (125 <= gluc && gluc < 140) return bgc + 'text-center text-green-5'
+      if      (10  <= gluc && gluc < 100) return bgc + 'text-center text-green-6'
+      else if (100 <= gluc && gluc < 125) return bgc + 'text-center text-green-5'
+      else if (125 <= gluc && gluc < 140) return bgc + 'text-center text-green-4'
       else if (140 <= gluc && gluc < 155) return bgc + 'text-center text-blue'
       else if (155 <= gluc && gluc < 190) return bgc + 'text-center text-pink-4'
       else if (190 <= gluc && gluc < 999) return bgc + 'text-center text-pink-8'
     } else if (/^餐[一二三]$/.test(type)) { 
-      if      (80  <= gluc && gluc < 155) return bgc + 'text-center text-green-9'
-      else if (155 <= gluc && gluc < 170) return bgc + 'text-center text-green-4'
+      if      (80  <= gluc && gluc < 155) return bgc + 'text-center text-green-4'
+      else if (155 <= gluc && gluc < 170) return bgc + 'text-center text-green-3'
       else if (170 <= gluc && gluc < 180) return bgc + 'text-center text-blue'
-      else if (180 <= gluc && gluc < 195) return bgc + 'text-center text-amber'
-      else if (195 <= gluc && gluc < 999) return bgc + 'text-center text-pink-4'
+      else if (180 <= gluc && gluc < 190) return bgc + 'text-center text-amber-4'
+      else if (190 <= gluc && gluc < 200) return bgc + 'text-center text-amber-7'
+      else if (200 <= gluc && gluc < 210) return bgc + 'text-center text-amber-9'
+      else if (210 <= gluc && gluc < 220) return bgc + 'text-center text-pink-4'
+      else if (220 <= gluc && gluc < 999) return bgc + 'text-center text-pink-6'
     }
   } else return 'text-right'
 }
-// function getClass (col, row) {
-//   // console.log(`-CK-row.id = ${row.id} clickedIex = ${clickedIdx.value}`)
-//   const bgc = row.id == lastClickedRow.value.row.id ? 'bg-indigo-9 ' : ''
-//   if (col == 'datetime') return bgc + 'cursor-pointer text-no-wrap;text-center'
-//   else if (col === 'week') return bgc + 'text-center text-no-wrap'
-//   else if (col === 'food') return bgc + 'text-cyan-2 cursor-pointer text-no-wrap ellipsis'
-//   else if (col === 'food' || col === 'datetime') return bgc + 'text-left text-no-wrap cursor-pointer'
-//   else if (col === 'drink' || col === 'fruit' || col === 'a1cp') return bgc + 'text-center text-no-wrap'
-//   else if (col === 'glucose' && row.typeC === '空腹') {
-//     if      (between(row.glucose,  10, 100)) return bgc + 'text-center text-green-9'  // between(x, a, b) = []; between(x, a, b, true) = ()
-//     else if (between(row.glucose, 101, 125)) return bgc + 'text-center text-green-7'
-//     else if (between(row.glucose, 126, 140)) return bgc + 'text-center text-green-5'
-//     else if (between(row.glucose, 141, 155)) return bgc + 'text-center text-blue'
-//     else if (between(row.glucose, 156, 190)) return bgc + 'text-center text-pink-4'
-//     else if (between(row.glucose, 191, 999)) return bgc + 'text-center text-pink-8'
-//   } else if (col === 'glucose' && /^餐[一二三]$/.test(row.typeC)) { 
-//     if      (between(row.glucose,  10, 155)) return bgc + 'text-center text-green-9'
-//     else if (between(row.glucose, 156, 170)) return bgc + 'text-center text-green-4'
-//     else if (between(row.glucose, 171, 180)) return bgc + 'text-center text-blue'
-//     else if (between(row.glucose, 181, 195, false)) return bgc + 'text-center text-red'
-//     else if (between(row.glucose, 196, 999)) return bgc + 'text-center text-pink-4'
-//   }
-//   else return 'text-right'
-// }
 function showExpend (col, p) {
   console.log(`%c-fn-showExpand col=${col} row.id=${p.row.id}, lastRowId=${lastClickedRow.value.row.id}`, 'color: red;font-size:18px')
   if (isDesk) return showExpendDesk(col, p)

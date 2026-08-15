@@ -16,4 +16,11 @@ target_file=/Users/swang/BAK/db/dump_${d0}_${db}.sql
 
 echo dumping database $target_file $argv
 
-mysqldump -uswang -pYbsjll11 -B $db --routines > $target_file &
+##mysqldump -uswang -pYbsjll11 -B $db --routines > $target_file &
+##__mysqldump -uswang -pYbsjll11 -B $db --routines > $target_file &
+mariadb-dump -uswang -pYbsjll11 -B $db --routines > $target_file &
+
+if [ $db == "prod" ]; then
+  ##mariadb-dump -uswang -pYbsjll11 -B $db --routines | mariadb -uswang -pYbsjll11 -hfedora
+  ##mysqldump -uswang -pYbsjll11 -B $db --routines | mysql -uswang -pYbsjll11 -hmaci
+fi

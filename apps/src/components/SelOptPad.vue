@@ -31,8 +31,8 @@ import emitter from 'tiny-emitter/instance'
 import { ref, computed } from 'vue'
 import { axiosFunctions } from '../../src/composables/axiosFunctions'
 const { gaxios } = axiosFunctions()
-const showSearch = ref(false)
-const footerState = ref(true)
+// const showSearch = ref(false)
+// const footerState = ref(true)
 const searchQuery = ref('')
 const selItem = ref(null)
 const opened = ref(false)
@@ -71,9 +71,9 @@ const emit = defineEmits(['selected-opt'])
 function getOpts() {
   var path = null
   if (title.value === 'Item') {
-    path = process.env.API + '/shopping/getAllItems'
+    path = ENV_DEV + '/shopping/getAllItems'
   } else if (title.value === 'Date') {
-    path = process.env.API + '/shopping/getShoppingDates'
+    path = ENV_DEV + '/shopping/getShoppingDates'
   } 
   gaxios(path)
 }
