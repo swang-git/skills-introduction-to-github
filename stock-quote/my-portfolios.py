@@ -70,7 +70,7 @@ if __name__=="__main__":
     TPdiff =  f"{tpdiff}"
     if tpdiff == 0: TPdiff = boldIt(yellowIt(TPdiff))
     elif tpdiff > 0: TPdiff = boldIt(greenIt(TPdiff))
-    elif pdiff < 0:
+    elif tpdiff < 0:
         TPdiff = f"{-1*tpdiff}"
         TPdiff = boldIt(redIt(TPdiff))
     TPdiffExp = prtft + ' - ' + prtfy
