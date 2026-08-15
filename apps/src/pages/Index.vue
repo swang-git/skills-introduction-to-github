@@ -88,10 +88,6 @@ function showSysInfo() {
 }
 function openApp(app) {
   if (['../golf', '../arts', '../yali'].includes(app)) {
-    // logout()
-    AppAdmin.value = false
-    console.log(`-CK-openApp ${app}`)
-    // router.replace({ path: app })
     window.location.href = ENV_DEV + app
   } else if ([
       'glucosecheck',

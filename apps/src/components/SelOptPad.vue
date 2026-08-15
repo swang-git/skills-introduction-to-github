@@ -30,9 +30,7 @@
 import emitter from 'tiny-emitter/instance'
 import { ref, computed } from 'vue'
 import { axiosFunctions } from '../../src/composables/axiosFunctions'
-import { libFunctions } from '../../src/composables/libFunctions'
 const { gaxios } = axiosFunctions()
-const { ENV_DEV } = libFunctions()
 // const showSearch = ref(false)
 // const footerState = ref(true)
 const searchQuery = ref('')
