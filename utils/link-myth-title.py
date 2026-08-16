@@ -105,10 +105,18 @@ for file in files:
 for idx, rec in enumerate(session.query(recorded).filter(recorded.watched == 0).order_by(recorded.starttime.desc()).limit(limitNum)):
     # stm = datetime.strftime(rec.starttime + timedelta(hours=-5), '%m-%d %H:%M') # winter time
     delta = calendar.timegm(datetime.now(tz=UTC).timetuple()) - calendar.timegm(datetime.now().timetuple())
-    stm = datetime.strftime(rec.starttime + timedelta(hours=-round(delta/60/60)), '%m-%d %H:%M')  # work with daylight time saving
+    # stm = datetime.strftime(rec.starttime + timedelta(hours=-round(delta/60/60)), '%m-%d %H:%M')  # work with daylight time saving
+    stm = (datetime.strptime(rec.starttime, "%Y-%m-%d %H:%M:%S") + timedelta(hours=-round(delta/60/60))).strftime('%m-%d %H:%M')
     durationMinutes = str(minuteDiff(rec.starttime, rec.endtime))
-    etm = datetime.strftime(rec.starttime + timedelta(hours=-round(delta/60/60) + int(durationMinutes)/60), '%m-%d %H:%M')[6:]
-    tem = datetime.strptime(str(rec.starttime + timedelta(hours=-round(delta/60/60) + int(durationMinutes)/60)), '%Y-%m-%d %H:%M:%S')
+    #etm = datetime.strftime(rec.starttime + timedelta(hours=-round(delta/60/60) + int(durationMinutes)/60), '%m-%d %H:%M')[6:]
+    etm = (datetime.strptime(rec.starttime, "%Y-%m-%d %H:%M:%S")
+       + timedelta(hours= -round(delta/60/60) + int(durationMinutes)/60)).strftime('%m-%d %H:%M')[6:]
+    #tem = datetime.strptime(str(rec.starttime + timedelta(hours=-round(delta/60/60) + int(durationMinutes)/60)), '%Y-%m-%d %H:%M:%S')
+    # 先把字符串解析成datetime对象
+    dt_start = datetime.strptime(rec.starttime, "%Y-%m-%d %H:%M:%S")
+    # 时间偏移计算
+    offset_h = -round(delta / 60 / 60) + int(durationMinutes) / 60
+    tem = dt_start + timedelta(hours=offset_h)
     diff = (now - tem).total_seconds()
     # print('minuteDiff is %d' % (int(diff)/60))
     if diff < 0: etm = fgcolor('green', etm)
