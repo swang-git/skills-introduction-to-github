@@ -33,6 +33,8 @@ import { ref } from 'vue'
 import emitter from 'tiny-emitter/instance'
 import { axiosFunctions } from '../src/composables/axiosFunctions'
 const { paxios } = axiosFunctions()
+import { libFunctions } from '../src/composables/libFunctions'
+const { ENV_DEV } = libFunctions()
 var cost = 0
 var paymId = 0
 // const curBalance = ref(0)
@@ -54,7 +56,8 @@ function addNewGiftCard () {
     return
   }
   // console.log(`-CK-fn-add new gift card curBalance=${curBalance} newCardNum=${newCardNum} newCardVal=${newCardVal}, newCarName=${newCardName}, paymId=${paymId}`)
-  const path = process.env.API + '/expense/addNewGiftCard'
+  // const path = process.env.API + '/expense/addNewGiftCard'
+  const path = ENV_DEV + '/expense/addNewGiftCard'
   let inData = { paym_id: paymId, name: newCardName, card_num: newCardNum, value: newCardVal }
   paxios(path, inData)
   let newBalance = parseFloat(newCardVal) + parseFloat(curBalance)
