@@ -90,23 +90,41 @@ class MyPortfolio(Base):
 # 3. YOUR EXACT CSV → DB COLUMN MAPPING
 # =============================================================================
 CSV_TO_DB_MAP = {
-    "Account Number": "account",
-    "Account Name": "account_name",
-    "Symbol": "symbol",
-    "Description": "company",
-    "Quantity": "quantity",
-    "Last Price": "price",
-    "Last Price Change": "price_change",
-    "Current Value": "current_value",
-    "Today's Gain/Loss Dollar": "today_gl",
-    "Today's Gain/Loss Percent": "today_gl_pct",
-    "Total Gain/Loss Dollar": "total_gl",
-    "Total Gain/Loss Percent": "total_gl_pct",
-    "Percent Of Account": "pct_of_account",
-    "Cost Basis Total": "total_cost",
-    "Average Cost Basis": "cost_per_share",
-    "Type": "type"
+    "account number": "account",
+    "account name": "account_name",
+    "symbol": "symbol",
+    "description": "company",
+    "quantity": "quantity",
+    "last price": "price",
+    "last price Change": "price_change",
+    "current value": "current_value",
+    "today's gain/loss dollar": "today_gl",
+    "today's gain/loss percent": "today_gl_pct",
+    "total gain/loss dollar": "total_gl",
+    "total gain/loss percent": "total_gl_pct",
+    "percent of account": "pct_of_account",
+    "cost basis total": "total_cost",
+    "average cost basis": "cost_per_share",
+    "type": "type"
 }
+# CSV_TO_DB_MAP = {
+#     "Account number": "account",
+#     "Account name": "account_name",
+#     "Symbol": "symbol",
+#     "Description": "company",
+#     "Quantity": "quantity",
+#     "Last price": "price",
+#     "Last price Change": "price_change",
+#     "Current value": "current_value",
+#     "Today's gain/loss dollar": "today_gl",
+#     "Today's gain/loss percent": "today_gl_pct",
+#     "Total gain/loss dollar": "total_gl",
+#     "Total gain/loss percent": "total_gl_pct",
+#     "Percent of account": "pct_of_account",
+#     "Cost basis total": "total_cost",
+#     "Average cost basis": "cost_per_share",
+#     "Type": "type"
+# }
 
 # =============================================================================
 # 4. DATA TYPE CONVERSION (DECIMAL, FLOAT, ETC.)
