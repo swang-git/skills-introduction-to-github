@@ -1,4 +1,4 @@
-#!/Users/swang/myenv/bin/python
+#!/usr/bin/python
 import os
 import sys
 import requests
