@@ -30,12 +30,20 @@ def import_portfolio_csv(db, csv_file_path, dict, asof_time: datetime):
 
             for row_num, row in enumerate(reader, 1):
                 added_seconds += 1
+                # print(row_num, row, row['Account number'])
+                # convert keys to lowercase # e.g. Account Number to account number
+                row = { (k.lower() if k is not None else None): v for k, v in row.items() }
+
                 # --------------------------
                 # Step 1: Map CSV → DB fields
                 # --------------------------
+                # now we can ignore this since we convert to lowercase:check the upper/low case of the csv_header which should match exactly with CSV_TO_DB_MAP
                 data = {}
-                for csv_header, db_col in CSV_TO_DB_MAP.items():
+                for csv_header, db_col in CSV_TO_DB_MAP.items(): 
                     raw_val = row.get(csv_header, "")
+                    # print("csv_header", csv_header)
+                    # print("db_col", db_col)
+                    # print("row_val", raw_val)
                     # Convert types
                     if db_col in TYPE_CONVERTERS:
                         data[db_col] = TYPE_CONVERTERS[db_col](raw_val)
@@ -45,10 +53,15 @@ def import_portfolio_csv(db, csv_file_path, dict, asof_time: datetime):
                             data["low_52_week"] = get_52_week_low(raw_val, dict)
                             data["high_52_week"] = get_52_week_high(raw_val, dict)
 
+                    # print("db_col", db_col)
+                    # if db_col == 'symbol': print(data)
+                    # if db_col == 'account': print(data)
+
                 # ==============================
                 # 🔥 CLEANUP / FILTER ROWS HERE
                 # ==============================
                 account = data.get("account")
+                #print("data:", data) # check if all values are empty or None for data (csv data)
                 
                 # SKIP ROW IF: no account OR length > 20
                 if not account or len(str(account)) > 20:

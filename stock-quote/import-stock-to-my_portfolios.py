@@ -220,7 +220,7 @@ def get_stock_data(symb):
     return data
 
 # =============================================================================
-# RUN THE SCRIPT __mail__
+# RUN THE SCRIPT __main__
 # =============================================================================
 if __name__ == "__main__":
     print('===== Starting import stock data to my_portfolios =====')
