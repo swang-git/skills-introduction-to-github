@@ -1,4 +1,4 @@
-#!/Users/swang/myenv/bin/python
+#!/usr/bin/python
 import sys, os, re
 from sty import fg, bg, rs, ef
 from pathlib import Path
