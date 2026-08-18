@@ -119,9 +119,11 @@ emitter.on('yali-getPixByYM', (x) => setPixByYM(x))
 
 // ---- function section -----
 function setPidx (idx) {
+  console.log(`-fn-setPidx idx=${idx}`)
   emitter.emit('pix-pidx', idx - 1)
 }
 function setPerPage (ppage) {
+  console.log(`-fn-setPerPage perPage=${ppage}`)
   perPage.value = 0
   perPage.value = ppage
   data.value = []
@@ -263,7 +265,7 @@ function openNumPad(flag=null) {
   // else if (flag == 'jump-page') numPadStore.open('YALI_PIX_PAGE', '输入要跳转的页数', lastPage.value)
   // if (flag == 'per-page') emitter.emit('open-NumPad', 'YALI_PER_PAGE', '输入每页的页数', total.value)
   // else if (flag == 'jump-page') emitter.emit('open-NumPad', 'YALI_PIX_PAGE', '输入要跳转的页数', lastPage.value)
-  if (flag == 'per-page') emitter.emit('open-NumPad', flag, '输入每页的页数', total.value)
+  if (flag == 'per-page') emitter.emit('open-NumPad', flag, '输入每页的画幅数', total.value)
   else if (flag == 'jump-page') emitter.emit('open-NumPad', flag, '输入要跳转的页数', lastPage.value)
 }
 /**

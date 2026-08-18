@@ -58,9 +58,10 @@ function setNumber(n) {
 }
 function setPicIdx() {
   console.log(`-fn-setPicIdx keyedId=${keyedIn.value} flag=${flag.value}`)
-  if (flag.value == 'YALI_PIX_PIDX') emit('pix-pidx', parseInt(keyedIn.value) - 1)
-  if (flag.value == 'YALI_PIX_PAGE') emit('jump-page', parseInt(keyedIn.value))
-  if (flag.value == 'YALI_PER_PAGE') emit('per-page', parseInt(keyedIn.value))
+  emit(flag.value, parseInt(keyedIn.value))
+  // if (flag.value == 'YALI_PIX_PIDX') emit('pix-pidx', parseInt(keyedIn.value) - 1)
+  // if (flag.value == 'YALI_PIX_PAGE') emit('jump-page', parseInt(keyedIn.value))
+  // if (flag.value == 'YALI_PER_PAGE') emit('per-page', parseInt(keyedIn.value))
   opened.value = false
 }
 // function setSpeed() {

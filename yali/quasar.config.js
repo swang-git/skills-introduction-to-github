@@ -98,8 +98,18 @@ export default defineConfig(ctx => {
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-file#devserver
     devServer: {
-      // https: true,
-      open: true // opens browser window automatically
+      open: true, // opens browser window automatically
+      port: ctx.mode.spa ? '8080' : ctx.mode.pwa ? 9080 : ctx.mode.ssr ? 9090 : 9091,
+      host: 'devx',
+      allowedHosts: ['devx', '192.168.1.107', '127.0.0.1'],
+      proxy: {
+        '/api': {
+          target: 'http://devx', // Your Fedora backend
+          changeOrigin: true,
+          rewrite: path => path.replace(/^\/api/, '') // Only if backend doesn't expect /api
+        }
+      },
+      vueDevTools: true
     },
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-file#framework

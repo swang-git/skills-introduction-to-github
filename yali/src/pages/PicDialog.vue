@@ -231,7 +231,7 @@ function stopSlideshow() {
 function slideshow() {
   if (slideshowing.value) return
   slideshowing.value = true
-  console.log(`-fn-slidshow() pidx=${pidx.value}`)
+  console.log(`-fn-slidshow() pidx=${pidx.value} totalPix=${piclst.value.length}`)
   intervalId.value = setInterval(() => {
     if (pidx.value > piclst.value.length - 1) {
       pidx.value = 0

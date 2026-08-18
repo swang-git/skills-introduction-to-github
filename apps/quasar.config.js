@@ -110,13 +110,7 @@ export default defineConfig(ctx => {
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-file#devserver
     devServer: {
       open: true, // opens browser window automatically
-      port: ctx.mode.spa
-        ? '8080'
-        : ctx.mode.pwa
-          ? 9080
-          : ctx.mode.ssr
-            ? 9090
-            : 9091,
+      port: ctx.mode.spa ? '8080' : ctx.mode.pwa ? 9080 : ctx.mode.ssr ? 9090 : 9091,
       host: 'devx',
       allowedHosts: ['devx', '192.168.1.107', '127.0.0.1'],
       proxy: {
