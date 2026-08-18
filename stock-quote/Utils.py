@@ -352,11 +352,17 @@ def get_52_week_high(symbol, dict):
     elif symbol not in dict: return None
     return dict[symbol]['wk52_high']
 
-def get_last_portfolio(cursor):
+def XXX_get_last_portfolio(cursor):
     print('-fn-get_last_portfolio')
     portf = get_data_from_table(cursor, 'health_records', 'status="A"', 'date desc', 1, 'portfolio')
-    # print(float(portf[0][0]))
     return float(portf[0][0])
+
+def get_last_portfolio(cursor):
+    print('-fn-get_last_portfolio')
+    cursor.execute("SELECT portfolio FROM health_records WHERE status='A' ORDER BY date DESC LIMIT 1")
+    row = cursor.fetchone()
+    print("portfolio=[%s]"%row[0])
+    return row[0]
 
 def get_meta(cursor):
     # print('-fn-get_meta[%s]'%symb)
