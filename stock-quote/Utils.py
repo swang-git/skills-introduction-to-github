@@ -274,7 +274,7 @@ def center_perfect_NOT_WORKING(string: str, target_length: int) -> str:
         # Even padding: normal full spaces
         return " " * base_pad + string + " " * base_pad
     
-def get_data_from_table(cur, tabname: str, condition: str = None, limit: int = None):
+def get_data_from_table(cur, tabname: str, condition: str = None, orderby: str = None, limit: int = None, cols: str = None):
     """
     Query data from a MySQL table (qtable) with optional WHERE condition and LIMIT.
     
@@ -291,10 +291,15 @@ def get_data_from_table(cur, tabname: str, condition: str = None, limit: int = N
         # Connect to MySQL
         # Build safe SQL query
         query = f"SELECT * FROM {tabname}"
+        if cols: query = f"SELECT {cols} FROM {tabname}"
         
         # Add WHERE condition if provided
         if condition:
             query += f" WHERE {condition}"
+
+        # Add orderBy condition if provided
+        if orderby:
+            query += f" ORDER BY {orderby}"
         
         # Add LIMIT if provided
         if limit:
@@ -346,6 +351,12 @@ def get_52_week_high(symbol, dict):
     if symbol == None: return None
     elif symbol not in dict: return None
     return dict[symbol]['wk52_high']
+
+def get_last_portfolio(cursor):
+    print('-fn-get_last_portfolio')
+    portf = get_data_from_table(cursor, 'health_records', 'status="A"', 'date desc', 1, 'portfolio')
+    # print(float(portf[0][0]))
+    return float(portf[0][0])
 
 def get_meta(cursor):
     # print('-fn-get_meta[%s]'%symb)

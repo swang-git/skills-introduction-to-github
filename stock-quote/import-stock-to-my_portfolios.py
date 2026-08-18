@@ -20,7 +20,7 @@ from decimal import Decimal
 # obj = User(**data)
 # print(obj.name)  # Bob
 
-from Utils import padsp, get_data_from_table, build_dict, get_meta, get_quantity, get_total_cost, get_basis_price
+from Utils import padsp, get_data_from_table, build_dict, get_meta, get_quantity, get_total_cost, get_basis_price, get_last_portfolio
 from MyPortfolio_Models import get_connection, CSV_TO_DB_MAP, TYPE_CONVERTERS, MyPortfolio, HealthRecord, StockQuote
 
 import argparse
@@ -152,7 +152,7 @@ def save_to_stock_quotes_table(db, stocks, datx):
     db.commit()
     print(f"🎉 stock_quotes data added/updated successfully!")
 
-def import_indices(db, date):
+def import_indices(db, cursor, date):
     print("-fn- import_indices -- get data from yf")
     indices = {
         "DOW_JONES": "^DJI",
@@ -166,6 +166,7 @@ def import_indices(db, date):
         info = yf.Ticker(ticker).info
         dbx[name] = info.get("regularMarketPrice")
     dbx['date'] = date
+    dbx['portfolio'] = get_last_portfolio(cursor)
 
     existing = db.query(HealthRecord).filter(HealthRecord.date == date).first()
 
@@ -227,11 +228,15 @@ if __name__ == "__main__":
 
     db, conn = get_connection(database)
     cursor = conn.cursor()
+    
+    # get_last_portfolio(cursor)
+    # sys.exit(0)
+
     # ASOF_TIME = datetime(2026, 5, 7, 14, 30, 0)
     today = date.today()
     ASOF_TIME = datetime(today.year, today.month, today.day, 16, 30, 0)
 
-    if not testing: import_indices(db, today)
+    if not testing: import_indices(db, cursor, today)
 
     meta_dict = get_meta(cursor)
     datx = {}
@@ -244,7 +249,7 @@ if __name__ == "__main__":
         else:
             stock_data = get_stock_data(symb) ## get real data from yf
             data = get_myp_data(symb, ASOF_TIME, stock_data, meta_dict) ## populate data for my_portfolios
-            ## import_indices(db, today)
+            ## import_indices(db, cursor, today)
         datx[symb] = data
 
     total_value = sum(da['current_value'] for da in datx.values())
