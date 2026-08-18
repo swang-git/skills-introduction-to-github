@@ -4,9 +4,13 @@
       <q-toolbar class="bg-teal-10 glossy">
         <q-toolbar-title>
           <div class="row justify-evenly q-pt-sm">
-            <RoundButton size="16px" icon="幅" clas="q-pb-xs" colr="indigo-9" style="margin-top:5px" iclr="yellow" ttip="设置每页包含幅数" @click="openNumPad('per-page')" />
-            <div v-if="ym!=null" class="text-center cursor-pointer text-whit q-pt-sm text-h4" @click="loadRandomPage">婭莉画展 <span class="text-h5">({{ ym }})</span></div>
-            <div v-else class="text-center cursor-pointer text-whit q-pt-sm text-h4" @click="loadRandomPage">婭莉画展 <span class="text-h5">(共{{ total }}幅)</span></div>
+            <RoundButton size="16px" icon="幅" clas="q-pb-xs" colr="indigo-9" style="margin-top:5px" iclr="yellow" ttip="设置每页的画幅数" @click="openNumPad('per-page')" />
+            <div v-if="ym!=null" class="text-center cursor-pointer text-whit q-pt-sm text-h4" @click="loadRandomPage">婭莉画展 <span class="text-h5">({{ ym }})</span>
+              <q-tooltip class="text-h4 text-lime bg-red">跳转随机画页</q-tooltip>
+            </div>
+            <div v-else class="text-center cursor-pointer text-whit q-pt-sm text-h4" @click="loadRandomPage">婭莉画展 <span class="text-h5">(共{{ total }}幅)</span>
+              <q-tooltip class="text-h4 text-lime bg-red">跳转随机画页</q-tooltip>
+            </div>
             <RoundButton size="16px" icon="月" clas="q-pb-xs" colr="indigo-9" style="margin-top:5px" iclr="yellow" ttip="跳到某年某月" @click="openYmPad" />
           </div>
           <q-card v-if="yue" class="bg-teal-10" style="margin-top:10px">

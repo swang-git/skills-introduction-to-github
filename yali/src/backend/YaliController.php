@@ -68,7 +68,7 @@ class YaliController extends Controller
         $pdiff = $perPage - count($pageFiles);
         if ($pdiff > 0) {
             $addingFiles = array_slice($allFiles, 0, $pdiff);
-            $pageFiles = array_merge($addingFiles, $pageFiles);
+            $pageFiles = array_merge($pageFiles, $addingFiles);
         }
         
         // Build response items
