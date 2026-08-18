@@ -61,6 +61,7 @@ def import_portfolio_csv(db, csv_file_path, dict, asof_time: datetime):
                 # 🔥 CLEANUP / FILTER ROWS HERE
                 # ==============================
                 account = data.get("account")
+                #print("data:", data) # check if all values are empty or None for data (csv data)
                 
                 # SKIP ROW IF: no account OR length > 20
                 if not account or len(str(account)) > 20:
