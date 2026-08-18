@@ -359,10 +359,10 @@ def XXX_get_last_portfolio(cursor):
 
 def get_last_portfolio(cursor):
     print('-fn-get_last_portfolio')
-    cursor.execute("SELECT portfolio FROM health_records WHERE status='A' ORDER BY date DESC LIMIT 1")
+    cursor.execute("SELECT date, portfolio FROM health_records WHERE status='A' ORDER BY date DESC LIMIT 1")
     row = cursor.fetchone()
-    print("portfolio=[%s]"%row[0])
-    return row[0]
+    print("date=[%s] portfolio=[%s]"%(row[0], row[1]))
+    return row[1]
 
 def get_meta(cursor):
     # print('-fn-get_meta[%s]'%symb)

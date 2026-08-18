@@ -228,9 +228,7 @@ if __name__ == "__main__":
 
     db, conn = get_connection(database)
     cursor = conn.cursor()
-    
-    # get_last_portfolio(cursor)
-    # sys.exit(0)
+    # get_last_portfolio(cursor); sys.exit(0)
 
     # ASOF_TIME = datetime(2026, 5, 7, 14, 30, 0)
     today = date.today()
