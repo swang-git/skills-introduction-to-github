@@ -133,7 +133,7 @@ def save_to_stock_quotes_table(db, stocks, datx):
             # Update all fields
             for key, value in datx[symb].items():
                 setattr(existing, key, value)
-            print(f"🔄 Updated |{adjsp} {symb} | As-of: {asof} | price: {price} | price change: {price_change} | 52wk_low: {low} | 52wk_high: {high}")
+            print(f"🔄 Upd |{adjsp} {symb} | As-of: {asof} | price: {price} | price change: {price_change} | 52wk_low: {low} | 52wk_high: {high}")
         else:
             # Create new record (NO __init__ needed!)
             # new_record = StockQuote(**datx[symb])
@@ -146,7 +146,7 @@ def save_to_stock_quotes_table(db, stocks, datx):
             high_52_week = dtsx["high_52_week"]
             new_record = StockQuote(asof_time, symbol, price, price_change, low_52_week, high_52_week)
             db.add(new_record)
-            print(f"✅ Added   |{adjsp} {symb} | As-of: {asof} | price: {price} | price change: {price_change} | 52wk_low: {low} | 52wk_high: {high}")
+            print(f"✅ Add   |{adjsp} {symb} | As-of: {asof} | price: {price} | price change: {price_change} | 52wk_low: {low} | 52wk_high: {high}")
 
     # Save all changes
     db.commit()

@@ -97,7 +97,7 @@ CSV_TO_DB_MAP = {
     "description": "company",
     "quantity": "quantity",
     "last price": "price",
-    "last price Change": "price_change",
+    "last price change": "price_change",
     "current value": "current_value",
     "today's gain/loss dollar": "today_gl",
     "today's gain/loss percent": "today_gl_pct",

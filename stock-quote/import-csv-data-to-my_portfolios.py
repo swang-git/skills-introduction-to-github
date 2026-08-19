@@ -89,6 +89,9 @@ def import_portfolio_csv(db, csv_file_path, dict, asof_time: datetime):
                 high = padsp('' if data.get("high_52_week") == None else data.get("high_52_week"), 7)
                 data["symbol"] = data["symbol"].strip("*")
                 symb = data["symbol"]
+                sym = padsp(symb, 5)
+                price = padsp('' if data.get("price") == None else data.get("price"), 7)
+                price_change = padsp('' if data.get("price_change") == None else data.get("price_change"), 7)
 
                 # --------------------------
                 # Step 4: UPSERT (Update if exists, else Insert)
@@ -103,12 +106,12 @@ def import_portfolio_csv(db, csv_file_path, dict, asof_time: datetime):
                     # Update all fields
                     for key, value in data.items():
                         setattr(existing, key, value)
-                    print(f"🔄 Updated | Account: {account} | As-of: {asof} | 52wk_low: {low} | 52wk_high: {high}")
+                    print(f"🔄 Upd |{account}| {asof} |{sym}| price: {price} | pchange: {price_change} | 52wk_low: {low} | 52wk_high: {high}")
                 else:
                     # Create new record (NO __init__ needed!)
                     new_record = MyPortfolio(**data)
                     db.add(new_record)
-                    print(f"✅ Added   | Account: {account} | As-of: {asof} | 52wk_low: {low} | 52wk_high: {high}")
+                    print(f"✅ Add |{account}| {asof} |{sym}| price: {price} | pchange: {price_change} | 52wk_low: {low} | 52wk_high: {high}")
 
         # Save all changes
         db.commit()
@@ -140,7 +143,9 @@ if __name__ == "__main__":
     cursor = conn.cursor()
     meta = get_data_from_table(cursor, 'security_metas', 'status="A"')
     dict = build_dict(cursor, meta)
-    ASOF_TIME = datetime(today.year, today.month, today.day, 17, 41, 0)
+    asof_date = today + timedelta(days=subdays)
+    # ASOF_TIME = datetime(today.year, today.month, today.day, 17, 41, 0)
+    ASOF_TIME = datetime(asof_date.year, asof_date.month, asof_date.day, 17, 41, 0)
     # ASOF_TIME = datetime(2026, 5, 7, 17, 30, 0)
     # Start import
     import_portfolio_csv(db, csv_data_file, dict, ASOF_TIME)
