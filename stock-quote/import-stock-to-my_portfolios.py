@@ -101,12 +101,12 @@ def save_to_myp_table(db, stocks, datx):
             # Update all fields
             for key, value in datx[symb].items():
                 setattr(existing, key, value)
-            print(f"🔄 Updated |{adjsp} {symb} | As-of: {asof} | price: {price} | price change: {price_change} | 52wk_low: {low} | 52wk_high: {high}")
+            print(f"🔄 Upd |{adjsp} {symb} | As-of: {asof} | price: {price} | price change: {price_change} | 52wk_low: {low} | 52wk_high: {high}")
         else:
             # Create new record (NO __init__ needed!)
             new_record = MyPortfolio(**datx[symb])
             db.add(new_record)
-            print(f"✅ Added   |{adjsp} {symb} | As-of: {asof} | price: {price} | price change: {price_change} | 52wk_low: {low} | 52wk_high: {high}")
+            print(f"✅ Add  |{adjsp} {symb} | As-of: {asof} | price: {price} | price change: {price_change} | 52wk_low: {low} | 52wk_high: {high}")
 
     # Save all changes
     db.commit()
