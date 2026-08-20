@@ -101,12 +101,12 @@ def save_to_myp_table(db, stocks, datx):
             # Update all fields
             for key, value in datx[symb].items():
                 setattr(existing, key, value)
-            print(f"🔄 Upd |{adjsp} {symb} | As-of: {asof} | price: {price} | price change: {price_change} | 52wk_low: {low} | 52wk_high: {high}")
+            print(f"🔄 Upd |{adjsp} {symb} | {asof} | price: {price} | price change: {price_change} | 52wk_low: {low} | 52wk_high: {high}")
         else:
             # Create new record (NO __init__ needed!)
             new_record = MyPortfolio(**datx[symb])
             db.add(new_record)
-            print(f"✅ Add  |{adjsp} {symb} | As-of: {asof} | price: {price} | price change: {price_change} | 52wk_low: {low} | 52wk_high: {high}")
+            print(f"✅ Add |{adjsp} {symb} | {asof} | price: {price} | price change: {price_change} | 52wk_low: {low} | 52wk_high: {high}")
 
     # Save all changes
     db.commit()
@@ -118,7 +118,6 @@ def save_to_stock_quotes_table(db, stocks, datx):
         asof = datx[symb]["asof_time"]
         # redx = MyPortfolio(**datx[symb])
         # pprint.pprint(datx[symb].__dict__)
-
         price = padsp(datx[symb]['price'], 7)
         price_change = padsp(datx[symb]['price_change'], 6)
         low = padsp(datx[symb]['low_52_week'], 7)
@@ -133,10 +132,8 @@ def save_to_stock_quotes_table(db, stocks, datx):
             # Update all fields
             for key, value in datx[symb].items():
                 setattr(existing, key, value)
-            print(f"🔄 Upd |{adjsp} {symb} | As-of: {asof} | price: {price} | price change: {price_change} | 52wk_low: {low} | 52wk_high: {high}")
+            print(f"🔄 Upd |{adjsp} {symb} | {asof} | price: {price} | price change: {price_change} | 52wk_low: {low} | 52wk_high: {high}")
         else:
-            # Create new record (NO __init__ needed!)
-            # new_record = StockQuote(**datx[symb])
             dtsx = datx[symb]
             asof_time = dtsx["asof_time"]
             symbol = dtsx["symbol"]
@@ -146,7 +143,11 @@ def save_to_stock_quotes_table(db, stocks, datx):
             high_52_week = dtsx["high_52_week"]
             new_record = StockQuote(asof_time, symbol, price, price_change, low_52_week, high_52_week)
             db.add(new_record)
-            print(f"✅ Add   |{adjsp} {symb} | As-of: {asof} | price: {price} | price change: {price_change} | 52wk_low: {low} | 52wk_high: {high}")
+            price = padsp(datx[symb]['price'], 7)
+            price_change = padsp(datx[symb]['price_change'], 6)
+            low = padsp(datx[symb]['low_52_week'], 7)
+            high = padsp(datx[symb]['high_52_week'], 7)
+            print(f"✅ Add |{adjsp} {symb} | {asof} | price: {price} | price change: {price_change} | 52wk_low: {low} | 52wk_high: {high}")
 
     # Save all changes
     db.commit()
@@ -177,12 +178,12 @@ def import_indices(db, cursor, date):
         # Update all fields
         for key, value in dbx.items():
             setattr(existing, key, value)
-        print(f"🔄 Updated | date: {date} | Dow Jones: {dowj} | Nasdaq: {nasd} | SP500: {sp500}")
+        print(f"🔄 Upd | date: {date} | Dow Jones: {dowj} | Nasdaq: {nasd} | SP500: {sp500}")
     else:
         # Create new record (NO __init__ needed!)
         new_record = HealthRecord(**dbx)
         db.add(new_record)
-        print(f"✅ Added   | date: {date} | Dow Jones: {dowj} | Nasdaq: {nasd} | SP500: {sp500}")
+        print(f"✅ Add | date: {date} | Dow Jones: {dowj} | Nasdaq: {nasd} | SP500: {sp500}")
     # Save all changes
     db.commit()
     print(f"🎉 Indices imported successfully!")
