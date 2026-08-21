@@ -3,7 +3,7 @@
 import sys, os, csv
 from datetime import datetime, timedelta, date
 
-from Utils import get_data_from_table, build_dict, get_52_week_low, get_52_week_high, padsp
+from Utils import get_data_from_table, build_dict, get_52_week_low, get_52_week_high, padsp, wkdayname, TeeFS
 from MyPortfolio_Models import get_connection, CSV_TO_DB_MAP, TYPE_CONVERTERS, MyPortfolio, StockQuote
 
 import argparse
@@ -130,7 +130,11 @@ if __name__ == "__main__":
     rootdir = "/Users/swang/sites/webdata/docs/Portfolio/"
     today = date.today()
     csvfile = 'snapshot_' + today.strftime('%Y%m%d') + '.csv'
-    print('--subdays=[%d]'%subdays)
+    logFile = '/Users/swang/tmp/logs/cn/imp-csv-' + wkdayname() + '.log'
+    if subdays < 0: logFile += '_' + str(abs(subdays))
+    tee = TeeFS(logFile, 'w')
+
+    print('===== starting imp-csv subdays=[%d] logFile=[%s]'%(subdays, logFile))
     if subdays < 0: csvfile = 'snapshot_' + (today - timedelta(days=-subdays)).strftime('%Y%m%d') + '.csv'
     csv_data_file = rootdir + csvfile
     if os.path.exists(csv_data_file):

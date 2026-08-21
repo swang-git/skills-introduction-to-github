@@ -20,7 +20,7 @@ from decimal import Decimal
 # obj = User(**data)
 # print(obj.name)  # Bob
 
-from Utils import padsp, get_data_from_table, build_dict, get_meta, get_quantity, get_total_cost, get_basis_price, get_last_portfolio
+from Utils import padsp, get_data_from_table, build_dict, get_meta, get_quantity, get_total_cost, get_basis_price, get_last_portfolio, wkdayname, TeeFS
 from MyPortfolio_Models import get_connection, CSV_TO_DB_MAP, TYPE_CONVERTERS, MyPortfolio, HealthRecord, StockQuote
 
 import argparse
@@ -225,7 +225,9 @@ def get_stock_data(symb):
 # RUN THE SCRIPT __main__
 # =============================================================================
 if __name__ == "__main__":
-    print('===== Starting import stock data to my_portfolios =====')
+    logFile = '/Users/swang/tmp/logs/cn/imp-skt-' + wkdayname() + '.log'
+    print('===== Starting import stock data to my_portfolios, logfile[%s] ====='%logFile)
+    tee = TeeFS(logFile, 'w')
 
     db, conn = get_connection(database)
     cursor = conn.cursor()
@@ -266,4 +268,5 @@ if __name__ == "__main__":
     print('===== ENDED import stock data to my_portfolios =====')
     cursor.close()
     conn.close()
+    tee.close()
     sys.exit(0)
