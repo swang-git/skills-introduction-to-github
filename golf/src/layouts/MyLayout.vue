@@ -5,7 +5,7 @@
         <q-btn v-if="isDesk" flat @click="drawer = !drawer" round dense icon="menu" />
         <q-btn v-else to="/" round dense glossy color="blue-6"><q-icon name="🏠" style="margin: -12px 0 0 0" /></q-btn>
         <q-toolbar-title class="cursor-pointer" @click="reloadPage()">{{ pageTitle }}</q-toolbar-title>
-         <!-- <span class="q-pr-md text-h6 text-red">{{ $q.version }} {{ compVer }}</span> -->
+        <span class="q-pr-md text-h6 text-pink-4">{{ $q.version }} {{ compVer }}</span>
         <q-input v-if="showSearch" :style="isIM ? { width: '90px' } : { width: '200px' }" dark borderless v-model="searchQuery" class="text-right text-h6" dense @keyup="search()">
           <template v-slot:append>
             <q-icon v-if="searchQuery === ''" name="search" />
@@ -182,9 +182,9 @@
             <q-item-section> Testing New </q-item-section>
           </q-item>
 
-          <div class="row text-cyan-4 text-h6 q-pl-lg" style="font-weight:300">
+          <!-- <div class="row text-cyan-4 text-h6 q-pl-lg" style="font-weight:300">
             <div style="margin-top:-5px"><q-icon :name="compVer" /></div><span class="q-pl-sm">{{ $q.version }}</span>
-          </div>
+          </div> -->
         </q-list>
       </q-scroll-area>
 
@@ -242,9 +242,10 @@ emitter.on('num-items', x => (numItems.value = x))
 const { gaxios } = axiosFunctions()
 const { ENV_API } = libFunctions()
 
-const compVer = computed(() => {
-  return import.meta.env.VITE_BUILD_TAG
-})
+// const compVer = computed(() => { return import.meta.env.VITE_BUILD_TAG })
+const compVer = computed(() => { return import.meta.env.VITE_BUILD_TAG == null ? '测' : import.meta.env.VITE_BUILD_TAG })
+
+
 // const pagename = computed({
 //   get: () => store.state.golf.page,
 //   set: val => store.commit('golf/setPage', val)

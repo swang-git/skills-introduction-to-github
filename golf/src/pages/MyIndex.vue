@@ -34,7 +34,8 @@
     <RoundButton size="20px" icon="logout" colr="blue-10" clas="q-ma-xs" ttip='JZsAdmin Logout' @click="logout()" v-else-if="JZsAdmin" />
     <RoundButton size="20px" icon="W" clas="q-ma-xs q-pb-sm" colr="amber-10"   ttip="device detect" @click="showDeviceType" />
     <RoundButton size="20px" icon="question_mark" colr="blue-10" clas="q-ma-xs" ttip='App Details for Each Button' @click="opened=!opened" />
-    <q-btn size="20px" round glossy icon="info" class="q-ma-xs" color="green-10" ttip='System Information' @click="showSysInfo" />
+    <!-- <q-btn size="20px" round glossy icon="info" class="q-ma-xs" color="green-10" ttip='System Information' @click="showSysInfo" /> -->
+    <q-btn size="20px" round glossy :icon="compVer" class="q-ma-xs q-pb-sm" color="green-10" ttip='System Information' @click="showSysInfo" />
       <!-- <b style="margin-top:-21px" class="text-cyan-2 text-h6">{{ compVer }}</b>
     </q-btn> -->
   </q-card-actions>
@@ -218,7 +219,8 @@ getPlayerCount()
 // emitter.on('golf-logout', () => golf_usertype = null)
 emitter.on('golf-getPlayerCount', (x) => {mcount.value = x.mcnt;fcount.value = x.fcnt})
 
-const compVer = computed(() => { return import.meta.env.VITE_BUILD_TAG })
+//const compVer = computed(() => { return import.meta.env.VITE_BUILD_TAG })
+const compVer = computed(() => { return import.meta.env.VITE_BUILD_TAG == null ? '测' : import.meta.env.VITE_BUILD_TAG })
 
 function getBackgroundImg () { 
   return {
