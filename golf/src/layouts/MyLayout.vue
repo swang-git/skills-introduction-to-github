@@ -5,7 +5,7 @@
         <q-btn v-if="isDesk" flat @click="drawer = !drawer" round dense icon="menu" />
         <q-btn v-else to="/" round dense glossy color="blue-6"><q-icon name="🏠" style="margin: -12px 0 0 0" /></q-btn>
         <q-toolbar-title class="cursor-pointer" @click="reloadPage()">{{ pageTitle }}</q-toolbar-title>
-        <span class="q-pr-md text-h6 text-pink-4">{{ $q.version }} {{ compVer }}</span>
+        <span class="q-pr-md text-h6 text-cyan-1">{{ $q.version }} {{ compVer }}</span>
         <q-input v-if="showSearch" :style="isIM ? { width: '90px' } : { width: '200px' }" dark borderless v-model="searchQuery" class="text-right text-h6" dense @keyup="search()">
           <template v-slot:append>
             <q-icon v-if="searchQuery === ''" name="search" />
