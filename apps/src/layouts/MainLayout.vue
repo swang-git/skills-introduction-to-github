@@ -3,10 +3,8 @@
     <q-layout view="hHh Lpr lFr">
       <q-header v-if="curApp!='arts'" class="bg-teal-10 inset-shadow-down">
         <q-toolbar style="margin-left:-5px">
-          <!-- <q-btn v-if="isDesk" glossy @click="drawerClick()" round dense icon="img:icons/quasar-logo.svg" size="18px" /> -->
           <q-btn v-if="isDesk" glossy @click="openApp('/apps')" round dense icon="img:icons/quasar-logo.svg" size="18px" />
           <q-btn v-else to="/apps" round dense glossy color="blue"><q-icon name="🏠" style="margin:-8px 0 0 -2px" /></q-btn>
-          <!-- <q-btn v-else to="/" round dense glossy color="blue"><q-icon :name="compVer" style="margin:-0px 0 0 0" /></q-btn> -->
           <q-toolbar-title>
             <div class="row q-pt-sm no-wrap">
               <span >{{ appTitle }}</span>
@@ -155,7 +153,7 @@ import LoginDialog from '../../users/LoginDialog.vue'
 const router = useRouter()
 
 const { isFedora, isIM, isDesk, $q, AppAdmin, ENV_DEV } = libFunctions()
-const { yyyymmdd } = dayFunctions()
+const { yyyymmddHHMM } = dayFunctions()
 const { getA1cDefinitions } = infoFunctions()
 
 //== data
@@ -252,10 +250,10 @@ function getWLval (x) {
 function setTitle (tit) {
   let tm = (new Date()).toString().split(' ')[4]
   // console.log(`-ck-%c${tm} setTitle`, 'color:indianRed;font-size:13px')
-  const ymd = (new Date()).yyyymmdd()
+  const ymdHM = (new Date()).yyyymmddHHMM()
   // this.appTitle = tit.split(' ')[0] + ' ' + ymd + ' (' + (this.isDesk ? this.getDay2(ymd) : this.getDay3(ymd)) + ')'
   appTitle = tit
-  if (isDesk) appTitle += ' ' + ymd + ' (' + ymd.chwk3() + ')'
+  if (isDesk) appTitle += ' ' + ymdHM + ' (' + ymd.chwk3() + ')'
   document.title = tit
 }
 function openApp (app) {
