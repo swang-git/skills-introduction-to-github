@@ -45,7 +45,11 @@ export function dayFunctions() {
     const datx = parseInt(dx[2])
     return weekday[(new Date(year, mIdx, datx)).getDay()]
   }
-  String.prototype.yyyymmddHHMM = function() {
+  String.prototype.yyyymmddHHMM = function() { // not working
+    const d = new Date(this)
+    return this.yyyymmdd() + ' ' + d.getHours() + ':' + (d.getMinutes() === 0 ? '00' : (d.getMinutes() < 10 ? '0' + d.getMinutes() : d.getMinutes()))
+  }
+  Date.prototype.yyyymmddHHMM = function() {
     const d = new Date(this)
     return this.yyyymmdd() + ' ' + d.getHours() + ':' + (d.getMinutes() === 0 ? '00' : (d.getMinutes() < 10 ? '0' + d.getMinutes() : d.getMinutes()))
   }

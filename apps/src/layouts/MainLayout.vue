@@ -250,10 +250,10 @@ function getWLval (x) {
 function setTitle (tit) {
   let tm = (new Date()).toString().split(' ')[4]
   // console.log(`-ck-%c${tm} setTitle`, 'color:indianRed;font-size:13px')
-  const ymdHM = (new Date()).yyyymmddHHMM()
+  const ymd = (new Date()).yyyymmddHHMM()
   // this.appTitle = tit.split(' ')[0] + ' ' + ymd + ' (' + (this.isDesk ? this.getDay2(ymd) : this.getDay3(ymd)) + ')'
   appTitle = tit
-  if (isDesk) appTitle += ' ' + ymdHM + ' (' + ymd.chwk3() + ')'
+  if (isDesk) appTitle += ' ' + ymd + ' (' + ymd.chwk3() + ')'
   document.title = tit
 }
 function openApp (app) {
