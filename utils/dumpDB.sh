@@ -1,7 +1,6 @@
 #!/bin/bash
 export PATH="/bin:/opt/homebrew/bin:/usr/local/mysql/bin:/Users/swang/bin:/opt/homebrew/opt/node@22/bin"
 if [ $# -ne 1 ]; then
-  # echo "Usage: $0 [database name]"
   echo "Please provide database name"
   exit
 fi
@@ -16,11 +15,11 @@ target_file=/Users/swang/BAK/db/dump_${d0}_${db}.sql
 
 echo dumping database $target_file $argv
 
-##mysqldump -uswang -pYbsjll11 -B $db --routines > $target_file &
-##__mysqldump -uswang -pYbsjll11 -B $db --routines > $target_file &
-mariadb-dump -uswang -pYbsjll11 -B $db --routines > $target_file &
+mariadb-dump -B $db --routines > $target_file &
 
-if [ $db == "prod" ]; then
-  mariadb-dump -uswang -pYbsjll11 -B $db --routines | mariadb -uswang -pYbsjll11 -hfedora
+#if [ $db == "prod" ]; then
+  # do this on fedora side
+  #/Users/swang/bin/sync2fedora $db
+  ##mariadb-dump -uswang -pYbsjll11 -B $db --routines | mariadb -uswang -pYbsjll11 -hfedora
   ##mysqldump -uswang -pYbsjll11 -B $db --routines | mysql -uswang -pYbsjll11 -hmaci
-fi
+#fi
