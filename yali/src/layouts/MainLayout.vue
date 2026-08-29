@@ -53,9 +53,11 @@
           <q-card class="bg-teal-10" style="margin-top:10px">
             <q-card-actions align="between">
               <RoundButton size="16px" icon="头" clas="q-pb-sm" colr="red-10" iclr="yellow" ttip="just show the first page" @click="getFirstPage" />
+              <RoundButton v-if="!isIM" :dsbl="pageBegin<=1" size="16px" icon="arrow_circle_left" colr="brown-9" iclr="yellow" ttip="show previous page" @click="getPrevPage" />
               <RoundButton size="16px" icon="chevron_left"  colr="indigo-10" iclr="yellow" ttip="show previous month" @click="getPrevYM" />
               <q-btn v-if="ym!=null" size="24px" :label="total"  colr="teal-10" />
               <RoundButton size="16px" icon="chevron_right" colr="indigo-10" iclr="yellow" ttip="show next mouth" @click="getNextYM" />
+              <RoundButton v-if="!isIM" :dsbl="pageBegin>=lastPage" size="16px" icon="arrow_circle_right" colr="brown-9" iclr="yellow" ttip="show next page" @click="getNextPage" />
               <RoundButton size="16px" icon="尾" clas="q-pb-sm" colr="red-10" iclr="yellow" ttip="just the last page" @click="getLastPage" />
             </q-card-actions>
           </q-card>
@@ -100,7 +102,7 @@ var years = []
 var yms = []
 
 // ---- main starts ----------
-// console.log(`-ST-yali window.location.hostname=${window.location.hostname} isLocal=${isLocal} isIM=${isIM}`)
+console.log(`-ST-yali window.location.hostname=${window.location.hostname} lastPage=${lastPage.value} isIM=${isIM} pageBegin=${pageBegin.value}`)
 document.title = '娅莉硬笔画'
 emitter.on('yali-getPages', (x) => setPages(x))
 buildApp('娅莉硬笔画', 'yali')
@@ -123,6 +125,27 @@ function setPerPage (ppage) {
   data.value = []
   getPages(1, perPage.value)
 }
+
+function getPrevPage () {
+  console.log(`-fn-getPrevPage pageBegin=${pageBegin.value}`)
+  pageBegin.value -= 1
+  data.value = []
+  getPages(pageBegin.value, perPage.value)
+}
+
+function getNextPage () {
+  console.log(`-fn-getNextPage pageBegin=${pageBegin.value}`)
+  pageBegin.value += 1
+  data.value = []
+  getPages(pageBegin.value, perPage.value)
+  // [yex.value, yue.value] = [false, true]
+  // let pos = yms.indexOf(ym.value)
+  // let x = yms.slice(0, pos)
+  // if (x.length <= 0) ym.value = yms[yms.length - 1]
+  // else ym.value = x[x.length - 1]
+  // getPixByYM(ym.value)
+}
+
 function getPrevYM () {
   [yex.value, yue.value] = [false, true]
   let pos = yms.indexOf(ym.value)
@@ -186,8 +209,7 @@ function setPixByYM (da) {
   total.value = da.total
 }
 
-const compVer = computed(() => { return import.meta.env.VITE_BUILD_TAG })
-// const compNumPages = computed({ get() { return Math.ceil(data.value.length/perPage.value) }, set(val) { numPages.value = val } })
+const compVer = computed(() => { return import.meta.env.VITE_BUILD_TAG==undefined ? '开' : import.meta.env.VITE_BUILD })
 
 function getFirstPage () {
   [yex.value, yue.value] = [true, false]
