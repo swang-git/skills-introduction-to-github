@@ -41,7 +41,7 @@
         <q-card-actions align="between">
           <div v-for="(p, idx) in data" :key="p" class="q-px-xs">
             <img v-if="isIM" :src="getThumbnailURL(p.fnm)" :height=IMiconSZ :width=IMiconSZ class="q-pt-xs cursor-pointer" @click="showFullImage(idx)" loading="lazy" />
-            <img v-else      :src="getThumbnailURL(p.fnm)" :height=DKiconSZ :width=DKiconSZ class="q-pa-xs cursor-pointer" @click="showFullImage(idx)" loading="lazy" />
+            <img v-else      :src="getThumbnailURL(p.fnm)" :height=DKiconSZ :width=DKiconSZ class="cursor-pointer" @click="showFullImage(idx)" loading="lazy" />
           </div>
         </q-card-actions>
       </q-card>
