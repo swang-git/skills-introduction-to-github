@@ -83,12 +83,9 @@ import { libFunctions } from '../composables/libFunctions.js'
 const { isDesk, DEV_API } = libFunctions()
 import { axiosFunctions } from '../composables/axiosFunctions.js'
 const { gaxios } = axiosFunctions()
-import TxtPad from '../../src/components/TxtPad.vue'
-import ConfirmDialog from '../../src/components/ConfirmDialog.vue'
-
-// import { useNumPadStore } from '../../src/stores/numPadStore.js'
-// const numPadStore = useNumPadStore()
-import { useAdminStore } from '../../src/stores/adminStore.js'
+import TxtPad from '../components/TxtPad.vue'
+import ConfirmDialog from '../components/ConfirmDialog.vue'
+import { useAdminStore } from '../stores/adminStore.js'
 const admin = useAdminStore()
 emitter.on('pix-pidx', (idx) => { pidx.value = idx%piclst.value.length; console.log(`pidx=${pidx.value}`); getPic() })
 

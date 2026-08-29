@@ -69,26 +69,18 @@
 </template>
 <script setup>
 
-// const API_BASE = import.meta.env.API || '/api'
-
 import { ref, computed } from 'vue'
-// Define getLabel before template uses it
 import emitter from 'tiny-emitter/instance'
-import { axiosFunctions } from '../../src/composables/axiosFunctions.js'
-const { gaxios } = axiosFunctions()
-import { libFunctions } from '../../src/composables/libFunctions.js'
-const { isIM, buildApp, DEV_API } = libFunctions()
+import { axiosFunctions } from '../composables/axiosFunctions.js'
+import { libFunctions } from '../composables/libFunctions.js'
+import { useAdminStore } from '../stores/adminStore.js'
 import PicDialog from '../pages/PicDialog.vue'
-import RoundButton from '../../src/components/RoundButton.vue'
-import YearMonthPad from '../../src/components/YearMonthPad.vue'
-import NumPad from '../../src/components/NumPad.vue'
-
-// import { useNumPadStore } from '../../src/stores/numPadStore.js'
-// const numPadStore = useNumPadStore()
-import { useAdminStore } from '../../src/stores/adminStore.js'
+import RoundButton from '../components/RoundButton.vue'
+import YearMonthPad from '../components/YearMonthPad.vue'
+import NumPad from '../components/NumPad.vue'
+const { isIM, buildApp, DEV_API } = libFunctions()
+const { gaxios } = axiosFunctions()
 const admin = useAdminStore()
-// emitter.on('jump-to-page', (page) => { jumpTo(page) })
-// emitter.on('per-page', (prpg) => { perPage.value = 0; perPage.value = prpg; data.value=[]; getPages(1, perPage.value) })
 
 const data = ref([])
 const hasMore = ref(true)
@@ -96,16 +88,17 @@ const perPage = ref(30)
 const total = ref(0)
 const lastPage = ref(total.value / perPage.value)
 const IMiconSZ = 177.8 // Mate60 Good for 2 columns
-const DKiconSZ = 150
+const DKiconSZ = 136.1
 const append = ref(true)
 const prepend = ref(false)
 const pageBegin = ref(1)
 const yex = ref(true)
 const yue = ref(false)
 const numPages = ref(1)
+const ym = ref(null)
 var years = []
 var yms = []
-const ym = ref(null)
+
 // ---- main starts ----------
 // console.log(`-ST-yali window.location.hostname=${window.location.hostname} isLocal=${isLocal} isIM=${isIM}`)
 document.title = '娅莉硬笔画'
@@ -113,13 +106,10 @@ emitter.on('yali-getPages', (x) => setPages(x))
 buildApp('娅莉硬笔画', 'yali')
 getPages(pageBegin.value, perPage.value)
 
-// admin.isCleanup = ref(window.location.href.substring(window.location.href.length - 2) == '//')
-// console.log(`-CK-isCleanup hostname=${window.location.hostname} href=${window.location.href.substring(window.location.href.length - 2)} isCleanup=${admin.isCleanup}`)
 admin.isCleanup = ref(window.location.hostname == 'localhost')
 let wloc = window.location
 console.log(`-CK-isCleanup=${admin.isCleanup} hostname=${wloc.hostname} host=${wloc.host} href=${wloc.href}`)
 emitter.on('yali-getPixByYM', (x) => setPixByYM(x))
-// const compYM = computed(() => { return ym.value })
 
 // ---- function section -----
 function setPidx (idx) {

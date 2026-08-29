@@ -63,8 +63,8 @@ async function start ({
           }
   }
 
-  const urlPath = window.location.href.replace(window.location.origin, '')
-
+  // the router-facing URL: no publicPath, no hash-mode "#"
+  const urlPath = window.location.href.replace(window.location.origin, '').replace(publicPath, '/')
   for (let i = 0; hasRedirected === false && i < bootFiles.length; i++) {
     try {
       await bootFiles[i]({
