@@ -254,6 +254,12 @@ def addDailyDatWW(art):
         dlout(3, 'adding:DatWW', art.lnk, art.tag, art.ymd,
               art.qid, art.aut, art.afz, art.img, art.tit)
         # sys.exit(0)
+
+        # if art.qid == '3042102': 
+        #     ##art.tit = '谁家的变态“浴衣𫫇男”国籍掀全网骂战'
+        #     art.tit = '谁家的变态「浴衣恶男」国籍掀全网骂战'
+        #     print("art.tit=[%s]"%art.tit)
+
         dat = DailyDat(art)
         session.add(dat)
         session.commit()

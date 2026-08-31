@@ -563,3 +563,81 @@ def show_struct(items):
         for xp, sp in enumerate(spans):
             print(xp, sp.prettify())
     print('======== --- %s --- ========\n' % ix)
+
+
+def inspect_string(s: str):
+    if not s:
+        return
+    for idx, c in enumerate(s):
+        code = ord(c)
+        # Detect control chars (< 32 except tab/newline), surrogate, non‑printable
+        is_control = code < 32 and c not in ("\t", "\n", "\r")
+        is_surrogate = 0xD800 <= code <= 0xDFFF
+        print(f"[{idx:3d}] U+{code:04X} | repr={repr(c)} | char={c} | control={is_control} | surrogate={is_surrogate}")
+
+#title = '谁家的变态“浴衣𫫇男”国籍掀全网骂战'
+#inspect_string(title)
+# Any control=True entry = hidden back‑char / non‑printable
+# Surrogate characters are invalid standalone UTF‑8
+
+import unicodedata
+
+def clean_bad_chars(raw: str) -> str:
+    cleaned = []
+    for c in raw:
+        cat = unicodedata.category(c)
+        # Skip C0 control chars (backspace, bell, etc.), skip surrogates
+        if cat.startswith("C"):
+            continue
+        cleaned.append(c)
+    return "".join(cleaned)
+
+#safe_title = clean_bad_chars(title)
+
+# 2. Check if there are 4‑byte emoji / rare Hanzi (utf8mb4 requirement)
+# 𫫇 is a 4‑byte Unicode character.
+# MySQL/MariaDB old utf8 only supports up to 3 bytes. If your table is utf8 instead of utf8mb4, insert will fail even with clean text.
+# Check if a string contains 4‑byte characters:
+def has_4byte_unicode(s: str) -> bool:
+    for c in s:
+        if ord(c) >= 0x10000:
+            return True
+    return True
+
+#print(has_4byte_unicode(title)) # True for 𫫇
+
+# Two options for saving to DB
+# 1. Recommended: Alter MySQL column to utf8mb4
+# ALTER TABLE art MODIFY tit VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+# Also set SQLAlchemy connection charset:
+# connection string
+# DATABASE_URL = "mysql+pymysql://user:pass@host/db?charset=utf8mb4"
+
+def strip_4byte(s: str) -> str:
+    return "".join([c for c in s if ord(c) < 0x10000])
+
+# 3. Full sanitize pipeline for SQLAlchemy insert
+
+from sqlalchemy import create_engine
+import unicodedata
+
+def sanitize_title(raw_title: str) -> str:
+    if raw_title is None:
+        return ""
+    # Step1: remove control / backspace / invisible chars
+    tmp = []
+    for ch in raw_title:
+        if unicodedata.category(ch).startswith("C"):
+            continue
+        tmp.append(ch)
+    clean = "".join(tmp)
+    # Optional: normalize unicode (NFC/NFD to avoid duplicate encoded glyphs)
+    clean = unicodedata.normalize("NFC", clean)
+    return clean
+
+# usage before insert
+# # art.tit = sanitize_title('谁家的变态“浴衣𫫇男”国籍掀全网骂战')
+# print("tit=[%s]"%tit)
+# session.add(art)
+# session.commit()

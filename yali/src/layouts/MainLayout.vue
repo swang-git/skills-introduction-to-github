@@ -209,7 +209,7 @@ function setPixByYM (da) {
   total.value = da.total
 }
 
-const compVer = computed(() => { return import.meta.env.VITE_BUILD_TAG==undefined ? '开' : import.meta.env.VITE_BUILD })
+const compVer = computed(() => { return import.meta.env.VITE_BUILD_TAG==undefined ? '开' : import.meta.env.VITE_BUILD_TAG })
 
 function getFirstPage () {
   [yex.value, yue.value] = [true, false]
