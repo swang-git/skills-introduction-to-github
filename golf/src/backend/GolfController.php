@@ -212,8 +212,9 @@ class GolfController extends Controller {
 	// 	// $id = UserGuide::where([['status', 'A'], ['page_name', $pagename]])->value('id');
 	// 	return ['userGuideId' => $id, 'status' => 'OK'];
 	// }
-	public function getUserGuide($pagename) { // Log:info("getUserGuide for $pagename");
+	public function getUserGuide($pagename) { Log:info("getUserGuide for $pagename");
     $dx = UserGuide::where([['status', 'A'], ['page_name', $pagename]])->select('id', 'page_name', 'user_guide')->get();
+    // $userGuide = UserGuide::where([['status', 'A'], ['page_name', 'PlayerList']])->select('user_guide')->value('user_guide');
     Log::info("user_guide for $pagename", $dx->toArray());
     $id = 0;
     $pagename = '';
@@ -1573,7 +1574,7 @@ class GolfController extends Controller {
 	// }
 	public function getPGCRules($gameId) { Log::info("getPGCRules for gameId=$gameId");
 		// $path = '/sites/webdata/docs/golf/pgc_rules.txt';  // for gameId = 0
-		$path = '/sites/webdata/docs/golf/pgc_rules.txt';  // for gameId = 0
+		$path = '/Users/swang/sites/webdata/docs/golf/pgc_rules.txt';  // for gameId = 0
 		$rules = file_get_contents($path);
 		Log::info("$path: $rules");
 		return ['rules' => $rules, 'status' => "OK"];

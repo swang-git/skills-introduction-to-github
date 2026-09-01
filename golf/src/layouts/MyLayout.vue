@@ -78,7 +78,7 @@
             <q-item-section v-else> Groups </q-item-section>
           </q-item>
 
-          <q-item clickable v-ripple @click=" openApp('PGCGameList', 'Club Outings, Tournaments and PlayOff')">
+          <q-item clickable v-ripple @click="openApp('PGCGameList', 'Club Outings, Tournaments and PlayOff')">
             <q-item-section avatar>
               <q-icon name="img:icons/PGC.png" color="blue" size="30px" />
             </q-item-section>
@@ -205,6 +205,7 @@
       <router-view />
     </q-page-container>
     <InfoDisplay />
+    <HolidayDialog />
   </q-layout>
 </template>
 <script setup>
@@ -216,6 +217,7 @@ import { axiosFunctions } from '../composables/axiosFunctions'
 import { libFunctions } from '../composables/libFunctions'
 import { dayFunctions } from '../composables/dayFunctions'
 import InfoDisplay from '../components/InfoDisplay.vue'
+import HolidayDialog from '../components/HolidayDialog.vue'
 
 const { store, JZsAdmin, KJsAdmin, ALsAdmin, SysAdmin, isIM, isDesk, PGCsAdmin, doGroup, pagename, userGuidePage, DEV_API, q } = libFunctions()
 const { yyyymmdd } = dayFunctions()
@@ -366,14 +368,15 @@ function setPGCRules(da) {
   emitter.emit('open-InfoDisplay', tit, msg)
 }
 const getUserGuideTitle = () => {
-  return 'User Guide for ' + userGuidePage.value.replace('_', ' ')
+  // return 'User Guide for ' + userGuidePage.value.replace('_', ' ')
+  return 'User Guide for ' + pagename.value 
 }
 function setUserGuide (da) {
-  console.log(`-fn-setUserGuide userGuidePage=${userGuidePage.value}, userGuidePageInDb=${userGuidePageInDb.value} userGuide=${da.userguide}`)
+  // console.log(`-fn-setUserGuide userGuidePage=${userGuidePage.value}, userGuidePageInDb=${userGuidePageInDb.value} userGuide=${da.userguide}`)
+  console.log(`-fn-setUserGuide pagename=${pagename.value}, userGuidePageInDb=${userGuidePageInDb.value} userGuide=${da.userguide}`)
   userGuideId.value = da.id
   userGuidePageInDb.value = da.pagename
   userGuide.value = da.userguide
-  // const tit = 'User Guide for '
   // const tit = 'User Guide for ' + pagename.value
   const tit = getUserGuideTitle()
   // emitter.emit('open-InfoDisplay', tit, userGuide.value)
@@ -382,28 +385,46 @@ function setUserGuide (da) {
 }
 function showUserGuide () {
   console.log(`-fn-showUserGuide userGuide=${userGuide.value}, userGuidePageInDb=${userGuidePageInDb.value} pagename=${pagename.value}`)
-  if (pagename.value === 'MatchGrouping14') {
-    emitter.emit('user-guide-KJsMatch')
-    return
-  } else if (pagename.value === 'MatchGrouping') {
-    emitter.emit('user-guide-JZsMatch')
-    return
-  }
-  if (userGuidePage.value == userGuidePageInDb.value) {
-    // const tit = 'User Guide for ' + pagename.value
-    const tit = getUserGuideTitle()
-    emitter.emit('open-InfoDisplay', tit, userGuide.value)
-    return
-  }
+  // if (pagename.value === 'MatchGrouping14') {
+  // // if (pagename.value == 'KJsMatch') {
+  //   // emitter.emit('user-guide-KJsMatch')
+  //   return
+  // // } else if (pagename.value === 'MatchGrouping') {
+  // } else if (pagename.value == 'JZsMatch') {
+  //   // emitter.emit('user-guide-JZsMatch')
+  //   return
+  // }
+  // if (userGuidePage.value == userGuidePageInDb.value) {
+  //   // const tit = 'User Guide for ' + pagename.value
+  //   const tit = getUserGuideTitle()
+  //   // emitter.emit('open-InfoDisplay', tit, userGuide.value)
+  //   return
+  // }
+  // return emitter.emit('user-guide-JZsMatch')
   getUserGuide()
   // emitter.emit('open-InfoDisplay', 'tit', userGuide.value)
 }
-function getUserGuide(upd = false) {
+function pageNameMapDBname () {
+  const pageNameMapDB = {
+    home: 'home',
+    MemberList: 'memberList',
+    JZsMatch: 'TeamMatch', 
+    KJsMatch: 'KJsMatch', 
+    ALsMatch: 'TeamMatch',
+    TournamentList: 'tournamentList',
+    CourseDetails: 'course_details',
+  };
+  return pageNameMapDB[pagename.value];
+}
+function getUserGuide (upd = false) {
+  console.info(`-fn-getUserGuide userGuidePage=${userGuidePage.value}`)
   if (!upd) gcinfo.value = !gcinfo.value
   // let page = 'JZsMatch'
   // if (pagename.value == 'ALsMatch') page = 'JZsMatch'
   // else page = pagename.value
-  const path = ENV_API + '/golf/getUserGuide/' + userGuidePage.value
+  const path = ENV_API + '/golf/getUserGuide/' + pageNameMapDBname()
+  // const path = ENV_API + '/golf/getUserGuide/' + pagename.value
+  // const path = ENV_API + '/golf/getUserGuide/' + 'memberList'
   gaxios(path)
 }
 // function setUserGuideId (da) {

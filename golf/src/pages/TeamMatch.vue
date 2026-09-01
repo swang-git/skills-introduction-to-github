@@ -28,7 +28,7 @@
   <SelOptionsWithSearch ref="refSelOptionsWithSearch" @selected-option="selectedPlayer" />
   <SimpPlayerDialog ref="refSimpPlayerDialog" />
   <KjGameDataDisplay />
-  <InfoDisplay />
+  <!-- <InfoDisplay /> -->
 </div>
 </template>
 <script setup>
@@ -48,7 +48,7 @@ import TeamMatchCreator  from './TeamMatchCreator.vue'
 import TeamMatchList from './TeamMatchList.vue'
 import TeamMatchGrouping from './TeamMatchGrouping.vue'
 import TeamMatchGrouped from './TeamMatchGrouped.vue'
-import InfoDisplay from '../components/InfoDisplay.vue'
+// import InfoDisplay from '../components/InfoDisplay.vue'
 import CourseInfo from '../components/CourseInfo.vue'
 import KJNewPlayerDialog from '../components/KJNewPlayerDialog.vue'
 // import Tooltip from 'src/components/ToolTip'

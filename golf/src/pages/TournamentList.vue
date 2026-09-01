@@ -143,7 +143,7 @@ const selectedTmnt = ref({})
 const golf_usertype = ref(null)
 
 store.pageTitle = 'Tournament List'
-store.page = 'tournamentList'
+store.page = 'TournamentList'
 emitter.on('golf-usertype', x => {
   golf_usertype.value = x
 })

@@ -271,7 +271,7 @@ emitter.on('show-match-grouping', (x, y) => { showMatchGrouping.value = x; gsx.v
 // emitter.on('golf-getAliases', (x) => setAliases(x))
 emitter.on('do-grouping', (gsx, year, groups) => doGrouping(gsx, year, groups))
 emitter.on('open-slots', (x) => openSlots.value = x)
-emitter.on('user-guide-JZsMatch', () => showUserGuide())
+// emitter.on('user-guide-JZsMatch', () => showUserGuide())
 // emitter.on('add-kj-new-player', (x) => addKjNewPlayer(x))
 
 //== function section

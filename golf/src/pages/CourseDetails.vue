@@ -357,6 +357,7 @@ function setCourseDetails (da) {
   store.yards = JSON.parse(JSON.stringify(course.value.yards))
   store.hcaps = JSON.parse(JSON.stringify(course.value.hcaps))
   teebox.value = course.value.trys[0].teebox
+  store.page = 'CourseDetails'
   // console.log(`-CK-fn-setCourseDetails course.yards`, course.value.yards)
   fyard.value = 0
   byard.value = 0

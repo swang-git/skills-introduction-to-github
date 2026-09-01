@@ -17,14 +17,14 @@
   <!-- <q-card-actions class="row" style="margin:auto;margin-top:-370px" :align="isDesk ? 'between' : 'evenly'"> -->
   <q-card-actions class="row" style="margin:auto;margin-top:-370px" align="between">
     <RoundButton size="20px" icon="PL" clas="q-ma-xs q-pb-sm" colr="amber-10" ttip="Player List" @click="openApp('PlayerList')" />
-    <RoundButton size="20px" icon="TL" clas="q-ma-xs q-pb-sm" colr="teal-10" ttip="All Club Games" @click="openApp('TournamentList')" />
+    <RoundButton size="20px" icon="TL" clas="q-ma-xs q-pb-sm" colr="indigo-9" ttip="All Club Games" @click="openApp('TournamentList')" />
     <RoundButton size="20px" icon="img:icons/hole_in_one.png" clas="q-ma-xs q-pb-sm" colr="green-10"  ttip="Golf Course Details" @click="openApp('CourseDetails')" />
     <RoundButton size="20px" icon="SG" colr="pink-10" clas="q-ma-xs q-pb-sm"   ttip="Game Registration" @click="openApp('Signup')" />
     <RoundButton size="20px" icon="JZ" colr="blue-10" clas="q-ma-xs q-pb-sm" ttip="JZ's Match" @click="openApp('JZsMatch')" />
     <RoundButton size="20px" icon="KJ" colr="red-10" clas="q-ma-xs q-pb-sm" ttip="MM's Match" @click="openApp('KJsMatch')" />
     <RoundButton size="20px" icon="AL" colr="indigo-10" clas="q-ma-xs q-pb-sm" ttip="AL's Match" @click="openApp('ALsMatch')" />
     <RoundButton size="20px" icon="GL" colr="green-10" clas="q-ma-xs q-pb-sm" ttip="(Admin)PGC Game Grouping, Entering Scores, etc." @click="openApp('PGCGroupList')" />
-    <RoundButton size="20px" icon="PG" colr="green-10" clas="q-ma-xs q-pb-sm" ttip="PGC Game List of Expired Games with scores(regular users)" @click="openApp('PGCGameList')" />
+    <RoundButton size="20px" icon="PG" colr="indigo-9" clas="q-ma-xs q-pb-sm" ttip="PGC Game List of Expired Games with scores(regular users)" @click="openApp('PGCGameList')" />
     <RoundButton size="20px" icon="PR" colr="green-10" clas="q-ma-xs q-pb-sm" ttip="PGC Game Rules" @click="showPGCRules()" />
     <RoundButton size="20px" icon="card_giftcard" clas="q-ma-xs" colr="pink-10"   ttip="Holidays" @click="showHolidays" />
     <RoundButton size="20px" icon="monitor" clas="q-ma-xs q-pb-sm" colr="green-10" ttip="Show Log" @click="openApp('LoadLogPage')" v-if="JZsAdmin" />

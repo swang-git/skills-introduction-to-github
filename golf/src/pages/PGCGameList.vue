@@ -47,11 +47,11 @@
 <script setup>
 import emitter from 'tiny-emitter/instance'
 import { ref, onMounted } from 'vue'
-import { dayFunctions } from '../../src/composables/dayFunctions'
+import { dayFunctions } from '../composables/dayFunctions'
 const { today } = dayFunctions()
-import { libFunctions } from '../../src/composables/libFunctions'
-const { $store, dats, dalist, isDesk, PGCsAdmin, ENV_API } = libFunctions()
-import { axiosFunctions } from '../../src/composables/axiosFunctions'
+import { libFunctions } from '../composables/libFunctions'
+const { store, dats, dalist, isDesk, PGCsAdmin, ENV_API } = libFunctions()
+import { axiosFunctions } from '../composables/axiosFunctions'
 const { gaxios } = axiosFunctions()
 import PGCGameResults from'./PGCGameResults.vue'
 import PGCGameGrouping from './PGCGameGrouping.vue'
@@ -72,8 +72,10 @@ onMounted(() => {
 
 console.log('-ST-PGCGameList')
 
-$store.commit('golf/setPageTitle', 'PGC Game List')
-$store.commit('golf/setPage', 'PGCGameList')
+// $store.commit('golf/setPageTitle', 'PGC Game List')
+// $store.commit('golf/setPage', 'PGCGameList')
+store.pageTitle = 'PGC Game List'
+store.page = 'PGCGameList'
 getPGCGames()
 emitter.on('golf-getPGCGamePlayers', (x) => setPGCGamePlayers(x))
 emitter.on('golf-getPGCGames', (x) => setPGCGames(x.lst))
