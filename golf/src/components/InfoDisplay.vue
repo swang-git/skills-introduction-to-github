@@ -31,7 +31,7 @@ function closeIt () {
   emitter.emit('close-tips')
 }
 function openIt (titx, msgx, fmtx='html') {
-  // console.log(`-fn-InfoDisplay.openIt(${titx}, ${msgx}`)
+  console.log(`-fn-InfoDisplay.openIt(${titx}, ${msgx}`)
   tit.value = titx
   msg.value = msgx
   fmt.value = fmtx

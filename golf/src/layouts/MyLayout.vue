@@ -5,7 +5,7 @@
         <q-btn v-if="isDesk" flat @click="drawer = !drawer" round dense icon="menu" />
         <q-btn v-else to="/" round dense glossy color="blue-6"><q-icon name="🏠" style="margin: -12px 0 0 0" /></q-btn>
         <q-toolbar-title class="cursor-pointer" @click="reloadPage()">{{ pageTitle }}</q-toolbar-title>
-        <span class="q-pr-md text-h6 text-cyan-1">{{ $q.version }} {{ compVer }}</span>
+        <span v-if="isDesk" class="q-pr-md text-h6 text-cyan-1">{{ $q.version }} {{ compVer }}</span>
         <q-input v-if="showSearch" :style="isIM ? { width: '90px' } : { width: '200px' }" dark borderless v-model="searchQuery" class="text-right text-h6" dense @keyup="search()">
           <template v-slot:append>
             <q-icon v-if="searchQuery === ''" name="search" />
@@ -13,6 +13,7 @@
           </template>
         </q-input>
         <q-btn v-if="pageTitle == 'Course Details' && SysAdmin" class="q-px-sm q-mx-sm" glossy dense icon="golf_course" label="Add New Course" color="red" @click="addNewCourse()" />
+        <!-- <q-btn v-if="pagename!='home'" round dense icon="help" @click="showUserGuide()" /> -->
         <q-btn round dense icon="help" @click="showUserGuide()" />
         <q-btn v-if="SysAdmin && updateUserGuide" outline rounded dense icon-right="update" :label="isDesk ? 'update user guide' : 'user guide'" @click="updateUserGuide()" class="q-pl-sm" />
       </q-toolbar>
@@ -104,63 +105,63 @@
             /></q-item-section>
             <q-item-section class="text-no-wrap">SysAdmin On</q-item-section>
           </q-item>
-          
+
           <q-item v-if="SysAdmin" clickable v-ripple>
             <q-item-section avatar
               ><q-icon name="settings" color="grey-0" size="30px"
             /></q-item-section>
             <q-item-section class="text-no-wrap">Maintainence</q-item-section>
           </q-item>
-          
+
           <q-item v-if="SysAdmin" clickable v-ripple @click="logout()">
             <q-item-section avatar
               ><q-icon name="logout" color="green-9" size="30px"
             /></q-item-section>
             <q-item-section class="text-no-wrap">Sys Logout</q-item-section>
           </q-item>
-          
+
           <q-item v-if="JZsAdmin" clickable v-ripple @click="logout()">
             <q-item-section avatar
               ><q-icon name="logout" color="green-9" size="30px"
             /></q-item-section>
             <q-item-section class="text-no-wrap">JZs Logout</q-item-section>
           </q-item>
-          
+
           <q-item v-if="KJsAdmin" clickable v-ripple @click="logout()">
             <q-item-section avatar
               ><q-icon name="logout" color="green-9" size="30px"
             /></q-item-section>
             <q-item-section class="text-no-wrap">KJs Logout</q-item-section>
           </q-item>
-          
+
           <q-item v-if="ALsAdmin" clickable v-ripple @click="logout()">
             <q-item-section avatar
               ><q-icon name="logout" color="green-9" size="30px"
             /></q-item-section>
             <q-item-section class="text-no-wrap">ALs Logout</q-item-section>
           </q-item>
-          
+
           <q-item v-if="PGCsAdmin" clickable v-ripple @click="logout()">
             <q-item-section avatar
               ><q-icon name="logout" color="green-9" size="30px"
             /></q-item-section>
             <q-item-section class="text-no-wrap">PGCs Logout</q-item-section>
           </q-item>
-          
+
           <q-item v-else-if="doGroup" clickable v-ripple @click="logout()">
             <q-item-section avatar
               ><q-icon name="logout" color="pink" size="30px"
             /></q-item-section>
             <q-item-section class="text-no-wrap">DoGroup Logout</q-item-section>
           </q-item>
-          
+
           <q-item v-else-if=" !(SysAdmin || JZsAdmin || KJsAdmin || ALsAdmin || PGCsAdmin)" clickable v-ripple @click="showLoginDialog()">
             <q-item-section avatar>
               <q-icon name="login" color="green" size="30px" />
             </q-item-section>
             <q-item-section>System Login</q-item-section>
           </q-item>
-          
+
           <q-item v-if="SysAdmin" clickable v-ripple @click="showRegisterDialog()">
             <q-item-section avatar>
               <q-icon name="app_registration" color="accent" size="30px" />
@@ -203,16 +204,18 @@
     <q-page-container>
       <router-view />
     </q-page-container>
+    <InfoDisplay />
   </q-layout>
 </template>
 <script setup>
 /* eslint-disable */
 import emitter from 'tiny-emitter/instance'
 import { ref, computed, onMounted } from 'vue'
-import { useQuasar } from 'quasar'
-import { axiosFunctions } from '../../src/composables/axiosFunctions'
-import { libFunctions } from '../../src/composables/libFunctions'
-import { dayFunctions } from '../../src/composables/dayFunctions'
+// import { useQuasar } from 'quasar'ss
+import { axiosFunctions } from '../composables/axiosFunctions'
+import { libFunctions } from '../composables/libFunctions'
+import { dayFunctions } from '../composables/dayFunctions'
+import InfoDisplay from '../components/InfoDisplay.vue'
 
 const { store, JZsAdmin, KJsAdmin, ALsAdmin, SysAdmin, isIM, isDesk, PGCsAdmin, doGroup, pagename, userGuidePage, DEV_API, q } = libFunctions()
 const { yyyymmdd } = dayFunctions()
@@ -365,28 +368,20 @@ function setPGCRules(da) {
 const getUserGuideTitle = () => {
   return 'User Guide for ' + userGuidePage.value.replace('_', ' ')
 }
-function setUserGuide(da) {
-  console.log(
-    `-fn-setUserGuide userGuidePage=${userGuidePage.value}, userGuidePageInDb=${userGuidePageInDb.value}`
-  )
+function setUserGuide (da) {
+  console.log(`-fn-setUserGuide userGuidePage=${userGuidePage.value}, userGuidePageInDb=${userGuidePageInDb.value} userGuide=${da.userguide}`)
   userGuideId.value = da.id
   userGuidePageInDb.value = da.pagename
   userGuide.value = da.userguide
+  // const tit = 'User Guide for '
   // const tit = 'User Guide for ' + pagename.value
   const tit = getUserGuideTitle()
-  if (updateUserGuide.value)
-    emitter.emit(
-      'open-UserGuidePad',
-      userGuidePage.value,
-      userGuideId.value,
-      userGuide.value
-    )
+  // emitter.emit('open-InfoDisplay', tit, userGuide.value)
+  if (updateUserGuide.value) emitter.emit('open-UserGuidePad', userGuidePage.value, userGuideId.value, userGuide.value)
   else emitter.emit('open-InfoDisplay', tit, userGuide.value)
 }
-function showUserGuide() {
-  console.log(
-    `-fn-showUserGuide userGuide=${userGuide.value}, userGuidePageInDb=${userGuidePageInDb.value} pagename=${pagename.value}`
-  )
+function showUserGuide () {
+  console.log(`-fn-showUserGuide userGuide=${userGuide.value}, userGuidePageInDb=${userGuidePageInDb.value} pagename=${pagename.value}`)
   if (pagename.value === 'MatchGrouping14') {
     emitter.emit('user-guide-KJsMatch')
     return
@@ -401,7 +396,7 @@ function showUserGuide() {
     return
   }
   getUserGuide()
-  // InfoDisplay.value.openIt(tit, userGuide.value)
+  // emitter.emit('open-InfoDisplay', 'tit', userGuide.value)
 }
 function getUserGuide(upd = false) {
   if (!upd) gcinfo.value = !gcinfo.value
