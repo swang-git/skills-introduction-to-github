@@ -41,6 +41,7 @@
         <q-card-actions align="between">
           <div v-for="(p, idx) in data" :key="p" class="q-px-xs">
             <img v-if="isIM" :src="getThumbnailURL(p.fnm)" :height=IMiconSZ :width=IMiconSZ class="q-pt-xs cursor-pointer" @click="showFullImage(idx)" loading="lazy" />
+            <!-- <img v-else      :src="getThumbnailURL(p.fnm)" :height=DKiconSZ :width=DKiconSZ class="cursor-pointer" @click="showFullImage(idx)" loading="lazy" style="object-fit: contain" /> -->
             <img v-else      :src="getThumbnailURL(p.fnm)" :height=DKiconSZ :width=DKiconSZ class="cursor-pointer" @click="showFullImage(idx)" loading="lazy" />
           </div>
         </q-card-actions>
@@ -80,7 +81,7 @@ import PicDialog from '../pages/PicDialog.vue'
 import RoundButton from '../components/RoundButton.vue'
 import YearMonthPad from '../components/YearMonthPad.vue'
 import NumPad from '../components/NumPad.vue'
-const { isIM, isDesk, buildApp, DEV_API, isLinux, screenwidth } = libFunctions()
+const { isIM, isDesk, buildApp, DEV_API, isLinux, $q } = libFunctions()
 const { gaxios } = axiosFunctions()
 const admin = useAdminStore()
 
@@ -91,8 +92,8 @@ const total = ref(0)
 const lastPage = ref(total.value / perPage.value)
 // const IMiconSZ = 177.8 // Mate60 Good for 2 columns
 // const DKiconSZ = isLinux ? 140 : 152.8
-const IMiconSZ = (screenwidth - 33) / 2 // for 2 columns
-const DKiconSZ = (screenwidth - 66) / 6
+const IMiconSZ = computed(() => { return ($q.screen.width - 33) / 2 }) // for 2 columns
+const DKiconSZ = computed(() => { return ($q.screen.width - 66) / 6 })
 const append = ref(true)
 const prepend = ref(false)
 const pageBegin = ref(1)
@@ -112,7 +113,7 @@ buildApp('娅莉硬笔画', 'yali')
 getPages(pageBegin.value, perPage.value)
 
 admin.isCleanup = ref(window.location.hostname == 'localhost')
-console.log(`-CK-isCleanup=${admin.isCleanup} isLinux=${isLinux} sreenw=${screenwidth} host=${wloc.host} href=${wloc.href}`)
+console.log(`-CK-isCleanup=${admin.isCleanup} isLinux=${isLinux} sreenw=${$q.screen.width} host=${wloc.host} href=${wloc.href}`)
 emitter.on('yali-getPixByYM', (x) => setPixByYM(x))
 
 // ---- function section -----
