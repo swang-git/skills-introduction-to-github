@@ -186,7 +186,7 @@ function getStyle() {
   if (!isDesk) return trans // + ';' + bgimg
 
   let idx = pidx.value
-  // console.log(`-fn-getStyle(${idx})`)
+  console.log(`-fn-getStyle idx=${idx}`)
   let imgAspectRatio = ratlst.value[idx]
   let viewW = (winW - 40)
   let viewH = (winH - 140) // top bar + bottom bar = 60 + 60 = 100px
