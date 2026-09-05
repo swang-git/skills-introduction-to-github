@@ -26,6 +26,7 @@
       <div v-if="isDesk">
         <div class="row justify-between">
           <q-btn flat icon="" size="lg" @click="--pidx < 0 ? (pidx = piclst.length - 1) : pidx" style="height:95vh; z-index:1" />
+          <!-- <img :src="getPic()" :style="{ width: ($q.screen.width - 150)+'px', height: 'auto' }" style="margin-top:-50px;object-fit:contain" @click="stopSlideshow()" /> -->
           <img class="fixed" :src="getPic()" :style="getStyle()" @click="stopSlideshow()" />
           <q-btn flat icon="" size="lg" @click="++pidx >= piclst.length ? (pidx = 0) : pidx" />
         </div>
@@ -80,7 +81,7 @@
 import { ref, computed } from 'vue'
 import emitter from 'tiny-emitter/instance'
 import { libFunctions } from '../composables/libFunctions.js'
-const { isDesk, DEV_API } = libFunctions()
+const { isDesk, DEV_API, $q } = libFunctions()
 import { axiosFunctions } from '../composables/axiosFunctions.js'
 const { gaxios } = axiosFunctions()
 import TxtPad from '../components/TxtPad.vue'
@@ -99,8 +100,10 @@ const piclst = ref([])
 const datetms = ref([])
 const fileszs = ref([])
 const ratlst = ref([])
-const winW = window.innerWidth
-const winH = window.innerHeight
+// const winW = window.innerWidth
+// const winH = window.innerHeight
+const winW = $q.screen.width
+const winH = $q.screen.height
 const imgWs = ref([])
 const imgHs = ref([])
 defineExpose({ openIt })
