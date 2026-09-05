@@ -52,13 +52,13 @@
         <q-toolbar-title>
           <q-card class="bg-teal-10" style="margin-top:10px">
             <q-card-actions align="between">
-              <RoundButton size="16px" icon="头" clas="q-pb-sm" colr="red-10" iclr="yellow" ttip="just show the first page" @click="getFirstPage" />
-              <RoundButton v-if="!isIM" :dsbl="pageBegin<=1" size="16px" icon="first_page" colr="brown-9" iclr="yellow" ttip="show previous page" @click="getPrevPage" />
+              <RoundButton v-if="isDesk" size="16px" icon="头" clas="q-pb-sm" colr="red-10" iclr="yellow" ttip="just show the first page" @click="getFirstPage" />
+              <RoundButton v-if="isIM" :dsbl="pageBegin<=1" size="16px" icon="first_page" colr="brown-9" iclr="yellow" ttip="show previous page" @click="getPrevPage" />
               <RoundButton size="16px" icon="chevron_left"  colr="indigo-10" iclr="yellow" ttip="show previous month" @click="getPrevYM" />
               <q-btn v-if="ym!=null" size="24px" :label="total"  colr="teal-10" />
               <RoundButton size="16px" icon="chevron_right" colr="indigo-10" iclr="yellow" ttip="show next mouth" @click="getNextYM" />
-              <RoundButton v-if="!isIM" :dsbl="pageBegin>=lastPage" size="16px" icon="last_page" colr="brown-9" iclr="yellow" ttip="show next page" @click="getNextPage" />
-              <RoundButton size="16px" icon="尾" clas="q-pb-sm" colr="red-10" iclr="yellow" ttip="just the last page" @click="getLastPage" />
+              <RoundButton v-if="isIM" :dsbl="pageBegin>=lastPage" size="16px" icon="last_page" colr="brown-9" iclr="yellow" ttip="show next page" @click="getNextPage" />
+              <RoundButton v-if="isDesk" size="16px" icon="尾" clas="q-pb-sm" colr="red-10" iclr="yellow" ttip="just the last page" @click="getLastPage" />
             </q-card-actions>
           </q-card>
         </q-toolbar-title>
@@ -80,17 +80,19 @@ import PicDialog from '../pages/PicDialog.vue'
 import RoundButton from '../components/RoundButton.vue'
 import YearMonthPad from '../components/YearMonthPad.vue'
 import NumPad from '../components/NumPad.vue'
-const { isIM, buildApp, DEV_API, isLinux } = libFunctions()
+const { isIM, isDesk, buildApp, DEV_API, isLinux, screenwidth } = libFunctions()
 const { gaxios } = axiosFunctions()
 const admin = useAdminStore()
 
 const data = ref([])
 const hasMore = ref(true)
-const perPage = ref(30)
+const perPage = ref(isIM ? 6 : 30)
 const total = ref(0)
 const lastPage = ref(total.value / perPage.value)
-const IMiconSZ = 177.8 // Mate60 Good for 2 columns
-const DKiconSZ = isLinux ? 140 : 152.8
+// const IMiconSZ = 177.8 // Mate60 Good for 2 columns
+// const DKiconSZ = isLinux ? 140 : 152.8
+const IMiconSZ = (screenwidth - 33) / 2 // for 2 columns
+const DKiconSZ = (screenwidth - 66) / 6
 const append = ref(true)
 const prepend = ref(false)
 const pageBegin = ref(1)
@@ -110,7 +112,7 @@ buildApp('娅莉硬笔画', 'yali')
 getPages(pageBegin.value, perPage.value)
 
 admin.isCleanup = ref(window.location.hostname == 'localhost')
-console.log(`-CK-isCleanup=${admin.isCleanup} isLinux=${isLinux} hostname=${wloc.hostname} host=${wloc.host} href=${wloc.href}`)
+console.log(`-CK-isCleanup=${admin.isCleanup} isLinux=${isLinux} sreenw=${screenwidth} host=${wloc.host} href=${wloc.href}`)
 emitter.on('yali-getPixByYM', (x) => setPixByYM(x))
 
 // ---- function section -----
