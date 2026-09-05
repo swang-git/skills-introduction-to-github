@@ -80,7 +80,7 @@ import PicDialog from '../pages/PicDialog.vue'
 import RoundButton from '../components/RoundButton.vue'
 import YearMonthPad from '../components/YearMonthPad.vue'
 import NumPad from '../components/NumPad.vue'
-const { isIM, buildApp, DEV_API } = libFunctions()
+const { isIM, buildApp, DEV_API, isLinux } = libFunctions()
 const { gaxios } = axiosFunctions()
 const admin = useAdminStore()
 
@@ -90,7 +90,7 @@ const perPage = ref(30)
 const total = ref(0)
 const lastPage = ref(total.value / perPage.value)
 const IMiconSZ = 177.8 // Mate60 Good for 2 columns
-const DKiconSZ = 136.1
+const DKiconSZ = isLinux ? 140 : 152.8
 const append = ref(true)
 const prepend = ref(false)
 const pageBegin = ref(1)
@@ -102,15 +102,15 @@ var years = []
 var yms = []
 
 // ---- main starts ----------
-console.log(`-ST-yali window.location.hostname=${window.location.hostname} lastPage=${lastPage.value} isIM=${isIM} pageBegin=${pageBegin.value}`)
+let wloc = window.location
+console.log(`-ST-yali host=${wloc.host} isLinux=${isLinux} lastPage=${lastPage.value} isIM=${isIM} pageBegin=${pageBegin.value}`)
 document.title = '娅莉硬笔画'
 emitter.on('yali-getPages', (x) => setPages(x))
 buildApp('娅莉硬笔画', 'yali')
 getPages(pageBegin.value, perPage.value)
 
 admin.isCleanup = ref(window.location.hostname == 'localhost')
-let wloc = window.location
-console.log(`-CK-isCleanup=${admin.isCleanup} hostname=${wloc.hostname} host=${wloc.host} href=${wloc.href}`)
+console.log(`-CK-isCleanup=${admin.isCleanup} isLinux=${isLinux} hostname=${wloc.hostname} host=${wloc.host} href=${wloc.href}`)
 emitter.on('yali-getPixByYM', (x) => setPixByYM(x))
 
 // ---- function section -----

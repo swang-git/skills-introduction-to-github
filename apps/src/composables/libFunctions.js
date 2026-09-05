@@ -43,14 +43,19 @@ export function libFunctions() {
   // function checkMate9 () { alert('is Mate9 ' + mate9()) }
   // function checkFone () { alert('is fone ' + fone()) }
   // function checkDesk () { alert('is Desk ' + desk()) }
-  function isfedora () {
-    const hostPatt = /http:\/\/(fedora|192.168.1.110)/gi
-    return hostPatt.test(window.location.href)
-  }
+  // function isfedora () {
+  //   const hostPatt = /http:\/\/(fedora|192.168.1.110)/gi
+  //   return hostPatt.test(window.location.href)
+  // }
   // function local () {
   //   const localhosts = /http:\/\/(prod|devx|divx|192.168.|localhost|127.0.0.1)/gi
   //   return localhosts.test(window.location.href)
   // }
+  function isLinux() {
+    const hostPatt = /http:\/\/(fedora|huaw|192.168.1.110|192.168.1.108|shengli.cn.mt)/gi
+    console.log(`-fn-isLinux href=${window.location.href}`)
+    return hostPatt.test(window.location.href)
+  }
   function isfedora() {
     const hostPatt = /http:\/\/(fedora|192.168.1.110)/gi
     return hostPatt.test(window.location.href)
@@ -257,7 +262,7 @@ export function libFunctions() {
     else if (n.length === 2) return '0.' + n
     else if (n.length >= 3) return parseInt(n) / 100.0
   }
-  const ENV_DEV = import.meta.env.DEV ? '/api' : '' 
+  const ENV_DEV = import.meta.env.DEV ? '/api' : ''
   return {
     getLineBackground,
     formatCurrency,
@@ -281,6 +286,7 @@ export function libFunctions() {
     isIM,
     isFone,
     isFedora,
+    isLinux,
     searchQuery,
     dats,
     dalist,

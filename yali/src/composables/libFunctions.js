@@ -213,6 +213,34 @@ export function libFunctions() {
     else if (n.length >= 3) return (parseInt(n) / 100.00)
   }
   const DEV_API = import.meta.env.DEV ? '/api' : ''
+
+  // function hostIsLinux() {
+  //   // const hostPatt = /http:\/\/(fedora|huaw|192.168.1.110|192.168.1.108|shengli.cn.mt)/gi
+  //   const hostname = window.location.hostname
+  //   const hostnames = /(huaw|fedora|192.168.1.110|192.168.1.108|69.248.188.20|shengli.cn.mt)/gi // remove g will work
+  //   console.log(`-fn-hostIsLinux hostname=${hostname} isLinux=${hostnames.test(hostname)}`)
+  //   return hostnames.test(hostname)
+  // }
+
+  function hostIsLinux() {
+    const hostname = window.location.hostname.toLowerCase()
+    const linuxHostList = [
+      'huaw',
+      'fedora',
+      '192.168.1.110',
+      '192.168.1.108',
+      '69.248.188.20',
+      'shengli.cn.mt'
+    ]
+    // Partial match (hostname contains the string)
+    const isLinux = linuxHostList.some(h => hostname.includes(h))
+    console.log(`-fn-hostIsLinux hostname=${hostname} isLinux=${isLinux}`)
+    return isLinux
+  }
+
+  const isLinux = hostIsLinux()
+  console.log(`-CK-from libFunctions isLinux=${isLinux} isDesk=${isDesk}`)
+
   return {
     getLineBackground,formatCurrency,fmtcy,deepClone,decimal2,
     isLocal,
@@ -229,6 +257,7 @@ export function libFunctions() {
     // AppAdmin,
     isDesk,
     isIM,
+    isLinux,
     isFone,
     searchQuery,
     dats,
