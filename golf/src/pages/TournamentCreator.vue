@@ -1,7 +1,7 @@
 <template>
 <div class="q-pa-md q-gutter-sm">
   <q-dialog v-model="opened" transition-show="scale" persistent :maximized='isIM'>
-    <q-layout container class="bg-teal-9" style="maxHeight:560px;maxWidth:400px">
+    <q-layout container class="bg-teal-9" style="max-height:560px;max-width:400px">
       <q-header elevated class="bg-teal-9 inset-shadow-down text-center">
         <q-toolbar>
           <q-toolbar-title v-if="action==='Create'"> Create Tournament </q-toolbar-title>
@@ -12,10 +12,11 @@
       <div class="q-pa-xs">
         <div class="q-gutter-y-xs q-pt-xl">
           <DateTimePicker :obj="tmnt" :dateTime="tmnt.start_at" txsz="text-h6" label="tournament start at" @upd-dt="setDateTime"/>
-          <selection :obj="tmnt" icon="filter_4"    iColor="amber" label="Select Game" :optList="gameNameList" />
-          <selection :obj="tmnt" icon="golf_course" iColor="red" label="Select Course" :optList="courseList" @set-opt="setOpt" />
-          <selection :obj="tmnt" icon="person_pin"  iColor="blue" label="Select Mens Tee" :optList="teeboxList" />
-          <selection :obj="tmnt" icon="person_pin_circle" iColor="pink" label="Select Lady Tee" :optList="teeboxList" />
+          <MySelection :obj="tmnt" icon="filter_4"    iColor="amber" label="Select Game" :optList="gameNameList" />
+          <!-- <MySelection :obj="tmnt" icon="golf_course" iColor="red" label="Select Course" :optList="courseList" @set-opt="setOpt" /> -->
+          <MySelection :obj="tmnt" icon="golf_course" iColor="red" label="Select Course" :optList="courseList" @get-TeeboxList="getTeeboxList" />
+          <MySelection :obj="tmnt" icon="person_pin"  iColor="blue" label="Select Mens Tee" :optList="teeboxList" />
+          <MySelection :obj="tmnt" icon="person_pin_circle" iColor="pink" label="Select Lady Tee" :optList="teeboxList" />
 
           <div class="row bg-teal-9">
             <numInput class="col-6" :obj="tmnt" icon="monetization_on" label="Green Fees" iColor="amber" />
@@ -46,11 +47,10 @@
 import emitter from 'tiny-emitter/instance'
 import { ref, onMounted } from 'vue'
 import { axiosFunctions } from '../composables/axiosFunctions'
-// import { dayFunctions } from '../composables/dayFunctions'
 import { libFunctions } from '../composables/libFunctions'
 import DateTimePicker from '../components/DateTimePicker.vue'
 import LayoutFooter from '../components/LayoutFooter.vue'
-import selection from '../components/MySelection.vue'
+import MySelection from '../components/MySelection.vue'
 import numInput from '../components/NumInput.vue'
 import txtInput from '../components/TxtInput.vue'
 import LnkInput from '../components/LnkInput.vue'
@@ -61,25 +61,14 @@ const { gaxios, paxios } = axiosFunctions()
 // const { getNNextSunday } = dayFunctions()
 const { isIM, ENV_API } = libFunctions()
 const tit = ref(null)
-// const gameName = ref(null)
-// const courseName = ref(null)
-// const mtee = ref(null)
-// const ltee = ref(null)
-// const gameDate = getNNextSunday().yyyymmdd()
-// const dialogResponse = ref(undefined)
 const courseList = ref([])
 const gameNameList = ref([])
 const teeboxList = ref([])
-// const tmnt = ref({ start_at:getNNextSunday() })
-// const tmnt = ref({note:'Tournament Notes'})
-const tmnt = ref({})
+const tmnt = ref({fees: 100, teetime_gap: 20 })
 const action = ref(null)
 const opened = ref(false)
-// const start_at = ref(getNNextSunday())
-// const game_id = ref(null)
 const refNotePad = ref(null)
 const refLnkInput = ref(null)
-// const note = ref('')
 
 onMounted(() => { refNotePad })
 console.log('-ST-TournamentCreator')
@@ -99,14 +88,14 @@ function updLinks(lnks) {
   tmnt.value.links = lnks.join('@')
 }
 function openIt (tt, bol, act) {
-  console.log('-fn-openIt act', act, tt)
+  console.log(`-fn-TmntCreator-openIt act=${act} courseId=${tt.course_id}`, tt)
   opened.value = bol
   action.value = act
   tit.value = 'Tournament'
   tmnt.value = tt
   tmnt.value.start_at = tt.start_at
-  let links = tmnt.value.links.split('@')
-  tmnt.value.links = links
+  // let links = tmnt.value.links.split('@')
+  // tmnt.value.links = links
   getCourseList()
   getGameNameList()
   if (tmnt.value.course_id > 0) getTeeboxList()
@@ -116,6 +105,7 @@ function setDateTime (dt) {
   tmnt.value.disptm = dt.substring(5, 10) + ' ' + dt.substring(9)
 }
 function setOpt (label, opt) {
+  console.log(`-CK-fn-setOpt label=${label}`, opt)
   if (label === 'Select Course') {
     tmnt.value.course_id = opt.value
     getTeeboxList()
@@ -143,7 +133,7 @@ function showLnkInput () {
   refLnkInput.value.openIt(tmnt.value.links)
 }
 function addTournament () {
-  console.log('addTournament() called')
+  console.log(`-fn-addTournament`)
   const path = ENV_API + '/golf/addTournament'
   console.log('addTournament inData', tmnt.value)
   paxios(path, tmnt.value)
@@ -160,13 +150,13 @@ function getCourseList () {
   gaxios(path)
 }
 function getTeeboxList () {
-  console.log('getTeeboxList() called course_id', tmnt.value.course_id)
+  console.log(`-fn-getTeeboxList course_id=${tmnt.value.course_id}`)
   if (tmnt.value.course_id === -1) this.$refs.addCourse.openIt()
   const path = ENV_API + '/golf/TeeboxList/' + tmnt.value.course_id
   gaxios(path)
 }
 function getGameNameList () {
-  // console.log('getGameNameList() called')
+  console.log('-fn-getGameNameList')
   const path = ENV_API + '/golf/GameNameList'
   gaxios(path)
 }

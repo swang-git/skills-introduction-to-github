@@ -219,7 +219,7 @@ import { dayFunctions } from '../composables/dayFunctions'
 import InfoDisplay from '../components/InfoDisplay.vue'
 import HolidayDialog from '../components/HolidayDialog.vue'
 
-const { store, JZsAdmin, KJsAdmin, ALsAdmin, SysAdmin, isIM, isDesk, PGCsAdmin, doGroup, pagename, userGuidePage, DEV_API, q } = libFunctions()
+const { store, router, JZsAdmin, KJsAdmin, ALsAdmin, SysAdmin, isIM, isDesk, PGCsAdmin, doGroup, pagename, userGuidePage, DEV_API, q } = libFunctions()
 const { yyyymmdd } = dayFunctions()
 
 const oneHour = 1000 * 60 * 60
@@ -345,7 +345,7 @@ function openApp(app, pageTitle, gameId = null) {
   // console.info(`-fn-openApp app=${appname.value}, pagename=${pagename.value}, pageTitle=${pageTitle.value}, gameId=${gameId.value}, SysAdmin=${SysAdmin.value}`)
   // this.$router.push({ path: app, params: { gameId: gameId } })
   // this.$router.push({ name: app, params: { gameId: gameId } })
-  // this.$router.push({ path: app })
+  // router.push({ path: app })
   window.location.href = appname.value
 }
 function reloadMatches(gameId) {

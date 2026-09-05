@@ -1,58 +1,13 @@
 <template>
 <div class="bg-teal-10">
-  <CardSelection v-if="activeGames.length > 1 && tmntId==0" :selections="activeGames" todo="Signup" @user-selected="userSelectedTmnt" />
-  <div v-if="tmntId>0" class="q-pt-none q-pl-xs">
-    <div class="row">
-      <q-chip size="18px" icon="people" color="red-5" text-color="white">{{ signerCount }}<q-tooltip class="bg-red text-white">Number of Peoples Signed up</q-tooltip></q-chip>
-      <q-chip size="18px" icon="golf_course" color="green" text-color="white">{{ playerCount }}<q-tooltip class="bg-green-8 text-white">Number of Peoples Golfing</q-tooltip></q-chip>
-      <q-chip size="18px" icon="restaurant" color="blue-7" text-color="white">{{ dinnerCount }}<q-tooltip class="bg-blue-7 text-white">Number of Peoples To Dinner</q-tooltip></q-chip>
-      <div class="q-pl-xs q-pt-xs">
-        <q-btn glossy rounded icon="add_circle" @click="showPlayerList" class="text-white bg-cyan-9" style="width:74px" />
-        <q-tooltip class="bg-blue-10 text-h6 text-white">Show Player List to Choose to Signup</q-tooltip>
-      </div>
-    </div>
-    <div>
-      <SelOptions ref="selOptions" @selected-option="addTournamentPlayer" />
-    </div>
-    <div style="margin:-28px 0 0 -8px">
-      <q-scroll-area style="height:1000px;padding:8px">
-        <div v-for="(p,i) in tList" :key=p.x>
-          <div class="row">
-            <q-btn @click="updTplayerActivity(p)" :color="getColor(p)" :icon="getIcon(p)" round glossy><q-tooltip class="bg-green-8 text-h6">Click to Update</q-tooltip></q-btn>
-              <q-btn v-if="sortby==='POY' || sortby==='NPY' || sortby==='GSC' || sortby ==='FPOY' || sortby ==='FNPY'" round outline size="sm" color="white"> {{p.label}} </q-btn>
-              <q-chip v-if="p.activity==='dinn'" class="name-chip bg-blue-9">
-                <q-tooltip class="bg-blue-9 text-h6">Dinner only for <div class="text-black">{{ p.fullname }}</div></q-tooltip>
-                <q-avatar><img :src="getAvatar(p)"></q-avatar><div class="text-body1">{{ p.fullname }}</div>
-              </q-chip>
-              <q-chip v-else-if="p.activity==='golf'" class="name-chip" :avatar="getAvatar(p)" color="green">
-                <q-tooltip class="bg-green-7 text-h6">Golf only for <div class="text-black">{{ p.fullname }}</div></q-tooltip>
-                <q-avatar> <img :src="getAvatar(p)" /></q-avatar><div class="text-body1">{{ p.fullname }}</div>
-              </q-chip>
-              <q-chip v-else class="name-chip" :avatar="getAvatar(p)" color="red">
-                <q-tooltip class="bg-red text-h6">Golf & Dinner for <div class="text-black">{{ p.fullname }}</div></q-tooltip>
-                <q-avatar> <img :src="getAvatar(p)" /></q-avatar><div class="text-body1">{{ p.fullname }}</div>
-              </q-chip>
-            <div v-if="SysAdmin">
-              <q-btn color="yellow" icon="cancel" round outline @click="delTournamentPlayer(p, i)" />
-            </div>
-            <div v-else>
-              <q-btn style="margin-left:-10px" v-if="sortby==='NPY' || sortby==='FNPY' || sortby==='PNM' || sortby==='GSC'" round outline color="white">
-                <q-tooltip class="bg-cyan-9 text-h6">your net playoff points</q-tooltip>{{p.npy}}</q-btn>
-              <q-btn style="margin-left:-1px" v-if="sortby==='POY' || sortby==='PNM' || sortby==='GSC' || sortby==='FPOY'" round outline color="yellow">
-                <q-tooltip class="bg-yellow text-h6 text-brown">your playoff points</q-tooltip>{{p.poy}}</q-btn>
-              <q-btn style="margin-left:-1px" v-if="sortby==='CDX' || sortby==='PNM' || sortby==='CDX' || sortby==='CDX'"  round outline color="white">
-                <q-tooltip class="bg-brown text-h6">your club index</q-tooltip>{{p.cdx}}</q-btn>
-              <q-btn v-if="sortby==='FNPY'" round outline size="md" color="yellow"> {{p.finalNPY}} </q-btn>
-              <q-btn v-if="sortby==='FPOY'" round outline size="md" color="yellow"> {{p.finalPOY}} </q-btn>
-              <q-btn v-if="sortby==='POY'"  round outline size="md" color="yellow"> {{p.FPOYpoint}} </q-btn>
-              <q-btn v-if="sortby==='NPY'"  round outline size="md" color="yellow"> {{p.FNPYpoint}} </q-btn>
-            </div>
-          </div>
-        </div>
-      </q-scroll-area>
-    </div>
+  <div class="row q-pl-lg">
+    <q-chip size="18px" icon="people" color="red-5" text-color="white">{{ signerCount }}<q-tooltip class="bg-red text-white">Number of Peoples Signed up</q-tooltip></q-chip>
+    <q-chip size="18px" icon="golf_course" color="green" text-color="white">{{ playerCount }}<q-tooltip class="bg-green-8 text-white">Number of Peoples Golfing</q-tooltip></q-chip>
+    <q-chip size="18px" icon="restaurant" color="blue-7" text-color="white">{{ dinnerCount }}<q-tooltip class="bg-blue-7 text-white">Number of Peoples To Dinner</q-tooltip></q-chip>
   </div>
-  <SignupDialog ref="refAddNewPlayer" @add-new-player="addTournamentPlayer" />
+  <CardSelection v-if="activeGames.length > 1 && tmntId==0" :selections="activeGames" todo="Signup" :tplayers="tPlayers" @open-signup-dialog="openSelectionDialog" />
+  <ModifyDialog @del-tplayer="delTplayer" @upd-tplayer="updTplayer" />
+  <SelectionDialog @new-tplayer="addNewTplayer"/>
 </div>
 </template>
 <script setup>
@@ -61,31 +16,22 @@ import emitter from 'tiny-emitter/instance'
 import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 const $router = useRouter()
-import { libFunctions } from '../../src/composables/libFunctions'
-const { $q, store, isDesk, SysAdmin, PGCAdmin, ENV_API } = libFunctions()
-import { axiosFunctions } from '../../src/composables/axiosFunctions'
+import { libFunctions } from '../composables/libFunctions'
+const { $q, store, isDesk, SysAdmin, ENV_API, PGCsAdmin } = libFunctions()
+import { axiosFunctions } from '../composables/axiosFunctions'
 const { paxios, gaxios } = axiosFunctions()
 
-import SignupDialog from './SignupDialog.vue'
-import CardSelection from '../../src/components/CardSelection.vue'
-import SelOptions from '../../src/components/SelOptionsWithSearch.vue'
+import CardSelection from '../components/CardSelection.vue'
+import ModifyDialog from '../components/ModifyDialog.vue'
+import SelectionDialog from '../components/SelectionDialog.vue'
 
 var year = (new Date()).getFullYear()
 var tmntId = 0
-var tPlayers = []
+const tPlayers = ref([])
 const playersForTournament = ref([])
-const player = null
-const playerId = null
-const sortby = 'PNM'
-// const sortOptions = []
-// const poyPlayers = []
-// const npyPlayers = []
+const allPlayers = ref([])
 var activeGames = ref([])
-// const selectedTid = -1
-// const isDone = false
 const refAddNewPlayer = ref(null)
-// const showSelectedGame = ref(false)
-// var tmnt = {}
 
 onMounted(() => refAddNewPlayer )
 console.log('-ST-Signup')
@@ -96,44 +42,62 @@ emitter.on('tmnt-id', (x) => tmntId = x)
 emitter.on('golf-UnexpiredTournaments', (x) => setUnexpiredTournaments(x))
 emitter.on('golf-getPlayersForTournament', (x) => setPlyaersForTournament(x))
 emitter.on('golf-getTournamentPlayersWithScores', (x) => setTournamentPlayersWithScores(x))
+emitter.on('golf-getValidGameTplayers', (x) => setValidGameTplayers(x))
+emitter.on('golf-getAllPlayers', (x) => setAllPlayers(x))
 getUnexpiredTournaments()
+getAllPlayers()
 
-const signerCount = computed(() => { return tPlayers.length })
-const dinnerCount = computed(() => { return tPlayers.filter(p => { return /dinn|both/.test(p.activity) }).length })
-const playerCount = computed(() => { return tPlayers.filter(p => { return /golf|both/.test(p.activity) }).length })
-const playersTobeAdded = computed(() => { return playersForTournament })
-
-const tournament = computed({
-  get: () => store.tournament,
-  set: t => store.tournament = t,
-})
-// const game = computed(() => { return tournament.value === null ? null : tournament.value.game })
-// const disptm = computed(() => { return tournament.value === null ? null : tournament.value.start_at })
-// const course = computed(() => { return tournament.value === null ? null : tournament.value.courseName })
-// const exportData = computed(() => {
-//   const dat = []
-//   tPlayers.forEach((p, i) => {
-//     const px = { id: i, player: p.player, activity: p.activity, notes: p.activity === 'dinn' ? 'Dinner Only' : '' }
-//     dat.push(px)
-//   })
-//   return dat
-// })
-const tList = computed(() => { return tPlayers })
-// const poyList = computed({
-//   get: () => doSortingPoyPlayers(),
-//   set: val => poyPlayers = val
-// })
+const signerCount = computed(() => { return tPlayers.value.length })
+const dinnerCount = computed(() => { return tPlayers.value.filter(p => { return /dinn|both/.test(p.activity) }).length })
+const playerCount = computed(() => { return tPlayers.value.filter(p => { return /golf|both/.test(p.activity) }).length })
+const tList = computed(() => { return tPlayers.value })
 
 //== function sections
+function updTplayer (ntp) {
+  console.log(`-fn-updTplayer ntp_name=${ntp.name}`, ntp)
+  tPlayers.value = tPlayers.value.map(elm => elm.player_id === ntp.player_id ? { ...elm, ...ntp} : elm)
+  const path = ENV_API + '/golf/addTournamentPlayer'
+  paxios(path, [ntp])
+}
+function delTplayer (tpid) {
+  console.log(`-fn-delTplayer tpid=${tpid}`)
+  tPlayers.value = tPlayers.value.filter(p => p.id != tpid)
+  const path = ENV_API + '/golf/delPGCTplayer/' + tpid
+  gaxios(path)
+}
+function addNewTplayer (tp) {
+  console.log(`-fn-addNewTplayer`, tp)
+  tPlayers.value.push(tp)
+}
+function openSelectionDialog (tmt, grp) {
+  const tplayerIds = tPlayers.value.map(p => p.player_id)
+  console.log(`-fn-openSelectionDialog grp=${grp}`, tplayerIds)
+  const players = allPlayers.value.map(p => ({ value: p.player_id, label: p.name })).filter(x => !tplayerIds.includes(x.value))
+  emitter.emit('open-SelectionDialog', 'add_circle', 'Signup Players', players, tmt, grp)
+}
+function setValidGameTplayers (da) {
+  tPlayers.value = da.tplayers
+  console.log(`-fn-setValidGameTplayers`, tPlayers.value)
+  // setCounts()
+}
+function getAllPlayers () {
+  console.log(`-fn-getAllPlayers`)
+  const path = ENV_API + '/golf/getAllPlayers'
+  gaxios(path)
+}
+function setAllPlayers (da) {
+  allPlayers.value = da.players
+  console.log(`-fn-setAllPlayers`, allPlayers.value)
+}
 function setTournamentPlayersWithScores (da) {
   console.log(`-CK-fn-setTournamentPlayersWithScores`, da)
   const tmnt = da.tmnt
     tournament.value = tmnt
     store.tournament = tmnt
     store.holes = tmnt.holes
-    tPlayers = da.tplayers
+    tPlayers.value = da.tplayers
     console.log('enter tmnt holes for tmnt', tmnt.holes)
-    tPlayers.forEach(p => {
+    tPlayers.value.forEach(p => {
       if (p.f9scores !== null) p.f9total = p.f9scores.reduce((x, y) => x + y)
       if (p.b9scores !== null) p.b9total = p.b9scores.reduce((x, y) => x + y)
       if (p.f9scores !== null && p.b9scores !== null) p.gstotal = p.f9total + p.b9total
@@ -141,16 +105,16 @@ function setTournamentPlayersWithScores (da) {
       if (p.b9total === 0) p.b9total = null
       if (p.gstotal === 0) p.gstotal = null
     })
-    console.log('tplayer', tPlayers, ' of tmnt ', tmnt)
+    console.log('tplayer', tPlayers.value, ' of tmnt ', tmnt)
     store.pageTitle = 'Signup ' + tmnt.game
 }
 function setPlyaersForTournament (da) {
   console.log(`-CK-fn-setPlyaersForTournament`, da)
   playersForTournament.value = da.lst
-  if (PGCAdmin) playersForTournament.value.push({ value:-1, label:'Add New Player' })
+  if (PGCsAdmin) playersForTournament.value.push({ value:-1, label:'Add New Player' })
 }
 function setUnexpiredTournaments (da) {
-  // console.log(`-CK-fn-setUnexpiredTournaments`, da)
+  console.log(`-CK-fn-setUnexpiredTournaments`, da.games)
   activeGames.value = da.games
   if (activeGames.value.length === 0) {
     $q.dialog({ title: 'there are no active games. Please ask the Admin to create the games/tournaments/outings etc..' })
@@ -158,12 +122,18 @@ function setUnexpiredTournaments (da) {
   } else if (activeGames.value.length === 1) {
     // showSelectedGame.value = true
     const tournament = activeGames.value[0]
-    showSignupPage(tournament.id)
+    // showSignupPage(tournament.id)
+    getPlayers4SignupPage(tournament)
   } else {
     console.log('-INFO-there are more than one active games, show them and let user to choose which one to signup')
     // console.log('-CK-activeGames')
     // showSelectedGame.value = false
     tmntId = 0
+  }
+  const tmntIds = da.games.map(p => p.id)
+  if (tmntIds.length > 0) {
+    const path = ENV_API + '/golf/getValidGameTplayers'
+    paxios(path, tmntIds)
   }
 }
 function getUnexpiredTournaments (gameName = 'ALL') {
@@ -237,9 +207,9 @@ function updTplayerActivity (p) {
 //     tournament.value = tmnt
 //     store.tournament = tmnt
 //     store.holes = tmnt.holes
-//     tPlayers = da.tplayers
+//     tPlayers.value = da.tplayers
 //     console.log('enter tmnt holes for tmnt', tournamentId, tmnt.holes)
-//     tPlayers.forEach(p => {
+//     tPlayers.value.forEach(p => {
 //       if (p.f9scores !== null) p.f9total = p.f9scores.reduce((x, y) => x + y)
 //       if (p.b9scores !== null) p.b9total = p.b9scores.reduce((x, y) => x + y)
 //       if (p.f9scores !== null && p.b9scores !== null) p.gstotal = p.f9total + p.b9total
@@ -247,36 +217,37 @@ function updTplayerActivity (p) {
 //       if (p.b9total === 0) p.b9total = null
 //       if (p.gstotal === 0) p.gstotal = null
 //     })
-//     console.log('tplayer', tPlayers, ' of tmnt ', tmnt)
+//     console.log('tplayer', tPlayers.value, ' of tmnt ', tmnt)
 //     store.pageTitle = 'Signup ' + tmnt.game
 //   } else if (target === 'golf.getTournamentPlayers') {
 //     console.log('-ab-getTournamentPlayers da', da)
-//     tPlayers = da.tplayers
+//     tPlayers.value = da.tplayers
 //   } else if (target === 'golf.addTournamentPlayer') {
 //     const addedPlayer = da.addedPlayer
 //     console.log('-ab-addTournamentPlayer', addedPlayer)
 //     if (addedPlayer.id > 0) {
-//       tPlayers.unshift(addedPlayer)
+//       tPlayers.value.unshift(addedPlayer)
 //       playersForTournament.value = playersForTournament.value.filter(p => p.value !== addedPlayer.pid)
 //     }
 //   } else if (target === 'golf.updTplayerActivity') {
 //     console.log('-ab-updTplayerActivity', da)
-//     tPlayers = da
+//     tPlayers.value = da
 //   }
 // }
-const refSelOptions = ref(null)
+// const refSelOptions = ref(null)
 function showPlayerList () {
-  refSelOptions.value.openIt('signup', 'Signup Tournament', playersTobeAdded)
+  // refSelOptions.value.openIt('signup', 'Signup Tournament', playersTobeAdded)
+  emitter.emit('open-SelOptionsWithSearch', 'signup', 'Signup Tournament', playersTobeAdded.value)
 }
 function userSelectedTmnt (tmnt) {
-  // console.log('-CK-fn-userSeleted tmnt', tmnt)
+  console.log('-CK-fn-userSeletedTmnt', tmnt)
   tournament.value = tmnt
   tmntId = tmnt.id
   year = tmnt.start_at.substring(0, 4)
-  showSignupPage(tmnt)
+  getPlayers4SignupPage(tmnt)
 }
 // function doSorting () {
-//   if (sortby === 'PNM') return tPlayers
+//   if (sortby === 'PNM') return tPlayers.value
 //   else if (sortby === 'GSC') return sortByGPN('GSC')
 //   else if (sortby === 'POY') return sortByGPN('POY')
 //   else if (sortby === 'FPOY') return sortFinalPoints('POY')
@@ -284,7 +255,7 @@ function userSelectedTmnt (tmnt) {
 //   else if (sortby === 'FNPY') return sortFinalPoints('NPY')
 // }
 // function sortByGPN (tag) {
-//   const data = tPlayers
+//   const data = tPlayers.value
 //   let showData = []
 //   data.forEach(p => {
 //     if (tag === 'GSC' && p.GSC > 0) showData.push(p)
@@ -367,7 +338,7 @@ function delTournamentPlayer (p, idx) {
   }).onOk(() => {
     let path = ENV_API + '/golf/delTournamentPlayer/' + p.id
     gaxios(path)
-    tPlayers.splice(idx, 1)
+    tPlayers.value.splice(idx, 1)
     signerCount.value--
     const toBeAddedPlayer = {}
     toBeAddedPlayer.label = player
@@ -385,9 +356,8 @@ function addTournamentPlayer (model, opt) {
   if (opt.label === 'Add New Player') {
     refAddNewPlayer.value.openIt('create', null)
   } else {
-    // player = opt.label
-    // playerId = opt.value
-    // model = model
+    const player = opt.label
+    const playerId = opt.value
     console.log('-CK-fn-addTournamentPlayer:', model, opt)
     const dx = $q.dialog({
       title: 'Options',
@@ -405,7 +375,7 @@ function addTournamentPlayer (model, opt) {
         ]
       }
     })
-    console.log('-CK-fn-player:', playerId, player)
+    console.log(`-CK-fn-player playerId=${playerId} player=${player}`)
     dx.onOk(() => {
       const inData = {}
       inData.tmntId = store.tournament.id
@@ -413,9 +383,10 @@ function addTournamentPlayer (model, opt) {
       inData.playerId = playerId
       inData.fullname = player
       inData.year = year
-      // inData.activity = option
+      inData.activity = 'both'
       inData.status = 'A'
       // inData = [inData] // to be able to re-use upserTplayers at the backend
+      console.log(`-fn-addTournamentPlayer`, inData)
       const path = ENV_API + '/golf/addTournamentPlayer'
       paxios(path, [inData])
       playersForTournament.value = playersForTournament.value.filter(p => p.value !== playerId)
@@ -441,14 +412,14 @@ function addTournamentPlayer (model, opt) {
 //   return data
 // }
 // function getFakeGSC () {
-//   const cnt = tPlayers.length
+//   const cnt = tPlayers.value.length
 //   for (let i = 0; i < cnt; i++) {
 //     const gsc = Math.floor((Math.random() * 30) + 72)
-//     tPlayers[i].GSC = gsc
+//     tPlayers.value[i].GSC = gsc
 //   }
 // }
-function showSignupPage (tmt) {
-  // console.log('-CK-fn-showSignUpPage stored tmnt', tmt)
+function getPlayers4SignupPage (tmt) {
+  console.log('-CK-fn-showSignUpPage stored tmnt', tmt)
   year = tmt.year
   const tid = tmt.id
   let path = ENV_API + '/golf/getPlayersForTournament/' + tid

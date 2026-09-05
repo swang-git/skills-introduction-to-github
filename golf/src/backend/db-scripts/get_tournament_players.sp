@@ -1,3 +1,28 @@
+DELIMITER $$
+CREATE DEFINER=`swang`@`localhost` PROCEDURE `get_tournament_players`(IN `tid` INT, IN `pid` INT)
+BEGIN
+
+CALL create_tmp_table_poy_point(tid, -1);     
+
+SELECT tp.id, concat(p.lastname, ', ', p.firstname) as fullname, p.gender, activity, 
+        tp.gross_score as GSC, tp.player_id as playerId, tp.pos, 
+        DATE_FORMAT(tp.created_at, '%Y-%m-%d %H:%i') AS signed_at,
+        py.poy, tp.captain, tp.grp
+
+FROM tplayers tp
+JOIN tournaments tt ON tp.tournament_id = tt.id
+JOIN players p ON tp.player_id = p.id
+LEFT JOIN tmp_poy_point py ON py.id = p.id
+
+WHERE tp.status in ('A', 'Y') AND tp.tournament_id = tid AND p.status = 'A' AND CASE WHEN pid>0 THEN tp.player_id = pid ELSE tp.player_id>0 END 
+AND CASE WHEN tt.start_at >= DATE_FORMAT(now(), '%Y-%m-%d') THEN tp.player_id>0 ELSE tp.gross_score > 0 END
+
+ORDER BY captain desc, fullname;
+END$$
+DELIMITER ;
+
+
+============================
 CREATE DEFINER=`swang`@`%` PROCEDURE `get_tournament_players`(tid INT, pid INT)
 BEGIN
 

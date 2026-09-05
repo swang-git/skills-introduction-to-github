@@ -249,11 +249,15 @@ trait IraActivityTrait {
         // $quan = explode('$', $lines[$ni + 5])[0];
         // $pric = explode('$', $lines[$ni + 5])[1];
         // $amnt = $this->cleanMoney($lines[$ni + 7]);
-        $quan = $this->cleanMoney($lines[$ni + 5]);
-        $pric = $this->cleanMoney($lines[$ni + 6]);
-        $cost = $this->cleanMoney($lines[$ni + 7]);
+        // $quan = $this->cleanMoney($lines[$ni + 5]);
+        // $pric = $this->cleanMoney($lines[$ni + 6]);
+        $x = explode('$', $lines[$ni + 5]);
+        $quan = $this->cleanMoney($x[0]);
+        $pric = $this->cleanMoney($x[1]);
+        $cost = $this->cleanMoney($lines[$ni + 6]);
         $transaction_cost = $lines[$ni + 8];
-        $amnt = $this->cleanMoney($lines[$ni + 9]);
+        // $amnt = $this->cleanMoney($lines[$ni + 9]);
+        $amnt = $this->cleanMoney($lines[$ni + 12]);
         $x = [
           $date,
           $security,

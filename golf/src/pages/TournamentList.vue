@@ -1,112 +1,40 @@
 <template>
   <div style="background: rgb(28, 68, 78); overflow: auto">
-    <q-toolbar-title v-if="PGCsAdmin">
-      <q-btn
-        glossy
-        color="teal-10"
-        label="create new tournament"
-        icon="add_circle"
-        @click="addTournament"
-        style="float: right; margin: 3px 0 0 0"
-      />
+    <!-- <q-toolbar-title v-if="PGCsAdmin"> -->
+    <q-toolbar-title>
+      <q-btn flat color="cyan-3" label="create new tournament" @click="addTournament" class="text-h6 q-pl-lg q-pt-sm" />
     </q-toolbar-title>
     <div v-for="(t, i) in tmntList" :key="t.id">
-      <q-expansion-item
-        dark
-        header-style="font-size:18px"
-        :icon="getIcon(t)"
-        :label="t.year + ' ' + t.game + ' ' + t.disptm + ' ' + t.courseName"
-        group="group"
-      >
+      <q-expansion-item dark header-style="font-size:18px" :icon="getIcon(t)" :label="t.year + ' ' + t.game + ' ' + t.disptm + ' ' + t.courseName" group="group">
         <q-card class="bg-teal-9 text-white">
           <q-card-section>
             <ul style="font-size: 18px; line-height: 1.3">
               <!-- <li v-show="isActive(t)">Game on <span style="color:black">{{ t.disptm.replace(' ', ' start at ') }}</span> </li> -->
-              <li
-                >Game on
-                <span class="text-amber">{{
-                  t.disptm.replace(' ', ' start at ')
-                }}</span>
-              </li>
+              <li>Game on <span class="text-amber">{{ t.disptm.replace(' ', ' start at ') }}</span></li>
               <li>Men's tee: {{ t.mtee }} </li>
               <li>Ladies tee: {{ t.ltee }} </li>
               <li>Fees: ${{ t.fees }} </li>
-              <li v-if="t.teetime_gap == 0"
-                >Shutgun Start at: {{ t.disptm.substring(6, 11) }}</li
-              >
+              <li v-if="t.teetime_gap == 0" >Shutgun Start at: {{ t.disptm.substring(6, 11) }}</li>
               <li v-else>Teetime Gap: {{ t.teetime_gap }} </li>
               <!-- <li v-if="t.note != null">Notes: {{ t.note }} </li> -->
-              <li v-if="t.note != null"
-                ><q-btn
-                  rounded
-                  outline
-                  no-caps
-                  label="Tournament Notes"
-                  @click="showTournamentNotes(t)"
-              /></li>
-              <li v-if="t.links != null"
-                ><q-btn
-                  rounded
-                  outline
-                  no-caps
-                  label="Tournament Links"
-                  @click="showTournamentLinks(t)"
-              /></li>
+              <li v-if="t.note != null">
+                <q-btn rounded outline no-caps label="Tournament Notes" @click="showTournamentNotes(t)"/>
+              </li>
+              <li v-if="t.links != null">
+                <q-btn rounded outline no-caps label="Tournament Links" @click="showTournamentLinks(t)" />
+              </li>
             </ul>
           </q-card-section>
           <q-separator />
           <q-toolbar-title v-if="!isActive(t)">
-            <q-btn
-              v-if="PGCsAdmin"
-              glossy
-              icon="edit"
-              label="edit game"
-              @click="updTournament(t)"
-              color="blue"
-              style="margin: 5px 0 0 0; float: left"
-            />
-            <q-btn
-              glossy
-              icon="score"
-              label="score / index"
-              @click="showScores(t)"
-              color="secondary"
-              style="margin: 5px 0 0 18px"
-            />
-            <q-btn
-              v-if="isTodayGame(t)"
-              glossy
-              icon="score"
-              label="enter scores"
-              @click="showEnterScores(t)"
-              color="primary"
-              style="margin: 5px 0 0 0; float: right"
-            />
+            <q-btn v-if="PGCsAdmin" glossy icon="edit" label="edit game" @click="updTournament(t)" color="blue" style="margin: 5px 0 0 0; float: left" />
+            <q-btn glossy icon="score" label="score / index" @click="showScores(t)" color="secondary" style="margin: 5px 0 0 18px" />
+            <q-btn v-if="isTodayGame(t)" glossy icon="score" label="enter scores" @click="showEnterScores(t)" color="primary" style="margin: 5px 0 0 0; float: right" />
           </q-toolbar-title>
           <q-card-actions v-if="isActive(t) || PGCsAdmin" align="between">
-            <q-btn
-              glossy
-              icon="delete"
-              label="delete"
-              @click="delTournament(t, i)"
-              color="red"
-              v-if="PGCsAdmin"
-            />
-            <q-btn
-              glossy
-              icon="assignment"
-              @click="showSignup(t)"
-              color="primary"
-              label="Signup"
-            />
-            <q-btn
-              glossy
-              icon="update"
-              label="Update"
-              @click="updTournament(t)"
-              color="purple"
-              v-if="PGCsAdmin"
-            />
+            <q-btn glossy icon="delete" label="delete" @click="delTournament(t, i)" color="red" v-if="PGCsAdmin" />
+            <q-btn glossy icon="assignment" @click="showSignup(t)" color="primary" label="Signup" />
+            <q-btn glossy icon="update" label="Update" @click="updTournament(t)" color="purple" v-if="PGCsAdmin" />
           </q-card-actions>
         </q-card>
       </q-expansion-item>
@@ -118,16 +46,16 @@
 import { ref } from 'vue'
 // import { useStore } from 'vuex'
 // import { useQuasar } from 'quasar'
-// import { useRouter } from 'vue-router'
+import { useRouter } from 'vue-router'
 import emitter from 'tiny-emitter/instance'
 
 import { libFunctions } from '../composables/libFunctions'
 import { dayFunctions } from '../composables/dayFunctions'
 import { axiosFunctions } from '../composables/axiosFunctions'
 const { gaxios, paxios } = axiosFunctions()
-const { PGCsAdmin, store, $q, $router, ENV_API } = libFunctions()
-const { gameExpired, todayGame, getNNextSunday } = dayFunctions()
-// const router = useRouter()
+const { PGCsAdmin, store, $q, ENV_API } = libFunctions()
+const { gameExpired, todayGame, getNNextSunday, yyyymmdd } = dayFunctions()
+const $router = useRouter()
 // const store = useStore()
 // const q = useQuasar()
 
@@ -141,26 +69,40 @@ const tmntList = ref([])
 const selectedIdx = ref(-1)
 const selectedTmnt = ref({})
 const golf_usertype = ref(null)
+const tplayers = ref({})
 
 store.pageTitle = 'Tournament List'
 store.page = 'TournamentList'
-emitter.on('golf-usertype', x => {
-  golf_usertype.value = x
-})
-emitter.on('golf-getTournamentList', x => {
-  tmntList.value = x.lst
-})
+emitter.on('golf-usertype', x => { golf_usertype.value = x })
+emitter.on('golf-getTournamentList', x => { setTournamentList(x) })
+emitter.on('golf-getValidGameTplayers', x => { setValidGameTplayers(x) })
 // emitter.on('usertype', (x) => { this.usertype = x })
 // emitter.emit('sys-admin', 'SysAdmin')
-console.log(
-  `-ST-TournamentList pageTitle=${store.pageTitle} page=${store.page}`
-)
-loadData()
+console.log(`-ST-TournamentList pageTitle=${store.pageTitle} page=${store.page}`)
+getTournamentList()
 
-function loadData() {
-  console.log(`-CK-fn-loadData`)
+function getValidGameTplayers () {
+  // const tmntIds = [1337, 1338, 1339, 1341]
+  const today = yyyymmdd(new Date())
+  const tmntIds = tmntList.value.filter(x => x.start_at >= today).map(p => p.id)
+  console.log(`-fn-getValidGameTplayers today=${today}`, tmntIds)
+  const path = ENV_API + '/golf/getValidGameTplayers'
+  paxios(path, tmntIds)
+}
+function setValidGameTplayers (da) {
+  console.log(`-CK-fn-setValidGameTplayers`, da.tplayers)
+  // da.tplayers.forEach( p => { tplayers } )
+  tplayers.value = da.tplayers
+}
+function getTournamentList() {
+  console.log(`-CK-fn-getTournamentList`)
   const path = ENV_API + '/golf/getTournamentList'
   gaxios(path)
+}
+function setTournamentList(da) {
+  console.log(`-fn-setTournamentList`)
+  tmntList.value = da.lst
+  getValidGameTplayers()
 }
 
 function showTournamentNotes(tmnt) {
@@ -193,7 +135,9 @@ function showSignup(tmnt) {
   // this.$store.state.golf.tournament = tmnt
   // this.$store.state.golf.showSelectedGame = true
   // console.log('stored tournament', store.state.golf.tournament)
-  $router.push({ path: '/SignupVue/' + tmnt.id })
+  // $router.push({ path: '/Signup/', params: { tournmentId: tmnt.id }})
+  $router.push({ path: 'Signup'})
+    // window.location.href = '/Signup/' + tmnt.id
 }
 function showScores() {
   // var tournamentId = tmnt.id
@@ -220,9 +164,13 @@ function updTournament(tmnt) {
   emitter.emit('open-TournamentCreator', tmnt, true, 'Update')
 }
 function addTournament() {
-  // this.opened = false
+  console.log(`-fn-addTournament PGCsAdmin=${PGCsAdmin.value}`)
+  if (!PGCsAdmin.value) {
+    const tit = "Ask 胜利 for Help"
+    const msg = "Only PGCsAdmin Can Create Tournament"
+    return emitter.emit('open-InfoDisplay', tit, msg)
+  }
   act.value = 'add'
-  console.log('addTournament called')
   const newTmnt = {}
   const nxd = getNNextSunday()
   const ymd = nxd.yyyymmdd()
@@ -234,7 +182,7 @@ function addTournament() {
   newTmnt.mtee = 'mtee name to be selected'
   newTmnt.ltee = 'ltee name to be selected'
   newTmnt.fees = 100
-  newTmnt.teetime_gap = 10
+  newTmnt.teetime_gap = '12/10' //12 groups starts at every 10 minutes
   // newTmnt.game_id = 0
   // newTmnt.course_id = 0
   // this.tmntList.unshift(newTmnt)

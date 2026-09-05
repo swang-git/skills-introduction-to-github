@@ -9,7 +9,7 @@
       <q-separator />
 
       <div class="q-pa-xs">
-        <q-input class="bg-teal-10" standout bottom-slots v-model="searchQuery" label="Search Courses by Name" dense dark>
+        <q-input class="bg-teal-10" standout bottom-slots v-model="searchQuery" label="Search Players by Name" dense dark>
           <template v-slot:prepend>
             <q-icon name="search" color="white" />
           </template>
@@ -84,7 +84,7 @@ function selectedOpt (opt) {
   opened.value = false
 }
 function openIt (iname, md, opts) {
-  console.log('-CK-fn-openIt', md)
+  console.log(`-CK-fn-openIt iname=${iname}, model=${md}`, opts)
   searchQuery.value = null
   cspOptions.value = opts
   model.value = md

@@ -332,6 +332,7 @@ Route::group (
     Route::get('RoundList/{playerId}', 'GolfController@getRoundList');
     Route::get('delRound/{scoreId}',   'GolfController@delRound');
     Route::get('/getTplayers/{tid}',   'GolfController@getTplayers');
+    Route::post('getValidGameTplayers',  'GolfController@getValidGameTplayers');
     Route::get('/getTeamMatchPlayers/{tid}/{gameId}/{gameDate}', 'GolfController@getTeamMatchPlayers');
     Route::post('/saveGrouping',  'GolfController@saveGrouping');
     Route::post('/saveTeamMatch', 'GolfController@saveTeamMatch');
@@ -358,7 +359,7 @@ Route::group (
     Route::post('saveTplayerScore', 'GolfController@saveTplayerScore');
     Route::post('setTmntNumGroups', 'GolfController@setTmntNumGroups');
     Route::post('addTplayers', 'GolfController@addTplayers');
-    Route::get ('getPlayers', 'GolfController@getPlayers');
+    // Route::get ('getPlayers', 'GolfController@getPlayers');
     Route::post('upsertTplayers', 'GolfController@upsertTplayers');
     Route::post('updTeamMatchTplayer', 'GolfController@updTeamMatchTplayer');
     Route::get ('delTplayer/{Id}/{tmntId}', 'GolfController@delTplayer');

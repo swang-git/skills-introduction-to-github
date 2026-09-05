@@ -2,6 +2,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use DateTime;
+use DateInterval;
 
 use App\Models\golf\MatchPlayerHandicap;
 use App\Models\golf\MatchPlayer;
@@ -188,7 +190,8 @@ class GolfController extends Controller {
 	}
 	public function delTplayer($Id, $tmntId) { Log:info("delTplayer $Id $tmntId");
 		Tplayer::destroy($Id);
-		return $this->getTplayers($tmntId);
+		if ($tmntId > 0) return $this->getTplayers($tmntId);
+		else return ['status', "OK"];
 	}
 	public function updUserGuide(Request $da) { Log:info("updUserGuide", $da->toArray());
     $dm = Userguide::find($da['id']);
@@ -330,8 +333,13 @@ class GolfController extends Controller {
 		);
 		return $this->getTplayers($d['tmntId']);
 	}
+	public function getValidGameTplayers(Request $tmntIds) { Log::info("-fn-getTplayers", $tmntIds->toArray());
+        $tplayers = Tplayer::where('status', 'A')->whereIn('tournament_id', $tmntIds)->select('id', 'tournament_id', 'year', 'game_id', 'name', 'player_id', 'captain', 'activity')->get();
+        Log::info("tplayers", $tplayers->toArray());
+        return ['tplayers' => $tplayers, 'status' => "OK"];
+    }
 	// public function getPlayers(Request $da) { Log:info('getPlayers');
-	public function getPlayers() { Log:info('getPlayers');
+	public function getAllPlayers() { Log:info('getAllPlayers');
 		// $p = Player::where('status', 'A')->select('id as player_id', 'gender', CONCAT('lastname', ', ', 'firstname') as fullname)->get();
 		// $lst = DB::select("select id as player_id, gender, null as captain, null as grp, CONCAT(lastname, ', ', firstname) as name from players where status='A'");
 		$lst = DB::select("select id as player_id, gender, null as captain, null as grp, lastname, firstname, CONCAT(lastname, ', ', firstname) as name from players where status='A'");
@@ -1442,11 +1450,12 @@ class GolfController extends Controller {
 		$tplayers = Collect(DB::select("CALL get_tournament_players(?,-1)", [$da->tmntId]));
 		return $tplayers;
 	}
-	public function getTournamentPlayers($tid) {
+	public function getTournamentPlayers($tid) { Log::info("-fn-getTournamentPlayers");
 		// $status = 'notDone';
 		$tplayers = [];
 		$tournament = Collect(DB::select("CALL get_tournaments(?)", [$tid]))[0]; //dd($tournament);
 		$tplayers = Collect(DB::select("CALL get_tournament_players(?,-1)", [$tid]));
+		Log::info("tplayers", $tplayers->toArray());
 		foreach($tplayers as $tp) {
 			$da = Collect(DB::select("CALL get_player_club_index_and_progress(?, ?)", [$tid, $tp->playerId]))[0];
 			$tp->cdx = $da->club_index;
@@ -1505,7 +1514,7 @@ class GolfController extends Controller {
 		$tplayers = DB::select("CALL get_tplayers(?)", [$tid]);
 		return [ 'tplayers' => $tplayers, 'status' => "OK" ];
 	}
-	public function getTournamentPlayersWithScores($tid) {
+	public function getTournamentPlayersWithScores($tid) { Log::info("-fn-getTournamentPlayersWithScores");
 		// $status = 'notDone';
 		$da = $this->getTournamentPlayers($tid);
 		$tournament = $da['tmnt'];
@@ -1796,8 +1805,22 @@ class GolfController extends Controller {
 			$ds->save();
 		}
 	}
-	public function addTournament(Request $da) { //Log::info('adding Tournament', $da->toArray());
-		$teeTimes = $da['teeTimes'];
+	private function getTeeTimes($start_at, $teetime_gap) { Log::info("-fn-getTeeTimes start_at=$start_at, teetime_gap=$teetime_gap");
+		$ngrp = explode('/', $teetime_gap)[0];
+		$tgap = explode('/', $teetime_gap)[1];
+		$dt = new DateTime($start_at);
+		$teetimes = [];
+		$teetimes[] = $start_at;
+		while (--$ngrp > 0) {
+			$dt->modify("+10 minutes");
+			$teetimes[] = $dt->format('Y-m-d H:i');
+		}
+		Log::info("ngrp=$ngrp tgap=$tgap", $teetimes);
+		return $teetimes;
+	}
+	public function addTournament(Request $da) { Log::info('-fn-addTournament', $da->toArray());
+		// $teeTimes = $da['teeTimes'];
+		$teeTimes = $this->getTeeTimes($da['start_at'], $da['teetime_gap']);
 		$dm = null;
 		foreach ($teeTimes as $i => $ttm) {
 			$dm = new Tournament;
@@ -2499,23 +2522,23 @@ class GolfController extends Controller {
 		$tmntId = -1;
 		$vals = [];
 		foreach($da->toArray() as $d) {
-			$tmntId = $d['tmntId'];
-			$status = $d['status'];
+			$tmntId = $d['tournament_id'];
+			// $status = $d['status'];
 			// $captain = $d['captain'] == 1 ? 1 : null;
 			// $grp = $d['grp'] > 0 ? $d['grp'] : null;
 			$actv = $d['activity'];
-			// $x = [ 'id' => $d['id'], 'tournament_id' => $tmntId, 'year' => $d['year'], 'game_id' => $d['gameId'], 'player_id' => $d['playerId'], 'player' => $d['fullname'], 'grp' => $grp, 'captain' => $captain ];
-			$x = [ 'tournament_id' => $tmntId, 'year' => $d['year'], 'game_id' => $d['gameId'], 'player_id' => $d['playerId'], 'player' => $d['fullname'], 'activity' => $actv, 'status' => $status ];
+			$x = [ 'tournament_id' => $tmntId, 'grp' => $d['grp'], 'captain' => $d['captain'], 'year' => $d['year'], 'game_id' => $d['game_id'], 'player_id' => $d['player_id'], 'name' => $d['name'], 'activity' => $actv ];
 			array_push($vals, $x);
 		}
 		Log::info('upsert vals', $vals);
 		Tplayer::upsert(
 			$vals,
 			['tournament_id', 'player_id'],
-			['activity', 'status'],
+			['activity', 'captain', 'grp'],
 		);
-		return $this->getTournamentPlayers($tmntId);
+		return ['status' => "OK"];
 	}
+
 	public function XXXXaddTournamentPlayer(Request $da) { Log::info('addTournamentPlayer', $da->toArray());
 		$tmntId = $da['tmntId'];
 		$playerId = $da['playerId'];

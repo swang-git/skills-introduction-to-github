@@ -45,7 +45,7 @@ function getPropertyKey () {
   if (props.label === 'Total Cost') return 'cost'
   else if (props.label === 'Gift Card Balance') return 'gcardVal'
   else if (props.label === 'Gift Card Number') return 'gcardNum'
-  else if (props.label === 'Green Fee') return 'fees'
+  else if (props.label === 'Green Fees') return 'fees'
   else if (props.label === 'Won or Lost') return 'quan'
   else if (props.label === 'Teetime Gap') return 'ttgap'
   else if (props.label === 'Num of Groups') return 'numGroup'

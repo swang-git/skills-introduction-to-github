@@ -1,101 +1,27 @@
 <template>
   <q-dialog v-model="opened" transition-show="slide-right">
-    <q-layout
-      container
-      class="bg-teal-10"
-      style="height: 440px; width: 400px"
-      :style="action == 'upd' ? 'height:490px' : 'height:440px'"
-    >
-      <layoutHeader>
-        <template #lbtn
-          ><q-btn
-            v-if="action == 'add' || action == 'upd'"
-            icon="chevron_left"
-            round
-            glossy
-            color="amber-10"
-            v-close-popup
-        /></template>
-        <template #ctit
-          ><q-toolbar-title class="text-center text-h5">{{ title }}</q-toolbar-title></template
-        >
-        <template #rbtn
-          ><q-btn
-            v-if="action == 'upd'"
-            icon="delete"
-            round
-            glossy
-            color="red"
-            @click="action = doAction('del')"
-        /></template>
-      </layoutHeader>
+    <q-layout container class="bg-teal-10" style="height: 440px; width: 400px" :style="action == 'upd' ? 'height:490px' : 'height:440px'">
+      <LayoutHeader>
+        <template #lbtn><q-btn v-if="action == 'add' || action == 'upd'" icon="chevron_left" round glossy color="amber-10" v-close-popup /></template>
+        <template #ctit><q-toolbar-title class="text-center text-h5">{{ title }}</q-toolbar-title></template>
+        <template #rbtn><q-btn v-if="action == 'upd'" icon="delete" round glossy color="red" @click="action = doAction('del')" /></template>
+      </LayoutHeader>
       <q-page-container class="q-pa-xs">
         <div v-if="isDesk" class="row">
-          <DateTimePicker
-            class="q-pa-xs"
-            label="Match Starting Date Time"
-            :obj="tmnt"
-            txsz="text-h6"
-            :dateTime="teeTime"
-            @upd-dt="setDateTime"
-          />
+          <DateTimePicker class="q-pa-xs" label="Match Starting Date Time" :obj="tmnt" txsz="text-h6" :dateTime="teeTime" @upd-dt="setDateTime" />
         </div>
         <div v-else>
-          <DateTimeIMPicker
-            class="q-pa-xs"
-            label="Match Starting Date Time"
-            :obj="tmnt"
-            txsz="text-h6"
-            :dateTime="teeTime"
-            @upd-dt="setDateTime"
-          />
+          <DateTimeIMPicker class="q-pa-xs" label="Match Starting Date Time" :obj="tmnt" txsz="text-h6" :dateTime="teeTime" @upd-dt="setDateTime" />
         </div>
-        <sel
-          :obj="tmnt"
-          iColor="green"
-          icon="golf_course"
-          label="Select Course"
-          :optList="courseList"
-          @get-TeeboxList="getTeeboxList"
-        />
-        <sel
-          :obj="tmnt"
-          iColor="cyan-2"
-          icon="person_pin"
-          label="Select Mens Tee"
-          :optList="teeboxList"
-          :disable="!tmnt.courseName"
-          @do-action="mat"
-        />
-        <sel
-          :obj="tmnt"
-          iColor="pink-4"
-          icon="person_pin"
-          label="Select Lady Tee"
-          :optList="teeboxList"
-          :disable="!tmnt.courseName"
-        />
-        <num
-          class="q-pa-xs"
-          :obj="tmnt"
-          icon="monetization_on"
-          label="Green Fee"
-          mask="#.##"
-          iColor="amber"
-        />
-        <txt :obj="tmnt" iColor="cyan-3" icon="note" label="Notes" />
+        <MySelection :obj="tmnt" iColor="green" icon="golf_course" label="Select Course" :optList="courseList" @get-TeeboxList="getTeeboxList" />
+        <MySelection :obj="tmnt" iColor="cyan-2" icon="person_pin" label="Select Mens Tee" :optList="teeboxList" :disable="!tmnt.courseName" @do-action="mat" />
+        <MySelection :obj="tmnt" iColor="pink-4" icon="person_pin" label="Select Lady Tee" :optList="teeboxList" :disable="!tmnt.courseName" />
+        <NumInput class="q-pa-xs" :obj="tmnt" icon="monetization_on" label="Green Fee" mask="#.##" iColor="amber" />
+        <TxtInput :obj="tmnt" iColor="cyan-3" icon="note" label="Notes" />
       </q-page-container>
-      <layoutFooter class="inset-shadow-down" v-if="tmnt.mtee != null && action == 'upd'">
-        <template #lbtn
-          ><q-btn rounded glossy icon="chevron_left" color="amber-10" label="cancel" v-close-popup
-        /></template>
-        <template #rbtn
-          ><q-btn rounded glossy icon-right="update" color="pink-10" label="update" @click="upd()"
-        /></template>
-      </layoutFooter>
+      <LayoutFooter act="update" @do-action="upd" />
     </q-layout>
     <ConfirmDialog @user-confirmed="delFromDB" @user-cancelled="opened = false" />
-    <!-- <NumPad ref="refNumPad" @num-teetimes="setNumTeetimes" @teetime-gap="setTeetimeGap" /> -->
     <NumPad ref="refNumPad" @set-teetimes="setTeeTimes" />
     <TimeTable ref="refTimeTable" @save-teetimes="createGames" />
   </q-dialog>
@@ -104,11 +30,11 @@
 import emitter from 'tiny-emitter/instance'
 import DateTimePicker from '../components/DateTimePicker.vue'
 import DateTimeIMPicker from '../components/DateTimeIMPicker.vue'
-import sel from '../components/MySelection.vue'
-import layoutFooter from '../components/LayoutFooter.vue'
-import layoutHeader from '../components/LayoutHeader.vue'
-import num from '../components/NumInput.vue'
-import txt from '../components/TxtInput.vue'
+import MySelection from '../components/MySelection.vue'
+import LayoutFooter from '../components/LayoutFooter.vue'
+import LayoutHeader from '../components/LayoutHeader.vue'
+import NumInput from '../components/NumInput.vue'
+import TxtInput from '../components/TxtInput.vue'
 import compDialog from '../components/DialogComponent.vue'
 import ConfirmDialog from '../components/ConfirmDialog.vue'
 import NumPad from '../components/NumPad.vue'
@@ -120,7 +46,7 @@ import { libFunctions } from '../composables/libFunctions'
 import { axiosFunctions } from '../composables/axiosFunctions'
 
 const $q = useQuasar()
-const { yyyymmddHHMM, getDay2 } = dayFunctions()
+const { yyyymmddHHMM, getDay2, getDay1 } = dayFunctions()
 const { isDesk, isIM, ENV_API } = libFunctions()
 const { gaxios, paxios } = axiosFunctions()
 const gameName = ref(null)
@@ -186,10 +112,10 @@ function openIt(inTmnt, act) {
   getGameNameList()
 
   if (act === 'add') {
-    title.value = isIM ? 'Create New Game' : 'Create New Game (' + getDay2(tmnt.start_at) + ')'
+    title.value = isIM ? 'Create New Game' : 'Create New Game (' + getDay1(tmnt.start_at) + ')'
     // footerTit.value = 'Set Number of Teetimes'
   } else if (act === 'upd') {
-    title.value = isIM ? 'Update the Game' : 'Update the Game (' + getDay2(tmnt.start_at) + ')'
+    title.value = isIM ? 'Update the Game' : 'Update the Game (' + getDay1(tmnt.start_at) + ')'
     gameName.value = tmnt.game
     courseName.value = tmnt.courseName
     // mtee.value = tmnt.mtee

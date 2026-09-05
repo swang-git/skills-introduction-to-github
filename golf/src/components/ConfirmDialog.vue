@@ -8,7 +8,8 @@
       </q-card-section>
 
       <q-card-section>
-        <span class="text-h6 text-black">{{ msg }}</span>
+        <!-- <span class="text-h6 text-black">{{ msg }}</span> -->
+        <div class="text-h5 text-cyan-10" v-html="msg" />
       </q-card-section>
 
       <q-card-actions align="right">
