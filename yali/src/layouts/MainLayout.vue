@@ -87,12 +87,12 @@ const admin = useAdminStore()
 
 const data = ref([])
 const hasMore = ref(true)
-const perPage = ref(isIM ? 6 : 30)
+const perPage = ref(isIM ? 20 : 30)
 const total = ref(0)
 const lastPage = ref(total.value / perPage.value)
 // const IMiconSZ = 177.8 // Mate60 Good for 2 columns
 // const DKiconSZ = isLinux ? 140 : 152.8
-const IMiconSZ = computed(() => { return ($q.screen.width - 33) / 2 }) // for 2 columns
+const IMiconSZ = computed(() => { return ($q.screen.width - 48) / 4 }) // for 2 columns
 const DKiconSZ = computed(() => { return ($q.screen.width - 66) / 6 })
 const append = ref(true)
 const prepend = ref(false)
