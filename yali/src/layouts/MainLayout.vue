@@ -3,7 +3,7 @@
     <q-header>
       <q-toolbar class="bg-teal-10 glossy">
         <q-toolbar-title>
-          <div class="row justify-evenly q-pt-sm">
+          <div v-if="isDesk" class="row justify-evenly q-pt-sm">
             <RoundButton size="16px" icon="幅" clas="q-pb-xs" colr="indigo-9" style="margin-top:5px" iclr="yellow" ttip="设置每页的画幅数" @click="openNumPad('per-page')" />
             <div v-if="ym!=null" class="text-center cursor-pointer text-whit q-pt-sm text-h4" @click="loadRandomPage">婭莉画展 <span class="text-h5">({{ ym }})</span>
               <q-tooltip class="text-h4 text-lime bg-red">跳转随机画页</q-tooltip>
@@ -22,7 +22,7 @@
               <RoundButton size="16px" icon="尾" clas="q-pb-sm" colr="red-10" iclr="yellow" ttip="just the last page" @click="getLastPage" />
             </q-card-actions>
           </q-card>
-          <q-card v-else class="bg-teal-10" style="margin-top:10px">
+          <q-card v-else class="bg-teal-10">
             <q-card-actions align="between">
               <RoundButton size="16px" icon="头" clas="q-pb-sm" :colr="pageBegin==1 && numPages==1 ? 'pink-3' : 'red-10'" iclr="yellow" ttip="just show the first page" @click="getFirstPage" />
               <RoundButton size="16px" icon="upload" :colr="pageBegin+numPages>lastPage ? 'pink-3' : 'red-10'" iclr="yellow" ttip="appending next page(on end)" @click="appnNextPage" />
@@ -37,7 +37,7 @@
     </q-header>
 
     <div class="q-pt-md"> <!-- prevent from moving up for first time reloading-->
-      <q-card class="flex flex-center bg-cyan-10" style="margin-top:102px">
+      <q-card class="flex flex-center bg-cyan-10" :style="{marginTop: isDesk ? '106px' : '56px'}">
         <q-card-actions align="between">
           <div v-for="(p, idx) in data" :key="p" class="q-px-xs">
             <img v-if="isIM" :src="getThumbnailURL(p.fnm)" :height=IMiconSZ :width=IMiconSZ class="q-pt-xs cursor-pointer" @click="showFullImage(idx)" loading="lazy" />
@@ -51,6 +51,16 @@
     <q-footer>
       <q-toolbar class="bg-teal-10">
         <q-toolbar-title>
+          <div v-if="isIM" class="row justify-evenly">
+            <RoundButton size="16px" icon="幅" clas="q-pb-xs" colr="indigo-9" style="margin-top:5px" iclr="yellow" ttip="设置每页的画幅数" @click="openNumPad('per-page')" />
+            <div v-if="ym!=null" class="text-center cursor-pointer text-whit q-pt-sm text-h4" @click="loadRandomPage">婭莉画展 <span class="text-h5">({{ ym }})</span>
+              <q-tooltip class="text-h4 text-lime bg-red">跳转随机画页</q-tooltip>
+            </div>
+            <div v-else class="text-center cursor-pointer text-whit q-pt-sm text-h4" @click="loadRandomPage">婭莉画展 <span class="text-h6">(共{{ total }}幅)</span>
+              <q-tooltip class="text-h4 text-lime bg-red">跳转随机画页</q-tooltip>
+            </div>
+            <RoundButton size="16px" icon="月" clas="q-pb-xs" colr="indigo-9" style="margin-top:5px" iclr="yellow" ttip="跳到某年某月" @click="openYmPad" />
+          </div>
           <q-card class="bg-teal-10" style="margin-top:10px">
             <q-card-actions align="between">
               <RoundButton v-if="isDesk" size="16px" icon="头" clas="q-pb-sm" colr="red-10" iclr="yellow" ttip="just show the first page" @click="getFirstPage" />
