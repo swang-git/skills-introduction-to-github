@@ -82,11 +82,10 @@
           </q-scroll-area>
         </q-drawer>
       </div> -->
-      <!-- <div v-if="isDesk && !isIM && curApp!='tvmanager'"> -->
       <div v-if="isDesk">
         <q-drawer v-model="drawer" :mini="isDesk ? true : !drawer || miniState" :width="230" :breakpoint="393" show-if-above class="q-pr-sm bg-teal-10 text-h5 text-cyan-2">
           <q-scroll-area class="fit" style="font-family:youyuan">
-            <q-list style="width:50px">
+            <q-list style="width:0">
               <AppItem appl="日 常 消 费" colr="purple-9" iclr="yellow" size="27px" styl="margin: 0 0 0 1.5px" icon="monetization_on" @click="openApp('exlist')" />
               <AppItem appl="采 购 清 单" colr="indigo-9" iclr="white"  size="27px" styl="margin: 3pxpx 0 0 0" icon="add_shopping_cart" appn="shopping" />
               <AppItem appl="温 馨 提 示" colr="teal-9"   iclr="white"  size="27px" styl="margin: 0 0 0 1.5px" icon="schedule" @click="openApp('reminder')" />
