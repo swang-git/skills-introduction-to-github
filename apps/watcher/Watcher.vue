@@ -1,6 +1,7 @@
 <template>
-<div style="display:grid;place-items:center" class="bg-teal-9">
-  <div style="margin:-1px 0 0 5px;width:812px;border:cyan solid 1px">
+<div style="display:grid;place-items:center" class="bg-teal-10">
+  <div style="margin:-1px -10px 0 -10px;width:812px;border:cyan solid 1px">
+  <!-- <div style="width:812px;border:cyan solid 1px" class="q-mx-xs"> -->
     <div v-for="(e, i) in palist" :key=e.id>
       <div :style="getLineBackground(i)" :class="{ 'bg-purple-10':!e.hideIt }" class="q-px-xs">
         <div class="row cursor-pointer;q-qx-sm" style="font-size:20.1px">
@@ -19,8 +20,8 @@
           <div class="q-pl-sm text-right"><q-icon :name="getIcon(i)" @click="showDar(e, 'add')" /></div>
         </div>
       </div>
-      <div :class="{ hidden: e.hideIt }" class="row q-pa-sm" style="color:yellow;font-size:18px">
-        <div class="q-pl-xs" :class="{ 'col-9':portfNote.length>0, 'col-10':portfNote.length<=0 }" style="font-size:18px;line-height:1.1">
+      <div :class="{ hidden: e.hideIt }" class="row q-pa-sm" style="color:yellow;font-size:22px">
+        <div class="q-pl-md" :class="{ 'col-9':portfNote.length>0, 'col-10':portfNote.length<=0 }" style="line-height:1.1">
           <q-tr><td class="text-no-wrap text-right">公斤:</td><td class="q-pl-xs">{{ (e.kilo).toFixed(2) }}</td></q-tr>
           <q-tr><td class="text-no-wrap text-right">市斤:</td><td class="q-pl-xs">{{ (e.kilo * 2).toFixed(2)  }}</td></q-tr>
           <q-tr><td class="text-no-wrap text-right">英磅:</td><td class="q-pl-xs">{{ formatCurrency(getPondx(e)) }}</td></q-tr>
@@ -34,7 +35,9 @@
           <q-tr><td class="text-no-wrap text-right">S&P 500: </td><td class="q-pl-xs">{{ formatCurrency(e.sp500) }} </td></q-tr>
           <q-tr><td class="text-no-wrap text-right">FTSE 100: </td><td class="q-pl-xs">{{ formatCurrency(e.ftse100) }} </td></q-tr>
           <q-tr><td class="text-no-wrap text-right">NIKKEI 225: </td><td class="q-pl-xs">{{ formatCurrency(e.nikkei) }} </td></q-tr>
-          <q-tr v-if="e.note!=null"><td class="text-cyan-2 text-h6 cursor-pointer" colspan="2" @click="showPNote(e)" v-html="e.note"></td></q-tr>
+          <q-tr v-if="e.note!=null" class="e-note">
+            <td class="text-cyan-2 text-h6 cursor-pointer" colspan="2" @click="showPNote(e)" v-html="e.note"></td>
+          </q-tr>
           <q-tr><td class="text-no-wrap text-right">Link: </td><td class="q-pl-xs" v-html="getDocLink(e.date)" /></q-tr>
           <q-tr v-if="e.date>=startedDate"><td class="text-no-wrap text-grey-5 text-right">注释: </td><td class="q-pl-xs text-grey-6">{{ startedNote }}</td></q-tr>
         </div>
@@ -306,6 +309,9 @@ function setPositions (da) {
 }
 </script>
 <style>
+.e-note {
+  background:navy;
+}
 a.alnkclass {
   text-decoration: none;
   color: lightcyan;
