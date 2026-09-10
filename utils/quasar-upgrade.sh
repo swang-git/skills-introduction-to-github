@@ -1,5 +1,7 @@
 #!/bin/bash
 
+[[ $1 == "-h" ]] && echo "Usage: qupd check for checking quasar upgrade arts only" && exit
+
 logFile="/Users/swang/tmp/qupd-arts.log"
 if [[ "$1" == "check" ]]; then
     cd ~/sites/projects/arts
