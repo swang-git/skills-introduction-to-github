@@ -6,7 +6,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Arr;
 // use Illuminate\Support\Facades\File;
+
 
 class YaliController extends Controller
 {
@@ -14,7 +16,22 @@ class YaliController extends Controller
     // private string $drawingsPath = 'drawings';
     // private string $drawingsPath = '/Users/swang/sites/webdata/pics/yali/thumbnails';
     // private string $thumbnailsPath = 'thumbnails';
-    
+
+     /**
+     * get rondam pic
+     */
+    public function getRandomPic() { Log::info("-fn-getRandomPic");
+        // Get all drawing files
+        $allFiles = $this->getDrawingFiles();
+        // $total = count($allFiles);
+        // $rfile = $allFiles[array_rand($allFiles)];
+        $rfile = Arr::random($allFiles);
+        $rat = getimagesize($rfile)[0] / getimagesize($rfile)[1];
+        $rfile = "/pics/yali/". basename($rfile);
+        Log::info("random file: $rfile");
+        return ['randomFile' => $rfile, 'rat' => $rat, 'status' => "OK"];
+    }
+
     /**
      * Scan filesystem and paginate results and filtered by year
      */

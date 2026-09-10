@@ -7,7 +7,7 @@
     <!-- <img alt="Quasar logo" src="~assets/quasar-logo-vertical.svg" style="width:200px; height:200px" /> -->
     <!-- <img alt="Quasar logo" src="/assets/quasar-logo-vertical.svg" style="width:200px; height:200px" /> -->
     <!-- <img alt="Quasar logo" src="icons/materal.png" style="width:200px; height:200px" /> -->
-    <q-card-actions align="between">
+    <q-card-actions align="between" style="margin-top:-150px">
       <RoundButton size="22px" icon="monetization_on" clas="q-ma-xs" colr="purple-10" iclr="yellow" ttip="日 常 消 费" @click="openApp('exlist')" />
       <RoundButton size="22px" icon="add_shopping_cart" clas="q-ma-xs" colr="indigo-10" ttip="采 购 清 单" @click="openApp('shopping')" />
       <RoundButton size="22px" icon="schedule" clas="q-ma-xs" colr="cyan-10" iclr="amber" ttip="温 馨 提 示" @click="openApp('reminder')" />
@@ -36,6 +36,9 @@
     <!-- <LoginAdmin /> -->
     <UserList ref="refUserList" />
   </q-card>
+  <q-card class="q-mx-sm">
+    <img :src="picurl" style="margin-top:-150px" />
+  </q-card>
   <PlatformDataPad ref="refPlatformDataPad" />
 </template>
 <script setup>
@@ -45,7 +48,7 @@ import { useRouter } from 'vue-router'
 const router = useRouter()
 
 import { libFunctions } from '../../src/composables/libFunctions'
-const { isFedora, buildApp, store, $q, userType, AppAdmin, ENV_DEV } = libFunctions()
+const { isFedora, buildApp, store, $q, userType, AppAdmin, isDesk, ENV_DEV } = libFunctions()
 import { axiosFunctions } from '../../src/composables/axiosFunctions'
 const { gaxios } = axiosFunctions()
 
@@ -55,20 +58,60 @@ import UserList from '../../users/UserList.vue'
 import PlatformDataPad from '../components/PlatformDataPad.vue'
 
 const refPlatformDataPad = ref(null)
+const piclnk = ref(null)
+const rat = ref(null)
 
 const refUserList = ref(null)
 const compVer = computed(() => { return import.meta.env.VITE_BUILD_TAG == null ? '测' : import.meta.env.VITE_BUILD_TAG })
+const picurl = computed(() => { return piclnk.value })
 
 console.log(`-ST-Index bg-img=${getBackgroundImg().backgroundImage} isFedora=${isFedora}`)
 // logout()
 buildApp('Apps Home', '家庭应用')
 emitter.on('user-type', (x) => userType.value = x)
 emitter.on('open-app', (x) => openApp(x))
+emitter.on('yali-getRandomPic', (x) => setRandomPic(x))
 // emitter.on('apps-logout', () => logout())
 onMounted(() => {
   console.log(refUserList.value)
   console.log(refPlatformDataPad.value)
 })
+
+getRandomPic()
+
+function getPicStyle () {
+  let trans = "left: 50%; top: 50%; transform: translate(-50%, -50%)"
+  if (!isDesk) return trans // + ';' + bgimg
+  console.log(`-fn-getStyle rat=${rat.value}`)
+  let imgAspectRatio = rat.value
+  let viewW = ($q.screenwidth - 40)
+  let viewH = ($q.screenheight - 540) // top bar + bottom bar = 60 + 60 = 100px
+  let viewAspectRatio = viewW / viewH
+  let stystr = ''
+  // console.log(`-CK- viewAspectRatio=${viewAspectRatio} imgAspectRatio=${imgAspectRatio} imgW=${imgW} viewW=${viewW} imgH=${imgH} viewH=${viewH}`)
+  // console.log(`-CK- viewAspectRatio=${viewAspectRatio} imgAspectRatio=${imgAspectRatio} 1/imgAspectRation=${1/imgAspectRatio}`)
+  if (viewAspectRatio > 1) {
+    stystr = 'width:' + viewW / 1.2 + 'px'
+    if (imgAspectRatio < 1) stystr = 'height:' + viewH + 'px'
+  } else if (viewAspectRatio < 1) {
+    stystr = 'height:' + viewH + 'px'
+    if (imgAspectRatio > 1) stystr = 'width:' + viewW + 'px'
+  } else {
+    stystr = imgAspectRatio >= 1 ? 'width:' + viewW + 'px' : 'height:' + viewH + 'px'
+  }
+  return stystr + ";" + trans + ";" + "margin-top:350px"
+}
+
+function setRandomPic (da) {
+  console.log(`-fn-setRandomFile rat=${rat} randomFile=${da.randomFile}`)
+  piclnk.value = ENV_DEV + da.randomFile
+  rat.value = da.rat
+}
+
+function getRandomPic () {
+  const path = ENV_DEV + '/yali/getRandomPic'
+  gaxios(path)
+}
 
 function getBackgroundImg() {
   return {
@@ -105,7 +148,7 @@ function openApp(app) {
     ].includes(app) && !AppAdmin.value
   ) {
     return login(app)
-  } else { 
+  } else {
     console.log(`-CK-openApp ${app}`)
     router.replace({ path: app })
   }
