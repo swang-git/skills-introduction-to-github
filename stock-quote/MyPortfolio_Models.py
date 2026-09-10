@@ -20,9 +20,18 @@ def get_connection(database):
 
 
 # =============================================================================
-# 1. MYSQL TABLE MODEL: HealthRecord (YOUR EXACT SCHEMA)
+# 0. MYSQL TABLE MODEL: GlucoseCheck (YOUR EXACT SCHEMA)
 # =============================================================================
 Base = declarative_base()
+class GlucoseCheck(Base):
+    __tablename__ = "glucose_checks"
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    datetime = Column(DATETIME, nullable=False, index=True)
+    weight = Column(DECIMAL(4, 1), nullable=False)
+
+# =============================================================================
+# 1. MYSQL TABLE MODEL: HealthRecord (YOUR EXACT SCHEMA)
+# =============================================================================
 class HealthRecord(Base):
     __tablename__ = "health_records"
     id = Column(Integer, primary_key=True, autoincrement=True)
@@ -33,6 +42,7 @@ class HealthRecord(Base):
     FTSE100 = Column(DECIMAL(12, 3), nullable=False)
     NIKKEI = Column(DECIMAL(12, 3), nullable=False)
     portfolio = Column(DECIMAL(12, 3), nullable=False)
+    weight = Column(DECIMAL(12, 3), nullable=False)
 
 # =============================================================================
 # 2. MYSQL TABLE MODEL: MyPortfolio (YOUR EXACT SCHEMA)

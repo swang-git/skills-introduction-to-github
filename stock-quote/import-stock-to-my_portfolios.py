@@ -4,6 +4,8 @@ import yfinance as yf
 import sys, pprint, time
 from datetime import datetime, date, timedelta
 from decimal import Decimal
+from sqlalchemy import desc
+
 # from dataclasses import dataclass
 
 # @dataclass
@@ -21,7 +23,7 @@ from decimal import Decimal
 # print(obj.name)  # Bob
 
 from Utils import padsp, get_data_from_table, build_dict, get_meta, get_quantity, get_total_cost, get_basis_price, get_last_portfolio, wkdayname, TeeFS
-from MyPortfolio_Models import get_connection, CSV_TO_DB_MAP, TYPE_CONVERTERS, MyPortfolio, HealthRecord, StockQuote
+from MyPortfolio_Models import get_connection, CSV_TO_DB_MAP, TYPE_CONVERTERS, MyPortfolio, HealthRecord, GlucoseCheck, StockQuote
 
 import argparse
 parser = argparse.ArgumentParser()
@@ -34,6 +36,13 @@ testing = args.test
 print("database:", database)
 print('testing...') if testing else None
 # sys.exit(0)
+
+def get_weight(db):
+    wt = None
+    wt_row = db.query(GlucoseCheck).order_by(desc(GlucoseCheck.datetime)).limit(1).first()
+    if wt_row: wt = wt_row.weight
+    print('wt=[%s]'%wt)
+    return wt
 
 def show_stock_data(row):
     leng = 15
@@ -174,16 +183,18 @@ def import_indices(db, cursor, date):
     dowj = dbx['DOW_JONES']
     nasd = dbx['NASDAQ']
     sp500 = dbx['SP500']
+    dbx['weight'] = get_weight(db) * Decimal('0.45359237')
+    wt = dbx['weight']
     if existing:
         # Update all fields
         for key, value in dbx.items():
             setattr(existing, key, value)
-        print(f"🔄 Upd | date: {date} | Dow Jones: {dowj} | Nasdaq: {nasd} | SP500: {sp500}")
+        print(f"🔄 Upd | date: {date} | Dow Jones: {dowj} | Nasdaq: {nasd} | SP500: {sp500} | weight: {wt}")
     else:
         # Create new record (NO __init__ needed!)
         new_record = HealthRecord(**dbx)
         db.add(new_record)
-        print(f"✅ Add | date: {date} | Dow Jones: {dowj} | Nasdaq: {nasd} | SP500: {sp500}")
+        print(f"✅ Add | date: {date} | Dow Jones: {dowj} | Nasdaq: {nasd} | SP500: {sp500} | weight: {wt}")
     # Save all changes
     db.commit()
     print(f"🎉 Indices imported successfully!")
@@ -231,12 +242,14 @@ if __name__ == "__main__":
 
     db, conn = get_connection(database)
     cursor = conn.cursor()
+    # get_weight(db); sys.exit(0)
     # get_last_portfolio(cursor); sys.exit(0)
 
     # ASOF_TIME = datetime(2026, 5, 7, 14, 30, 0)
     today = date.today()
     ASOF_TIME = datetime(today.year, today.month, today.day, 16, 30, 0)
 
+    # import_indices(db, cursor, today); sys.exit(0)
     if not testing: import_indices(db, cursor, today)
 
     meta_dict = get_meta(cursor)

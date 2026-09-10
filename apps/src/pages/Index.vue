@@ -7,7 +7,7 @@
     <!-- <img alt="Quasar logo" src="~assets/quasar-logo-vertical.svg" style="width:200px; height:200px" /> -->
     <!-- <img alt="Quasar logo" src="/assets/quasar-logo-vertical.svg" style="width:200px; height:200px" /> -->
     <!-- <img alt="Quasar logo" src="icons/materal.png" style="width:200px; height:200px" /> -->
-    <q-card-actions align="between" style="margin-top:-150px">
+    <q-card-actions align="between" style="margin-top:0px">
       <RoundButton size="22px" icon="monetization_on" clas="q-ma-xs" colr="purple-10" iclr="yellow" ttip="日 常 消 费" @click="openApp('exlist')" />
       <RoundButton size="22px" icon="add_shopping_cart" clas="q-ma-xs" colr="indigo-10" ttip="采 购 清 单" @click="openApp('shopping')" />
       <RoundButton size="22px" icon="schedule" clas="q-ma-xs" colr="cyan-10" iclr="amber" ttip="温 馨 提 示" @click="openApp('reminder')" />
@@ -36,9 +36,9 @@
     <!-- <LoginAdmin /> -->
     <UserList ref="refUserList" />
   </q-card>
-  <q-card class="q-mx-sm">
+  <!-- <q-card class="q-mx-sm">
     <img :src="picurl" style="margin-top:-150px" />
-  </q-card>
+  </q-card> -->
   <PlatformDataPad ref="refPlatformDataPad" />
 </template>
 <script setup>
@@ -112,15 +112,19 @@ function getRandomPic () {
   const path = ENV_DEV + '/yali/getRandomPic'
   gaxios(path)
 }
-
+function getHeight () {
+  return ($q.screen.height - 60)+ 'px'
+}
 function getBackgroundImg() {
   return {
-    backgroundImage: 'url("' + ENV_DEV + '/apps/assets/bg-img-purple.png"' + ')',
+    backgroundImage: 'url("' + picurl.value + '")',
+    // backgroundImage: 'url("' + ENV_DEV + '/apps/assets/bg-img-purple.png"' + ')',
     // backgroundImage: 'url("' + ENV_DEV + '/apps/assets/material.svg"' + ')',
-    backgroundSize: 'cover',
-    backgroundPosition: 'center',
-    backgroundRepeat: 'no-repeat',
-    height: '400px'
+    // backgroundSize: 'cover',
+    // backgroundPosition: 'center',
+    // backgroundRepeat: 'no-repeat',
+    width: ($q.screen.width - 60) + 'px',
+    height: getHeight()
   }
 }
 
