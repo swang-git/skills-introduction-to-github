@@ -7,7 +7,8 @@
     <!-- <img alt="Quasar logo" src="~assets/quasar-logo-vertical.svg" style="width:200px; height:200px" /> -->
     <!-- <img alt="Quasar logo" src="/assets/quasar-logo-vertical.svg" style="width:200px; height:200px" /> -->
     <!-- <img alt="Quasar logo" src="icons/materal.png" style="width:200px; height:200px" /> -->
-    <q-card-actions align="between" style="margin-top:0px">
+    <!-- <q-card-actions align="between" :style="getTopAlign()"> -->
+    <q-card-actions align="between" style="margin-top:-10px">
       <RoundButton size="22px" icon="monetization_on" clas="q-ma-xs" colr="purple-10" iclr="yellow" ttip="日 常 消 费" @click="openApp('exlist')" />
       <RoundButton size="22px" icon="add_shopping_cart" clas="q-ma-xs" colr="indigo-10" ttip="采 购 清 单" @click="openApp('shopping')" />
       <RoundButton size="22px" icon="schedule" clas="q-ma-xs" colr="cyan-10" iclr="amber" ttip="温 馨 提 示" @click="openApp('reminder')" />
@@ -36,9 +37,9 @@
     <!-- <LoginAdmin /> -->
     <UserList ref="refUserList" />
   </q-card>
-  <!-- <q-card class="q-mx-sm">
-    <img :src="picurl" style="margin-top:-150px" />
-  </q-card> -->
+  <q-card class="q-mx-sm">
+    <img :src="picurl" style="margin-top:-10px" />
+  </q-card>
   <PlatformDataPad ref="refPlatformDataPad" />
 </template>
 <script setup>
@@ -79,6 +80,10 @@ onMounted(() => {
 
 getRandomPic()
 
+function getTopAlign () {
+  // return 'margin-top:-733px'
+  return 'margin-top:' + ($q.screen.height - 555) + 'px'
+}
 function getPicStyle () {
   let trans = "left: 50%; top: 50%; transform: translate(-50%, -50%)"
   if (!isDesk) return trans // + ';' + bgimg
@@ -117,14 +122,15 @@ function getHeight () {
 }
 function getBackgroundImg() {
   return {
-    backgroundImage: 'url("' + picurl.value + '")',
-    // backgroundImage: 'url("' + ENV_DEV + '/apps/assets/bg-img-purple.png"' + ')',
+    // backgroundImage: 'url("' + picurl.value + '")',
+    backgroundImage: 'url("' + ENV_DEV + '/apps/assets/bg-img-purple.png"' + ')',
     // backgroundImage: 'url("' + ENV_DEV + '/apps/assets/material.svg"' + ')',
-    // backgroundSize: 'cover',
-    // backgroundPosition: 'center',
-    // backgroundRepeat: 'no-repeat',
-    width: ($q.screen.width - 60) + 'px',
-    height: getHeight()
+    backgroundSize : 'cover',
+    backgroundPosition: 'center',
+    backgroundRepeat: 'no-repeat',
+    // width: ($q.screen.width - 60) + 'px',
+    // height: getHeight()
+    height: 400
   }
 }
 

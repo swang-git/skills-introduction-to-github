@@ -1,6 +1,6 @@
 #!/bin/bash
 
-[[ "$1" == "-h" ]] && echo "Usage: qupd check for checking quasar upgrade arts only; upd update all" && exit
+[[ "$1" == "-h" ]] && echo "Usage: 'qupd check': checking/upgrade arts only; 'qupd upd_rest' upgrade yali/golf/apps; 'qupd upd_all' upgrade all" && exit
 
 HOME_DIR="/Users/swang"
 PROJECTS_DIR="/Users/swang/sites/projects"
@@ -17,8 +17,16 @@ if [[ "$1" == "check" ]]; then
     quasar upgrade -i | tee $logFile 2>&1
 fi
 
+if [ "$1" == "upd_all" ]; then
+    cd $PROJECTS_DIR/arts
+    echo "  ✅ -- Upgrading $PROJECTS_DIR/art"
+    quasar upgrade -i |tee $logFile 2>&1
+elif [ -f "$logFile" ]; then
+    echo "$logFile exists -- which already upgraded, exit..."
+fi
+
 logFile="$HOME_DIR/tmp/qupd-yali.log"
-if [ "$1" == "upd" ]; then
+if [ "$1" == "upd_rest" -o "$1" == "upd_all" ]; then
     cd $PROJECTS_DIR/yali
     echo "  ✅ -- Upgrading $PROJECTS_DIR/yali"
     quasar upgrade -i |tee $logFile 2>&1
@@ -27,7 +35,7 @@ elif [ -f "$logFile" ]; then
 fi
 
 logFile="$HOME_DIR/tmp/qupd-golf.log"
-if [ "$1" == "upd" ]; then
+if [ "$1" == "upd_rest" -o "$1" == "upd_all" ]; then
     cd $PROJECTS_DIR/golf
     echo "  ✅ -- Upgrading $PROJECTS_DIR/golf"
     quasar upgrade -i |tee $logFile 2>&1
@@ -36,7 +44,7 @@ elif [ -f "$logFile" ]; then
 fi
 
 logFile="$HOME_DIR/tmp/qupd-apps.log"
-if [ "$1" == "upd" ]; then
+if [ "$1" == "upd_rest" -o "$1" == "upd_all" ]; then
     cd $PROJECTS_DIR/apps
     echo "  ✅ -- Upgrading $PROJECTS_DIR/apps"
     quasar upgrade -i |tee $logFile 2>&1
