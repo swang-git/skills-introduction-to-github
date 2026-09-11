@@ -8,6 +8,7 @@
     <div class="text-center"><slot name="ctit" /></div>
     <div><slot name="rbtn"/></div>
     <q-btn v-if="tit==null" rounded glossy :label="act" color="indigo-9" class="q-mx-xs" size="16px" dense icon-right="update" @click="doAction" />
+    <!-- <q-btn v-else-if="tit==null && act=='add'" rounded glossy :label="act" color="indigo-9" class="q-mx-xs" size="16px" dense icon-right="create" @click="doAction" /> -->
   </q-card-actions>
 </q-card>
 </template>

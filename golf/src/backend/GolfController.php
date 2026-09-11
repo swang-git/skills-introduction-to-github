@@ -1820,7 +1820,8 @@ class GolfController extends Controller {
 	}
 	public function addTournament(Request $da) { Log::info('-fn-addTournament', $da->toArray());
 		// $teeTimes = $da['teeTimes'];
-		$teeTimes = $this->getTeeTimes($da['start_at'], $da['teetime_gap']);
+		// $teeTimes = $this->getTeeTimes($da['start_at'], $da['teetime_gap']);
+		$teeTimes = $da['teeTimes'];
 		$dm = null;
 		foreach ($teeTimes as $i => $ttm) {
 			$dm = new Tournament;

@@ -1,10 +1,10 @@
 <template>
   <q-dialog v-model="opened" transition-show="slide-right">
-    <q-layout container class="bg-teal-10" style="height: 440px; width: 400px" :style="action == 'upd' ? 'height:490px' : 'height:440px'">
+    <q-layout container class="bg-teal-10" style="height: 440px; width: 400px" :style="action == 'upd' ? 'height:505px' : 'height:460px'">
       <LayoutHeader>
-        <template #lbtn><q-btn v-if="action == 'add' || action == 'upd'" icon="chevron_left" round glossy color="amber-10" v-close-popup /></template>
-        <template #ctit><q-toolbar-title class="text-center text-h5">{{ title }}</q-toolbar-title></template>
-        <template #rbtn><q-btn v-if="action == 'upd'" icon="delete" round glossy color="red" @click="action = doAction('del')" /></template>
+        <template #lbtn><q-btn v-if="action=='add' || action=='upd'" act="action" icon="chevron_left" round glossy color="amber-10" v-close-popup /></template>
+        <template #ctit><q-toolbar-title class="text-center text-h5 text-cyan-3">{{ title }}</q-toolbar-title></template>
+        <template #rbtn><q-btn v-if="action=='upd'" icon="delete" round glossy color="red" @click="action = doAction('del')" /></template>
       </LayoutHeader>
       <q-page-container class="q-pa-xs">
         <div v-if="isDesk" class="row">
