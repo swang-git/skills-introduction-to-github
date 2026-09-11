@@ -22,7 +22,7 @@ class YaliController extends Controller
      */
     public function getRandomPic() { Log::info("-fn-getRandomPic");
         // Get all drawing files
-        $allFiles = $this->getDrawingFiles();
+        $allFiles = $this->getAllPicFullFileNames();
         // $total = count($allFiles);
         // $rfile = $allFiles[array_rand($allFiles)];
         $rfile = Arr::random($allFiles);
@@ -37,7 +37,7 @@ class YaliController extends Controller
      */
     public function getPixByYM($ym) { Log::info("-fn-getPixByYM [$ym]");
         // Get all drawing files
-        $allFiles = $this->getDrawingFiles();
+        $allFiles = $this->getAllPicFullFileNames();
         $total = count($allFiles);
         $files = [];
         forEach($allFiles as $file) {
@@ -65,7 +65,7 @@ class YaliController extends Controller
      */
     public function getPages($page, $perPage) { Log::info("-fn-getPages page=$page, perPage=$perPage");
         // Get all drawing files
-        $allFiles = $this->getDrawingFiles();
+        $allFiles = $this->getAllPicFullFileNames();
         $total = count($allFiles);
         $years = [];
         $yms = [];
@@ -126,7 +126,8 @@ class YaliController extends Controller
      * move dulicated file to dup_files and dump_files/thumbnails
      */
     public function removeDupFile($dupFile) { Log::info("remove duplicate file[$dupFile]\n");
-        $picsDir = '/Users/swang/sites/webdata/pics';
+        // $picsDir = '/Users/swang/sites/webdata/pics';
+        $picsDir = config('constants.PICS_DIR');
         $yaliDir = "$picsDir/yali";
         $dupFilesDir = "$picsDir/dup_files";
         $thumbnailsDir = "$yaliDir/thumbnails";
@@ -141,7 +142,8 @@ class YaliController extends Controller
      * reverse the "move dulicated file to dup_files and dump_files/thumbnails"
      */
     public function undoRemovedDupFile($dupFile) { Log::info("undo removed duplicate file[$dupFile]\n");
-        $picsDir = '/Users/swang/sites/webdata/pics';
+        // $picsDir = '/Users/swang/sites/webdata/pics';
+        $picsDir = config('constants.PICS_DIR');
         $yaliDir = "$picsDir/yali";
         $dupFilesDir = "$picsDir/dup_files";
         $thumbnailsDir = "$yaliDir/thumbnails";
@@ -159,18 +161,19 @@ class YaliController extends Controller
         return ['status' => "FAILED"];
     }
     /**
-     * Get all drawing files, sorted
+     * Get all filenames (full path like: /Users/swang/sites/webdata/pics/yali/ya20260811.jpg), sorted
      */
-    private function getDrawingFiles(): array
+    private function getAllPicFullFileNames(): array
     {
         // $files = Storage::disk($this->disk)->allFiles($this->drawingsPath);
         // Log::log("-CK-files", $files);
         
         // Filter to images only
-        $picdir = "/Users/swang/sites/webdata/pics/yali";
+        // $picdir = "/Users/swang/sites/webdata/pics/yali";
+        $yaliDir = config('constants.PICS_DIR') . '/yali';
         // if ($isIM) $picdir = "/sites/webdata/pics/yaliIM";
 		$thumbnails = [];
-		$thumbnaildir = "$picdir/thumbnails";
+		$thumbnaildir = "$yaliDir/thumbnails";
         $files = glob("$thumbnaildir/*.{jpg,webp,jpeg,png,gif,JPG,JPEG,PNG,GIG}", GLOB_BRACE);
         // $files = array_filter($files, function ($file) {
         //     $ext = strtolower(pathinfo($file, PATHINFO_EXTENSION));
