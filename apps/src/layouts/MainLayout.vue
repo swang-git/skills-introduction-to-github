@@ -4,7 +4,8 @@
       <q-header v-if="curApp!='arts'" class="bg-teal-10 inset-shadow-down">
         <q-toolbar style="margin-left:-5px">
           <q-btn v-if="isDesk" glossy @click="openApp('/apps')" round dense icon="img:icons/quasar-logo.svg" size="18px" />
-          <q-btn v-else to="/apps" round dense glossy color="blue"><q-icon name="🏠" style="margin:-8px 0 0 -2px" /></q-btn>
+          <q-btn v-else @click="openApp('/apps')" round dense glossy color="blue"><q-icon name="🏠" style="margin:-8px 0 0 -2px" /></q-btn>
+          <!-- <q-btn v-else to="/apps" round dense glossy color="blue"><q-icon name="🏠" style="margin:-8px 0 0 -2px" /></q-btn> -->
           <q-toolbar-title>
             <div class="row q-pt-sm no-wrap">
               <span >{{ appTitle }}</span>

@@ -2,13 +2,15 @@
   <!-- <q-card class="flex flex-center" style="margin-top:-5px;height:500px;background-image:url('https://cdn.quasar.dev/img/material.png')"> -->
   <!-- <q-card class="flex flex-center" style="margin-top:-5px;height:500px;background-image:url('icons/material.png')"> -->
   <!-- <q-card class="flex flex-center" style="margin-top:-5px;height:500px;background-image:url('/api/apps/icons/bg-img-purple.png')"> -->
+  <!-- <q-card class="flex flex-center q-pr-xs" :style="getBackgroundImg()"> -->
   <q-card class="flex flex-center q-pr-xs" :style="getBackgroundImgM()">
     <!-- <q-card class="flex flex-center bg-teal-10" style="margin-top:-5px;height:500px;background-image:url('/icons/quasar-logo.svg')"> -->
     <!-- <img alt="Quasar logo" src="~assets/quasar-logo-vertical.svg" style="width:200px; height:200px" /> -->
     <!-- <img alt="Quasar logo" src="/assets/quasar-logo-vertical.svg" style="width:200px; height:200px" /> -->
     <!-- <img alt="Quasar logo" src="icons/materal.png" style="width:200px; height:200px" /> -->
     <!-- <q-card-actions align="between" :style="getTopAlign()"> -->
-    <q-card-actions align="between" style="margin-top:-855px" class="bg-teal-10">
+    <!-- <q-card-actions align="between" style="margin-top:-855px" class="bg-teal-10"> -->
+    <q-card-actions align="between" class="bg-teal-9" :style="isIM ? { 'margin':'-5px -5px 0 0' } : { 'margin-top': '-855px' }">
       <RoundButton size="22px" icon="monetization_on" clas="q-ma-xs" colr="purple-10" iclr="yellow" ttip="日 常 消 费" @click="openApp('exlist')" />
       <RoundButton size="22px" icon="add_shopping_cart" clas="q-ma-xs" colr="indigo-10" ttip="采 购 清 单" @click="openApp('shopping')" />
       <RoundButton size="22px" icon="schedule" clas="q-ma-xs" colr="cyan-10" iclr="amber" ttip="温 馨 提 示" @click="openApp('reminder')" />
@@ -49,7 +51,7 @@ import { useRouter } from 'vue-router'
 const router = useRouter()
 
 import { libFunctions } from '../../src/composables/libFunctions'
-const { isFedora, buildApp, store, $q, userType, AppAdmin, isDesk, ENV_DEV } = libFunctions()
+const { isIM, isFedora, buildApp, store, $q, userType, AppAdmin, isDesk, ENV_DEV } = libFunctions()
 import { axiosFunctions } from '../../src/composables/axiosFunctions'
 const { gaxios } = axiosFunctions()
 
@@ -134,6 +136,7 @@ function getBackgroundImg() {
   }
 }
 function getBackgroundImgM() {
+  if (isIM) return "backgroundColor:teal"
   return {
     backgroundImage: 'url("' + picurl.value + '")',
     // backgroundSize : 'cover',
