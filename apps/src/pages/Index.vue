@@ -45,6 +45,10 @@
       <q-toolbar>
         <q-btn rounded glossy label="上一幅" color="andigo" @click="getPrevPic" />
         <q-space /> <!-- this pushes next button all the way right -->
+        <q-btn rounded glossy :label="showSlide ? '停止' : '幻灯'" :color="showSlide ? 'amber-9' : 'primary'" @click="showSlide=!showSlide" />
+        <q-space /> <!-- this pushes next button all the way right -->
+        <q-btn rounded glossy label="随机" color="primary" @click="showSlide=getRandomPic(-1)" />
+        <q-space /> <!-- this pushes next button all the way right -->
         <q-btn rounded glossy label="下一幅" color="andigo" @click="getNextPic" />
       </q-toolbar>
     </q-footer>
@@ -70,6 +74,7 @@ const picidx = ref(-1)
 const totalp = ref(0)
 const piclnk = ref(null)
 const rat = ref(null)
+const showSlide = ref(true)
 
 const refUserList = ref(null)
 const compVer = computed(() => { return import.meta.env.VITE_BUILD_TAG == null ? '测' : import.meta.env.VITE_BUILD_TAG })
@@ -89,7 +94,13 @@ onMounted(() => {
 })
 
 getRandomPic(-1)
+slideShow()
 
+function slideShow () {
+  setInterval(() => { 
+    showSlide.value ? getNextPic() : null 
+  }, 2500)
+}
 function getPrevPic () {
   console.log(`-fn-getNextPic picIdx=${picIdx.value}`)
   let pidx = picIdx.value - 1
@@ -97,32 +108,10 @@ function getPrevPic () {
   getRandomPic(pidx)
 }
 function getNextPic () {
-  console.log(`-fn-getNextPic picIdx=${picIdx.value}`)
+  console.log(`-fn-getNextPic picIdx=${picIdx.value} showSlide=${showSlide.value}`)
   let pidx = picIdx.value + 1
   if (pidx >= totalp.value) pidx = 0
   getRandomPic(pidx)
-}
-function getPicStyle () {
-  let trans = "left: 50%; top: 50%; transform: translate(-50%, -50%)"
-  if (!isDesk) return trans // + ';' + bgimg
-  console.log(`-fn-getStyle rat=${rat.value}`)
-  let imgAspectRatio = rat.value
-  let viewW = ($q.screenwidth - 40)
-  let viewH = ($q.screenheight - 540) // top bar + bottom bar = 60 + 60 = 100px
-  let viewAspectRatio = viewW / viewH
-  let stystr = ''
-  // console.log(`-CK- viewAspectRatio=${viewAspectRatio} imgAspectRatio=${imgAspectRatio} imgW=${imgW} viewW=${viewW} imgH=${imgH} viewH=${viewH}`)
-  // console.log(`-CK- viewAspectRatio=${viewAspectRatio} imgAspectRatio=${imgAspectRatio} 1/imgAspectRation=${1/imgAspectRatio}`)
-  if (viewAspectRatio > 1) {
-    stystr = 'width:' + viewW / 1.2 + 'px'
-    if (imgAspectRatio < 1) stystr = 'height:' + viewH + 'px'
-  } else if (viewAspectRatio < 1) {
-    stystr = 'height:' + viewH + 'px'
-    if (imgAspectRatio > 1) stystr = 'width:' + viewW + 'px'
-  } else {
-    stystr = imgAspectRatio >= 1 ? 'width:' + viewW + 'px' : 'height:' + viewH + 'px'
-  }
-  return stystr + ";" + trans + ";" + "margin-top:350px"
 }
 
 function setRandomPic (da) {
@@ -136,9 +125,6 @@ function setRandomPic (da) {
 function getRandomPic (pidx) {
   const path = ENV_DEV + '/yali/getRandomPic/' + pidx
   gaxios(path)
-}
-function getHeight () {
-  return ($q.screen.height - 60)+ 'px'
 }
 function getBackgroundImg() {
   return {
