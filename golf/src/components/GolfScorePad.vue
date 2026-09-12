@@ -22,9 +22,10 @@
 <script setup>
 import { ref } from 'vue'
 import emitter from 'tiny-emitter/instance'
-import { axiosFunctions } from '../../src/composables/axiosFunctions'
-// import InfoDisplay from '../src/components/InfoDisplay' // parent import this already
+import { axiosFunctions } from '../composables/axiosFunctions'
+import { libFunctions } from '../composables/libFunctions'
 const { paxios } = axiosFunctions()
+const { ENV_API } = libFunctions()
 console.info('-ST-GolfScorePad')
 emitter.on('open-GolfScorePad', (x) => openIt(x))
 const opened = ref(false)
