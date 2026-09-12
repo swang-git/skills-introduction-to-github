@@ -125,7 +125,8 @@ const pagination = ref({
   rowsPerPage: 0
 })
 const itemsPerPage = isDesk ? 29 : 17
-console.log(`%c-ST-Watcher iPhone=${iPhone}`, 'color:red;font-size:16px')
+// console.log(`%c-ST-Watcher iPhone=${iPhone}`, 'color:red;font-size:16px')
+console.log(`-ST-Watcher BASE_URL=${import.meta.env.BASE_URL}`)
 emitter.on('show-watcher-chart', () => { showChart() })
 emitter.on('watcher-add', () => getList())
 emitter.on('watcher-upd', () => getList())

@@ -258,6 +258,7 @@ function setTitle (tit) {
 }
 function openApp (app) {
   console.log(`-fn-openApp, app=${app} AppAdmin=${AppAdmin.value} drawer=${drawer} numItems=${numItems.value} itemsPerPage=${itemsPerPage.value}`)
+  emitter.emit('stop-slide-show')
   curApp.value = app
   // if (app == '../golf') {
   //   emitter.emit('apps-logout')

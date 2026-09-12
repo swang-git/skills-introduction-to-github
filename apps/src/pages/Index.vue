@@ -80,14 +80,15 @@ const refUserList = ref(null)
 const compVer = computed(() => { return import.meta.env.VITE_BUILD_TAG == null ? '测' : import.meta.env.VITE_BUILD_TAG })
 const picurl = computed(() => { return piclnk.value })
 const picIdx = computed(() => { return parseInt(picidx.value) })
+const isApps = computed(() => { return /apps/.test(import.meta.env.BASE_URL) })
 
-console.log(`-ST-Index bg-img=${getBackgroundImg().backgroundImage} isFedora=${isFedora}`)
+console.log(`-ST-Index BASE_URL=${import.meta.env.BASE_URL} isApps=${isApps.value}`)
 // logout()
 buildApp('Apps Home', '家庭应用')
 emitter.on('user-type', (x) => userType.value = x)
 emitter.on('open-app', (x) => openApp(x))
 emitter.on('yali-getRandomPic', (x) => setRandomPic(x))
-// emitter.on('apps-logout', () => logout())
+emitter.on('stop-slide-show', () => showSlide.value = false)
 onMounted(() => {
   console.log(refUserList.value)
   console.log(refPlatformDataPad.value)
@@ -97,7 +98,8 @@ getRandomPic(-1)
 slideShow()
 
 function slideShow () {
-  setInterval(() => { 
+  console.log(`-fn-slideShow isApps=${isApps.value} BASE_URL=${import.meta.env.BASE_URL}`)
+  setInterval(() => {
     showSlide.value ? getNextPic() : null 
   }, 2500)
 }
@@ -108,14 +110,14 @@ function getPrevPic () {
   getRandomPic(pidx)
 }
 function getNextPic () {
-  console.log(`-fn-getNextPic picIdx=${picIdx.value} showSlide=${showSlide.value}`)
+  // console.log(`-fn-getNextPic picIdx=${picIdx.value} showSlide=${showSlide.value}`)
   let pidx = picIdx.value + 1
   if (pidx >= totalp.value) pidx = 0
   getRandomPic(pidx)
 }
 
 function setRandomPic (da) {
-  console.log(`-fn-setRandomFile rat=${da.rat} picidx=${da.picidx} totalp=${da.totalp} randomFile=${da.randomFile}`)
+  // console.log(`-fn-setRandomFile rat=${da.rat} picidx=${da.picidx} totalp=${da.totalp} randomFile=${da.randomFile}`)
   piclnk.value = ENV_DEV + da.randomFile
   rat.value = da.rat
   picidx.value = da.picidx
