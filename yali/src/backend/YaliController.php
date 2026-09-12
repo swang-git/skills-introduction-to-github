@@ -20,16 +20,17 @@ class YaliController extends Controller
      /**
      * get rondam pic
      */
-    public function getRandomPic() { Log::info("-fn-getRandomPic");
+    public function getRandomPic($pidx) { Log::info("-fn-getRandomPic pidx=$pidx");
         // Get all drawing files
         $allFiles = $this->getAllPicFullFileNames();
-        // $total = count($allFiles);
-        // $rfile = $allFiles[array_rand($allFiles)];
-        $rfile = Arr::random($allFiles);
+        $total = count($allFiles);
+        $picidx = $pidx >= 0 ? $pidx : array_rand($allFiles);
+        $rfile = $allFiles[$picidx];
+        // $rfile = Arr::random($allFiles);
         $rat = getimagesize($rfile)[0] / getimagesize($rfile)[1];
         $rfile = "/pics/yali/". basename($rfile);
         Log::info("random file: $rfile");
-        return ['randomFile' => $rfile, 'rat' => $rat, 'status' => "OK"];
+        return ['randomFile' => $rfile, 'rat' => $rat, 'picidx' => $picidx, 'totalp' => $total, 'status' => "OK"];
     }
 
     /**

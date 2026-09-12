@@ -450,7 +450,7 @@ Route::group (
   array('prefix' => 'yali'), function() {
     Route::view('list', 'yali'); 
     //Route::get ('getList/{isIM}', 'YaliController@getList'); //->middleware('auth');
-    Route::get('getRandomPic', 'YaliController@getRandomPic'); 
+    Route::get('getRandomPic/{pidx}', 'YaliController@getRandomPic'); 
     Route::get('getPages/{page}/{per_page}', 'YaliController@getPages'); 
     Route::get('removeDupFile/{fnm}/', 'YaliController@removeDupFile'); 
     Route::get('undoRemovedDupFile/{fnm}/', 'YaliController@undoRemovedDupFile'); 
