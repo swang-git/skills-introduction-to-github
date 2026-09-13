@@ -1,7 +1,7 @@
 <template>
   <q-dialog v-model="opened" maximized>
     <q-layout class="q-pa-md bg-teal-10 text-cyan-2 text-h6" v-close-popup>
-      <q-card flat class="bg-teal-10 text-white text-h6 justify-center" style="border:cyan 2px solid; border-radius:8%">
+      <q-card flat class="bg-teal-10 text-white text-h6 justify-center" style="border:cyan 2px solid; border-radius:4%">
         <ShadowBox class="float-right" style="border-radius:50%;border:yellow 2px solid" :val="compVer" />
         <tbody class="text-h6">
           <!-- <tr v-for="(value, prop) in $q.platform.is" :key="prop"><td class="text-right q-px-sm">{{ prop.toUpperCase() }}:</td><td>{{ value }}</td></tr> -->
