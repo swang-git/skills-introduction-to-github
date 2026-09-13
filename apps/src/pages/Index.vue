@@ -1,11 +1,8 @@
 <template>
-  <!-- <q-layout view="hHh lpR fFf"> -->
   <q-layout view="hhh lpR fFf">
     <q-header elevated>
       <q-toolbar class="bg-teal-9">
         <q-card class="flex flex-center">
-        <!-- <q-card class="flex flex-center q-pr-xs" :style="getBackgroundImgM()"> -->
-          <!-- <q-card-actions align="between" class="bg-teal-9" :style="isIM ? { 'margin':'-5px -5px 0 0' } : { 'margin-top': '-855px' }"> -->
           <q-card-actions align="between" class="bg-teal-9">
             <RoundButton size="22px" icon="monetization_on" clas="q-ma-xs" colr="purple-10" iclr="yellow" ttip="日 常 消 费" @click="openApp('exlist')" />
             <RoundButton size="22px" icon="add_shopping_cart" clas="q-ma-xs" colr="indigo-10" ttip="采 购 清 单" @click="openApp('shopping')" />
@@ -22,7 +19,7 @@
             <RoundButton size="22px" icon="card_giftcard" clas="q-ma-xs" colr="red-10" ttip="联 邦 节 日" @click="showHolidays()" />
             <RoundButton size="22px" icon="palette" clas="q-ma-xs q-pb-x" colr="indigo-10" ttip="Drawing" @click="openApp('painting')" />
             <RoundButton size="22px" icon="报" clas="q-ma-xs q-pb-sm" colr="cyan-10" ttip="信 用 卡 花 销" @click="openApp('bankstatementloader')" />
-            <RoundButton size="22px" icon="转" clas="q-ma-xs q-pb-sm" colr="green-10" ttip="Convert To Text" @click="openApp('totext')" />
+            <RoundButton size="22px" icon="转" clas="q-ma-xs q-pb-sm" colr="red-10" ttip="Convert To Text" @click="openApp('totext')" />
             <RoundButton size="22px" icon="查" clas="q-ma-xs q-pb-sm" colr="green-10" iclr="cyan-2" ttip="健 康 检 查" @click="openApp('htlist')" />
             <RoundButton size="22px" icon="胰" clas="q-ma-xs q-pb-sm" colr="purple-10" iclr="white" ttip="胰 流 报 告" @click="openApp('pfcheck')" />
             <RoundButton size="22px" icon="年" clas="q-ma-xs q-pb-sm" colr="teal-10" iclr="white" ttip="中 西 年 列 表" @click="openApp('chnyears')" />
@@ -100,7 +97,7 @@ slideShow()
 function slideShow () {
   console.log(`-fn-slideShow isApps=${isApps.value} BASE_URL=${import.meta.env.BASE_URL}`)
   setInterval(() => {
-    showSlide.value ? getNextPic() : null 
+    showSlide.value ? getNextPic() : null
   }, 2500)
 }
 function getPrevPic () {
