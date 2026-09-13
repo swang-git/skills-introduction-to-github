@@ -57,7 +57,7 @@ export function libFunctions() {
     return hostPatt.test(window.location.href)
   }
   function isfedora() {
-    const hostPatt = /http:\/\/(fedora|192.168.1.110)/gi
+    const hostPatt = /http:\/\/(fedora|192.168.1.110|shengli.cn.mt|69.248.188.20)/gi
     return hostPatt.test(window.location.href)
   }
   function ScreenWidth() {

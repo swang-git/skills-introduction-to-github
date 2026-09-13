@@ -25,8 +25,8 @@
             <RoundButton size="22px" icon="年" clas="q-ma-xs q-pb-sm" colr="teal-10" iclr="white" ttip="中 西 年 列 表" @click="openApp('chnyears')" />
             <RoundButton size="22px" icon="group" clas="q-ma-xs" colr="indigo-10" iclr="amber" ttip="用 户 管 理" @click="refUserList.getUserList()" v-if="AppAdmin" />
             <RoundButton size="22px" icon="logout" clas="q-ma-xs" colr="amber-10" iclr="grey-10" ttip="系 统 Logout" @click="logout()" v-show="AppAdmin" />
-            <RoundButton size="22px" :icon="compVer" clas="q-ma-xs q-pb-sm" colr="blue-10" iclr="yellow" ttip="系 统 信 息" @click="showSysInfo()" />
             <RoundButton v-if="isFedora" size="22px" icon="视" clas="q-ma-xs q-pb-sm" colr="indigo-10" iclr="white" ttip="电 视 列 表" @click="openApp('tvmanager')" />
+            <RoundButton size="22px" :icon="compVer" clas="q-ma-xs q-pb-sm" colr="amber-10" iclr="grey-10" ttip="系 统 信 息" @click="showSysInfo()" />
             <!-- <RoundButton size="22px" icon="login" clas="q-ma-xs" colr="grey-10" iclr="amber" ttip="系 统 管 理" @click="login()" v-if="!AppAdmin" /> -->
           </q-card-actions>
         </q-card>
