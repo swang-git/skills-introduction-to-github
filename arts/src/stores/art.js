@@ -10,7 +10,8 @@ export const useArtStore = defineStore('art', {
     // pageTile: null,
     clickedCont: {},
     qids: [],
-    clickedIndex: -1,
+    // clickedIndex: -1,
+    clickedArt: {},
     topTit: '省千里路 🏠 破万卷书',
   }),
   actions: {

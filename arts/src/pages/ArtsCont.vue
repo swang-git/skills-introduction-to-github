@@ -1,7 +1,7 @@
 <template>
  <div class="q-pa-md">
   <q-page>
-    <q-item :id="'cont_'+i" v-for="(lnk, i) in data.links" :key=lnk.x :to="{ name: 'text', params: {'tag':lnk.tag, 'ymd':lnk.ymd, 'qid':lnk.qid}}" @click="setClickedIndex(i)">
+    <q-item :id="'cont_'+i" v-for="(lnk, i) in data.links" :key=lnk.x :to="{ name: 'text', params: {'tag':lnk.tag, 'ymd':lnk.ymd, 'qid':lnk.qid}}" @click="setClickedArt(i)">
       <q-item-section>
         <q-item-label :class="{ 'dim-index':highlit===i, 'lit-index':highlit!==i }">
           <span style="color:lime">{{i+1}}.</span>
@@ -71,15 +71,17 @@ function setCont(da) {
 
 const isPrevActive = computed(() => { return prevYmd.value === undefined ? 'invisible' : 'visible' })
 const isNextActive = computed(() => { return nextYmd.value === undefined ? 'invisible' : 'visible' })
-const highlit = computed(() => { return store.clickedIndex })
+const highlit = computed(() => { return store.clickedArt[tag.value+ymd.value] })
 const totalArts = computed(() => { return data.value.titles === undefined ? 0 : data.value.titles.length })
 
 console.info('-ST-ArtCont')
 getCont()
 
-function setClickedIndex (i) {
+function setClickedArt (i) {
   store.clickedIndex = i
-  console.log(`-fn-%csetClickedIndex idx=${store.clickedIndex}`, 'color:red')
+  const tagymd = tag.value + ymd.value
+  store.clickedArt[tagymd] = i
+  console.log(`-fn-%csetClickedIndex idx=${store.clickedArt[tagymd]} ty=${tagymd}`, 'color:red')
 }
 function getCont () {
   console.log(`-fn-getCont DEV_API=${DEV_API}`)
@@ -209,7 +211,9 @@ setTimeout(() => { scrollToClickedCont() }, 190)
 // const highlit = computed(() => { return data.value.clickedIndex })
 // const totalArts = computed(() => { return data.value.titles === undefined ? 0 : data.value.titles.length })
 const getElement = computed(() => {
-  const idx = store.clickedIndex
+  // const idx = store.clickedIndex
+  const tagymd = tag.value + ymd.value
+  const idx = store.clickedArt[tagymd]
   const elId = 'cont_' + idx
   const ele = document.getElementById(elId)
   console.log(`-cp-%cgetElement idx=${idx} elId=${elId}`, ele, 'color:pink')

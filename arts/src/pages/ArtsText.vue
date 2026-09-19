@@ -294,7 +294,7 @@ function getNextQid() {
   return nqids.shift()
 }
 function showPrev() {
-  store.clickedIndex--
+  store.clickedArt[tag.value+ymd.value]--
   // $router.replace({ name: 'text', params: { tag: prevTag.value, ymd: prevYmd.value, qid: prevQid.value } })
   qid.value = getPrevQid()
   console.log(`-fn-showPrev name:text, tag=${tag.value}, ymd=${ymd.value}, qid=${qid.value}`)
@@ -302,7 +302,7 @@ function showPrev() {
 }
 
 function showNext() {
-  store.clickedIndex++
+  store.clickedArt[tag.value+ymd.value]++
   qid.value = getNextQid()
   console.log(`-fn-showNext name:text, tag=${tag.value}, ymd=${ymd.value}, qid=${qid.value}`)
   $router.push({ path: '/' + tag.value + '/' + ymd.value + '/' + qid.value })
