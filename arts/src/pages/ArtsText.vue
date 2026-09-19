@@ -32,14 +32,7 @@
         <q-btn v-show="isLocal" round dense flat icon="edit" @click="editTxt" />
         <span class="text-h6" style="white-space: nowrap">第 {{ readArticle }} 篇</span>
         <q-btn dense flat @click="toggleHeadEnd">
-          <q-knob
-            :angle="90"
-            v-model="readPercent"
-            size="30px"
-            :thickness="0.33"
-            color="orange"
-            track-color="white"
-          />
+          <q-knob :angle="90" v-model="readPercent" size="30px" :thickness="0.33" color="orange" track-color="white" />
         </q-btn>
         <q-toolbar-title />
         <span class="cursor-pointer text-yellow text-h6 nowrap" @click="backToCont()">{{
@@ -301,6 +294,7 @@ function getNextQid() {
   return nqids.shift()
 }
 function showPrev() {
+  store.clickedIndex--
   // $router.replace({ name: 'text', params: { tag: prevTag.value, ymd: prevYmd.value, qid: prevQid.value } })
   qid.value = getPrevQid()
   console.log(`-fn-showPrev name:text, tag=${tag.value}, ymd=${ymd.value}, qid=${qid.value}`)
@@ -308,6 +302,7 @@ function showPrev() {
 }
 
 function showNext() {
+  store.clickedIndex++
   qid.value = getNextQid()
   console.log(`-fn-showNext name:text, tag=${tag.value}, ymd=${ymd.value}, qid=${qid.value}`)
   $router.push({ path: '/' + tag.value + '/' + ymd.value + '/' + qid.value })

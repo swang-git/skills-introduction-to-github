@@ -1,7 +1,7 @@
 <template>
  <div class="q-pa-md">
   <q-page>
-    <q-item :id="'cont_'+i" v-for="(lnk, i) in data.links" :key=lnk.x :to="{ name: 'text', params: {'tag':lnk.tag, 'ymd':lnk.ymd, 'qid':lnk.qid}}">
+    <q-item :id="'cont_'+i" v-for="(lnk, i) in data.links" :key=lnk.x :to="{ name: 'text', params: {'tag':lnk.tag, 'ymd':lnk.ymd, 'qid':lnk.qid}}" @click="setClickedIndex(i)">
       <q-item-section>
         <q-item-label :class="{ 'dim-index':highlit===i, 'lit-index':highlit!==i }">
           <span style="color:lime">{{i+1}}.</span>
@@ -9,8 +9,8 @@
         </q-item-label>
         <q-item-label class="subtits" caption>{{ data.subtits[i].replace(/\(|\W.\W.\W.\W\)/g, '') }} </q-item-label>
       </q-item-section>
-      <!-- <span v-if="data.cons[i]==='photo'"> <q-icon name="photo" color="cyan-3" size="md" /></span> -->
-      <!-- <span v-else-if="data.cons[i]==='videocam'"><q-icon name="videocam" color="yellow-3" size="md" /></span> -->
+      <span v-if="data.cons[i]==='photo'"> <q-icon name="photo" color="cyan-3" size="md" /></span>
+      <span v-else-if="data.cons[i]==='videocam'"><q-icon name="videocam" color="yellow-3" size="md" /></span>
       <q-icon :name="data.cons[i]" color="cyan-3" size="md" />
     </q-item>
     <q-footer reveal elevated bordered v-model="footerState">
@@ -37,12 +37,12 @@ const route = useRoute()
 const $router = useRouter()
 import emitter from 'tiny-emitter/instance'
 import { ref, computed, watch } from 'vue'
-import { libFunctions } from '../../src/composables/libFunctions'
+import { libFunctions } from '../composables/libFunctions'
 const { store, DEV_API } = libFunctions()
-import { axiosFunctions } from '../../src/composables/axiosFunctions'
+import { axiosFunctions } from '../composables/axiosFunctions'
 const { gaxios } = axiosFunctions()
-// import { scroll } from 'quasar'
-// const { getScrollTarget, setVerticalScrollPosition } = scroll
+import { scroll } from 'quasar'
+const { getScrollTarget, setVerticalScrollPosition } = scroll
 
 // name: 'ArtsCont',
 const footerState = ref(true) // might be used some times
@@ -61,8 +61,8 @@ function setCont(da) {
   tag.value = route.params.tag
   ymd.value = route.params.ymd
   data.value = da.cont
-  document.title = data.value.topTitle
-  // document.title = da.cont.topTitle
+  // document.title = store.topTitle
+  document.title = da.cont.topTitle
   store.clickedCont = da.cont
   store.qids = da.cont.links.map(p => p.qid)
   store.topTit = da.cont.topTitle
@@ -71,12 +71,16 @@ function setCont(da) {
 
 const isPrevActive = computed(() => { return prevYmd.value === undefined ? 'invisible' : 'visible' })
 const isNextActive = computed(() => { return nextYmd.value === undefined ? 'invisible' : 'visible' })
-const highlit = computed(() => { return data.value.clickedIndex })
+const highlit = computed(() => { return store.clickedIndex })
 const totalArts = computed(() => { return data.value.titles === undefined ? 0 : data.value.titles.length })
 
 console.info('-ST-ArtCont')
 getCont()
 
+function setClickedIndex (i) {
+  store.clickedIndex = i
+  console.log(`-fn-%csetClickedIndex idx=${store.clickedIndex}`, 'color:red')
+}
 function getCont () {
   console.log(`-fn-getCont DEV_API=${DEV_API}`)
   tag.value = route.params.tag
@@ -94,8 +98,8 @@ watch(
 )
 
 function showPrev () { $router.push({ name: 'cont', params: { tag: tag.value, ymd: prevYmd.value } }) }
-function showNext () { $router.push({ name: 'cont', params: { tag: tag.value, ymd: nextYmd.value } }) }
-
+function showNext () { $router.push({ name: 'cont', params: { tag: tag.value, ymd: nextYmd.value } })
+}
 function setPrevNextYmds () {
   if (data.value.ymds.length <= 0) {
     prevYmd.value = undefined
@@ -113,15 +117,16 @@ function setPrevNextYmds () {
 //   return re.test(tag.value)
 // }
 
-// function scrollToClickedCont () {
-//   const ele = getElement.value // You need to get your element here
-//   if (ele !== null) {
-//     const target = getScrollTarget(ele)
-//     const offset = ele.offsetTop - ele.scrollHeight - 150
-//     const duration = 200
-//     setVerticalScrollPosition(target, offset, duration)
-//   }
-// }
+function scrollToClickedCont () {
+  const ele = getElement.value // You need to get your element here
+  console.log(`-fn-scrollToClickedCont`, ele)
+  if (ele != null) {
+    const target = getScrollTarget(ele)
+    const offset = ele.offsetTop - ele.scrollHeight - 150
+    const duration = 200
+    setVerticalScrollPosition(target, offset, duration)
+  }
+}
 // function getCont () {
 //   console.log('-fn-getCont', route)
 //   const tagymd = route.path
@@ -190,12 +195,10 @@ function setPrevNextYmds () {
 
 // function changeTxt () { this.searchCat = '' }
 
-// console.info('-ST-ArtCont')
-// // console.info('=cr= ArtsCont params:', $router.params)
-// getCont('from created()')
-// setTimeout(() => {
-//   scrollToClickedCont()
-// }, 50)
+console.info('-ST-ArtCont')
+console.info('=cr= ArtsCont params:', $router.params)
+getCont('from created()')
+setTimeout(() => { scrollToClickedCont() }, 190)
 
 // const isPrevActive = computed(() => { return prevYmd.value === undefined ? 'invisible' : 'visible' })
 // const isNextActive = computed(() => { return nextYmd.value === undefined ? 'invisible' : 'visible' })
@@ -205,12 +208,13 @@ function setPrevNextYmds () {
 // // const ymd = computed(() => { return $router.params.ymd })
 // const highlit = computed(() => { return data.value.clickedIndex })
 // const totalArts = computed(() => { return data.value.titles === undefined ? 0 : data.value.titles.length })
-// const getElement = computed(() => {
-//   const idx = data.value.clickedIndex
-//   const elId = 'cont_' + idx
-//   const ele = document.getElementById(elId)
-//   return ele
-// })
+const getElement = computed(() => {
+  const idx = store.clickedIndex
+  const elId = 'cont_' + idx
+  const ele = document.getElementById(elId)
+  console.log(`-cp-%cgetElement idx=${idx} elId=${elId}`, ele, 'color:pink')
+  return ele
+})
 
 </script>
 
