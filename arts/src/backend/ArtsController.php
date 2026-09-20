@@ -66,8 +66,7 @@ class ArtsController extends Controller
 		return ['links'=>$links, 'titles'=>$titles, 'updtime'=>$updtime, 'status' => "OK"];
 		// return ['links'=>$links, 'titles'=>$titles, 'subtits'=>$subtits, 'updtime'=>$updtime];
 	}
-	public function getCont($tag, $ymd)
-    {
+	public function getCont($tag, $ymd) { Log::info("-fn-getCont tag=$tag ymd=$ymd");
         $d1 = date_create($ymd);
 		$d2 = date_create('2016-08-15');
 		if ($d1 > $d2) {
@@ -87,7 +86,8 @@ class ArtsController extends Controller
 		// else $pagetit = "<span class='top-title'>$pagetit</span> <span class='art-info'>(". count($arts) ."篇)</span>";
       	$dats = $this->get_art_list($arts, $pagetit);
 		$dats['ymds'] = $ymds;
-		$dats['key'] = "/" . $tag . "/" . $ymd;   // use as url path as well
+		// $dats['key'] = "/" . $tag . "/" . $ymd;   // use as url path as well
+		$dats['key'] = $tag . $ymd;   // use as url path as well
 		//__ ToDo_later $this->saveLog("$tag/$ymd");
 		return ['cont' => $dats, 'status' => "OK"];
 
@@ -214,7 +214,7 @@ class ArtsController extends Controller
 		}
 		return ['status' => "OK"];
 	}
- 	public function search($cat, $txt) {
+ 	public function searchATT($cat, $txt) {  Log::info("-fn-search $cat, $txt", [__line__, __file__]);
         $arts = DailyDat::fromQuery('CALL MyWeb.art_search(?,?)', [$cat, "%$txt%"]);   // dd($arts);
 		$pagetit = "搜索作者含有“{$txt}”的文章";
 		if ($cat == 'tit') $pagetit = "搜索题目含有“{$txt}”的文章";
@@ -223,7 +223,8 @@ class ArtsController extends Controller
 		$dats['key'] = "/" . $cat . "/" . $txt;       // use as url as well
 		// $dats['key'] = "/search/" . $cat . "/" . $txt;       // use as url as well
 		//__ToDo_later $this->saveLog("arts/$cat/$txt");
-		return $dats;
+		Log::info("-CK-searche data", $dats->toArray());
+		return [ 'cont' => $dats, 'status' => "OK" ];
     }
 	private function get_art_list($arts, $topTitle, $page_type="XXXX") {
 		$titles = [];
@@ -388,8 +389,7 @@ class ArtsController extends Controller
 		else $pagetit = "<span class='art-page-tit'>$pagetit</span> <span class='art-info'>(". count($arts) ."篇)</span>";
 		return $this->get_art_list($arts, $pagetit, 'List');
 	}
-    public function artSearch($cat, $txt)
-    {
+    public function artSearch($cat, $txt) {
         $arts = DailyDat::fromQuery('CALL MyWeb.art_search(?,?)', [$cat, "%$txt%"]);   // dd($arts);
 		$pagetit = "搜索作者含有“{$txt}”的文章";
 		if ($cat == 'tit') $pageTitle = "搜索题目含有“{$txt}”的文章";

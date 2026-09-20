@@ -1,34 +1,34 @@
 <template>
- <div class="q-pa-md">
-  <q-page>
-    <q-item :id="'cont_'+i" v-for="(lnk, i) in data.links" :key=lnk.x :to="{ name: 'text', params: {'tag':lnk.tag, 'ymd':lnk.ymd, 'qid':lnk.qid}}" @click="setClickedArt(i)">
-      <q-item-section>
-        <q-item-label :class="{ 'dim-index':highlit===i, 'lit-index':highlit!==i }">
-          <span style="color:lime">{{i+1}}.</span>
-          <span class="text-bold" style="font-size:28.8px">{{ data.titles[i] }}</span>
-        </q-item-label>
-        <q-item-label class="subtits" caption>{{ data.subtits[i].replace(/\(|\W.\W.\W.\W\)/g, '') }} </q-item-label>
-      </q-item-section>
-      <span v-if="data.cons[i]==='photo'"> <q-icon name="photo" color="cyan-3" size="md" /></span>
-      <span v-else-if="data.cons[i]==='videocam'"><q-icon name="videocam" color="yellow-3" size="md" /></span>
-      <q-icon :name="data.cons[i]" color="cyan-3" size="md" />
-    </q-item>
-    <q-footer reveal elevated bordered v-model="footerState">
-      <q-toolbar class="bg-teal-10 glossy" style="height:30px">
-        <q-toolbar-title class="row" style="padding:2px 0 0 10px">
-          <div class="col-12 q-pt-xs" align="right">
-            <q-btn flat round dense icon="arrow_back" @click="showPrev" :class="isPrevActive" />
-            <span class="q-pl-md q-pr-md">共 {{ totalArts }} 篇</span>
-            <q-btn flat round dense icon="arrow_forward" @click="showNext" :class="isNextActive" />
-          </div>
-        </q-toolbar-title>
-      </q-toolbar>
-    </q-footer>
-    <q-page-scroller position="bottom-right" :scroll-offset="350" :offset="[0, -5]">
-      <q-btn fab icon="keyboard_arrow_up" color="accent" />
-    </q-page-scroller>
-  </q-page>
-</div>
+  <div class="q-pa-md">
+    <q-page>
+      <q-item :id="'cont_' + i" v-for="(lnk, i) in compData.links" :key="lnk.x" :to="{ name: 'text', params: { tag: lnk.tag, ymd: lnk.ymd, qid: lnk.qid } }" @click="setClickedArt(i)" >
+        <q-item-section>
+          <q-item-label :class="{ 'dim-index': highlit === i, 'lit-index': highlit !== i }">
+            <span style="color: lime">{{ i + 1 }}.</span>
+            <span class="text-bold" style="font-size: 28.8px">{{ compData.titles[i] }}</span>
+          </q-item-label>
+          <q-item-label class="subtits" caption>{{ compData.subtits[i].replace(/\(|\W.\W.\W.\W\)/g, '') }}</q-item-label>
+        </q-item-section>
+        <span v-if="compData.cons[i] === 'photo'" ><q-icon name="photo" color="cyan-3" size="md" /></span>
+        <span v-else-if="compData.cons[i] === 'videocam'" ><q-icon name="videocam" color="yellow-3" size="md" /></span>
+        <q-icon :name="compData.cons[i]" color="cyan-3" size="md" />
+      </q-item>
+      <q-footer reveal elevated bordered v-model="footerState">
+        <q-toolbar class="bg-teal-10 glossy" style="height: 30px">
+          <q-toolbar-title class="row" style="padding: 2px 0 0 10px">
+            <div class="col-12 q-pt-xs" align="right">
+              <q-btn flat round dense icon="arrow_back" @click="showPrev" :class="isPrevActive" />
+              <span class="q-pl-md q-pr-md">共 {{ totalArts }} 篇</span>
+              <q-btn flat round dense icon="arrow_forward" @click="showNext" :class="isNextActive" />
+            </div>
+          </q-toolbar-title>
+        </q-toolbar>
+      </q-footer>
+      <q-page-scroller position="bottom-right" :scroll-offset="350" :offset="[0, -5]" >
+        <q-btn fab icon="keyboard_arrow_up" color="accent" />
+      </q-page-scroller>
+    </q-page>
+  </div>
 </template>
 
 <script setup>
@@ -44,49 +44,105 @@ const { gaxios } = axiosFunctions()
 import { scroll } from 'quasar'
 const { getScrollTarget, setVerticalScrollPosition } = scroll
 
-// name: 'ArtsCont',
 const footerState = ref(true) // might be used some times
 const prevYmd = ref(undefined)
 const nextYmd = ref(undefined)
 const tag = ref(undefined)
 const ymd = ref(undefined)
-// const searchCat = ref('')
-// const searchQuery = ref('数学')
 const data = ref({})
 
+const compData = computed(() => { return data.value })
+
 emitter.on('get-cont', () => getCont())
-emitter.on('arts-getCont', (da) => setCont(da))
+emitter.on('arts-getCont', da => setCont(da))
+emitter.on('arts-searchATT', da => { console.log('call setSearched'); setSearched(da) })
+// emitter.on('back-to-search', () => { console.log('back-to-search'); backToSearch() })
+
+const isPrevActive = computed(() => { return prevYmd.value === undefined ? 'invisible' : 'visible' })
+const isNextActive = computed(() => { return nextYmd.value === undefined ? 'invisible' : 'visible' })
+const highlit = computed(() => { return store.clickedArt[tag.value + ymd.value] })
+const totalArts = computed(() => { return data.value.titles === undefined ? 0 : data.value.titles.length })
+// const contKey = computed(() => { return '/' + tag.value + '/' + ymd.value })
+const contKey = computed(() => { return tag.value + ymd.value })
+// const contKey = computed({
+//   get: () => tag.value + ymd.value,
+//   set: (val) => contKey.value = val
+// })
+
+console.info(`-ST-ArtCont contKey=${contKey.value}`)
+getCont()
+
+// function backToSearch () {
+//   // $router.replace({ path: '/aut/XXX' })
+//   data.value = store.clickedCont
+//   store.topTit = store.clickedCont.topTitle
+//   document.title = store.topTit
+//   console.log(`-fn-backToSearch`, store.clickedCont, data.value.links)
+// }
+function setSearched(da) {
+  // console.log(`-fn-setSearched`, compData.value.links, compData.value.titles, compData.value.subtits)
+  let x = route.path.split('/')
+  tag.value = x[1]
+  ymd.value = x[2]
+  console.log(`-fn-setSearched contKey=${contKey.value} route.path=${route.path}`)
+  store.isSearch = true
+  data.value = da.cont
+  store.topTit = da.cont.topTitle
+  document.title = store.topTit
+  store.addClicked(contKey.value, da.cont)
+  // store.qids = da.cont.links.map(p => p.qid)
+  // data.value.ymds = da.cont.links.map(p => p.ymd)
+  console.log(`-fn-setSearched`, store.clickedCont)
+  // setPrevNextYmds()
+}
 function setCont(da) {
-  console.log(`-fn-setCont`, da.cont)
+  if (store.isSearch) return
   tag.value = route.params.tag
   ymd.value = route.params.ymd
+  // store.topTit = da.cont.topTitle
+  // document.title = store.topTit
   data.value = da.cont
-  // document.title = store.topTitle
-  document.title = da.cont.topTitle
-  store.clickedCont = da.cont
+  console.log(`-fn-%csetCont befor: clickedCont=`, 'color:pink', store.clickedCont)
+  store.clickedCont[contKey.value] = da.cont
+  // store.addClicked(contKey.value, da.cont)
+  console.log(`-fn-%csetCont after: clickedCont=`, 'color:pink', store.clickedCont)
+  // console.log(`-fn-setCont`, compData.value.links, compData.value.titles, compData.value.subtits)
+  // console.log(`-fn-setCont`, compData.value, store.clickedCont)
+  // console.log(`-fn-setCont contKey=${contKey.value} store.clickedCont=`, store.clickedCont)
   store.qids = da.cont.links.map(p => p.qid)
+  // data.value.ymds = da.cont.links.map(p => p.ymd)
   store.topTit = da.cont.topTitle
   setPrevNextYmds()
 }
 
-const isPrevActive = computed(() => { return prevYmd.value === undefined ? 'invisible' : 'visible' })
-const isNextActive = computed(() => { return nextYmd.value === undefined ? 'invisible' : 'visible' })
-const highlit = computed(() => { return store.clickedArt[tag.value+ymd.value] })
-const totalArts = computed(() => { return data.value.titles === undefined ? 0 : data.value.titles.length })
-
-console.info('-ST-ArtCont')
-getCont()
-
-function setClickedArt (i) {
+function setClickedArt(i) {
   store.clickedIndex = i
   const tagymd = tag.value + ymd.value
   store.clickedArt[tagymd] = i
-  console.log(`-fn-%csetClickedIndex idx=${store.clickedArt[tagymd]} ty=${tagymd}`, 'color:red')
+  console.log( `-fn-%csetClickedIndex idx=${store.clickedArt[tagymd]} ty=${tagymd}`, 'color:red')
 }
-function getCont () {
-  console.log(`-fn-getCont DEV_API=${DEV_API}`)
+function getCont() {
   tag.value = route.params.tag
   ymd.value = route.params.ymd
+  let x = store.clickedCont[contKey.value]
+  console.log(`-fn-getCont isSearch=${store.isSearch} contKey=${contKey.value}`)
+  // if (store.isSearch) return
+  if (store.isSearch && x != undefined) {
+    data.value = x
+    store.topTit = store.clickedCont.topTitle
+    document.title = store.topTit
+    return
+  }
+  
+  let contx = store.clickedCont[contKey.value]
+  console.log(`clickedCont[${contKey.value}]`, contx)
+  if (contx != undefined) {
+    console.log(`getCont contx.key=${contx.key} contKey=${contKey.value}`)
+    if (contx.key == contKey.value) {
+      data.value = contx
+      return
+    } 
+  }
   const path = DEV_API + '/arts/getCont/' + tag.value + '/' + ymd.value
   gaxios(path)
 }
@@ -94,15 +150,30 @@ function getCont () {
 watch(
   () => route.path, // Watch the `path` property of the route
   (newPath, oldPath) => {
-    console.log('Route changed from', oldPath, 'to', newPath);
+    console.log(
+      `%cwatch(in ArtsCont): route changed from ${oldPath} to ${newPath}`,
+      'color:pink'
+    )
+    let x = newPath.split('/')
+    tag.value = x[1]
+    ymd.value = x[2]
+    console.log(
+      `%cwatch(in ArtsCont): tag=${tag.value} ymd=${ymd.value}`,
+      'color:lime'
+    )
+    store.isSearch = false
     getCont()
   }
 )
 
-function showPrev () { $router.push({ name: 'cont', params: { tag: tag.value, ymd: prevYmd.value } }) }
-function showNext () { $router.push({ name: 'cont', params: { tag: tag.value, ymd: nextYmd.value } })
+function showPrev() {
+  $router.push({ name: 'cont', params: { tag: tag.value, ymd: prevYmd.value } })
 }
-function setPrevNextYmds () {
+function showNext() {
+  $router.push({ name: 'cont', params: { tag: tag.value, ymd: nextYmd.value } })
+}
+function setPrevNextYmds() {
+  // console.log(`-fn-setPrevNextYmds prevYmd=${prevYmd.value} ymd=${ymd.value}`, data.value.ymds)
   if (data.value.ymds.length <= 0) {
     prevYmd.value = undefined
     nextYmd.value = undefined
@@ -110,8 +181,8 @@ function setPrevNextYmds () {
   }
   prevYmd.value = data.value.ymds.filter(d => d < ymd.value).shift()
   nextYmd.value = data.value.ymds.filter(d => d > ymd.value).pop()
-  console.log(`prevYmd=${prevYmd.value} ymd=${ymd.value}`)
-  console.log(`nextYmd=${nextYmd.value}`)
+  // console.log(`prevYmd=${prevYmd.value} ymd=${ymd.value}`)
+  // console.log(`nextYmd=${nextYmd.value}`)
 }
 
 // function isSearch () {
@@ -119,7 +190,7 @@ function setPrevNextYmds () {
 //   return re.test(tag.value)
 // }
 
-function scrollToClickedCont () {
+function scrollToClickedCont() {
   const ele = getElement.value // You need to get your element here
   console.log(`-fn-scrollToClickedCont`, ele)
   if (ele != null) {
@@ -196,10 +267,10 @@ function scrollToClickedCont () {
 // }
 
 // function changeTxt () { this.searchCat = '' }
+// console.info('-ST-ArtCont')
+// console.info('=cr= ArtsCont params:', $router.params)
 
-console.info('-ST-ArtCont')
-console.info('=cr= ArtsCont params:', $router.params)
-getCont('from created()')
+// getCont('from created()')
 setTimeout(() => { scrollToClickedCont() }, 190)
 
 // const isPrevActive = computed(() => { return prevYmd.value === undefined ? 'invisible' : 'visible' })
@@ -216,10 +287,9 @@ const getElement = computed(() => {
   const idx = store.clickedArt[tagymd]
   const elId = 'cont_' + idx
   const ele = document.getElementById(elId)
-  console.log(`-cp-%cgetElement idx=${idx} elId=${elId}`, ele, 'color:pink')
+  console.log(`-cp-%cgetElement idx=${idx} elId=${elId}`, 'color:pink', ele)
   return ele
 })
-
 </script>
 
 <style>
@@ -257,34 +327,34 @@ const getElement = computed(() => {
   color: rgb(209, 176, 176);
 }
 html {
-    overflow: scroll;
-    overflow-x: hidden;
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-    /* -moz-overflow: hidden; */
+  overflow: scroll;
+  overflow-x: hidden;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  /* -moz-overflow: hidden; */
 }
 ::-webkit-scrollbar {
-    width: 0px;  /* Remove scrollbar space */
-    background: transparent;  /* Optional: just make scrollbar invisible */
+  width: 0px; /* Remove scrollbar space */
+  background: transparent; /* Optional: just make scrollbar invisible */
 }
 /* Optional: show position indicator in red */
 ::-webkit-scrollbar-thumb {
-    background: #FF0000;
+  background: #ff0000;
 }
 ::-moz-scrollbar {
-    width: 0px;  /* Remove scrollbar space */
-    background: transparent;  /* Optional: just make scrollbar invisible */
+  width: 0px; /* Remove scrollbar space */
+  background: transparent; /* Optional: just make scrollbar invisible */
 }
 /* Optional: show position indicator in red */
 ::-moz-scrollbar-thumb {
-    background: #FF0000;
+  background: #ff0000;
 }
 ::-ms-scrollbar {
-    width: 0px;  /* Remove scrollbar space */
-    background: transparent;  /* Optional: just make scrollbar invisible */
+  width: 0px; /* Remove scrollbar space */
+  background: transparent; /* Optional: just make scrollbar invisible */
 }
 /* Optional: show position indicator in red */
 ::-ms-scrollbar-thumb {
-    background: #FF0000;
+  background: #ff0000;
 }
 </style>

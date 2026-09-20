@@ -1,12 +1,12 @@
 <template>
   <div id="pageId">
     <q-scroll-observer @scroll="scrollHandler" />
-    <div v-if="isLocal" class="text-center text-lime cursor-pointer text-h6" @click="openArtLink()">
+    <div v-if="isLocal" class="text-center text-lime cursor-pointer text-h6" @click="openArtLink()" >
       <q-item-section>
         <q-item-label>{{ art.sub }}</q-item-label>
       </q-item-section>
     </div>
-    <q-item v-else-if="isIM" class="text-center cursor-pointer text-lime" @click="openArtLink()">
+    <q-item v-else-if="isIM" class="text-center cursor-pointer text-lime" @click="openArtLink()" >
       <q-item-section>
         <q-item-label class="truncate">{{ art.sub }}</q-item-label>
       </q-item-section>
@@ -20,7 +20,7 @@
     <hr v-if="flw.length > 0" />
     <div v-for="(ff, i) in flwups" :key="ff.x">
       <div class="arts-text" v-html="ff.txt" />
-      <div class="arts-sub" v-if="isLocal" style="cursor: pointer" @click="editFlw(i)">
+      <div class="arts-sub" v-if="isLocal" style="cursor: pointer" @click="editFlw(i)" >
         {{ ff.sub }}
       </div>
       <div class="arts-sub" v-else>{{ ff.sub }}</div>
@@ -30,14 +30,12 @@
     <q-footer elevated bordered v-model="footerState">
       <q-toolbar class="bg-teal-9 glossy">
         <q-btn v-show="isLocal" round dense flat icon="edit" @click="editTxt" />
-        <span class="text-h6" style="white-space: nowrap">第 {{ readArticle }} 篇</span>
+        <span class="text-h6" style="white-space: nowrap" >第 {{ readArticle }} 篇</span>
         <q-btn dense flat @click="toggleHeadEnd">
           <q-knob :angle="90" v-model="readPercent" size="30px" :thickness="0.33" color="orange" track-color="white" />
         </q-btn>
         <q-toolbar-title />
-        <span class="cursor-pointer text-yellow text-h6 nowrap" @click="backToCont()">{{
-          getSub()
-        }}</span>
+        <span class="cursor-pointer text-yellow text-h6 nowrap" @click="backToCont()">{{ getSub() }}</span>
         <q-toolbar-title />
         <q-btn round dense glossy icon="help_outline" @click="showArtInfo" /> &nbsp;
         <q-btn v-if="prevQid" round dense flat icon="arrow_back" @click="showPrev" />
@@ -99,10 +97,11 @@ function getText() {
   totalHeight.value = document.body.scrollHeight - window.innerHeight
   // console.warn(`totalHeight=${totalHeight.value}`)
   // setPrevNextQids()
-  const path = DEV_API + '/arts/getText/' + tag.value + '/' + ymd.value + '/' + qid.value
+  const path =
+    DEV_API + '/arts/getText/' + tag.value + '/' + ymd.value + '/' + qid.value
   gaxios(path)
 }
-emitter.on('arts-getText', (da) => setText(da))
+emitter.on('arts-getText', da => setText(da))
 function setText(da) {
   console.log(`-fn-setText`, da.text)
   // if (da.text == null) {
@@ -124,9 +123,7 @@ function setText(da) {
 const flwups = computed(() => {
   if (isIM) {
     const re = /(.*)\d{4}-(.*):\d\d(\s+)/g
-    flw.value.forEach((ff) => {
-      ff.sub = ff.sub.replace(re, '$1$2$3')
-    })
+    flw.value.forEach(ff => { ff.sub = ff.sub.replace(re, '$1$2$3') })
   }
   return flw.value
 })
@@ -151,17 +148,11 @@ function getSub() {
   const sub = art.value.sub
   if (!isDesk || sub === undefined) return null
   else if (sub.search(/图片.*文章字数/) >= 0)
-    return sub.replace(
-      /^\d{4}-.*\d\d:\d\d:\d\d\s+作者:(.*)\s+(\d+)图片\s+文章字数:(.*)/,
-      '$1 $2图 $3',
-    )
+    return sub.replace( /^\d{4}-.*\d\d:\d\d:\d\d\s+作者:(.*)\s+(\d+)图片\s+文章字数:(.*)/, '$1 $2图 $3')
   else if (sub.search('文章字数') >= 0)
-    return sub.replace(/^\d{4}-.*\s+\d\d:\d\d:\d\d\s+作者:(.*)\s+文章字数:(.*)/, '$1$2')
+    return sub.replace( /^\d{4}-.*\s+\d\d:\d\d:\d\d\s+作者:(.*)\s+文章字数:(.*)/, '$1$2')
   else if (sub.indexOf('图片') >= 0)
-    return sub.replace(
-      /^\d{4}-.*\d\d:\d\d:\d\d\s+作者:(.*)\s+(\d+)图片\s+文章字数:(.*)/,
-      '$1 $2图 $3',
-    )
+    return sub.replace( /^\d{4}-.*\d\d:\d\d:\d\d\s+作者:(.*)\s+(\d+)图片\s+文章字数:(.*)/, '$1 $2图 $3')
   else return sub.replace(/^\d{4}-.*\d\d:\d\d:\d\d\s+作者:(.*)/, '$1')
 }
 
@@ -174,7 +165,10 @@ function toggleHeadEnd() {
     // console.info('=M= readPercent', readPercent.value, articlePosition.value, totalHeight.value, scrollElm.value.pageYOffset)
     setVerticalScrollPosition(scrollElm.value, 1, 0) // move to get document.body.scrollHeight
     setTimeout(() => {
-      if (articlePosition.value === 'articleStart' || articlePosition.value === undefined) {
+      if (
+        articlePosition.value === 'articleStart' ||
+        articlePosition.value === undefined
+      ) {
         articlePosition.value = 'articleEnd'
         // console.info(`=Z= readPercent=${readPercent.value} articlePostion=${articlePosition.value} totalHeight=${totalHeight.value}`, scrollElm.value)
         // console.info('=Z= readPercent', readPercent.value, articlePosition.value, totalHeight.value, scrollElm.value.pageYOffset)
@@ -200,7 +194,7 @@ function editFlw(i) {
   store.qid = qid.value
   $router.push({
     name: 'editFlw',
-    params: { tag: tag.value, ymd: ymd.value, qid: qid.value, flwIdx: i },
+    params: { tag: tag.value, ymd: ymd.value, qid: qid.value, flwIdx: i }
   })
 }
 
@@ -211,7 +205,10 @@ function editTxt() {
   store.tag = tag.value
   store.ymd = ymd.value
   store.qid = qid.value
-  $router.push({ name: 'editTxt', params: { tag: tag.value, ymd: ymd.value, qid: qid.value } })
+  $router.push({
+    name: 'editTxt',
+    params: { tag: tag.value, ymd: ymd.value, qid: qid.value }
+  })
 }
 
 function scrollHandler(scroll) {
@@ -254,14 +251,21 @@ function showArtInfo() {
       '<strong style="font-family:youyuan">' +
       art.value.tit +
       '</strong><p><p style="font-family:stfangsong">' +
-      art.value.sub,
+      art.value.sub
   })
 }
 
 function backToCont() {
+  if (store.isSearch) {
+    // emitter.emit('back-to-search')
+    $router.replace({ path: '/' + store.searchCat + '/' + store.searchTxt })
+    return
+  }
   const clickedCont = store.clickedCont
-  // console.error('-CK-' clickedCont', clickedCont, $router)
-  $router.replace({ path: clickedCont.key })
+  let x = route.path.split('/')
+  const contPath = '/' + x[1] + '/' + x[2]
+  $router.replace({ path: contPath })
+  console.error( `-CK-clickedCont store.clickedCont.key=${store.clickedCont.key} route.path=${route.path}`, clickedCont)
   // $router.replace({name: 'cont', params: {tag: tag.value, ymd: ymd.value}})
   // window.location.href = clickedCont.key
 }
@@ -274,14 +278,14 @@ watch(
     // const path = process.env.API + '/arts/getCont' + newPath
     // gaxios(path)
     getText()
-  },
+  }
 )
 
 function getPrevQid() {
-  // console.log('-fn-getPrevQid', art.value.qids)
+  console.log('-fn-getPrevQid', art.value.qids)
   // const qids = art.value.qids
   const qids = store.qids
-  const idx = qids.findIndex((q) => parseInt(q) == qid.value)
+  const idx = qids.findIndex(q => parseInt(q) == qid.value)
   const pqids = qids.slice(0, idx)
   return pqids.pop()
 }
@@ -289,12 +293,12 @@ function getNextQid() {
   console.log(`-fn-getNextQid qid=${qid.value}`, art.value.qids)
   // const qids = art.value.qids
   const qids = store.qids
-  const idx = qids.findIndex((q) => parseInt(q) == qid.value)
+  const idx = qids.findIndex(q => parseInt(q) == qid.value)
   const nqids = qids.slice(idx + 1)
   return nqids.shift()
 }
 function showPrev() {
-  store.clickedArt[tag.value+ymd.value]--
+  store.clickedArt[tag.value + ymd.value]--
   // $router.replace({ name: 'text', params: { tag: prevTag.value, ymd: prevYmd.value, qid: prevQid.value } })
   qid.value = getPrevQid()
   console.log(`-fn-showPrev name:text, tag=${tag.value}, ymd=${ymd.value}, qid=${qid.value}`)
@@ -302,7 +306,7 @@ function showPrev() {
 }
 
 function showNext() {
-  store.clickedArt[tag.value+ymd.value]++
+  store.clickedArt[tag.value + ymd.value]++
   qid.value = getNextQid()
   console.log(`-fn-showNext name:text, tag=${tag.value}, ymd=${ymd.value}, qid=${qid.value}`)
   $router.push({ path: '/' + tag.value + '/' + ymd.value + '/' + qid.value })
@@ -337,7 +341,7 @@ function showNext() {
 // }
 
 function setPrevNextQids() {
-  console.info(`-fn-setPrevNextQids qid=[${qid.value}]`)
+  console.info(`-fn-setPrevNextQids qid=[${qid.value}]`, store.qids)
   if (store.qids.length <= 0) {
     prevQid.value = undefined
     nextQid.value = undefined
@@ -348,7 +352,7 @@ function setPrevNextQids() {
   // const pos = qids.indexOf(qid.value)
   prevTag.value = tag.value
   prevYmd.value = ymd.value
-  const pos = qids.findIndex((q) => parseInt(q) == parseInt(qid.value))
+  const pos = qids.findIndex(q => parseInt(q) == parseInt(qid.value))
   readArticle.value = pos + 1
   const pqids = qids.slice(0, pos)
   const nqids = qids.slice(pos + 1)
@@ -356,18 +360,23 @@ function setPrevNextQids() {
   prevQid.value = pqids.pop()
   nextQid.value = nqids.length > 0 ? nqids.shift() : undefined
   // console.log(`qid=${qid.value}`, pqids, nqids)
-  console.log(`prevQid=${prevQid.value}`)
-  console.log(`nextQid=${nextQid.value}`)
+  // console.log(`prevQid=${prevQid.value}`)
+  // console.log(`nextQid=${nextQid.value}`)
   store.topTit = art.value.tit
 }
 
 function add_api_for_testing() {
   if (import.meta.env.PROD) return
-  console.log(`-fn-add_api_for_testing import.meta.env.PROD=${import.meta.env.PROD}`)
+  console.log(
+    `-fn-add_api_for_testing import.meta.env.PROD=${import.meta.env.PROD}`
+  )
   var re = /<img\s+src="\/daily_data/gi
   // if (tag.value === 'PXWX') {
   // art.value.modifiedTxt = art.value.txt.replace(re, '<img src="' + process.env.API + '/daily_data')
-  art.value.modifiedTxt = art.value.txt.replace(re, '<img src="' + DEV_API + '/daily_data')
+  art.value.modifiedTxt = art.value.txt.replace(
+    re,
+    '<img src="' + DEV_API + '/daily_data'
+  )
   art.value.txt = art.value.modifiedTxt
   // re = 'style="max-width:600px;float:left;margin:9px 9px 0 0"'
   // art.value.imgRestyled = art.value.modifiedTxt.replace(re, 'class="q-px-xs w-full"')
@@ -377,96 +386,95 @@ function add_api_for_testing() {
   // art.value.imgRestyled = art.value.modifiedTxt.replace(re, 'style="width: 100%; max-width: 100%; height: auto;" native-context')
   // art.value.txt = art.value.imgRestyled
   // }
-  flw.value.forEach((f) => {
+  flw.value.forEach(f => {
     // f.txt = f.txt.replace(re, '<img src="' + process.env.API + '/daily_data')
     f.txt = f.txt.replace(re, '<img src="/daily_data')
   })
 
+  // function setPrevNextQids () {
+  //   console.info(`-fn-setPrevNextQids qid=[${qid.value}]`)
+  //   if (art.value.qids.length <= 0) {
+  //     prevQid.value = undefined
+  //     nextQid.value = undefined
+  //     return
+  //   }
+  //   const qids = art.value.qids
+  //   // const qids = [2847364, 2847302, 2847304, 2847314, 2847340, 2847338, 2847362, 2847312, 2847300, 2847310, 2847330, 2847360]
+  //   // const pos = qids.indexOf(qid.value)
+  //   prevTag.value = tag.value
+  //   prevYmd.value = ymd.value
+  //   const pos = qids.findIndex((q) => parseInt(q) == parseInt(qid.value))
+  //   readArticle.value = pos + 1
+  //   const pqids = qids.slice(0, pos)
+  //   const nqids = qids.slice(pos + 1)
+  //   // console.log(`-CK-pos=${qids.findIndex((q) => parseInt(q) == parseInt(qid.value))}`, pqids, nqids)
+  //   prevQid.value = pqids.pop()
+  //   nextQid.value = nqids.length > 0 ? nqids.shift() : undefined
+  //   // console.log(`qid=${qid.value}`, pqids, nqids)
+  //   console.log(`prevQid=${prevQid.value}`)
+  //   console.log(`nextQid=${nextQid.value}`)
+  //   // var lnk = store.clickedCont.links
+  //   // for (var i = 0; i < lnk.length; i++) {
+  //   //   var qx = lnk[i].qid
+  //   //   if (qx === parseInt(qid.value)) {
+  //   //     store.clickedIndex = i
+  //   //     readArticle.value = i + 1
+  //   //     prevTag.value = (lnk[i - 1] === undefined) ? lnk[lnk.length - 1].tag : lnk[i - 1].tag
+  //   //     prevYmd.value = (lnk[i - 1] === undefined) ? lnk[lnk.length - 1].ymd : lnk[i - 1].ymd
+  //   //     prevQid.value = (lnk[i - 1] === undefined) ? lnk[lnk.length - 1].qid : lnk[i - 1].qid
+  //   //     nextQid.value = (lnk[i + 1] === undefined) ? lnk[0].qid : lnk[i + 1].qid
+  //   //     nextYmd.value = (lnk[i + 1] === undefined) ? lnk[0].ymd : lnk[i + 1].ymd
+  //   //     nextTag.value = (lnk[i + 1] === undefined) ? lnk[0].tag : lnk[i + 1].tag
+  //   //     break
+  //   //   }
+  //   // }
+  // // function setPrevNextQids () {
+  // //   console.info('-fn-setPrevNextQids', store.clickedCont)
+  // //   var lnk = store.clickedCont.links
+  // //   for (var i = 0; i < lnk.length; i++) {
+  // //     var qx = lnk[i].qid
+  // //     if (qx === parseInt(qid.value)) {
+  // //       store.clickedIndex = i
+  // //       readArticle.value = i + 1
+  // //       prevTag.value = (lnk[i - 1] === undefined) ? lnk[lnk.length - 1].tag : lnk[i - 1].tag
+  // //       prevYmd.value = (lnk[i - 1] === undefined) ? lnk[lnk.length - 1].ymd : lnk[i - 1].ymd
+  // //       prevQid.value = (lnk[i - 1] === undefined) ? lnk[lnk.length - 1].qid : lnk[i - 1].qid
+  // //       nextQid.value = (lnk[i + 1] === undefined) ? lnk[0].qid : lnk[i + 1].qid
+  // //       nextYmd.value = (lnk[i + 1] === undefined) ? lnk[0].ymd : lnk[i + 1].ymd
+  // //       nextTag.value = (lnk[i + 1] === undefined) ? lnk[0].tag : lnk[i + 1].tag
+  // //       break
+  // //     }
+  // //   }
 
-// function setPrevNextQids () {
-//   console.info(`-fn-setPrevNextQids qid=[${qid.value}]`)
-//   if (art.value.qids.length <= 0) {
-//     prevQid.value = undefined
-//     nextQid.value = undefined
-//     return
-//   }
-//   const qids = art.value.qids
-//   // const qids = [2847364, 2847302, 2847304, 2847314, 2847340, 2847338, 2847362, 2847312, 2847300, 2847310, 2847330, 2847360]
-//   // const pos = qids.indexOf(qid.value)
-//   prevTag.value = tag.value
-//   prevYmd.value = ymd.value
-//   const pos = qids.findIndex((q) => parseInt(q) == parseInt(qid.value))
-//   readArticle.value = pos + 1
-//   const pqids = qids.slice(0, pos)
-//   const nqids = qids.slice(pos + 1)
-//   // console.log(`-CK-pos=${qids.findIndex((q) => parseInt(q) == parseInt(qid.value))}`, pqids, nqids)
-//   prevQid.value = pqids.pop()
-//   nextQid.value = nqids.length > 0 ? nqids.shift() : undefined
-//   // console.log(`qid=${qid.value}`, pqids, nqids)
-//   console.log(`prevQid=${prevQid.value}`)
-//   console.log(`nextQid=${nextQid.value}`)
-//   // var lnk = store.clickedCont.links
-//   // for (var i = 0; i < lnk.length; i++) {
-//   //   var qx = lnk[i].qid
-//   //   if (qx === parseInt(qid.value)) {
-//   //     store.clickedIndex = i
-//   //     readArticle.value = i + 1
-//   //     prevTag.value = (lnk[i - 1] === undefined) ? lnk[lnk.length - 1].tag : lnk[i - 1].tag
-//   //     prevYmd.value = (lnk[i - 1] === undefined) ? lnk[lnk.length - 1].ymd : lnk[i - 1].ymd
-//   //     prevQid.value = (lnk[i - 1] === undefined) ? lnk[lnk.length - 1].qid : lnk[i - 1].qid
-//   //     nextQid.value = (lnk[i + 1] === undefined) ? lnk[0].qid : lnk[i + 1].qid
-//   //     nextYmd.value = (lnk[i + 1] === undefined) ? lnk[0].ymd : lnk[i + 1].ymd
-//   //     nextTag.value = (lnk[i + 1] === undefined) ? lnk[0].tag : lnk[i + 1].tag
-//   //     break
-//   //   }
-//   // }
-// // function setPrevNextQids () {
-// //   console.info('-fn-setPrevNextQids', store.clickedCont)
-// //   var lnk = store.clickedCont.links
-// //   for (var i = 0; i < lnk.length; i++) {
-// //     var qx = lnk[i].qid
-// //     if (qx === parseInt(qid.value)) {
-// //       store.clickedIndex = i
-// //       readArticle.value = i + 1
-// //       prevTag.value = (lnk[i - 1] === undefined) ? lnk[lnk.length - 1].tag : lnk[i - 1].tag
-// //       prevYmd.value = (lnk[i - 1] === undefined) ? lnk[lnk.length - 1].ymd : lnk[i - 1].ymd
-// //       prevQid.value = (lnk[i - 1] === undefined) ? lnk[lnk.length - 1].qid : lnk[i - 1].qid
-// //       nextQid.value = (lnk[i + 1] === undefined) ? lnk[0].qid : lnk[i + 1].qid
-// //       nextYmd.value = (lnk[i + 1] === undefined) ? lnk[0].ymd : lnk[i + 1].ymd
-// //       nextTag.value = (lnk[i + 1] === undefined) ? lnk[0].tag : lnk[i + 1].tag
-// //       break
-// //     }
-// //   }
+  //   // console.info(' == from', msg)
+  //   // store.state.arts.topTitle = art.value.tit
+  //   store.topTit = art.value.tit
+  //   // var key = tag.value + ymd.value
+  //   // var conts = store.conts
+  //   // if (conts !== undefined && Object.prototype.hasOwnProperty.call(conts, key)) {
+  //   //   conts[key].clicked = qid.value
+  //   //   // store.commit('arts/updClicked', qid.value)
+  //   // document.title = art.value.tit
+  // }
 
-//   // console.info(' == from', msg)
-//   // store.state.arts.topTitle = art.value.tit
-//   store.topTit = art.value.tit
-//   // var key = tag.value + ymd.value
-//   // var conts = store.conts
-//   // if (conts !== undefined && Object.prototype.hasOwnProperty.call(conts, key)) {
-//   //   conts[key].clicked = qid.value
-//   //   // store.commit('arts/updClicked', qid.value)
-//   // document.title = art.value.tit
-// }
-
-// function restyleImage() {
-//   console.log(`-fn-restyleImage tag=${tag.value}`, art.value)
-//   if (process.env.API === '') return
-//   var re = /<img\s+src="\/daily_data/gi
-//   // if (tag.value === 'PXWX') {
-//   art.value.modifiedTxt = art.value.txt.replace(re, '<img src="' + process.env.API + '/daily_data')
-//   art.value.txt = art.value.modifiedTxt
-//   // re = 'style="max-width:600px;float:left;margin:9px 9px 0 0"'
-//   // art.value.imgRestyled = art.value.modifiedTxt.replace(re, 'class="q-px-xs w-full"')
-//   // art.value.imgRestyled = art.value.modifiedTxt.replace(re, 'style="width: 100%; height: auto"')
-//   // art.value.imgRestyled = art.value.modifiedTxt.replace(re, 'style="width: 100%; height: auto; display: block"')
-//   // art.value.imgRestyled = art.value.modifiedTxt.replace(re, 'style="width: 100vw; height: auto; max-width: 100%;"')
-//   // art.value.imgRestyled = art.value.modifiedTxt.replace(re, 'style="width: 100%; max-width: 100%; height: auto;" native-context')
-//   // art.value.txt = art.value.imgRestyled
-//   // }
-//   flw.value.forEach((f) => {
-//     f.txt = f.txt.replace(re, '<img src="' + process.env.API + '/daily_data')
-//   })
+  // function restyleImage() {
+  //   console.log(`-fn-restyleImage tag=${tag.value}`, art.value)
+  //   if (process.env.API === '') return
+  //   var re = /<img\s+src="\/daily_data/gi
+  //   // if (tag.value === 'PXWX') {
+  //   art.value.modifiedTxt = art.value.txt.replace(re, '<img src="' + process.env.API + '/daily_data')
+  //   art.value.txt = art.value.modifiedTxt
+  //   // re = 'style="max-width:600px;float:left;margin:9px 9px 0 0"'
+  //   // art.value.imgRestyled = art.value.modifiedTxt.replace(re, 'class="q-px-xs w-full"')
+  //   // art.value.imgRestyled = art.value.modifiedTxt.replace(re, 'style="width: 100%; height: auto"')
+  //   // art.value.imgRestyled = art.value.modifiedTxt.replace(re, 'style="width: 100%; height: auto; display: block"')
+  //   // art.value.imgRestyled = art.value.modifiedTxt.replace(re, 'style="width: 100vw; height: auto; max-width: 100%;"')
+  //   // art.value.imgRestyled = art.value.modifiedTxt.replace(re, 'style="width: 100%; max-width: 100%; height: auto;" native-context')
+  //   // art.value.txt = art.value.imgRestyled
+  //   // }
+  //   flw.value.forEach((f) => {
+  //     f.txt = f.txt.replace(re, '<img src="' + process.env.API + '/daily_data')
+  //   })
   // store.commit('arts/art', art.value)
   // store.commit('arts/flw', flw.value)
   // store.commit('arts/sub', art.value.sub)

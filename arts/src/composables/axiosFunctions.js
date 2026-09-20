@@ -31,7 +31,7 @@ export function axiosFunctions() {
         if (da.status === 'FAILED') {
           notifyFunc(path, target, da.errmsg)
         } else {
-          console.log("da=", da)
+          console.log(`target=${target} da:`, da)
           emitter.emit(target, da)
           return
         }

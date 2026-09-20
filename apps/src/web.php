@@ -46,10 +46,12 @@ Route::group (
     Route::view('/{cat}/{txt}',       'arts')->where(['cat'=>'(aut|tit|txt)']);
     Route::get('/getList',                   'ArtsController@getList');
     Route::get('/getCont/{tag}/{ymd}',       'ArtsController@getCont')->where(['tag'=>'(PX)(HY|WX|WW|QG|ZJ|JL)', 'ymd'=>'\d{4}-\d\d-\d\d']);
+    Route::get('/getSearchedCont/{act}/{txt}',   'ArtsController@getSearchedCont');
     Route::get('/getText/{tag}/{ymd}/{qid}', 'ArtsController@getText')->where(['tag'=>'(PX)(HY|WX|WW|QG|ZJ|JL)', 'ymd'=>'\d{4}-\d\d-\d\d', 'qid'=>'\d+']);
     Route::post('/updText', 'ArtsController@updText');
     Route::post('/logClientPlatform', 'ArtsController@logClientPlatform');
-    Route::get('/search/{cat}/{txt}', 'ArtsController@search')->where(['cat'=>'(aut|tit|txt)']);
+    Route::get('/searchATT/{cat}/{txt}', 'ArtsController@searchATT')->where(['cat'=>'(aut|tit|txt)']);
+    Route::get('/getCont/{cat}/{txt}', function($cat, $txt) { return response()->noContent();})->where(['cat'=>'(aut|tit|txt)']);
   });
 // Route::view('/arts', function () { return redirect('/apps/arts'); });
 // Route::permanentRedirect('/arts', '/apps/arts');
