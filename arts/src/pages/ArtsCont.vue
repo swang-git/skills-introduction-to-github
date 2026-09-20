@@ -122,6 +122,7 @@ function setClickedArt(i) {
   console.log( `-fn-%csetClickedIndex idx=${store.clickedArt[tagymd]} ty=${tagymd}`, 'color:red')
 }
 function getCont() {
+  // if (store.isSearch) return
   tag.value = route.params.tag
   ymd.value = route.params.ymd
   let x = store.clickedCont[contKey.value]

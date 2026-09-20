@@ -214,8 +214,8 @@ class ArtsController extends Controller
 		}
 		return ['status' => "OK"];
 	}
- 	public function searchATT($cat, $txt) {  Log::info("-fn-search $cat, $txt", [__line__, __file__]);
-        $arts = DailyDat::fromQuery('CALL MyWeb.art_search(?,?)', [$cat, "%$txt%"]);   // dd($arts);
+ 	public function searchATT($cat, $txt) {  Log::info("-fn-searchATT $cat, $txt", [__line__, __file__]);
+        $arts = DailyDat::fromQuery('CALL MyWeb.art_search(?,?)', [$cat, $txt]);
 		$pagetit = "搜索作者含有“{$txt}”的文章";
 		if ($cat == 'tit') $pagetit = "搜索题目含有“{$txt}”的文章";
 		else if ($cat == 'txt') $pagetit = "搜索文章内容含有“{$txt}”的文章";
