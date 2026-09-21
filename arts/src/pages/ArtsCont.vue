@@ -60,10 +60,11 @@ emitter.on('arts-searchATT', da => { console.log('call setSearched'); setSearche
 
 const isPrevActive = computed(() => { return prevYmd.value === undefined ? 'invisible' : 'visible' })
 const isNextActive = computed(() => { return nextYmd.value === undefined ? 'invisible' : 'visible' })
-const highlit = computed(() => { return store.clickedArt[tag.value + ymd.value] })
+const contKey = computed(() => { return tag.value + ymd.value })
+// const highlit = computed(() => { return store.clickedArt[tag.value + ymd.value] })
+const highlit = computed(() => { return store.clickedArt[contKey.value] })
 const totalArts = computed(() => { return data.value.titles === undefined ? 0 : data.value.titles.length })
 // const contKey = computed(() => { return '/' + tag.value + '/' + ymd.value })
-const contKey = computed(() => { return tag.value + ymd.value })
 // const contKey = computed({
 //   get: () => tag.value + ymd.value,
 //   set: (val) => contKey.value = val
@@ -118,9 +119,9 @@ function setCont(da) {
 
 function setClickedArt(i) {
   store.clickedIndex = i
-  const tagymd = tag.value + ymd.value
-  store.clickedArt[tagymd] = i
-  console.log( `-fn-%csetClickedIndex idx=${store.clickedArt[tagymd]} ty=${tagymd}`, 'color:red')
+  // const tagymd = tag.value + ymd.value
+  store.clickedArt[contKey.value] = i
+  console.log(`-fn-%csetClickedIndex idx=${store.clickedArt[contKey.value]} contKey=${contKey.value}`, 'color:red')
 }
 function getCont() {
   // if (store.isSearch) return
@@ -287,8 +288,9 @@ function scrollToClickedCont () {
 // const totalArts = computed(() => { return data.value.titles === undefined ? 0 : data.value.titles.length })
 const getElement = computed(() => {
   // const idx = store.clickedIndex
-  const tagymd = tag.value + ymd.value
-  const idx = store.clickedArt[tagymd]
+  // const tagymd = tag.value + ymd.value
+  // const idx = store.clickedArt[tagymd]
+  const idx = store.clickedArt[contKey.value]
   const elId = 'cont_' + idx
   const ele = document.getElementById(elId)
   console.log(`-cp-%cgetElement idx=${idx} elId=${elId}`, 'color:pink', ele)

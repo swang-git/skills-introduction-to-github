@@ -51,7 +51,7 @@
 <script setup>
 import emitter from 'tiny-emitter/instance'
 import { openURL, scroll } from 'quasar'
-import { ref, computed, watch } from 'vue'
+import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 const route = useRoute()
 const $router = useRouter()
@@ -84,6 +84,20 @@ const nextQid = ref(false)
 const articlePosition = ref(null)
 // destroyed () { window.removeEventListener('scroll', this.scrollHandler) // }
 
+let handler = null
+onMounted(() => {
+  if (!handler) {
+    handler = (da) => setText(da)
+    emitter.on('arts-getText', handler)
+  }
+})
+
+onUnmounted(() => {
+  emitter.off('arts-getText', handler)
+  handler = null
+})
+// emitter.on('arts-getText', da => setText(da))
+
 console.info('-ST-ArtsText')
 // getText('-cr-ArtsText')
 getText()
@@ -97,11 +111,9 @@ function getText() {
   totalHeight.value = document.body.scrollHeight - window.innerHeight
   // console.warn(`totalHeight=${totalHeight.value}`)
   // setPrevNextQids()
-  const path =
-    DEV_API + '/arts/getText/' + tag.value + '/' + ymd.value + '/' + qid.value
+  const path = DEV_API + '/arts/getText/' + tag.value + '/' + ymd.value + '/' + qid.value
   gaxios(path)
 }
-emitter.on('arts-getText', da => setText(da))
 function setText(da) {
   console.log(`-fn-setText`, da.text)
   // if (da.text == null) {
