@@ -71,6 +71,7 @@ const contKey = computed(() => { return tag.value + ymd.value })
 
 console.info(`-ST-ArtCont contKey=${contKey.value}`)
 getCont()
+setTimeout(() => { scrollToClickedCont() }, 190)
 
 // function backToSearch () {
 //   // $router.replace({ path: '/aut/XXX' })
@@ -132,6 +133,7 @@ function getCont() {
     data.value = x
     store.topTit = store.clickedCont.topTitle
     document.title = store.topTit
+    // scrollToClickedCont()
     return
   }
   
@@ -141,6 +143,7 @@ function getCont() {
     console.log(`getCont contx.key=${contx.key} contKey=${contKey.value}`)
     if (contx.key == contKey.value) {
       data.value = contx
+      setTimeout(() => { scrollToClickedCont() }, 190)
       return
     } 
   }
@@ -191,7 +194,7 @@ function setPrevNextYmds() {
 //   return re.test(tag.value)
 // }
 
-function scrollToClickedCont() {
+function scrollToClickedCont () {
   const ele = getElement.value // You need to get your element here
   console.log(`-fn-scrollToClickedCont`, ele)
   if (ele != null) {
@@ -272,7 +275,7 @@ function scrollToClickedCont() {
 // console.info('=cr= ArtsCont params:', $router.params)
 
 // getCont('from created()')
-setTimeout(() => { scrollToClickedCont() }, 190)
+// setTimeout(() => { scrollToClickedCont() }, 190)
 
 // const isPrevActive = computed(() => { return prevYmd.value === undefined ? 'invisible' : 'visible' })
 // const isNextActive = computed(() => { return nextYmd.value === undefined ? 'invisible' : 'visible' })
