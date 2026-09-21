@@ -1,0 +1,29 @@
+/* SimYou 幼圆 */
+@font-face {
+  font-family: "SimYou";
+  src: url("/fonts/SIMYOU.woff2") format("woff2"),
+       url("/fonts/SIMYOU.TTF") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* STFangSo 方正宋体 */
+@font-face {
+  font-family: "STFangSo";
+  src: url("/fonts/stfangso.woff2") format("woff2"),
+       url("/fonts/stfangso.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* STZhongS 方正粗宋简体 */
+@font-face {
+  font-family: "STZhongS";
+  src: url("/fonts/stzhongs.woff2") format("woff2"),
+       url("/fonts/stzhongs.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}

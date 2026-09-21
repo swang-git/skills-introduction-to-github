@@ -4,8 +4,8 @@
       <q-item :id="'cont_' + i" v-for="(lnk, i) in compData.links" :key="lnk.x" :to="{ name: 'text', params: { tag: lnk.tag, ymd: lnk.ymd, qid: lnk.qid } }" @click="setClickedArt(i)" >
         <q-item-section>
           <q-item-label :class="{ 'dim-index': highlit === i, 'lit-index': highlit !== i }">
-            <span style="color: lime">{{ i + 1 }}.</span>
-            <span class="text-bold" style="font-size: 28.8px">{{ compData.titles[i] }}</span>
+            <span style="font-family:stzhongs" class="text-yellow text-h4">{{ i + 1 }}.</span>
+            <span class="text-bold" style="font-size:28.8px;font-family:stfangso">{{ compData.titles[i] }}</span>
           </q-item-label>
           <q-item-label class="subtits" caption>{{ compData.subtits[i].replace(/\(|\W.\W.\W.\W\)/g, '') }}</q-item-label>
         </q-item-section>
@@ -300,7 +300,7 @@ const getElement = computed(() => {
 
 <style>
 .q-toolbar-title {
-  font-family: youyuan;
+  font-family: simyou;
   font-size: 20px;
   font-weight: 700;
   line-height: 1.6;
@@ -308,26 +308,26 @@ const getElement = computed(() => {
   text-align: justify;
 }
 .q-item-label {
-  font-family: youyuan;
+  font-family: simyou;
   font-size: 21.9px;
   font-weight: 600;
   color: white;
 }
 .subtits {
-  font-family: stzhongsong;
+  font-family: stzhongso;
   font-size: 17.5px;
   font-weight: 500;
   color: yellow;
 }
 .lit-index {
-  font-family: stfangsong;
+  font-family: stfangso;
   font-size: 26px;
   font-weight: 400;
   color: lightcyan;
 }
 .dim-index {
-  /* font-family: youyuan; */
-  font-family: stfangsong;
+  font-family: simyou;
+  /* font-family: stfangso; */
   font-size: 26px;
   font-weight: 400;
   color: rgb(209, 176, 176);

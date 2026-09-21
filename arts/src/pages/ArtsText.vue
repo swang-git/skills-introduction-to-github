@@ -581,7 +581,7 @@ img {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  font-family: stzhongsong;
+  font-family: stzhongs;
   font-size: 17.5px;
   font-weight: 500;
   color: yellow;
@@ -591,7 +591,7 @@ img {
   font-weight: 600;
 }
 div.arts-text {
-  font-family: stfangsong;
+  font-family: stfangso;
   font-size: 29.5px;
   font-weight: 600;
   line-height: 1.5;
@@ -600,8 +600,8 @@ div.arts-text {
   overflow-wrap: break-word;
 }
 .arts-sub {
-  /* font-family: stzhongsong; */
-  font-family: stfangsong;
+  font-family: stzhongs;
+  /* font-family: stfangso; */
   font-size: 20px;
   font-weight: 600;
   padding: 5px 20px 5px 20px;
