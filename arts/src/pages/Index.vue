@@ -63,7 +63,10 @@ function searchAut () {
   store.isSearch = true
   store.searchCat = 'aut'
   store.searchTxt = searchQuery.value
+  let ckey = 'aut' + searchQuery.value
   $router.replace({ path: '/' + searchCat.value + '/' + searchQuery.value })
+  let contx = store.clickedCont[ckey]
+  if (contx != undefined) return
   const path = DEV_API + '/arts/searchATT/aut/' + searchQuery.value
   gaxios(path)
 }

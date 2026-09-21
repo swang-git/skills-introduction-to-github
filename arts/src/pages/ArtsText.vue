@@ -341,7 +341,7 @@ function showNext() {
 // }
 
 function setPrevNextQids() {
-  console.info(`-fn-setPrevNextQids qid=[${qid.value}]`, store.qids)
+  // console.info(`-fn-setPrevNextQids qid=[${qid.value}]`, store.qids)
   if (store.qids.length <= 0) {
     prevQid.value = undefined
     nextQid.value = undefined
@@ -367,16 +367,11 @@ function setPrevNextQids() {
 
 function add_api_for_testing() {
   if (import.meta.env.PROD) return
-  console.log(
-    `-fn-add_api_for_testing import.meta.env.PROD=${import.meta.env.PROD}`
-  )
+  console.log(`-fn-add_api_for_testing import.meta.env.PROD=${import.meta.env.PROD}`)
   var re = /<img\s+src="\/daily_data/gi
   // if (tag.value === 'PXWX') {
   // art.value.modifiedTxt = art.value.txt.replace(re, '<img src="' + process.env.API + '/daily_data')
-  art.value.modifiedTxt = art.value.txt.replace(
-    re,
-    '<img src="' + DEV_API + '/daily_data'
-  )
+  art.value.modifiedTxt = art.value.txt.replace(re, '<img src="' + DEV_API + '/daily_data')
   art.value.txt = art.value.modifiedTxt
   // re = 'style="max-width:600px;float:left;margin:9px 9px 0 0"'
   // art.value.imgRestyled = art.value.modifiedTxt.replace(re, 'class="q-px-xs w-full"')
