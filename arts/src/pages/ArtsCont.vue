@@ -132,7 +132,8 @@ function getCont() {
   // if (store.isSearch) return
   if (store.isSearch && x != undefined) {
     data.value = x
-    store.topTit = store.clickedCont.topTitle
+    // store.topTit = store.clickedCont.topTitle
+    store.topTit = x.topTitle
     document.title = store.topTit
     // scrollToClickedCont()
     return
@@ -144,6 +145,8 @@ function getCont() {
     console.log(`getCont contx.key=${contx.key} contKey=${contKey.value}`)
     if (contx.key == contKey.value) {
       data.value = contx
+      store.topTit = contx.topTitle
+      document.title = contx.topTitle
       setTimeout(() => { scrollToClickedCont() }, 190)
       return
     } 
@@ -293,7 +296,7 @@ const getElement = computed(() => {
   const idx = store.clickedArt[contKey.value]
   const elId = 'cont_' + idx
   const ele = document.getElementById(elId)
-  console.log(`-cp-%cgetElement idx=${idx} elId=${elId}`, 'color:pink', ele)
+  // console.log(`-cp-%cgetElement idx=${idx} elId=${elId}`, 'color:pink', ele)
   return ele
 })
 </script>
