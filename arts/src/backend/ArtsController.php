@@ -223,7 +223,7 @@ class ArtsController extends Controller
 		$dats['key'] = "/" . $cat . "/" . $txt;       // use as url as well
 		// $dats['key'] = "/search/" . $cat . "/" . $txt;       // use as url as well
 		//__ToDo_later $this->saveLog("arts/$cat/$txt");
-		Log::info("-CK-searche data", $dats->toArray());
+		// Log::info("-CK-searche data", $dats->toArray());
 		return [ 'cont' => $dats, 'status' => "OK" ];
     }
 	private function get_art_list($arts, $topTitle, $page_type="XXXX") {
