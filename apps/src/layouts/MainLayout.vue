@@ -90,14 +90,15 @@
               <AppItem appl="日 常 消 费" colr="purple-9" iclr="yellow" size="27px" styl="margin: 0 0 0 1.5px" icon="monetization_on" @click="openApp('exlist')" />
               <AppItem appl="采 购 清 单" colr="indigo-9" iclr="white"  size="27px" styl="margin: 3pxpx 0 0 0" icon="add_shopping_cart" appn="shopping" />
               <AppItem appl="温 馨 提 示" colr="teal-9"   iclr="white"  size="27px" styl="margin: 0 0 0 1.5px" icon="schedule" @click="openApp('reminder')" />
-              <AppItem appl="备 忘 录 表" colr="grey-9"   iclr="white"  size="27px" styl="margin: 0px 0 0 0" icon="assignment" @click="openApp('memo')" />
-              <AppItem appl="每 天 看 看" colr="pink-9"   iclr="yellow" size="25px" styl="margin:-5px 0 0 1.5px" icon="健" @click="openApp('watcher')" />
+              <!-- <AppItem appl="备 忘 录 表" colr="grey-9"   iclr="white"  size="27px" styl="margin: 0px 0 0 0" icon="assignment" @click="openApp('memo')" /> -->
+              <AppItem appl="备 忘 录 表" colr="indigo-7" iclr="cyan-3"  size="25px" styl="margin:-9px 0 0 1.5px" icon="备" @click="openApp('memo')" />
+              <AppItem appl="每 天 看 看" colr="pink-9"   iclr="yellow" size="25px" styl="margin:-7px 0 0 1.5px" icon="健" @click="openApp('watcher')" />
               <AppItem appl="银 行 月 报" colr="indigo-9" iclr="yellow" size="28px" styl="margin: 1px 0 0 0" icon="account_balance" @click="openApp('bankstatement')" />
               <AppItem appl="月 报 明 细" colr="brown-9"  iclr="white"  size="25px" styl="margin:-6px 0 0 0" icon="析" @click="openApp('holdings')" />
-              <AppItem appl="血 糖 控 制" colr="pink-7"   iclr="yellow" size="27px" styl="margin:-1px 0 0 0" icon="bloodtype" appn="glucosecheck" />
+              <AppItem appl="血 糖 控 制" colr="pink-9"   iclr="lime"   size="27px" styl="margin:-1px 0 0 1.7px" icon="bloodtype" appn="glucosecheck" />
               <AppItem appl="月 报 分 析" colr="brown-9"  iclr="white"  size="25px" styl="margin:-6px 0 0 0" icon="报" @click="openApp('bankstatementloader')" />
               <AppItem appl="网 上 阅 读" colr="indigo-9" iclr="white"  size="25px" styl="margin:-6px 0 0 0" icon="文" appn="../arts" />
-              <AppItem appl="娅 莉 画 展" colr="red-9"    iclr="yellow" size="25px" styl="margin:-6px 0 0 0" icon="画" appn="../yali" />
+              <AppItem appl="娅 莉 画 展" colr="red-9"    iclr="grey-2" size="25px" styl="margin:-7px 0 0 1.8px" icon="画" appn="../yali" />
               <!-- AppItem appl="高 尔 夫 球" colr="green-9"  iclr="yellow" size="27px" styl="margin:-1px 0 0 0" icon="golf_course" @click="openApp('../golf')" / -->
               <AppItem appl="高 尔 夫 球" colr="green-9"  iclr="yellow" size="27px" styl="margin:-1px 0 0 0" icon="golf_course" appn="../golf" />
               <AppItem appl="英 汉 字 典" colr="brown-9"  iclr="yellow" size="25px" styl="margin:-1px 0 0 0" icon="translate" @click="openApp('dictionary')" />
