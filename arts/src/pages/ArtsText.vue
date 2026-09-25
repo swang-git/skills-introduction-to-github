@@ -106,6 +106,9 @@ function getText() {
   tag.value = route.params.tag
   ymd.value = route.params.ymd
   qid.value = route.params.qid.trim()
+  store.tag = tag.value
+  store.ymd = ymd.value
+  store.qid = qid.value
   console.log(`-fn-getText tag=${tag.value} ymd=${ymd.value} qid=${qid.value}`)
   // console.warn('document.body.scrollHeight:', document.body.scrollHeight, 'window.innerHeight:', window.innerHeight)
   totalHeight.value = document.body.scrollHeight - window.innerHeight

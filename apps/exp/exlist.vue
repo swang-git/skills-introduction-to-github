@@ -38,11 +38,9 @@
           <!-- <q-tr v-if="isDesk" v-show="p.expand" :props="p"> -->
           <q-tr v-show="p.expand" :props="p">
             <q-td colspan="100%">
-              <ExpDetails :record="clickedRow" :hasPurchases="purchaselst.length > 0" :isReconcileC="isReconcile()" :hasGolfScore="scoreId > 0" :expColor="p.row.upd ? 'bg-cyan-10' : 'bg-teal-10'" :idx="clickedIdx"
-                @open-dar="openExdar"
-                @open-plist="openPlst"
-                @open-recon="openRecon"
-                @open-score="getScore"
+              <ExpDetails :record="clickedRow" :hasPurchases="purchaselst.length > 0" :isReconcileC="isReconcile()" :hasGolfScore="scoreId > 0" 
+                :expColor="p.row.upd ? 'bg-cyan-10' : 'bg-teal-10'" :idx="clickedIdx"
+                @open-dar="openExdar" @open-plist="openPlst" @open-recon="openRecon" @open-score="getScore"
               />
             </q-td>
           </q-tr>

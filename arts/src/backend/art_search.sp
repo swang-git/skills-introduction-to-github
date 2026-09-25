@@ -1,3 +1,22 @@
+
+DELIMITER $$
+CREATE DEFINER=`swang`@`%` PROCEDURE `art_search`(IN `cat` CHAR(3) CHARSET utf8mb4, IN `txt` VARCHAR(16) CHARSET utf8mb4)
+BEGIN
+IF cat = 'aut' THEN
+	select * from DailyDat where status = 'A' and aut like concat('%', txt COLLATE utf8mb4_unicode_ci, '%') order by tim desc;
+    -- select * from DailyDat where status = 'A' and aut = txt COLLATE utf8mb4_unicode_ci order by tim desc;
+ELSEIF cat = 'tit' THEN
+	select * from DailyDat where status = 'A' and tit like concat('%', txt COLLATE utf8mb4_general_ci, '%') order by tim desc;
+ELSEIF cat = 'txt' THEN
+	select * from DailyDat d
+    JOIN DailyArt a on d.tag = a.tag
+    where d.status = 'A' and a.qid = a.fid and  a.txt like concat('%', txt COLLATE utf8mb4_0900_ai_ci, '%') order by d.tim desc;
+END IF;
+END$$
+DELIMITER ;
+
+
+=========================
 DELIMITER $$
 CREATE DEFINER=`swang`@`localhost` PROCEDURE `get_daily_pxload`()
 BEGIN

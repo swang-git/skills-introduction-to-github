@@ -2,30 +2,14 @@
   <q-dialog v-model="opened" :transition-show="action == 'add' ? 'slide-right' : 'rotate'" :maximized="isIM" >
     <q-layout container class="bg-teal-10" :style="{ height: compHeight }">
       <LayoutHeader :tit="getTitle()" @do-action="doAction" :rbtn="iicon" />
-      <LayoutFooter
-        :tit="getFoote()"
-        icon="link"
-        :act="action"
-        @do-action="doAction"
-      />
+      <LayoutFooter :tit="getFoote()" icon="link" :act="action" @do-action="doAction" />
       <q-page-container>
         <q-page class="q-pa-sm">
           <div v-if="isDesk">
-            <DateTimePicker
-              label="Purchased at Date and Time"
-              :dateTime="row.purchasedon"
-              @upd-dt="updDateTime"
-              txsz="text-h6"
-            />
-          </div>
+            <DateTimePicker label="Purchased at Date and Time" :dateTime="row.purchasedon" @upd-dt="updDateTime" txsz="text-h6" />
+           </div>
           <div v-else>
-            <DateTimeIMPicker
-              class="q-pa-xs"
-              label="Match Starting Date Time"
-              txsz="text-h6"
-              :dateTime="row.purchasedon"
-              @upd-dt="setDateTime"
-            />
+            <DateTimeIMPicker class="q-pa-xs" label="Match Starting Date Time" txsz="text-h6" :dateTime="row.purchasedon" @upd-dt="setDateTime" />
           </div>
           <SelInput :obj="row" label="Select Paid with" icon="money" iColor="amber" :optList="paymOptions" @add-new-csp="handleUserSelection" />
           <SelInput :obj="row" label="Select Category" icon="category" iColor="pink" :optList="catsOptions" @get-subc-opt="getSubcOpt" />

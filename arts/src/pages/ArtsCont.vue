@@ -5,7 +5,7 @@
         <q-item-section>
           <q-item-label :class="{ 'dim-index': highlit === i, 'lit-index': highlit !== i }">
             <span style="font-family:stzhongs" class="text-yellow text-h4">{{ i + 1 }}.</span>
-            <span class="text-bold" style="font-size:28.8px;font-family:stfangso">{{ compData.titles[i] }}</span>
+            <span style="font-size:24.8px;font-family:stzhongs">{{ compData.titles[i] }}</span>
           </q-item-label>
           <q-item-label class="subtits" caption>{{ compData.subtits[i].replace(/\(|\W.\W.\W.\W\)/g, '') }}</q-item-label>
         </q-item-section>
@@ -116,7 +116,6 @@ function setCont(da) {
   store.topTit = da.cont.topTitle
   setPrevNextYmds()
 }
-
 function setClickedArt(i) {
   store.clickedIndex = i
   // const tagymd = tag.value + ymd.value
@@ -193,11 +192,6 @@ function setPrevNextYmds() {
   // console.log(`nextYmd=${nextYmd.value}`)
 }
 
-// function isSearch () {
-//   const re = /aut|tit|txt/gi
-//   return re.test(tag.value)
-// }
-
 function scrollToClickedCont () {
   const ele = getElement.value // You need to get your element here
   console.log(`-fn-scrollToClickedCont`, ele)
@@ -208,87 +202,6 @@ function scrollToClickedCont () {
     setVerticalScrollPosition(target, offset, duration)
   }
 }
-// function getCont () {
-//   console.log('-fn-getCont', route)
-//   const tagymd = route.path
-//   const path = process.env.API + '/arts/getCont' + tagymd
-//   gaxios(path)
-//   // if (!isSearch()) searchCat.value = ''
-//   // store.pageType = 'cont'
-//   // const key = '/' + tag.value + '/' + ymd.value
-//   // // console.warn('=ck=key:', key)
-//   // var conts = store.conts
-//   // // var hasPropety = Object.prototype.hasOwnProperty.call(cont, key)
-//   // if (Object.prototype.hasOwnProperty.call(conts, key)) {
-//   //   // console.warn('=ck=msg passed in ' + msg + ' - getCont from STORE') // for', tag.value, ymd.value)
-//   //   data.value = conts[key]
-//   //   store.updClickedCont = data.value
-//   //   const topTit = data.value.topTitle
-//   //   store.updTopTitle = topTit
-//     setPrevNextYmds()
-//   // } else {
-//   //   // console.warn('=ck=msg' + msg + ' - getCont from DB') // for', tag.value, ymd.value)
-//   //   getContFromDB()
-//   // }
-//   document.title = data.value.topTitle + 'XXX'
-// }
-
-// function getContFromDB () {
-//   var args = {}
-//   args.vm = this
-//   // console.debug(' -- params', $router.params)
-//   // if ($router.params.cat !== undefined) {
-//   if (this.isSearch()) {
-//     args.flag = 'search'
-//     args.path = process.env.API + '/arts/search/' + tag.value + '/' + ymd.value
-//   } else {
-//     args.flag = 'cont'
-//     args.path = process.env.API + '/arts/getCont/' + tag.value + '/' + ymd.value
-//   }
-//   axiosLoad(args)
-//   // document.title = this.$store.state.arts.topTit
-// }
-
-// $router.replace({ path: '/aut/' + searchQuery.value })
-// function searchAut () {
-//   loadAut.value = true
-//   setTimeout(() => {
-//     $router.replace({ path: '/aut/' + this.searchQuery })
-//     loadAut.value = false
-//   }, 2000)
-// }
-
-// function searchTit () {
-//   this.loadTit = true
-//   setTimeout(() => {
-//     $router.replace({ path: '/tit/' + this.searchQuery })
-//     this.loadTit = false
-//   }, 1000)
-// }
-
-// function searchTxt () {
-//   this.loadTxt = true
-//   setTimeout(() => {
-//     $router.replace({ path: '/txt/' + this.searchQuery })
-//     this.loadTxt = false
-//   }, 4000)
-// }
-
-// function changeTxt () { this.searchCat = '' }
-// console.info('-ST-ArtCont')
-// console.info('=cr= ArtsCont params:', $router.params)
-
-// getCont('from created()')
-// setTimeout(() => { scrollToClickedCont() }, 190)
-
-// const isPrevActive = computed(() => { return prevYmd.value === undefined ? 'invisible' : 'visible' })
-// const isNextActive = computed(() => { return nextYmd.value === undefined ? 'invisible' : 'visible' })
-// // const isDesk = computed(() => { return is.desk() })
-// // const isFone = computed(() => { return is.fone() })
-// // const tag = computed(() => { return $router.params.tag })
-// // const ymd = computed(() => { return $router.params.ymd })
-// const highlit = computed(() => { return data.value.clickedIndex })
-// const totalArts = computed(() => { return data.value.titles === undefined ? 0 : data.value.titles.length })
 const getElement = computed(() => {
   // const idx = store.clickedIndex
   // const tagymd = tag.value + ymd.value

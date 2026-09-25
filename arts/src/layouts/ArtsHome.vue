@@ -2,9 +2,10 @@
   <q-layout view="lHh Lpr LFf">
     <q-header>
       <q-toolbar class="bg-teal-10 glossy">
-        <q-btn v-if="!isTextPage" flat dense round @click="drawer=!drawer" aria-label="Menu" size="20px" :icon="getIcon()" />
+        <!-- <q-btn v-if="!isTextPage" flat dense round @click="drawer=!drawer" aria-label="Menu" size="20px" :icon="getIcon()" /> -->
+        <q-btn flat dense round @click="drawer=!drawer" aria-label="Menu" size="20px" :icon="getIcon()" />
           <q-toolbar-title>
-            <div class="text-center cursor-pointer no-wrap" style="font-size:27px" @click="doAction()">{{ store.topTit }}</div>
+            <div class="cursor-pointer text-h5" @click="goToCont()">{{ store.topTit }}</div>
           </q-toolbar-title>
       </q-toolbar>
     </q-header>
@@ -98,12 +99,14 @@ function openApp (url) {
   window.location.href = url
 }
 
-function doAction () {
-  if (!isTextPage.value) {
-    $router.replace({ path: store.clickedCont.key })
-  } else {
-    drawer.value = !drawer.value
-  }
+function goToCont () {
+  console.log(`-fn-goToCont isTextPage=${isTextPage.value} store.tag=${store.tag} store.ymd=${store.ymd}`)
+  $router.replace({ path: '/' + store.tag + '/' + store.ymd })
+  // if (!isTextPage.value) {
+  //   // $router.replace({ path: store.clickedCont.key })
+  // } else {
+  //   drawer.value = !drawer.value
+  // }
 }
 
 function goHome () {

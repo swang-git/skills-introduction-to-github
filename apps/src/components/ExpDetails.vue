@@ -12,12 +12,12 @@
 
     <template v-slot:top-left>
       <q-fab v-if="isDesk" v-model="fabOpen" :label="isIM ? '' : getTitle()" flat direction="right" color="cyan-2">
-        <q-btn round glossy class="q-mr-sm" size="16px" icon="add_circle" color="green-10"  @click="$emit('open-dar', 'add')" />
+        <!-- <q-btn round glossy class="q-mr-sm" size="16px" icon="add_circle" color="green-10"  @click="$emit('open-dar', 'add')" /> -->
         <q-btn round glossy class="q-mr-sm" size="16px" icon="update"     color="indigo-10" @click="$emit('open-dar', 'upd')" v-if="!props.record.del"  />
         <q-btn v-if="hasPurchases" round glossy size="16px" icon="shopping_cart" color="green-10" text-color="amber-1" class="q-mr-sm" @click="$emit('open-plist')" />
         <q-btn v-if="isReconcileC" round glossy size="16px" icon="credit_card"   color="amber-10" text-color="amber-2" class="q-mr-sm" @click="$emit('open-recon')" />
         <q-btn v-if="hasGolfScore" round glossy size="16px" icon="golf_course"   color="green-10" text-color="amber-5" class="q-mr-sm" @click="$emit('open-score')" />
-        <q-btn round glossy class="q-mr-sm" size="16px" icon="delete"     color="red-10"    @click="emitter.emit('del-row', props.record)" />
+        <!-- <q-btn round glossy class="q-mr-sm" size="16px" icon="delete"     color="red-10"    @click="emitter.emit('del-row', props.record)" /> -->
         <q-btn v-if="isIM" round size="10px" color="pink" @click="p.toggleFullscreen" class="q-pt-sm" />
       </q-fab>
     </template>
@@ -43,7 +43,7 @@ const props = defineProps({
   colColor: { type: String },
   idx: { type: Number },
 })
-const fabOpen = ref(false)
+const fabOpen = ref(true)
 const cIdx = ref(0)
 emitter.on('clicked-idx', (x) => { cIdx.value = x; console.log(`-ck-clicked-idx cIdx=${x}`) })
 console.log('-ST-ExpDetails')
