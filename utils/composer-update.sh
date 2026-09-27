@@ -16,11 +16,13 @@ composer update 2>&1 | tee $logFile
 if cat "$logFile" | grep -qi "Nothing to install"; then
     echo "ℹ️ No updates, skip install/build"
     exit 0
-elif cat "$logFile" | grep -qi "download"; then
+elif cat "$logFile" | grep -qi "Upgrading"; then
+    echo "ℹ️ devx just updated."
     logFile=$HOME_DIR/tmp/composer-upd-prod.log
     cd $SITE_DIR/prod
+    echo "ℹ️ Updating prod..."
     composer update 2>&1 | tee $logFile
-    cat "$logFile"
+    # cat "$logFile"
     ret=${PIPESTATUS[0]}
     exit $ret
 else
