@@ -5,7 +5,7 @@
         <!-- <q-btn v-if="!isTextPage" flat dense round @click="drawer=!drawer" aria-label="Menu" size="20px" :icon="getIcon()" /> -->
         <q-btn flat dense round @click="drawer=!drawer" aria-label="Menu" size="20px" :icon="getIcon()" />
           <q-toolbar-title>
-            <div class="cursor-pointer text-h5" @click="goToCont()">{{ store.topTit }}</div>
+            <div class="cursor-pointer text-h5" @click="backToCont()">{{ store.topTit }}</div>
           </q-toolbar-title>
       </q-toolbar>
     </q-header>
@@ -98,19 +98,26 @@ function openApp (url) {
   // console.debug('acts', this.acts)
   window.location.href = url
 }
-
-function goToCont () {
-  console.log(`-fn-goToCont isTextPage=${isTextPage.value} store.tag=${store.tag} store.ymd=${store.ymd}`)
-  $router.replace({ path: '/' + store.tag + '/' + store.ymd })
-  // if (!isTextPage.value) {
-  //   // $router.replace({ path: store.clickedCont.key })
-  // } else {
-  //   drawer.value = !drawer.value
+function backToCont() {
+  console.log(`-fn-backToCont isSearch=${store.isSearch} store.tag=${store.tag} store.ymd=${store.ymd}`)
+  if (store.isSearch) {
+    $router.replace({ path: '/' + store.searchCat + '/' + store.searchTxt })
+    return
+  } else {
+    const x = route.path.split('/')
+    const contpath = '/' + x[1] + '/' + x[2]
+    $router.replace({ path: contpath })
+    console.error( `-CK-backToCont from ArtsHome route.path=${route.path}`)
+  }
+  // emitter.emit('get-cont')
+  // if (store.isSearch) {
+  //   $router.replace({ path: '/' + store.searchCat + '/' + store.searchTxt })
+  //   return
   // }
+  // $router.replace({ path: '/' + store.tag + '/' + store.ymd })
 }
-
 function goHome () {
-  console.debug('-fn-goHome()')
+  console.log('-fn-goHome()')
   document.title = topTit.value
   $router.push({ path: '/' })
 }

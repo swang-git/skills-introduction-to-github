@@ -54,7 +54,7 @@ const searchQuery = ref('采访')
 // const searchQuery = ref('胜利')
 // topTitle: '天 天 浏 览 - 破万卷书 省千里路'
 
-console.info('-ST-Index')
+console.info('-ST-Index', store.contDict)
 
 function search () {
   console.info(`-fn-search searchQuery=${searchQuery.value}`)
@@ -67,7 +67,7 @@ function searchAut () {
   store.searchTxt = searchQuery.value
   let ckey = 'aut' + searchQuery.value
   $router.replace({ path: '/' + searchCat.value + '/' + searchQuery.value })
-  let contx = store.clickedCont[ckey]
+  let contx = store.contDict[ckey]
   if (contx != undefined) return
   const path = DEV_API + '/arts/searchATT/aut/' + searchQuery.value
   gaxios(path)
@@ -80,7 +80,7 @@ function searchTit () {
   store.searchTxt = searchQuery.value
   let ckey = 'tit' + searchQuery.value
   $router.replace({ path: '/' + searchCat.value + '/' + searchQuery.value })
-  let contx = store.clickedCont[ckey]
+  let contx = store.contDict[ckey]
   if (contx != undefined) return
   const path = DEV_API + '/arts/searchATT/tit/' + searchQuery.value
   gaxios(path)

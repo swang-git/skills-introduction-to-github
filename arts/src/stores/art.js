@@ -11,21 +11,25 @@ export const useArtStore = defineStore('art', {
     tag: null,
     ymd: null,
     qid: null,
-    clickedCont: {},
-    qids: [],
+    searchCat: null,
+    searchTxt: null,
+    contDict: {},
+    qids: {},
+    // clickedCont: null,
+    clickedIdx: {},
     clickedArt: {},
     topTit: '省千里路 🏠 破万卷书'
   }),
   actions: {
-    addClicked(key, obj) {
+    addContDict(key, obj) {
       // ✅ This adds a new key, WILL NOT overwrite other keys
-      this.clickedCont[key] = obj
+      this.contDict[key] = obj
     },
-    removeClicked(key) {
-      delete this.clickedCont[key]
+    removeContDict(key) {
+      delete this.contDict[key]
     },
-    resetClicked() {
-      this.clickedCont = {} // ⚠️ This clears everything
+    resetContDict() {
+      this.contDict = {} // ⚠️ This clears everything
     },
     increment() {
       this.count++

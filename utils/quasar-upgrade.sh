@@ -17,7 +17,6 @@ if cat "$logFile" | grep -qi "Congrats"; then
     echo "ℹ️ Already latest version, skip install/build"
     exit 0
 elif cat "$logFile" | grep -qi "install"; then
-    # echo "$output"
     echo "✅ Package arts upgraded"
 else
     echo "❌ Upgrade error detected:"
@@ -31,7 +30,6 @@ if cat "$logFile" | grep -qi "Congrats"; then
     echo "ℹ️ Already latest version, skip install/build"
     exit 0
 elif cat "$logFile" | grep -qi "install"; then
-    # echo "$output"
     echo "✅ Package arts upgraded"
 else
     echo "❌ Upgrade error detected:"
@@ -45,7 +43,6 @@ if cat "$logFile" | grep -qi "Congrats"; then
     echo "ℹ️ Already latest version, skip install/build"
     exit 0
 elif cat "$logFile" | grep -qi "install"; then
-    # echo "$output"
     echo "✅ Package arts upgraded"
 else
     echo "❌ Upgrade error detected:"
@@ -59,7 +56,6 @@ if cat "$logFile" | grep -qi "Congrats"; then
     echo "ℹ️ Already latest version, skip install/build"
     exit 0
 elif cat "$logFile" | grep -qi "install"; then
-    # echo "$output"
     echo "✅ Package arts upgraded"
 else
     echo "❌ Upgrade error detected:"

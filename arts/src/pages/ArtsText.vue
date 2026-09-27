@@ -56,9 +56,11 @@ import { useRoute, useRouter } from 'vue-router'
 const route = useRoute()
 const $router = useRouter()
 import { libFunctions } from '../../src/composables/libFunctions'
-const { isDesk, isIM, isLocal, $q, store, DEV_API } = libFunctions()
+const { isDesk, isIM, isLocal, $q, DEV_API } = libFunctions()
 import { axiosFunctions } from '../../src/composables/axiosFunctions'
 const { gaxios } = axiosFunctions()
+import { useArtStore } from '../stores/art.js'
+const store = useArtStore()
 // const { getScrollTarget, setVerticalScrollPosition, getScrollPosition } = scroll
 const { getScrollTarget, setVerticalScrollPosition } = scroll
 
@@ -97,6 +99,9 @@ onUnmounted(() => {
   handler = null
 })
 // emitter.on('arts-getText', da => setText(da))
+// emitter.on('get-text', () => getText())
+
+const contKey = computed(() => { return tag.value + ymd.value })
 
 console.info('-ST-ArtsText')
 // getText('-cr-ArtsText')
@@ -109,7 +114,7 @@ function getText() {
   store.tag = tag.value
   store.ymd = ymd.value
   store.qid = qid.value
-  console.log(`-fn-getText tag=${tag.value} ymd=${ymd.value} qid=${qid.value}`)
+  console.log(`-fn-getText tag=${tag.value} ymd=${ymd.value} qid=${qid.value}`, store.qids)
   // console.warn('document.body.scrollHeight:', document.body.scrollHeight, 'window.innerHeight:', window.innerHeight)
   totalHeight.value = document.body.scrollHeight - window.innerHeight
   // console.warn(`totalHeight=${totalHeight.value}`)
@@ -129,8 +134,6 @@ function setText(da) {
   tag.value = route.params.tag
   ymd.value = route.params.ymd
   qid.value = route.params.qid
-  // art.value.qids = store.clickedCont.links.map(p => p.qid)
-  // restyleImage()
   add_api_for_testing()
   setPrevNextQids()
 }
@@ -272,23 +275,19 @@ function showArtInfo() {
 
 function backToCont() {
   if (store.isSearch) {
-    // emitter.emit('back-to-search')
     $router.replace({ path: '/' + store.searchCat + '/' + store.searchTxt })
     return
   }
-  const clickedCont = store.clickedCont
   let x = route.path.split('/')
   const contPath = '/' + x[1] + '/' + x[2]
   $router.replace({ path: contPath })
-  console.error( `-CK-clickedCont store.clickedCont.key=${store.clickedCont.key} route.path=${route.path}`, clickedCont)
-  // $router.replace({name: 'cont', params: {tag: tag.value, ymd: ymd.value}})
-  // window.location.href = clickedCont.key
+  console.error( `-CK-backToCont route.path=${route.path}`)
 }
 
 watch(
   () => route.path, // Watch the `path` property of the route
   (newPath, oldPath) => {
-    console.log('Route changed from', oldPath, 'to', newPath)
+    console.log('watch: Route changed from', oldPath, 'to', newPath)
     // You can perform any action here when the route changes
     // const path = process.env.API + '/arts/getCont' + newPath
     // gaxios(path)
@@ -298,22 +297,39 @@ watch(
 
 function getPrevQid() {
   console.log('-fn-getPrevQid', art.value.qids)
-  // const qids = art.value.qids
-  const qids = store.qids
-  const idx = qids.findIndex(q => parseInt(q) == qid.value)
+  let ckey = contKey.value
+  if (store.isSearch) ckey = store.searchCat + store.searchTxt
+  const qids = store.qids[ckey]
+  let idx = qids.findIndex(q => parseInt(q) == qid.value)
   const pqids = qids.slice(0, idx)
+  if (idx == 0) idx = qids.length - 1
+  store.clickedIdx[ckey] = idx - 1
+  console.log(`%c -fn-getPrevQid store.clickedIndex=${store.clickedIndex}`, 'color:lime')
+  const conty = store.contDict[ckey].links[idx - 1]
+  tag.value = conty.tag
+  ymd.value = conty.ymd
   return pqids.pop()
 }
 function getNextQid() {
-  console.log(`-fn-getNextQid qid=${qid.value}`, art.value.qids)
   // const qids = art.value.qids
-  const qids = store.qids
-  const idx = qids.findIndex(q => parseInt(q) == qid.value)
+  // const qids = store.qids[tag.value + ymd.value]
+  // const qids = store.clickedCont.links.map(p => p.qid)
+  let ckey = contKey.value
+  if (store.isSearch) ckey = store.searchCat + store.searchTxt
+  const qids = store.qids[ckey]
+  let idx = qids.findIndex(q => parseInt(q) == qid.value)
+  if (idx >= qids.length) idx = -1
+  store.clickedIdx[ckey] = idx + 1
+  console.log(`%c -fn-getNextQid store.clickedIndex=${store.clickedIndex}`, 'color:pink')
   const nqids = qids.slice(idx + 1)
+  const conty = store.contDict[ckey].links[idx + 1]
+  // console.log(`-fn-getNextQid qid=${qid.value}`, conty)
+  tag.value = conty.tag
+  ymd.value = conty.ymd
   return nqids.shift()
 }
 function showPrev() {
-  store.clickedArt[tag.value + ymd.value]--
+  // store.clickedArt[tag.value + ymd.value]--
   // $router.replace({ name: 'text', params: { tag: prevTag.value, ymd: prevYmd.value, qid: prevQid.value } })
   qid.value = getPrevQid()
   console.log(`-fn-showPrev name:text, tag=${tag.value}, ymd=${ymd.value}, qid=${qid.value}`)
@@ -321,48 +337,28 @@ function showPrev() {
 }
 
 function showNext() {
-  store.clickedArt[tag.value + ymd.value]++
+  console.log(`-fn-showNext %cstore.isSearch=${store.isSearch} nextQid=${nextQid.value} store.clickedCont.key=${store.clickedCont.key}`, 'color:red')
+  // store.clickedArt[tag.value + ymd.value]++
   qid.value = getNextQid()
-  console.log(`-fn-showNext name:text, tag=${tag.value}, ymd=${ymd.value}, qid=${qid.value}`)
+  // if (store.isSearch) setNextTagYmd()
+  console.log(`-fn-showNext store.clickedCont.key=${store.clickedCont.key} tag=${tag.value}, ymd=${ymd.value}, qid=${qid.value}`)
   $router.push({ path: '/' + tag.value + '/' + ymd.value + '/' + qid.value })
-  // console.log(`-fn-showNext name:text, nextTag=${nextTag.value}, nextYmd=${nextYmd.value}, nextQid=${nextQid.value}`)
   // $router.replace({ name: 'text', params: { tag: nextTag.value, ymd: nextYmd.value, qid:nextQid.value } })
 }
 
-// function getText (msg) {
-//   // setVerticalScrollPosition(scrollElm.value, 0, 0)
-//   // document.title = store.state.arts.topTitle
-//   // // store.state.arts.clickedCont.ymd = ymd.value
-//   // store.commit('arts/clickedCont_ymd', ymd.value)
-//   // store.commit('arts/clickedCont_tag', tag.value)
-//   // store.commit('arts/clickedCont_qid', qid.value)
-//   // var cont = store.state.arts.clickedCont
-//   // console.info(msg)
-//   // console.warn('document.body.scrollHeight:', document.body.scrollHeight, 'window.innerHeight:', window.innerHeight)
-//   totalHeight.value = document.body.scrollHeight - window.innerHeight
-//   // console.warn(`totalHeight=${totalHeight.value}`)
-//   var lnk = cont.links
-//   if (lnk === undefined) {
-//     var args = {}
-//     args.flag = 'cont_text'
-//     args.vm = this
-//     args.path = process.env.API + '/arts/getCont/' + tag.value + '/' + ymd.value
-//     gaxios(args)
-//   } else {
-//     // lnk = store.state.arts.clickedCont.links
-//     setPrevNextQids(msg)
-//   }
-//   getTextFromDB()
-// }
-
 function setPrevNextQids() {
-  // console.info(`-fn-setPrevNextQids qid=[${qid.value}]`, store.qids)
-  if (store.qids.length <= 0) {
+  // const contx = store.contDict[contKey.value]
+  let ckey = contKey.value
+  if (store.isSearch) ckey = store.searchCat + store.searchTxt
+  const qids = store.qids[ckey]
+  console.info(`-fn-setPrevNextQids qid=[${qid.value}] contKey=${ckey} isSearch=${store.isSearch} store.tag=${store.tag} store.ymd=${store.ymd}`, store.contDict)
+  // const qids = store.contDict[contKey.value].links.map(p => p.qid)
+  // const qids = store.qids[contKey.value]
+  if (qids.length <= 0) {
     prevQid.value = undefined
     nextQid.value = undefined
     return
   }
-  const qids = store.qids
   // const qids = [2847364, 2847302, 2847304, 2847314, 2847340, 2847338, 2847362, 2847312, 2847300, 2847310, 2847330, 2847360]
   // const pos = qids.indexOf(qid.value)
   prevTag.value = tag.value
@@ -384,194 +380,16 @@ function add_api_for_testing() {
   if (import.meta.env.PROD) return
   console.log(`-fn-add_api_for_testing import.meta.env.PROD=${import.meta.env.PROD}`)
   var re = /<img\s+src="\/daily_data/gi
-  // if (tag.value === 'PXWX') {
-  // art.value.modifiedTxt = art.value.txt.replace(re, '<img src="' + process.env.API + '/daily_data')
   art.value.modifiedTxt = art.value.txt.replace(re, '<img src="' + DEV_API + '/daily_data')
   art.value.txt = art.value.modifiedTxt
-  // re = 'style="max-width:600px;float:left;margin:9px 9px 0 0"'
-  // art.value.imgRestyled = art.value.modifiedTxt.replace(re, 'class="q-px-xs w-full"')
-  // art.value.imgRestyled = art.value.modifiedTxt.replace(re, 'style="width: 100%; height: auto"')
-  // art.value.imgRestyled = art.value.modifiedTxt.replace(re, 'style="width: 100%; height: auto; display: block"')
-  // art.value.imgRestyled = art.value.modifiedTxt.replace(re, 'style="width: 100vw; height: auto; max-width: 100%;"')
-  // art.value.imgRestyled = art.value.modifiedTxt.replace(re, 'style="width: 100%; max-width: 100%; height: auto;" native-context')
-  // art.value.txt = art.value.imgRestyled
-  // }
   flw.value.forEach(f => {
-    // f.txt = f.txt.replace(re, '<img src="' + process.env.API + '/daily_data')
     f.txt = f.txt.replace(re, '<img src="/daily_data')
   })
 
-  // function setPrevNextQids () {
-  //   console.info(`-fn-setPrevNextQids qid=[${qid.value}]`)
-  //   if (art.value.qids.length <= 0) {
-  //     prevQid.value = undefined
-  //     nextQid.value = undefined
-  //     return
-  //   }
-  //   const qids = art.value.qids
-  //   // const qids = [2847364, 2847302, 2847304, 2847314, 2847340, 2847338, 2847362, 2847312, 2847300, 2847310, 2847330, 2847360]
-  //   // const pos = qids.indexOf(qid.value)
-  //   prevTag.value = tag.value
-  //   prevYmd.value = ymd.value
-  //   const pos = qids.findIndex((q) => parseInt(q) == parseInt(qid.value))
-  //   readArticle.value = pos + 1
-  //   const pqids = qids.slice(0, pos)
-  //   const nqids = qids.slice(pos + 1)
-  //   // console.log(`-CK-pos=${qids.findIndex((q) => parseInt(q) == parseInt(qid.value))}`, pqids, nqids)
-  //   prevQid.value = pqids.pop()
-  //   nextQid.value = nqids.length > 0 ? nqids.shift() : undefined
-  //   // console.log(`qid=${qid.value}`, pqids, nqids)
-  //   console.log(`prevQid=${prevQid.value}`)
-  //   console.log(`nextQid=${nextQid.value}`)
-  //   // var lnk = store.clickedCont.links
-  //   // for (var i = 0; i < lnk.length; i++) {
-  //   //   var qx = lnk[i].qid
-  //   //   if (qx === parseInt(qid.value)) {
-  //   //     store.clickedIndex = i
-  //   //     readArticle.value = i + 1
-  //   //     prevTag.value = (lnk[i - 1] === undefined) ? lnk[lnk.length - 1].tag : lnk[i - 1].tag
-  //   //     prevYmd.value = (lnk[i - 1] === undefined) ? lnk[lnk.length - 1].ymd : lnk[i - 1].ymd
-  //   //     prevQid.value = (lnk[i - 1] === undefined) ? lnk[lnk.length - 1].qid : lnk[i - 1].qid
-  //   //     nextQid.value = (lnk[i + 1] === undefined) ? lnk[0].qid : lnk[i + 1].qid
-  //   //     nextYmd.value = (lnk[i + 1] === undefined) ? lnk[0].ymd : lnk[i + 1].ymd
-  //   //     nextTag.value = (lnk[i + 1] === undefined) ? lnk[0].tag : lnk[i + 1].tag
-  //   //     break
-  //   //   }
-  //   // }
-  // // function setPrevNextQids () {
-  // //   console.info('-fn-setPrevNextQids', store.clickedCont)
-  // //   var lnk = store.clickedCont.links
-  // //   for (var i = 0; i < lnk.length; i++) {
-  // //     var qx = lnk[i].qid
-  // //     if (qx === parseInt(qid.value)) {
-  // //       store.clickedIndex = i
-  // //       readArticle.value = i + 1
-  // //       prevTag.value = (lnk[i - 1] === undefined) ? lnk[lnk.length - 1].tag : lnk[i - 1].tag
-  // //       prevYmd.value = (lnk[i - 1] === undefined) ? lnk[lnk.length - 1].ymd : lnk[i - 1].ymd
-  // //       prevQid.value = (lnk[i - 1] === undefined) ? lnk[lnk.length - 1].qid : lnk[i - 1].qid
-  // //       nextQid.value = (lnk[i + 1] === undefined) ? lnk[0].qid : lnk[i + 1].qid
-  // //       nextYmd.value = (lnk[i + 1] === undefined) ? lnk[0].ymd : lnk[i + 1].ymd
-  // //       nextTag.value = (lnk[i + 1] === undefined) ? lnk[0].tag : lnk[i + 1].tag
-  // //       break
-  // //     }
-  // //   }
-
-  //   // console.info(' == from', msg)
-  //   // store.state.arts.topTitle = art.value.tit
-  //   store.topTit = art.value.tit
-  //   // var key = tag.value + ymd.value
-  //   // var conts = store.conts
-  //   // if (conts !== undefined && Object.prototype.hasOwnProperty.call(conts, key)) {
-  //   //   conts[key].clicked = qid.value
-  //   //   // store.commit('arts/updClicked', qid.value)
-  //   // document.title = art.value.tit
-  // }
-
-  // function restyleImage() {
-  //   console.log(`-fn-restyleImage tag=${tag.value}`, art.value)
-  //   if (process.env.API === '') return
-  //   var re = /<img\s+src="\/daily_data/gi
-  //   // if (tag.value === 'PXWX') {
-  //   art.value.modifiedTxt = art.value.txt.replace(re, '<img src="' + process.env.API + '/daily_data')
-  //   art.value.txt = art.value.modifiedTxt
-  //   // re = 'style="max-width:600px;float:left;margin:9px 9px 0 0"'
-  //   // art.value.imgRestyled = art.value.modifiedTxt.replace(re, 'class="q-px-xs w-full"')
-  //   // art.value.imgRestyled = art.value.modifiedTxt.replace(re, 'style="width: 100%; height: auto"')
-  //   // art.value.imgRestyled = art.value.modifiedTxt.replace(re, 'style="width: 100%; height: auto; display: block"')
-  //   // art.value.imgRestyled = art.value.modifiedTxt.replace(re, 'style="width: 100vw; height: auto; max-width: 100%;"')
-  //   // art.value.imgRestyled = art.value.modifiedTxt.replace(re, 'style="width: 100%; max-width: 100%; height: auto;" native-context')
-  //   // art.value.txt = art.value.imgRestyled
-  //   // }
-  //   flw.value.forEach((f) => {
-  //     f.txt = f.txt.replace(re, '<img src="' + process.env.API + '/daily_data')
-  //   })
-  // store.commit('arts/art', art.value)
-  // store.commit('arts/flw', flw.value)
-  // store.commit('arts/sub', art.value.sub)
-  // console.warn(`=wn=restyleImage readPercent=${readPercent.value} totalHeight=${totalHeight.value}`)
   articlePosition.value = 'articleEnd' // this make sure show the begging of the article - check function toggleHeadEnd() in else block
   toggleHeadEnd()
 }
-
-// function testing_restyleImage_repeated_img () {
-//   const rex = /<img src="(.*?)"\s+style=(.*?)0">/gi
-//   console.info('== regex match', art.value.txt.match(rex))
-//   art.value.txt = art.value.txt.replace(rex, '<img src="$1" class="responsive">')
-// }
-
-// function testing_restyleImage_repeated_img_look_forward_regex () {
-//   const pat = '<img src="(.*)" style(.*)0">'
-//   const re = new RegExp(pat + '(?=' + pat + ')')
-//   art.value.txt = art.value.txt.replace(re, '<img src="' + '$1" class="responsive" />')
-// }
-
-// function testing_restyleImage_repeated_imgXXX () {
-//   // var re = /<img\s+src="(.*)"\s+(.*)>/gim
-//   // var re = /<img\s+src="(.*)"\s+style(.*)0">(?=<img)/gi
-//   // var re = /<img(.*)>(?=<img)/gi
-//   // console.log(' === matched patterns', art.value.txt.match(re))
-
-//   var rex = /><img/gi
-//   const imgRepeator = art.value.txt.match(rex).length
-//   // console.info(' == matched patterns', imgRepeator, art.value.txt.match(rex))
-//   // console.log(' === matched patterns', art.value.txt.match(rex))
-//   // art.value.txt.replace(rex, '>\\n\\n<img')
-//   var re = /<img\s+src="(.*)"\s+style=(.*)0">/gi
-//   // const txt = art.value.txt
-//   for (let i = 0; i <= imgRepeator; i++) {
-//     // console.log(' === matched patternsXX', art.value.txt.match(re))
-//     art.value.txt = art.value.txt.replace(re, '<img src="' + '$1" class="responsive" />')
-//   }
-//   // art.value.txt = art.value.txt.replace(re, '<img src="' + '$1" class="responsive" />')
-//   flw.value.forEach(f => {
-//     f.txt = f.txt.replace(re, '<img src="' + '$1" class="responsive" />')
-//   })
-// }
-
-// function restyleImageForFone () {
-//   const rex = /<img src="(.*?)"\s+style=(.*?)0">/gi
-//   if  tag.value === 'PXWX') art.value.modifiedTxt = art.value.modifiedTxt.replace(rex, '<img src="$1" class="responsive" />')
-//   else art.value.txt = art.value.txt.replace(rex, '<img src="$1" class="responsive" />')
-//   // art.value.txt = art.value.txt.replace(rex, '<img src="$1" class="img-circle">')
-
-//   flw.value.forEach(f => {
-//     f.txt = f.txt.replace(rex, '<img src="$1" class="responsive">')
-//   })
-// }
-
-// function restyleVideo () {
-//   var rex = /<iframe(.*)src="(.*)"><\/iframe>/gi
-//   if (is.desk()) art.value.txt = art.value.txt.replace(rex, '<iframe frameborder="0" allowfullscreen height="450" width="800" src="$2"></iframe>')
-//   else art.value.txt = art.value.txt.replace(rex, '<iframe frameborder="0" allowfullscreen width="340" src="$2"></iframe>')
-//   flw.value.forEach(f => { f.txt = f.txt.replace(rex, '<div class="q-video"><iframe frameborder="0" allowfullscreen src="$2"></iframe></div>') })
-// }
-
-// function getTextFromDB () {
-//   if (qid.value == undefined) return
-//   var args = {}
-//   args.flag = 'text'
-//   args.vm = this
-//   args.path = process.env.API + '/arts/getText/' + tag.value + '/' + ymd.value + '/' + qid.value
-//   // args.path = process.env.API + '/arts/getText/' + tag.value + '/' + ymd.value + '/' + 2543671
-//   axiosLoad(args)
-// }
-
-// openURL,
-// function checkPlatform () {
-//   if (is.desk()) alert('you are running on Desktop')
-//   if (is.android()) alert('you are running on Android')
-//   if (is.iPhone()) alert('you are running on iPhone')
-//   if (is.iPad()) alert('you are running on iPad')
-//   if (is.mobile()) alert('you are running on Mobile')
-//   if (is.fone()) alert('you are running on Fone')
-//   if (is.safari()) alert('you are running on Safari')
-//   if (is.chromeExt()) alert('you are running on ChromeExt')
-//   if (is.chrome()) alert('you are running on Chrome')
-//   if (is.linux()) alert('you are running on Linux')
-//   if (is.firefox()) alert('you are running on Firefox')
-// }
 </script>
-
 <style>
 img {
   max-width: 100% !important;
