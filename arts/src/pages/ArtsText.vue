@@ -135,7 +135,8 @@ function setText(da) {
   ymd.value = route.params.ymd
   qid.value = route.params.qid
   add_api_for_testing()
-  setPrevNextQids()
+  const qids = store.qids[contKey.value]
+  if (qids != undefined) setPrevNextQids()
 }
 
 const flwups = computed(() => {
@@ -337,7 +338,7 @@ function showPrev() {
 }
 
 function showNext() {
-  console.log(`-fn-showNext %cstore.isSearch=${store.isSearch} nextQid=${nextQid.value} store.clickedCont.key=${store.clickedCont.key}`, 'color:red')
+  // console.log(`-fn-showNext %cstore.isSearch=${store.isSearch} nextQid=${nextQid.value} store.clickedCont.key=${store.clickedCont.key}`, 'color:red')
   // store.clickedArt[tag.value + ymd.value]++
   qid.value = getNextQid()
   // if (store.isSearch) setNextTagYmd()

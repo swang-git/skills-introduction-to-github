@@ -36,7 +36,7 @@ import { useRoute, useRouter } from 'vue-router'
 const route = useRoute()
 const $router = useRouter()
 import emitter from 'tiny-emitter/instance'
-import { ref, computed, watch } from 'vue'
+import { ref, computed, watch, onMounted } from 'vue'
 import { libFunctions } from '../composables/libFunctions'
 const { DEV_API } = libFunctions()
 import { axiosFunctions } from '../composables/axiosFunctions'
@@ -46,6 +46,26 @@ const { getScrollTarget, setVerticalScrollPosition } = scroll
 
 import { useArtStore } from '../stores/art.js'
 const store = useArtStore()
+// const loading = ref(true)
+// const error = ref(null)
+// // await store.fetchArtFromLaravel()
+
+// async function loadData () {
+//   console.log(`-fn-%c loadData`, 'color:pink')
+//   loading.value = true
+//   error.value = null
+//   try {
+//     await store.fetchArtFromLaravel()
+//   } catch (err) {
+//     error.value = err
+//   } finally {
+//     loading.value = false
+//   }
+// }
+
+// onMounted(() => {
+//   loadData()
+// })
 
 const footerState = ref(true) // might be used some times
 const prevYmd = ref(undefined)

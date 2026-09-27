@@ -19,9 +19,7 @@ export function axiosFunctions() {
     // const pathx = '/' + target.replace('-', '/')
     console.log(`%cGATH:${pathx}`, 'font-size:10px;font-weight:600;color:yellow;font-size:medium')
 
-    axios
-      .get(path)
-      .then((response) => {
+    axios.get(path).then((response) => {
         const da = response.data
         console.log(
           `%cGTGT:${target}(${da.status})`,
@@ -49,9 +47,7 @@ export function axiosFunctions() {
     if (x[0] === 'api') target = x[1] + '-' + x[2]
     else target = x[0] + '-' + x[1]
 
-    axios
-      .post(path, data)
-      .then((response) => {
+    axios.post(path, data).then((response) => {
         const da = response.data
         // console.log(`-fn-target=${target} axios return status=${da.status}`)
         console.log(

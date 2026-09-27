@@ -63,7 +63,10 @@ import emitter from 'tiny-emitter/instance'
 import { libFunctions } from '../composables/libFunctions'
 import { axiosFunctions } from '../composables/axiosFunctions'
 const { gaxios } = axiosFunctions()
-const { isDesk, isFone, isIM, store, DEV_API } = libFunctions()
+const { isDesk, isFone, isIM, DEV_API } = libFunctions()
+import { useArtStore } from '../stores/art.js'
+const store = useArtStore()
+// await store.fetchArtFromLaravel()
 
 // name: 'ArtsHome',
 const clickedIdx = ref(-1)
