@@ -12,12 +12,13 @@ fi
 
 logFile="$HOME_DIR/tmp/qupd-arts.log"
 cd $PROJECTS_DIR/arts
-quasar upgrade 2>&1 | tee $logFile
+quasar upgrade -i 2>&1 | tee $logFile
 if cat "$logFile" | grep -qi "Congrats"; then
     echo "ℹ️ Already latest version, skip install/build"
     exit 0
 elif cat "$logFile" | grep -qi "install"; then
     echo "✅ Package arts upgraded"
+    npm audit fix
 else
     echo "❌ Upgrade error detected:"
     echo "$logFile"
@@ -25,12 +26,13 @@ else
 fi
 logFile="$HOME_DIR/tmp/qupd-yali.log"
 cd $PROJECTS_DIR/yali
-quasar upgrade 2>&1 | tee $logFile
+quasar upgrade -i 2>&1 | tee $logFile
 if cat "$logFile" | grep -qi "Congrats"; then
     echo "ℹ️ Already latest version, skip install/build"
     exit 0
 elif cat "$logFile" | grep -qi "install"; then
     echo "✅ Package arts upgraded"
+    npm audit fix
 else
     echo "❌ Upgrade error detected:"
     echo "$logFile"
@@ -38,12 +40,13 @@ else
 fi
 logFile="$HOME_DIR/tmp/qupd-golf.log"
 cd $PROJECTS_DIR/golf
-quasar upgrade 2>&1 | tee $logFile
+quasar upgrade -i 2>&1 | tee $logFile
 if cat "$logFile" | grep -qi "Congrats"; then
     echo "ℹ️ Already latest version, skip install/build"
     exit 0
 elif cat "$logFile" | grep -qi "install"; then
     echo "✅ Package arts upgraded"
+    npm audit fix
 else
     echo "❌ Upgrade error detected:"
     echo "$logFile"
@@ -51,12 +54,13 @@ else
 fi
 logFile="$HOME_DIR/tmp/qupd-apps.log"
 cd $PROJECTS_DIR/apps
-quasar upgrade 2>&1 | tee $logFile
+quasar upgrade -i 2>&1 | tee $logFile
 if cat "$logFile" | grep -qi "Congrats"; then
     echo "ℹ️ Already latest version, skip install/build"
     exit 0
 elif cat "$logFile" | grep -qi "install"; then
     echo "✅ Package arts upgraded"
+    npm audit fix
 else
     echo "❌ Upgrade error detected:"
     echo "$logFile"
