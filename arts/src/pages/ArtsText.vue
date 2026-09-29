@@ -167,11 +167,11 @@ function getSub() {
   const sub = art.value.sub
   if (!isDesk || sub === undefined) return null
   else if (sub.search(/图片.*文章字数/) >= 0)
-    return sub.replace( /^\d{4}-.*\d\d:\d\d:\d\d\s+作者:(.*)\s+(\d+)图片\s+文章字数:(.*)/, '$1 $2图 $3')
+    return sub.replace( /^\d{4}-.*\d\d:\d\d:\d\d\s+作者:(.*)\s+(\d+)图片\s+文章字数:(.*)/, '$1 $2图')
   else if (sub.search('文章字数') >= 0)
-    return sub.replace( /^\d{4}-.*\s+\d\d:\d\d:\d\d\s+作者:(.*)\s+文章字数:(.*)/, '$1$2')
+    return sub.replace( /^\d{4}-.*\s+\d\d:\d\d:\d\d\s+作者:(.*)\s+文章字数:(.*)/, '$1')
   else if (sub.indexOf('图片') >= 0)
-    return sub.replace( /^\d{4}-.*\d\d:\d\d:\d\d\s+作者:(.*)\s+(\d+)图片\s+文章字数:(.*)/, '$1 $2图 $3')
+    return sub.replace( /^\d{4}-.*\d\d:\d\d:\d\d\s+作者:(.*)\s+(\d+)图片\s+文章字数:(.*)/, '$1 $2图')
   else return sub.replace(/^\d{4}-.*\d\d:\d\d:\d\d\s+作者:(.*)/, '$1')
 }
 
