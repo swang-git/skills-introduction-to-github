@@ -17,7 +17,7 @@ if cat "$logFile" | grep -qi "Nothing to install"; then
     echo "ℹ️ No updates, skip install/build"
     exit 0
 elif cat "$logFile" | grep -qi "Upgrading"; then
-    echo "ℹ️ ✅ devx just updated."
+    echo "ℹ️ ✅ devx just updated.🎉"
     logFile=$HOME_DIR/tmp/composer-upd-prod.log
     cd $SITE_DIR/prod
     echo "ℹ️ Updating prod..."
@@ -25,7 +25,7 @@ elif cat "$logFile" | grep -qi "Upgrading"; then
     # cat "$logFile"
     ret=${PIPESTATUS[0]}
     if [ $ret -eq 0 ]; then
-      echo "ℹ️ℹ️ ✅ prod ijust updated."
+      echo "ℹ️ℹ️ ✅ prod just updated.🎉"
     fi
     exit $ret
 else
