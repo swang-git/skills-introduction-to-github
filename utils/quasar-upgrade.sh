@@ -10,7 +10,7 @@ if [ "$OS" == "Linux" ]; then
     PROJECTS_DIR="/sites/projects"
 fi
 echo
-echo "⚠️ℹ️ Current system $OS"
+echo "⚠️ℹ️ Current system: $OS"
 
 logFile="$HOME_DIR/tmp/qupd-arts.log"
 cd $PROJECTS_DIR/arts
