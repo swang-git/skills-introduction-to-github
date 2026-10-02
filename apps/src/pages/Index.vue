@@ -32,12 +32,7 @@
         </q-card>
       </q-toolbar>
     </q-header>
-    <q-page-container v-if="isDesk" :style="getBackgroundImgM()">
-      <div class="row justify-between">
-        <q-btn flat icon="" size="150px" @click="getPrevPic" style="height:95vh; z-index:1" />
-        <q-btn flat icon="" size="150px" @click="getNextPic" style="height:95vh; z-index:1" />
-      </div>
-    </q-page-container>
+    <div v-if="isDesk" :style="getBackgroundImgM()" />
     <q-footer v-if="isDesk" elevated class="bg-teal-10">
       <q-toolbar>
         <q-btn rounded glossy label="上一幅" color="andigo" @click="getPrevPic" />
@@ -98,7 +93,7 @@ function slideShow () {
   console.log(`-fn-slideShow isApps=${isApps.value} BASE_URL=${import.meta.env.BASE_URL}`)
   setInterval(() => {
     showSlide.value ? getNextPic() : null
-  }, 2500)
+  }, 30000)
 }
 function getPrevPic () {
   console.log(`-fn-getNextPic picIdx=${picIdx.value}`)
