@@ -3,7 +3,7 @@
     <q-header elevated>
       <q-toolbar class="bg-teal-9">
         <q-card class="flex flex-center">
-          <q-card-actions align="between" class="bg-teal-9">
+          <q-card-actions align="between" class="bg-teal-9" style="margin:-5px -12px 0 -12px">
             <RoundButton size="22px" icon="monetization_on" clas="q-ma-xs" colr="purple-10" iclr="yellow" ttip="日 常 消 费" @click="openApp('exlist')" />
             <RoundButton size="22px" icon="add_shopping_cart" clas="q-ma-xs" colr="indigo-10" ttip="采 购 清 单" @click="openApp('shopping')" />
             <RoundButton size="22px" icon="schedule" clas="q-ma-xs" colr="cyan-10" iclr="amber" ttip="温 馨 提 示" @click="openApp('reminder')" />
