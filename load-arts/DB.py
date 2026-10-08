@@ -557,7 +557,12 @@ def addDailyArt(art):
     elif flw.first().txt == '' and len(art.txt) > 0:
         dlout(3, 'Exist:Art but empty_txt upd txt', art.idx, art.tag, art.qid, art.fid, art.txt[0:40], art.aut)
         # flw = session.query(DailyArt).filter(DailyArt.tag==art.tag, DailyArt.qid==art.qid, DailyArt.fid==art.fid)
-        flw.update({'txt': art.txt})
+        #flw.update({'txt': art.txt})
+        session.query(DailyArt).filter(
+            DailyArt.tag==art.tag,
+            DailyArt.qid==art.qid,
+            DailyArt.fid==art.fid
+        ).update({'txt': art.txt})
         # session.query(DailyArt).filter(DailyArt.tag==art.tag, DailyArt.qid==art.qid, DailyArt.fid==art.fid).update({'txt':art.txt})
         session.commit()
     else:
