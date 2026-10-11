@@ -64,10 +64,12 @@ class ExpController extends Controller {
       }
       $cardNums09 = GiftCard::where([['status', 'A'], ['paym_id', 9]])->select('card_num as slbl')->orderBy('dtm', 'desc')->get();
       $cardNums15 = GiftCard::where([['status', 'A'], ['paym_id', 15]])->select('card_num as slbl')->orderBy('dtm', 'desc')->get();
+      $cardNums27 = GiftCard::where([['status', 'A'], ['paym_id', 27]])->select('card_num as slbl')->orderBy('dtm', 'desc')->get();
       $idx = 0; foreach ($cardNums09 as $num) $num->sval = $idx++;
       $idx = 0; foreach ($cardNums15 as $num) $num->sval = $idx++;
+      $idx = 0; foreach ($cardNums27 as $num) $num->sval = $idx++;
 
-    return ['giftCards' => $usedcards, 'cardNums09' => $cardNums09, 'cardNums15' => $cardNums15, 'status' => "OK"];
+    return ['giftCards' => $usedcards, 'cardNums09' => $cardNums09, 'cardNums15' => $cardNums15, 'cardNums27' => $cardNums27, 'status' => "OK"];
     // return ['giftcards' => $giftcards, 'status' => "OK"];
   }
   public function getGiftCardBalances($paymId, $giftCardNum, $prevCardNum) { Log::info("getGiftCardBalances($paymId, $giftCardNum, $prevCardNum)");

@@ -37,7 +37,7 @@ use DateTimeZone;
 
 class ExpenseController extends Controller {
 	// private $origCost = null;
-	private $giftCardIds = [9, 15];  // 9 = Mercer County Golf Gift Card, 15 = Somerset County Golf Gift Card
+	private $giftCardIds = [9, 15, 27];  // 9 = Mercer County Golf Gift Card, 15 = Somerset County Golf Gift Card
 	// private $lowerBound = null;
 	// private $origPaymId = null;
 	public function __construct() {
@@ -336,7 +336,7 @@ class ExpenseController extends Controller {
 		$nd['miles'] = $d['mile'];
 		$nd['notes'] = $d['note'];
 		$nd['link'] = $d['link'];
-    Log::info("-CK-subc=$subc cost=$nd->totalpaid");
+		Log::info("-CK-subc=$subc cost=$nd->totalpaid");
 		return $nd;
 	}
 	private function getModel($d, $action) {
@@ -424,11 +424,16 @@ class ExpenseController extends Controller {
 	 */
 	private function get_last_balance($purchasedon, $paymId, $gcardNum, $cost) { 
 		Log::info("get_last_balance for purchasedon=$purchasedon, paymId=$paymId gcardNum=$gcardNum, cost=$cost", [__line__]);
-	// public function testDB($purchasedon, $paymId, $gcardNum) {
+		// public function testDB($purchasedon, $paymId, $gcardNum) {
 		// $lastB = GiftCardBalance::where([['spend_datetime', '<', $purchasedon], ['pay_method_id', $paymId], ['card_num', $gcardNum]])
-		$lastCardB = GiftCardBalance::where([['spend_datetime', '<', $purchasedon], ['pay_method_id', $paymId]])
-				->orderBy('spend_datetime', 'desc')->select('balance')->first()->balance;
-				Log::debug("-CK-get_last_balance(from GiftCardBalance) lastCardBalance=$lastCardB or cost<0($cost) pursdon=$purchasedon,gcardNum=$gcardNum,paymId=$paymId", [__line__]);
+		$x = GiftCardBalance::where([['spend_datetime', '<', $purchasedon], ['pay_method_id', $paymId]])->orderBy('spend_datetime', 'desc')->select('balance')->first();
+		if ($x == null) {
+			$lastCardB = GiftCard::where([['status', 'A'], ['paym_id', $paymId]])->orderBy('dtm', 'desc')->value('value');
+			Log::info("-CK: get_last_balance from gift_cards for $paymId lastCardB=$lastCardB", [__line__]);
+		} else {
+			$lastCardB = $x->balance;
+		}
+		Log::debug("-CK-get_last_balance(from GiftCardBalance) lastCardBalance=$lastCardB or cost<0($cost) pursdon=$purchasedon,gcardNum=$gcardNum,paymId=$paymId", [__line__]);
 		if (is_null($lastCardB) or $lastCardB == 0 or $lastCardB < $cost) {
 			Log::info("CANNOT get_last_balance(from GiftCardBalance) lastCardBalance=$lastCardB or cost<0($cost) for $purchasedon, $paymId, getting new Card", [__line__]);
 			$newCardB = GiftCard::where([['paym_id', $paymId], ['card_num', $gcardNum]])->select('value')->orderby('dtm', 'desc')->first()->value;
@@ -473,7 +478,30 @@ class ExpenseController extends Controller {
 			$lastB = $lastB - $pd->totalpaid;
 		}
 	}
-	public function addSpend(Request $d) { Log::info('addSpend d', $d->toArray());
+	// private function upsertRangeBallCardBalance($spId, $spdt, $d) { Log::info("-fn-upsertRangeBallCardBalance $spId, $spdt", $d->toArray());
+	// 	$paymId = $d['paymId'];
+	// 	if ($paymId == 27) { // this is Mercer Oak Range Ball Card -- upsert the balance
+	// 		$balance = $d['gcardVal'] - $d['cost'];
+	// 		$spendId = $spId;
+	// 		// $spendDatetime = $d['date'];
+	// 		$spendDatetime = $spdt;
+	// 		$cardNum = $d['gcardNum'];
+	// 		Log::info("-CK: $paymId, $balance, $spendId, $spendDatetime, $cardNum");
+
+	// 		$dm = new GiftCardBalance();
+	// 		$dm->spend_datetime = $spendDatetime;
+	// 		$dm->spend_id = $spendId;
+	// 		$dm->balance = $balance;
+	// 		$dm->pay_method_id = $paymId;
+	// 		$dm->card_num = $cardNum;
+	// 		$dm->upsert(
+	// 			['spend_datetime'=>$dm->spend_datetime, 'spend_id'=>$dm->spend_id, 'balance'=>$dm->balance, 'pay_method_id'=>$dm->pay_method_id, 'card_num'=>$dm->card_num],
+	// 			['spend_id', 'pay_method_id'],
+	// 			['spend_datetime', 'balance']
+	// 		);
+	// 	}
+	// }
+	public function addSpend(Request $d) { Log::info('-CK-fn-addSpend:', $d->toArray());
 		$d->id = null;
 		$dx = $this->getModel($d, 'add');
 		try {
@@ -526,7 +554,8 @@ class ExpenseController extends Controller {
 		return $lowerBound;
 	}
 	private function isPaidByGiftCard($paymId) {
-		return $paymId == 9 or $paymId == 15;
+		// return $paymId == 9 or $paymId == 15;
+		return in_array($paymId, [9, 15, 27], true);
 	}
 	private function updateAndReturn(Request $d, String $msg) {
 		Log::info($msg, [__line__]);

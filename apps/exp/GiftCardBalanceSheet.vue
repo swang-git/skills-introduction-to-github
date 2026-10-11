@@ -83,6 +83,7 @@ const checkStatus = ref('OK')
 // const cardNums09 = ref([ {sval:0, slbl:'45116'}, {sval:1, slbl:'40816'}, {sval:2, slbl:'40815'}, {sval:3, slbl:'230761'} ])
 const cardNums09 = ref([])
 const cardNums15 = ref([])
+const cardNums27 = ref([])
 const cards = ref([])
 
 emitter.on('exp-getGiftCards', (da) => setGiftCards(da))
@@ -91,8 +92,8 @@ emitter.on('exp-getSpending', (da) => setSpending(da))
 defineExpose({ openIt })
 onMounted(() => { refExdar })
 
-const currCard = computed(() => { return paymId.value == 9 ? cards.value[0] : cards.value[1]})
-const cardNums = computed(() => { return paymId.value == 9 ? cardNums09.value : cardNums15.value})
+const currCard = computed(() => { return paymId.value == 9 ? cards.value[0] : paymId.value == 15 ? cards.value[1] : cards.value[2] })
+const cardNums = computed(() => { return paymId.value == 9 ? cardNums09.value : paymId.value == 15 ? cardNums15.value : cardNums27.value })
 const currCardNum = computed(() => { return cardNums.value[cardIdx.value] })
 const prevCardNum = computed(() => { return cardNums.value[cardIdx.value + 1] == undefined ? 0 : cardNums.value[cardIdx.value + 1] })
 
@@ -105,9 +106,10 @@ function openIt () {
 function setGiftCards (da) {
   console.log(`-fn-setGiftCards`, da)
   cards.value = da.giftCards
-  currCard.value = cards.value[0]
+  // currCard.value = cards.value[0]
   cardNums09.value = da.cardNums09
   cardNums15.value = da.cardNums15
+  cardNums27.value = da.cardNums27
   // console.table(currCardNum.value) 
   getGiftCardBalances()
   opened.value = true
@@ -124,7 +126,7 @@ function getCardNumIndex (selectedCardNum) {
 function selectCard (label, opt) {
   console.log(`-CK-selectCard label=${label} opt.sval=${opt.sval}`, opt)
   cardIdx.value = 0
-  paymId.value = opt.sval == 0 ? 9 : 15
+  paymId.value = opt.sval == 0 ? 9 : opt.sval == 1 ? 15 : 27
   getGiftCardBalances()
 }
 function getGiftCardBalances () {

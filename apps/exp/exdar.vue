@@ -133,8 +133,7 @@ const compHeight = computed(() => {
   let autogaso = 0
   // if (r.cats === 'Golf' && r.subc === 'Play' ) golfplay += 63
   // if ((isGolfPlayRelated() || isGolfMembership()) && (r.paym === 'Mercer County Golf Gift Card' || r.paym === 'Somerset County Golf Gift Card' )) golfplay += 63
-  if ((isGolfPlayRelated() || isGolfMembership()) && isGiftCard())
-    golfplay += 63
+  if ((isGolfPlayRelated() || isGolfMembership()) && isGiftCard()) golfplay += 63
   if (isAutoGaso()) autogaso += 63
   if (r.paym === 'Fidelity Credit Card' && showPostDate.value) autogaso += 63
   console.log('-cp-compHeight-input', baseh, '+', golfplay, '+', autogaso)
@@ -160,7 +159,8 @@ const showDLink = computed(() => {
 
 //== functions
 function isGiftCard() {
-  return [9, 15].includes(row.value.paymId)
+  console.log(`-fn-isGiftCard, pyam=${row.value.paym}`)
+  return [9, 15, 27].includes(row.value.paymId)
 }
 function setDateTime(dt) {
   row.value.purchasedon = dt
@@ -174,7 +174,8 @@ function setDateTime(dt) {
   // gaxios(path)
 }
 function selectedOption(cspId, model, opt) {
-  console.log(`-CK-fn-selectedOption cspId=${cspId} model=${model}`, opt)
+  console.error(`-CK-fn-selectedOption cspId=${cspId} model=${model}`, opt)
+  // console.error(`-CK-fn-selectedOption cspId=${cspId} model=${model}`, row.value)
   if (cspId === -1) {
     var cspModel = null
     if (model === 'Select Paid with') cspModel = 'PayMethod'
@@ -188,8 +189,10 @@ function selectedOption(cspId, model, opt) {
     row.value.paym = opt.label
     // console.log('select Paid with label, opt.value, opt.label, compObj.value)
     // if (opt.label === 'Mercer County Golf Gift Card' || opt.label === 'Somerset County Golf Gift Card') getGiftCardBalance()
-    if (isaUsingGiftCardCourse() || isGolfMembership() || isGiftCard())
+    if (isaUsingGiftCardCourse() || isGolfMembership() || isGiftCard()) {
+      console.error(`-CK-isGiftCard=${isGiftCard()}`)
       getGiftCardNumAndBalance()
+    }
   } else if (model === 'Select Category') {
     row.value.catsId = opt.value
     row.value.cats = opt.label
@@ -250,7 +253,7 @@ function isGolfPlayRelated() {
   const regex = new RegExp( 'Play|Tournament|Outing|Playof|Golf Balls|Range Balls|Membership|Driving Range', 'gi')
   // const regex = new RegExp('Playof', 'i')
   const retval = row.value.cats === 'Golf' && regex.test(subc)
-  // console.log(`-fn-isGolfPlayRelated()=${retval} cats=${cats} subc=${subc}`, regex, /Club Playoff/ig.test(subc))
+  console.log(`-fn-isGolfPlayRelated()=${retval} cats=${cats} subc=${subc}`, regex, /Club Playoff/ig.test(subc))
   return retval
   // return row.value.cats === 'Golf' && (subc === 'Play' || subc.indexOf('Tournament') >= 0 || subc.indexOf('Outing') >= 0 || subc.indexOf('Playoff') >= 0)
   // return row.value.cats === 'Golf' && (['Play', 'Tournament', 'Outing', 'Playoff'].includes(subc))
@@ -516,20 +519,12 @@ function getGiftCardBalance() {
     // emitter.emit('open-InfoDialog', tit, msg)
     emitter.emit('open-InfoDisplay', tit, msg)
   }
-  const path =
-    ENV_DEV +
-    '/exp/getGiftCardBalance/' +
-    row.value.paymId +
-    '/' +
-    row.value.cost
+  const path = ENV_DEV + '/exp/getGiftCardBalance/' + row.value.paymId + '/' + row.value.cost
   gaxios(path)
 }
 function setGiftCardBalance(da) {
   // console.log(`-CK-fn-setGiftCardBalance, balance=${da.curBalance} gcardNum=${da.curCardNum}`, da)
-  console.log(
-    `-CK-fn-setGiftCardBalance, balance=${da.gcardBal} gcardNum=${da.gcardNum}`,
-    da
-  )
+  console.error(`-fn-setGiftCardBalance, balance=${da.gcardBal} gcardNum=${da.gcardNum}`, da)
   if (da.status === 'Need to Add New Golf Gift Card') {
     console.log('-fn-setGiftCardBalance', da)
     row.value.curBalance = da.gcardBal
@@ -539,9 +534,7 @@ function setGiftCardBalance(da) {
   }
   // giftCardBalance.value = da
   // console.log(`-fn-getGiftCardBalance, ${row.value.gcardVal}=${da.gcardBal} ${row.value.gcardNum}=${da.gcardNum}`)
-  console.log(
-    `-fn-getGiftCardBalance, balance=${da.gcardBal} gcardNum=${da.gcardNum}`
-  )
+  console.log(`-fn-getGiftCardBalance, balance=${da.gcardBal} gcardNum=${da.gcardNum}`)
   // if (row.value.gcardNum !== da.gcardNum) {
   //   let tit = "NOTICE: Using New Golf Gift Card"
   //   let msg = "Please check the new card balance and add/upd again"
@@ -649,8 +642,7 @@ function doAction(act) {
   // if (isaDeleted.value && (act === 'upd' || act === 'del')) {
   if (act === 'upd' || act === 'del') {
     const tit = 'A Deleted Purchase'
-    const msg =
-      'A Deleted Purchase can not be updated or delete, you can use it as template - revise it and add a new purchase.'
+    const msg = 'A Deleted Purchase can not be updated or delete, you can use it as template - revise it and add a new purchase.'
     // emitter.emit('open-InfoDisplay', tit, msg)
     if (act === 'del') emitter.emit('open-ConfirmDialog', tit, msg, 'del-spend')
     else if (act === 'upd') upd()
@@ -670,15 +662,7 @@ function doAction(act) {
     emitter.emit('show-golf-scores', row.value)
     return
   }
-  return act === 'add'
-    ? add()
-    : act === 'upd'
-      ? upd()
-      : act === 'del'
-        ? del()
-        : act === 'lnk'
-          ? lnkfunc()
-          : openNotePad()
+  return act === 'add' ? add() : act === 'upd' ? upd() : act === 'del' ? del() : act === 'lnk' ? lnkfunc() : openNotePad()
 }
 function setPurchasedList(plst) {
   console.log('-fn-purchasedList from exlist', plst)
@@ -686,21 +670,13 @@ function setPurchasedList(plst) {
   const paye = row.value.paye
   const payeId = row.value.payeId
   if (plst.length == 0) {
-    emitter.emit(
-      'open-InfoDisplay',
-      'No Purchased List',
-      `On this shopping date: ${date} at ${paye}`
-    )
+    emitter.emit('open-InfoDisplay', 'No Purchased List', `On this shopping date: ${date} at ${paye}`)
     return
   }
   emitter.emit('open-PurchasedList', date, plst, paye, payeId)
 }
 function isInvalidCost() {
-  return (
-    Number.isNaN(row.value.cost) ||
-    row.value.cost === null ||
-    row.value.cost === ''
-  )
+  return (Number.isNaN(row.value.cost) || row.value.cost === null || row.value.cost === '')
 }
 function isRightGolfCourseForGolfPlay() {
   const paymId = row.value.paymId
@@ -773,38 +749,42 @@ function add() {
   paxios(path, data)
 }
 function upd() {
-  console.log('-fn-upd row:', row.value)
-  if (isGiftCard() && !isRightGolfCourseForGolfPlay()) return
-  // if (Number.isNaN(row.value.cost) || row.value.cost == null || row.value.cost === '') {
-  if (
-    row.value.post_date != null &&
-    row.value.post_date < row.value.purchasedon
-  ) {
-    row.value.post_date = null
-  }
-  if (isInvalidCost()) {
-    const tit = 'Please check the cost for updating'
-    emitter.emit('open-InfoDisplay', tit, null)
-    return
-  }
-  if (row.value.gcardVal === '') {
-    const tit = 'Please provide gift card balance'
-    emitter.emit('open-InfoDisplay', tit, null)
-    return
-  }
-  checkBalance(originalCost) // this need to add the original cost to the balance then checkBalance
-  const data = row.value
-  const path = ENV_DEV + '/exp/updSpend'
-  paxios(path, data)
-  opened.value = false
+  console.log(`-fn-upd paymId=${row.value.paymId} paye=${row.value.paye}`)
+  // const isRangeBallCard = (row.value.paymId == 25)
+  // if (isRangeBallCard) {
+    //   return
+    // }
+    if (isGiftCard() && !isRightGolfCourseForGolfPlay()) return
+    // if (Number.isNaN(row.value.cost) || row.value.cost == null || row.value.cost === '') {
+      if ( row.value.post_date != null && row.value.post_date < row.value.purchasedon ) {
+        row.value.post_date = null
+      }
+      if (isInvalidCost()) {
+        const tit = 'Please check the cost for updating'
+        emitter.emit('open-InfoDisplay', tit, null)
+        return
+      }
+      if (row.value.gcardVal === '') {
+        const tit = 'Please provide gift card balance'
+        emitter.emit('open-InfoDisplay', tit, null)
+        return
+      }
+      checkBalance(originalCost) // this need to add the original cost to the balance then checkBalance
+      const data = row.value
+      const path = ENV_DEV + '/exp/updSpend'
+      console.error(`-fn-upd paymId=${row.value.paymId} paye=${row.value.paye} path=${path}`, data)
+      paxios(path, data)
+      opened.value = false
 }
+
 function psd() {
   showPostDate.value = true
 }
+
 function delFromDB() {
   const data = row.value
   const path = ENV_DEV + '/exp/delSpend'
-  console.log('-fn-delFromDB', path)
+  console.log(`-fn-delFromDB path=${path}`, data)
   paxios(path, data)
   opened.value = false
 }
