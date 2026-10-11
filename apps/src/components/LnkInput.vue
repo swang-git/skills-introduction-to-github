@@ -34,7 +34,8 @@ const opened = ref(false)
 const lnks = ref([])
 
 console.log('-ST-lnkInput')
-emitter.on('open-LnkInput', (x) => openIt(x))
+// emitter.on('open-LnkInput', (x) => openIt(x))
+defineExpose({ openIt })
 
 function openIt (lnk) {
   console.log(`-CK-fn-LnkInput.openIt lnk=${lnk}`)

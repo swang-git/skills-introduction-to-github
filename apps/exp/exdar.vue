@@ -58,14 +58,14 @@
   <ConfirmDialog @user-confirmed="userConfirmed" />
   <AddNewCSPDialog @add-new-csp="addNewCSP" />
   <NotesDialog @set-link-notes="setNotes" />
-  <LnkInput @upd-link="updLink" />
+  <LnkInput ref="refLnkInput" @upd-link="updLink" />
   <AddNewGiftCardDialog @new-gift-card="updGCardInfo" />
-  <NotePad @save-details="saveNote" />
+  <NotePad ref="refNotePad" @save-details="saveNote" />
   <FloatPad />
   <SelOptionsWithSearch @selected-option="selectedOption" />
 </template>
 <script setup>
-import { ref, reactive, computed } from 'vue'
+import { ref, reactive, computed, onMounted } from 'vue'
 import { libFunctions } from '../src/composables/libFunctions'
 import { axiosFunctions } from '../src/composables/axiosFunctions'
 import { dayFunctions } from '../src/composables/dayFunctions'
@@ -112,10 +112,17 @@ const tit = ref(null)
 const giftCardBalance = ref(null)
 // var row = ref({ cats:null, subc:null, subcId: 0, purchasedon:null, paym:null, paymId:0, payeId:0 })
 var row = ref({})
+const refNotePad = ref(null)
+const refLnkInput = ref(null)
 
 const emit = defineEmits(['user-confirmed', 'add-new-csp'])
 defineExpose({ openIt })
 console.log('-ST-exdar')
+
+onMounted(() => {
+  console.log(`-MT-refNotePad=${refNotePad.value}`) 
+  console.log(`-MT-refLnkInput=${refLnkInput.value}`) 
+})
 
 //== emitter.on
 // emitter.on('open-exdar', (rw) => { console.table([rw.id, rw.payeId, rw.paye]); openIt(rw) })
@@ -641,8 +648,9 @@ function getCourseList() {
 }
 function openNotePad() {
   console.log('-fn-open-NotePad')
-  emitter.emit('open-NotePad', row.value.note)
+  // emitter.emit('open-NotePad', row.value.note)
   // refs.NotePad.openIt(row.value.note)
+  refNotePad.value.openIt(row.value.note)
 }
 function doAction(act) {
   // if (isaDeleted.value && (act === 'upd' || act === 'del')) {
@@ -817,7 +825,8 @@ function lnkfunc() {
     lnks = [lnks]
   }
   console.log('-fn-lnk.openIt, lnks[]', lnks)
-  emitter.emit('open-LnkInput', lnks)
+  // emitter.emit('open-LnkInput', lnks)
+  refLnkInput.value.openIt(lnks)
 }
 function isaUsingGiftCardCourse() {
   let paye = row.value.paye

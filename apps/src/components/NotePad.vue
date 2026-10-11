@@ -74,8 +74,10 @@ const props = defineProps({
 const details = ref(null)
 const opened = ref(false)
 
+defineExpose({ openIt })
+
 console.log('-ST-NotePad')
-emitter.on('open-NotePad', (x) => openIt(x))
+// emitter.on('open-NotePad', (x) => openIt(x))
 
 function saveDetails () {
   console.log('-fn-saveDetails')
