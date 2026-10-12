@@ -37,12 +37,12 @@
       </q-page>
     </q-page-container>
   </q-layout>
-  <NotePad @save-details="saveNote" />
-  <LnkInput @upd-link="saveLnk" />
+  <NotePad ref="refNotePad" @save-details="saveNote" />
+  <LnkInput ref="refLnkInput" @upd-link="saveLnk" />
 </q-dialog>
 </template>
 <script setup>
-import { ref, createApp } from 'vue'
+import { ref, onMounted } from 'vue'
 import emitter from 'tiny-emitter/instance'
 import LayoutHeader from '../src/components/LayoutHeader.vue'
 import LayoutFooter from '../src/components/LayoutFooter.vue'
@@ -64,7 +64,10 @@ const action = ref(null)
 const dense = ref(false)
 const date = ref('0000-00-00')
 const row = ref({})
+const refNotePad = ref(null)
+const refLnkInput = ref(null)
 console.log('-ST-UserInput')
+onMounted(() => { refNotePad.value; refLnkInput.value; })
 emitter.on('open-UserInputDesk', (rw, act) => openIt(rw, act))
 emitter.on('user-confirmed', (x) => userConfirmed(x))
 const emit = defineEmits(['user-confirmed'])
@@ -172,12 +175,13 @@ function lnk () {
     lnks = [lnks]
   }
   // console.log('-fn-lnk.openIt, lnka', lnks)
-  // refs.lnk.openIt(lnks)
-  emitter.emit('open-LnkInput', lnks)
+  // emitter.emit('open-LnkInput', lnks)
+  refLnkInput.value.openIt(lnks)
 }
 function msg () {
   // refs.NotePad.openIt(row.value.note)
-  emitter.emit('open-NotePad', row.value.note)
+  // emitter.emit('open-NotePad', row.value.note)
+  refNotePad.value.openIt(row.value.note)
 }
 function getInputData () {
   // console.log('-fn-getInputData-row', row.value)
