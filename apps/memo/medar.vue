@@ -26,13 +26,13 @@
     </q-page-container>
   </q-layout>
 </q-dialog>
-<LnkInput @upd-link="updLink" />
-<NotePad @save-details="saveDetails" />
+<LnkInput ref="refLnkInput" @upd-link="updLink" />
+<NotePad ref="refNotePad" @save-details="saveDetails" />
 <ConfirmDialog @user-confirmed="delFromDB" />
 <TxtPad @upd-selected-opt="updSelectedOpt" />
 </template>
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import emitter from 'tiny-emitter/instance'
 import { libFunctions } from '../src/composables/libFunctions'
 import { axiosFunctions } from '../src/composables/axiosFunctions'
@@ -56,9 +56,12 @@ const row = ref(null)
 const action = ref(null)
 var rowOrig = null
 const tagOpt = ref([])
+const refLnkInput = ref(null)
+const refNotePad = ref(null)
 
 //== main ==
 console.log('-ST-medar')
+onMounted(() => {refLnkInput.value; refNotePad.value })
 emitter.on('open-medar', (row, act) => openIt(row, act))
 const emit = defineEmits(['added-row', 'upded-row', 'deled-row'])
 // emitter.on('memo-add', (x) => emit('added-row', x))
@@ -97,7 +100,8 @@ function saveDetails (val) { row.value.details = val }
 function saveLnk (val) { row.value.link = val }
 function msg () {
   // console.log('-CK-fn-msg', row)
-  emitter.emit('open-NotePad', row.value.details)
+  // emitter.emit('open-NotePad', row.value.details)
+  refNotePad.value.openIt(row.value.details)
 }
 function lnk () {
   // console.log('-CK-fn-lnk', row.value.link)
@@ -110,7 +114,8 @@ function lnk () {
     lnks = [lnks]
   }
   // console.log('-fn-lnk.openIt, lnks[]', lnks)
-  emitter.emit('open-LnkInput', lnks)
+  // emitter.emit('open-LnkInput', lnks)
+  refLnkInput.value.openIt(lnks)
 }
 function add () {
   console.log('-fn-add', row.value)
