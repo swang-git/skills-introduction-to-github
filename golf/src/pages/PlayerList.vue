@@ -79,7 +79,8 @@ emitter.on('search', (x) => { searchQuery.value = x })
 emitter.on('golf-getMemberList', (x) => { setMemberList(x) })
 emitter.on('golf-Scores', (x) => { setScores(x) })
 store.pageTitle = 'List of Players'
-store.page = 'MemberList'
+// store.page = 'MemberList'
+store.page = 'PlayerList'
 
 buildApp('Players', 'Golf')
 getMemberList()

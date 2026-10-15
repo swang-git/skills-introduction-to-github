@@ -219,11 +219,12 @@ import { dayFunctions } from '../composables/dayFunctions'
 import InfoDisplay from '../components/InfoDisplay.vue'
 import HolidayDialog from '../components/HolidayDialog.vue'
 
-const { store, router, JZsAdmin, KJsAdmin, ALsAdmin, SysAdmin, isIM, isDesk, PGCsAdmin, doGroup, pagename, userGuidePage, DEV_API, q } = libFunctions()
+const { store, JZsAdmin, KJsAdmin, ALsAdmin, SysAdmin, isIM, isDesk, PGCsAdmin, doGroup, pagename, userGuidePage, DEV_API, q } = libFunctions()
 const { yyyymmdd } = dayFunctions()
 
 const oneHour = 1000 * 60 * 60
 const curApp = ref(null)
+console.log(`-ST-MyLayout pagename=${pagename.value}`)
 
 emitter.on('golf-getUserType', x => setUserType(x))
 // emitter.on('golf-usertype', (x) => { golfUserType.value = x })
@@ -237,10 +238,7 @@ emitter.on('golf-getUserGuide', x => setUserGuide(x))
 // emitter.on('golf-getUserGuideId', (x) => setUserGuideId(x))
 // emitter.on('app-path', (x) => this.app = x)
 // emitter.on('upd-user-guide', (x) => this.updateUserGuide = x)
-emitter.on('cur-tit', ctit => {
-  setTitle(ctit)
-  setInterval(setTitle, oneHour, ctit)
-})
+emitter.on('cur-tit', ctit => { setTitle(ctit); setInterval(setTitle, oneHour, ctit) })
 emitter.on('cur-app', (capp, from) => (curApp.value = capp))
 emitter.on('num-items', x => (numItems.value = x))
 
@@ -256,17 +254,7 @@ const compVer = computed(() => { return import.meta.env.VITE_BUILD_TAG == null ?
 //   set: val => store.commit('golf/setPage', val)
 // })
 const showSearch = computed(() => {
-  return (
-    [
-      'PGCGames',
-      'PlayerList',
-      'tournmaentList',
-      'grouping',
-      'team_match_top',
-      'JZsMatch',
-      'LoadLogPage'
-    ].indexOf(pagename.value) >= 0
-  )
+  return [ 'PGCGames', 'PlayerList', 'tournmaentList', 'grouping', 'team_match_top', 'JZsMatch', 'LoadLogPage' ].indexOf(pagename.value) >= 0
 })
 const pageTitle = computed(() => {
   return store.pageTitle
