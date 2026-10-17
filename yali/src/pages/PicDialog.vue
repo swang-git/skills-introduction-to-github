@@ -33,7 +33,9 @@
           <q-btn flat icon="" size="lg" @click="++pidx >= piclst.length ? (pidx = 0) : pidx" />
         </div>
         <div v-else class="q-pt-sm row justify-center">
-          <q-avatar :size="screenwidth - 30 + 'px'" ><img :src="getPic()" class="circle-img" @click="stopSlideshow()" /></q-avatar>
+          <q-avatar :size="screenwidth - 30 + 'px'">
+            <img :src="getPic()" :style="pidx%2==0 ? 'border:solid 3px cyan' : 'border:solid 3px pink'" class="circle-img" @click="stopSlideshow()" />
+          </q-avatar>
         </div>
       </div>
       <div v-else-if="isIM">
@@ -121,8 +123,6 @@ const piclst = ref([])
 const datetms = ref([])
 const fileszs = ref([])
 const ratlst = ref([])
-// const winW = window.innerWidth
-// const winH = window.innerHeight
 const winW = $q.screen.width
 const winH = $q.screen.height
 const imgWs = ref([])
