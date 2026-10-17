@@ -13,6 +13,11 @@
             </div>
             <RoundButton size="16px" icon="月" clas="q-pb-xs" colr="indigo-9" style="margin-top:5px" iclr="yellow" ttip="跳到某年某月" @click="openYmPad" />
           </div>
+          <!-- <RoundButton size="56px" icon="img:/api/pics/yali/thumbnails/ya20261017_01.jpg" clas="q-pb-sm" :colr="pageBegin==1 && numPages==1 ? 'pink-6' : 'red-10'" iclr="yellow" ttip="just show the first page" @click="getFirstPage" /> -->
+          <!-- size controls circle diameter -->
+          <!-- <q-avatar size="240px">
+            <img src="/api/pics/yali/thumbnails/ya20261013_01.jpg" class="circle-img" />
+          </q-avatar> -->
           <q-card v-if="yue" class="bg-teal-10" style="margin-top:10px">
             <q-card-actions align="between">
               <RoundButton size="16px" icon="头" clas="q-pb-sm" colr="red-10" iclr="yellow" ttip="just show the first page" @click="getFirstPage" />
@@ -40,9 +45,11 @@
       <q-card class="flex flex-center bg-cyan-10" :style="{marginTop: isDesk ? '106px' : '56px'}">
         <q-card-actions align="between">
           <div v-for="(p, idx) in data" :key="p" class="q-px-xs">
-            <img v-if="isIM" :src="getThumbnailURL(p.fnm)" :height=IMiconSZ :width=IMiconSZ class="q-pt-xs cursor-pointer" @click="showFullImage(idx)" loading="lazy" />
-            <!-- <img v-else      :src="getThumbnailURL(p.fnm)" :height=DKiconSZ :width=DKiconSZ class="cursor-pointer" @click="showFullImage(idx)" loading="lazy" style="object-fit: contain" /> -->
-            <img v-else      :src="getThumbnailURL(p.fnm)" :height=DKiconSZ :width=DKiconSZ class="cursor-pointer" @click="showFullImage(idx)" loading="lazy" />
+            <!-- <img v-if="isIM" :src="getThumbnailURL(p.fnm)" :height=IMiconSZ :width=IMiconSZ class="q-pt-xs cursor-pointer" @click="showFullImage(idx)" loading="lazy" />
+            <img v-else      :src="getThumbnailURL(p.fnm)" :height=DKiconSZ :width=DKiconSZ class="cursor-pointer" @click="showFullImage(idx)" loading="lazy" /> -->
+            <q-avatar :size="isDesk ? DKiconSZ: IMiconSZ">
+            <img :src="getThumbnailURL(p.fnm)" class="circle-img q-pt-xs" @click="showFullImage(idx)" />
+            </q-avatar>
           </div>
         </q-card-actions>
       </q-card>
@@ -102,8 +109,10 @@ const total = ref(0)
 const lastPage = ref(total.value / perPage.value)
 // const IMiconSZ = 177.8 // Mate60 Good for 2 columns
 // const DKiconSZ = isLinux ? 140 : 152.8
-const IMiconSZ = computed(() => { return ($q.screen.width - 48) / 4 }) // for 2 columns
-const DKiconSZ = computed(() => { return ($q.screen.width - 66) / 6 })
+// const IMiconSZ = computed(() => { return ($q.screen.width - 48) / 4 }) // for 2 columns
+// const DKiconSZ = computed(() => { return ($q.screen.width - 66) / 6 })
+const DKiconSZ = '142px'
+const IMiconSZ = '118px'
 const append = ref(true)
 const prepend = ref(false)
 const pageBegin = ref(1)
