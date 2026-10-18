@@ -32,6 +32,11 @@
         </q-card>
       </q-toolbar>
     </q-header>
+    <div v-if="isDesk" :style="getBackgroundImg()">
+      <div class="q-pb-xl row justify-center">
+        <q-avatar :size="screenwidth - 190 + 'px'" style="margin-top:170px"><img :src="piclnk" class="circle-img" /></q-avatar>
+      </div>
+    </div>
     <div v-if="isDesk" :style="getBackgroundImgM()" />
     <q-footer v-if="isDesk" elevated class="bg-teal-10">
       <q-toolbar>
@@ -54,7 +59,7 @@ import { useRouter } from 'vue-router'
 const router = useRouter()
 
 import { libFunctions } from '../../src/composables/libFunctions'
-const { isIM, isFedora, buildApp, store, $q, userType, AppAdmin, isDesk, ENV_DEV } = libFunctions()
+const { isIM, isFedora, screenwidth, buildApp, store, $q, userType, AppAdmin, isDesk, ENV_DEV } = libFunctions()
 import { axiosFunctions } from '../../src/composables/axiosFunctions'
 const { gaxios } = axiosFunctions()
 
@@ -93,7 +98,7 @@ function slideShow () {
   console.log(`-fn-slideShow isApps=${isApps.value} BASE_URL=${import.meta.env.BASE_URL}`)
   setInterval(() => {
     showSlide.value ? getNextPic() : null
-  }, 30000)
+  }, 3000)
 }
 function getPrevPic () {
   console.log(`-fn-getNextPic picIdx=${picIdx.value}`)

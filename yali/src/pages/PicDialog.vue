@@ -34,7 +34,8 @@
         </div>
         <div v-else class="q-pt-sm row justify-center">
           <q-avatar :size="screenwidth - 30 + 'px'">
-            <img :src="getPic()" :style="pidx%2==0 ? 'border:solid 3px cyan' : 'border:solid 3px pink'" class="circle-img" @click="stopSlideshow()" />
+            <!-- <img :src="getPic()" :style="pidx%2==0 ? 'border:solid 3px cyan' : 'border:solid 3px pink'" class="circle-img" @click="stopSlideshow()" /> -->
+            <img :src="getPic()" :style="getBorderColor()" class="circle-img" @click="stopSlideshow()" />
           </q-avatar>
         </div>
       </div>
@@ -134,8 +135,14 @@ const compRemovedPidx = computed(() => {
   return removedPidx.value
 })
 
-function toogleOrigin() {
-  console.log(`-fh-A-toogleOrigin showOrigin=${showOrigin.value}`)
+function getBorderColor () {
+  const recd = pidx.value % 3
+  console.log(`-fh-getBorderColor pidx=${pidx.value} recd=${recd}`)
+  const colr = recd==0 ? 'red' : recd==1 ? 'purple' : 'cyan'
+  return "border: solid 3px " + colr
+}
+function toogleOrigin () {
+console.log(`-fh-A-toogleOrigin showOrigin=${showOrigin.value}`)
   showOrigin.value = !showOrigin.value
   console.log(`-fh-B-toogleOrigin showOrigin=${showOrigin.value}`)
 }
