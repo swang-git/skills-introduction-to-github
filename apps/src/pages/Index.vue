@@ -6,14 +6,14 @@
           <q-card-actions align="between" class="bg-teal-9" style="margin:-5px -12px 0 -12px">
             <RoundButton size="22px" icon="monetization_on" clas="q-ma-xs" colr="purple-10" iclr="yellow" ttip="日 常 消 费" @click="openApp('exlist')" />
             <RoundButton size="22px" icon="add_shopping_cart" clas="q-ma-xs" colr="indigo-10" ttip="采 购 清 单" @click="openApp('shopping')" />
-            <RoundButton size="22px" icon="schedule" clas="q-ma-xs" colr="cyan-10" iclr="amber" ttip="温 馨 提 示" @click="openApp('reminder')" />
-            <RoundButton size="22px" icon="忘" clas="q-ma-xs q-pb-sm" colr="purple-10" iclr="cyan-2" ttip="备　忘　录" @click="openApp('memo')" />
+            <RoundButton v-if="!isFedora" size="22px" icon="schedule" clas="q-ma-xs" colr="cyan-10" iclr="amber" ttip="温 馨 提 示" @click="openApp('reminder')" />
+            <RoundButton size="22px" icon="备" clas="q-ma-xs q-pb-sm" colr="purple-10" iclr="cyan-2" ttip="备　忘　录" @click="openApp('memo')" />
             <RoundButton size="22px" icon="健" clas="q-ma-xs q-pb-sm" colr="red-10" iclr="yellow" ttip="每 天 看 看" @click="openApp('watcher')" />
             <RoundButton size="22px" icon="account_balance" clas="q-ma-xs" colr="indigo-10" iclr="amber" ttip="银 行 月 报" @click="openApp('bankstatement')" />
             <RoundButton size="22px" icon="析" clas="q-ma-xs q-pb-sm" colr="green-10" ttip="月 报 分 析" @click="openApp('holdings')" />
             <RoundButton size="22px" icon="bloodtype" clas="q-ma-xs" colr="red-10" iclr="lime" ttip="血 糖 控 制" @click="openApp('glucosecheck')" />
-            <RoundButton size="22px" icon="文" clas="q-ma-xs q-pb-sm" colr="indigo-10" ttip="网 上 阅 读" @click="openApp('../arts')" />
-            <RoundButton size="22px" icon="画" clas="q-ma-xs q-pb-sm" colr="red-10" iclr="yellow" ttip="娅 莉 画 展" @click="openApp('../yali')" />
+            <!-- <RoundButton size="22px" icon="文" clas="q-ma-xs q-pb-sm" colr="indigo-10" ttip="网 上 阅 读" @click="openApp('../arts')" /> -->
+            <!-- <RoundButton size="22px" icon="画" clas="q-ma-xs q-pb-sm" colr="red-10" iclr="yellow" ttip="娅 莉 画 展" @click="openApp('../yali')" /> -->
             <RoundButton size="22px" icon="golf_course" clas="q-ma-xs" colr="teal-10" iclr="yellow" ttip="高  尔  夫" @click="openApp('../golf')" />
             <RoundButton size="22px" icon="translate" clas="q-ma-xs" colr="brown-10" ttip="英 汉 字 典" @click="openApp('dictionary')" />
             <RoundButton size="22px" icon="card_giftcard" clas="q-ma-xs" colr="red-10" ttip="联 邦 节 日" @click="showHolidays()" />
@@ -27,17 +27,31 @@
             <RoundButton size="22px" icon="logout" clas="q-ma-xs" colr="amber-10" iclr="grey-10" ttip="系 统 Logout" @click="logout()" v-show="AppAdmin" />
             <RoundButton v-if="isFedora" size="22px" icon="视" clas="q-ma-xs q-pb-sm" colr="indigo-10" iclr="white" ttip="电 视 列 表" @click="openApp('tvmanager')" />
             <RoundButton size="22px" :icon="compVer" clas="q-ma-xs q-pb-sm" colr="indigo-10" iclr="cyan-2" ttip="系 统 信 息" @click="showSysInfo()" />
-            <!-- <RoundButton size="22px" icon="login" clas="q-ma-xs" colr="grey-10" iclr="amber" ttip="系 统 管 理" @click="login()" v-if="!AppAdmin" /> -->
+            <RoundButton size="22px" icon="login" clas="q-ma-xs" colr="grey-10" iclr="amber" ttip="系 统 管 理" @click="login()" v-if="!AppAdmin" />
           </q-card-actions>
         </q-card>
       </q-toolbar>
     </q-header>
-    <div v-if="isDesk" :style="getBackgroundImg()">
+    <div v-if="isDesk" class="row" :style="getBackgroundImg()">
+      <div class="corner-btn top-left">
+        <RoundButton size="33px" icon="画" clas="q-ma-xs q-pb-md" colr="purple-10" iclr="yellow" ttip="娅 莉 画 展" @click="openApp('../yali')" />
+      </div>
+      <div class="corner-btn top-right">
+        <RoundButton size="33px" icon="文" clas="q-ma-xs q-pb-md" colr="purple-10" iclr="yellow" ttip="网 上 阅 读" @click="openApp('../arts')" />
+      </div>
       <div class="q-pb-xl row justify-center">
-        <q-avatar :size="screenwidth - 190 + 'px'" style="margin-top:170px"><img :src="piclnk" class="circle-img" /></q-avatar>
+        <q-avatar :size="screenwidth - 190 + 'px'" style="margin:237px 0 0 66px"><img :src="piclnk" class="circle-img" /></q-avatar>
+      </div>
+      <div class="corner-btn bottom-left">
+        <RoundButton size="33px" icon="golf_course" clas="q-ma-xs" colr="teal-10" iclr="yellow" ttip="高  尔  夫" @click="openApp('../golf')" />
+      </div>
+      <div class="corner-btn bottom-right">
+        <RoundButton size="33px" icon="schedule" clas="q-ma-xs" colr="teal-10" iclr="amber" ttip="温 馨 提 示" @click="openApp('reminder')" />
+        <!-- <RoundButton size="33px" icon="logout" clas="q-ma-xs" colr="amber-10" iclr="grey-10" ttip="系 统 Logout" @click="logout()" v-show="AppAdmin" />
+        <RoundButton size="33px" icon="login" clas="q-ma-xs" colr="grey-10" iclr="amber" ttip="系 统 管 理" @click="login()" v-if="!AppAdmin" /> -->
       </div>
     </div>
-    <div v-if="isDesk" :style="getBackgroundImgM()" />
+    <!-- <div v-if="isDesk" :style="getBackgroundImgM()" /> -->
     <q-footer v-if="isDesk" elevated class="bg-teal-10">
       <q-toolbar>
         <q-btn rounded glossy label="上一幅" color="andigo" @click="getPrevPic" />
@@ -134,20 +148,19 @@ function getBackgroundImg() {
     backgroundPosition: 'center',
     backgroundRepeat: 'no-repeat',
     // width: ($q.screen.width - 60) + 'px',
-    // height: getHeight()
-    height: 400
+    // height: getHeight(),
+    height: 500
   }
 }
 function getBackgroundImgM() {
   if (isIM) return "backgroundColor:teal"
   return {
     backgroundImage: 'url("' + picurl.value + '")',
-    // backgroundSize : 'cover',
+    backgroundSize : 'cover',
     backgroundPosition: 'center',
-    // backgroundRepeat: 'no-repeat',
+    backgroundRepeat: 'no-repeat',
     width: ($q.screen.width - 50) + 'px',
     height: ($q.screen.height - 10) + 'px',
-
   }
 }
 
@@ -200,3 +213,32 @@ function logout() {
   gaxios(path)
 }
 </script>
+<style>
+.corner-btn {
+  position: fixed;
+  z-index: 10;
+}
+.top-left {
+  top: 220px;
+  left: 60px;
+}
+.top-right {
+  top: 220px;
+  right: 3px;
+}
+.bottom-left {
+  bottom: 56px;
+  left: 60px;
+}
+.bottom-right {
+  bottom: 56px;
+  right: 3px;
+}
+.Xcircle-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* fill circle, crop edges, NO distortion */
+  /* object-fit: contain; → whole image visible, may have empty space inside circle */
+  object-position: center;
+}
+</style>
