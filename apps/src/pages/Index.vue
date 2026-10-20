@@ -51,16 +51,31 @@
         <RoundButton size="33px" icon="login" clas="q-ma-xs" colr="grey-10" iclr="amber" ttip="系 统 管 理" @click="login()" v-if="!AppAdmin" /> -->
       </div>
     </div>
-    <!-- <div v-if="isDesk" :style="getBackgroundImgM()" /> -->
     <q-footer v-if="isDesk" elevated class="bg-teal-10">
       <q-toolbar>
-        <q-btn rounded glossy label="上一幅" color="andigo" @click="getPrevPic" />
-        <q-space /> <!-- this pushes next button all the way right -->
-        <q-btn rounded glossy :label="showSlide ? '停止' : '幻灯'" :color="showSlide ? 'amber-9' : 'primary'" @click="showSlide=!showSlide" />
-        <q-space /> <!-- this pushes next button all the way right -->
-        <q-btn rounded glossy label="随机" color="primary" @click="showSlide=getRandomPic(-1)" />
-        <q-space /> <!-- this pushes next button all the way right -->
-        <q-btn rounded glossy label="下一幅" color="andigo" @click="getNextPic" />
+          <q-btn glossy rounded class="bg-teal-9" @click="getPrevPic">
+            <q-icon left name="arrow_circle_left" size="md" color="lime" />
+            <span class="text-bold text-cyan-2 text-body1" style="margin: 0 4px 0 -10px">上一幅</span>
+          </q-btn>
+          <q-space /> <!-- this pushes next button all the way right -->
+          <q-btn v-if="showSlide" glossy rounded class="bg-lime-9" @click="showSlide=!showSlide">
+            <span class="text-bold text-cyan-2 text-body1" style="margin: 0 4px 0 4px">停止</span>
+            <q-icon name="pause" size="md" color="lime" />
+          </q-btn>
+          <q-btn v-else glossy rounded class="bg-teal-9" @click="showSlide=!showSlide">
+            <span class="text-bold text-cyan-2 text-body1" style="margin: 0 4px 0 4px">幻灯</span>
+            <q-icon name="play_circle" size="md" color="lime" />
+          </q-btn>
+          <q-space /> <!-- this pushes next button all the way right -->
+          <q-btn glossy rounded class="bg-teal-9" @click="getRandomPic(-1)">
+            <q-icon name="slow_motion_video" size="md" color="lime" />
+            <span class="text-bold text-cyan-2 text-body1" style="margin: 0 4px 0 4px">随机</span>
+          </q-btn>
+          <q-space /> <!-- this pushes next button all the way right -->
+          <q-btn glossy rounded class="bg-teal-9" @click="getNextPic">
+            <span class="text-bold text-cyan-2 text-body1" style="margin: 0 4px 0 4px">下一幅</span>
+            <q-icon name="arrow_circle_right" size="md" color="lime" />
+          </q-btn>
       </q-toolbar>
     </q-footer>
   </q-layout>
