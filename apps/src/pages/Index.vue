@@ -39,8 +39,8 @@
       <div class="corner-btn top-right">
         <RoundButton size="33px" icon="文" clas="q-ma-xs q-pb-md" colr="purple-10" iclr="yellow" ttip="网 上 阅 读" @click="openApp('../arts')" />
       </div>
-      <div class="q-pb-xl row justify-center">
-        <q-avatar :size="screenwidth - 190 + 'px'" style="margin:237px 0 0 66px"><img :src="piclnk" class="circle-img" /></q-avatar>
+      <div class="q-pb-xl row justify-center" style="margin:208px 0 0 66px">
+        <q-avatar :size="screenwidth - 190 + 'px'"><img :src="piclnk" class="circle-img" /></q-avatar>
       </div>
       <div class="corner-btn bottom-left">
         <RoundButton size="33px" icon="golf_course" clas="q-ma-xs" colr="teal-10" iclr="yellow" ttip="高  尔  夫" @click="openApp('../golf')" />
