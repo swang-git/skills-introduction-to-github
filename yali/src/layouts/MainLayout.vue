@@ -13,11 +13,6 @@
             </div>
             <RoundButton size="16px" icon="月" clas="q-pb-xs" colr="indigo-9" style="margin-top:5px" iclr="yellow" ttip="跳到某年某月" @click="openYmPad" />
           </div>
-          <!-- <RoundButton size="56px" icon="img:/api/pics/yali/thumbnails/ya20261017_01.jpg" clas="q-pb-sm" :colr="pageBegin==1 && numPages==1 ? 'pink-6' : 'red-10'" iclr="yellow" ttip="just show the first page" @click="getFirstPage" /> -->
-          <!-- size controls circle diameter -->
-          <!-- <q-avatar size="240px">
-            <img src="/api/pics/yali/thumbnails/ya20261013_01.jpg" class="circle-img" />
-          </q-avatar> -->
           <q-card v-if="yue" class="bg-teal-10" style="margin-top:10px">
             <q-card-actions align="between">
               <RoundButton size="16px" icon="头" clas="q-pb-sm" colr="red-10" iclr="yellow" ttip="just show the first page" @click="getFirstPage" />
@@ -30,10 +25,18 @@
           <q-card v-else class="bg-teal-10">
             <q-card-actions align="between">
               <RoundButton size="16px" icon="头" clas="q-pb-sm" :colr="pageBegin==1 && numPages==1 ? 'pink-3' : 'red-10'" iclr="yellow" ttip="just show the first page" @click="getFirstPage" />
-              <RoundButton size="16px" icon="upload" :colr="pageBegin+numPages>lastPage ? 'pink-3' : 'red-10'" iclr="yellow" ttip="appending next page(on end)" @click="appnNextPage" />
+              <!-- <RoundButton size="16px" icon="upload" :colr="pageBegin+numPages>lastPage ? 'pink-3' : 'red-10'" iclr="yellow" ttip="appending next page(on end)" @click="appnNextPage" /> -->
+              <q-btn glossy rounded class="bg-teal-9" @click="appnNextPage">
+                <span class="text-bold text-cyan-2 text-body1" style="margin: 0 4px 0 4px">下加载</span>
+                <q-icon name="upload" size="md" color="lime" />
+              </q-btn>
               <RoundButton v-if="pageBegin==1 && numPages==1" size="16px" :icon="compVer" clas="q-pb-sm" colr="indigo-10" iclr="yellow" ttip="跳转到某页" @click="openNumPad('jump-page')" />
               <q-btn v-else flat round  dense size="22px" style="width:80px; justify-content:center" :label=getLabel() color="cyan-3" @click="openNumPad('jump-page')"/>
-              <RoundButton size="16px" icon="download" :colr="pageBegin>1 ? 'red-10' : 'pink-3'" iclr="yellow" ttip="preppend the prev page(on top)" @click="prepnPrevPage" />
+              <!-- <RoundButton size="16px" icon="download" :colr="pageBegin>1 ? 'red-10' : 'pink-3'" iclr="yellow" ttip="preppend the prev page(on top)" @click="prepnPrevPage" /> -->
+              <q-btn glossy rounded class="bg-teal-9" @click="prepnPrevPage" :disable="pageBegin<=1">
+                <q-icon left name="download" size="md" color="lime" />
+                <span class="text-bold text-cyan-2 text-body1" style="margin: 0 4px 0 -10px">上加载</span>
+              </q-btn>
               <RoundButton size="16px" icon="尾" clas="q-pb-sm" :colr="pageBegin==lastPage && numPages==1 ? 'pink-3' : 'red-10'" iclr="yellow" ttip="just the last page" @click="getLastPage" />
             </q-card-actions>
           </q-card>
@@ -71,11 +74,27 @@
           <q-card class="bg-teal-10" style="margin-top:10px">
             <q-card-actions align="between">
               <RoundButton v-if="isDesk" size="16px" icon="头" clas="q-pb-sm" colr="red-10" iclr="yellow" ttip="just show the first page" @click="getFirstPage" />
-              <RoundButton :dsbl="pageBegin<=1" size="16px" icon="first_page" colr="brown-9" iclr="yellow" ttip="show previous page" @click="getPrevPage" />
-              <RoundButton size="16px" icon="chevron_left"  colr="indigo-10" iclr="yellow" ttip="show previous month" @click="getPrevYM" />
+              <!-- <RoundButton :dsbl="pageBegin<=1" size="16px" icon="first_page" colr="brown-9" iclr="yellow" ttip="show previous page" @click="getPrevPage" /> -->
+              <!-- <RoundButton size="16px" icon="chevron_left"  colr="indigo-10" iclr="yellow" ttip="show previous month" @click="getPrevYM" /> -->
+              <q-btn glossy rounded class="bg-teal-9" @click="getPrevPage">
+                <q-icon left name="arrow_circle_left" size="md" color="lime" />
+                <span class="text-bold text-cyan-2 text-body1" style="margin: 0 4px 0 -10px">上一页</span>
+              </q-btn>
+              <q-btn glossy rounded class="bg-teal-9" @click="getPrevYM">
+                <span class="text-bold text-cyan-2 text-body1" style="margin: 0 4px 0 4px">上个月</span>
+                <q-icon name="arrow_circle_right" size="md" color="lime" />
+              </q-btn>
               <q-btn v-if="ym!=null" size="24px" :label="total"  colr="teal-10" />
-              <RoundButton size="16px" icon="chevron_right" colr="indigo-10" iclr="yellow" ttip="show next mouth" @click="getNextYM" />
-              <RoundButton :dsbl="pageBegin>=lastPage" size="16px" icon="last_page" colr="brown-9" iclr="yellow" ttip="show next page" @click="getNextPage" />
+              <!-- <RoundButton size="16px" icon="chevron_right" colr="indigo-10" iclr="yellow" ttip="show next mouth" @click="getNextYM" /> -->
+              <q-btn glossy rounded class="bg-teal-9" @click="getNextYM">
+                <q-icon name="arrow_circle_right" size="md" color="lime" />
+                <span class="text-bold text-cyan-2 text-body1" style="margin: 0 4px 0 4px">下个月</span>
+              </q-btn>
+              <q-btn glossy rounded class="bg-teal-9" @click="getNextPage">
+                <span class="text-bold text-cyan-2 text-body1" style="margin: 0 4px 0 4px">下一页</span>
+                <q-icon name="arrow_circle_right" size="md" color="lime" />
+              </q-btn>
+              <!-- <RoundButton :dsbl="pageBegin>=lastPage" size="16px" icon="last_page" colr="brown-9" iclr="yellow" ttip="show next page" @click="getNextPage" /> -->
               <RoundButton v-if="isDesk" size="16px" icon="尾" clas="q-pb-sm" colr="red-10" iclr="yellow" ttip="just the last page" @click="getLastPage" />
             </q-card-actions>
           </q-card>
