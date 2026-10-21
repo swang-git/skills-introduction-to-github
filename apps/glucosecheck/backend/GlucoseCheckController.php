@@ -32,7 +32,7 @@ class GlucoseCheckController extends Controller {
       		$x = explode(' / ', $d->bloodPressure);
       		$d->hiBP = isset($x[0]) ? $x[0] : null;
       		$d->loBP = isset($x[1]) ? $x[1] : null;
-      		$d->htBT = isset($x[2]) ? $x[1] : null;
+      		$d->htBT = isset($x[2]) ? $x[2] : null;
 			if (is_null($d->food)) $d->glucoseSearch = 'glucose';
 		}
 
