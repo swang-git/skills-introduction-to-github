@@ -366,6 +366,13 @@ function openIt(idx, imgdata) {
 </script>
 
 <style scoped>
+.Xcircle-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* fill circle, crop edges, NO distortion */
+  /* object-fit: contain; → whole image visible, may have empty space inside circle */
+  object-position: center;
+}
 .bg-img-not-used {
   /* background-image: url('');
   background-image: url('https://cdn.quasar.dev/img/material.png');

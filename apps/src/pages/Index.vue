@@ -39,8 +39,8 @@
       <div class="corner-btn top-right">
         <RoundButton size="33px" icon="文" clas="q-ma-xs q-pb-md" colr="purple-10" iclr="yellow" ttip="网 上 阅 读" @click="openApp('../arts')" />
       </div>
-      <div class="q-pb-xl row justify-center" style="margin:208px 0 0 66px">
-        <q-avatar :size="screenwidth - 190 + 'px'"><img :src="piclnk" class="circle-img" /></q-avatar>
+      <div class="q-pb-xl row justify-center" :style="getSty()">
+        <q-avatar :size="getAvatarSZ()"><img :src="piclnk" class="circle-img" /></q-avatar>
       </div>
       <div class="corner-btn bottom-left">
         <RoundButton size="33px" icon="golf_course" clas="q-ma-xs" colr="teal-10" iclr="yellow" ttip="高  尔  夫" @click="openApp('../golf')" />
@@ -123,6 +123,17 @@ onMounted(() => {
 getRandomPic(-1)
 slideShow()
 
+function getAvatarSZ () {
+  const offsz = 190
+  const sz = (screenwidth - offsz) + 'px'
+  return sz
+}
+function getSty () {
+  const leftpx = 130/2 + 'px'
+  const sty = "margin: 200px 0 0 " + leftpx
+  console.log(`-fn-getSty`)
+  return sty
+}
 function slideShow () {
   console.log(`-fn-slideShow isApps=${isApps.value} BASE_URL=${import.meta.env.BASE_URL}`)
   setInterval(() => {
@@ -250,8 +261,8 @@ function logout() {
   right: 3px;
 }
 .Xcircle-img {
-  width: 100%;
-  height: 100%;
+  width: 1000%;
+  height: 1000%;
   object-fit: cover; /* fill circle, crop edges, NO distortion */
   /* object-fit: contain; → whole image visible, may have empty space inside circle */
   object-position: center;
