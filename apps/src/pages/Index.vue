@@ -8,18 +8,18 @@
             <RoundButton size="22px" icon="add_shopping_cart" clas="q-ma-xs" colr="indigo-10" ttip="采 购 清 单" @click="openApp('shopping')" />
             <RoundButton v-if="!isFedora" size="22px" icon="schedule" clas="q-ma-xs" colr="cyan-10" iclr="amber" ttip="温 馨 提 示" @click="openApp('reminder')" />
             <RoundButton size="22px" icon="备" clas="q-ma-xs q-pb-sm" colr="purple-10" iclr="cyan-2" ttip="备　忘　录" @click="openApp('memo')" />
-            <RoundButton size="22px" icon="健" clas="q-ma-xs q-pb-sm" colr="red-10" iclr="yellow" ttip="每 天 看 看" @click="openApp('watcher')" />
+            <RoundButton size="22px" icon="健" clas="q-ma-xs q-pb-sm" colr="pink-10" iclr="yellow" ttip="每 天 看 看" @click="openApp('watcher')" />
             <RoundButton size="22px" icon="account_balance" clas="q-ma-xs" colr="indigo-10" iclr="amber" ttip="银 行 月 报" @click="openApp('bankstatement')" />
-            <RoundButton size="22px" icon="析" clas="q-ma-xs q-pb-sm" colr="green-10" ttip="月 报 分 析" @click="openApp('holdings')" />
-            <RoundButton size="22px" icon="bloodtype" clas="q-ma-xs" colr="red-10" iclr="lime" ttip="血 糖 控 制" @click="openApp('glucosecheck')" />
+            <RoundButton size="22px" icon="析" clas="q-ma-xs q-pb-sm" colr="brown-10" ttip="月 报 分 析" @click="openApp('holdings')" />
+            <RoundButton size="22px" icon="bloodtype" clas="q-ma-xs" colr="pink-10" iclr="lime" ttip="血 糖 控 制" @click="openApp('glucosecheck')" />
             <!-- <RoundButton size="22px" icon="文" clas="q-ma-xs q-pb-sm" colr="indigo-10" ttip="网 上 阅 读" @click="openApp('../arts')" /> -->
-            <!-- <RoundButton size="22px" icon="画" clas="q-ma-xs q-pb-sm" colr="red-10" iclr="yellow" ttip="娅 莉 画 展" @click="openApp('../yali')" /> -->
+            <RoundButton size="22px" icon="画" clas="q-ma-xs q-pb-sm" colr="purple-10" iclr="yellow" ttip="娅 莉 画 展" @click="openApp('../yali')" />
             <RoundButton size="22px" icon="golf_course" clas="q-ma-xs" colr="teal-10" iclr="yellow" ttip="高  尔  夫" @click="openApp('../golf')" />
             <RoundButton size="22px" icon="translate" clas="q-ma-xs" colr="brown-10" ttip="英 汉 字 典" @click="openApp('dictionary')" />
-            <RoundButton size="22px" icon="card_giftcard" clas="q-ma-xs" colr="red-10" ttip="联 邦 节 日" @click="showHolidays()" />
+            <RoundButton size="22px" icon="card_giftcard" clas="q-ma-xs" colr="pink-10" ttip="联 邦 节 日" @click="showHolidays()" />
             <RoundButton size="22px" icon="palette" clas="q-ma-xs q-pb-x" colr="indigo-10" ttip="Drawing" @click="openApp('painting')" />
             <RoundButton size="22px" icon="报" clas="q-ma-xs q-pb-sm" colr="cyan-10" ttip="信 用 卡 花 销" @click="openApp('bankstatementloader')" />
-            <RoundButton size="22px" icon="转" clas="q-ma-xs q-pb-sm" colr="red-10" ttip="Convert To Text" @click="openApp('totext')" />
+            <RoundButton size="22px" icon="转" clas="q-ma-xs q-pb-sm" colr="pink-10" ttip="Convert To Text" @click="openApp('totext')" />
             <RoundButton size="22px" icon="查" clas="q-ma-xs q-pb-sm" colr="green-10" iclr="cyan-2" ttip="健 康 检 查" @click="openApp('htlist')" />
             <RoundButton size="22px" icon="胰" clas="q-ma-xs q-pb-sm" colr="purple-10" iclr="white" ttip="胰 流 报 告" @click="openApp('pfcheck')" />
             <RoundButton size="22px" icon="年" clas="q-ma-xs q-pb-sm" colr="teal-10" iclr="white" ttip="中 西 年 列 表" @click="openApp('chnyears')" />
