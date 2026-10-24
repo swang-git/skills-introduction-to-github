@@ -1,22 +1,22 @@
 <template>
-<div style="display:grid;place-items:center" class="bg-teal-10">
-  <div style="margin:-1px -10px 0 -10px;width:98.8%;border:cyan solid 1px">
+<div style="display:grid;place-items:center" class="bg-teal-9">
+  <div style="margin:3px -10px 0 -10px;width:786px;border:cyan solid 1px">
   <!-- <div style="margin:-1px -10px 0 -10px;width:812px;border:cyan solid 1px"> -->
     <div v-for="(e, i) in palist" :key=e.id>
       <div :style="getLineBackground(i)" :class="{ 'bg-purple-10':!e.hideIt }" class="q-px-xs">
         <div class="row cursor-pointer;q-qx-sm" style="font-size:20.1px">
           <!-- <div v-if="isDesk" class="q-pl-sm" @click="e.hideIt=true"><a :href="getDocLinkStr(e.date)" target="_blank" class="alnkclass">{{ e.date }}</a></div> -->
           <div v-if="isDesk" class="q-pl-sm" @click="e.hideIt=true"><a :href="getDocLinkStr(e.date)" target="_blank" class="co">{{ e.date }}</a></div>
-          <div v-if="isDesk" class="q-pl-md cursor-pointer" @click="e.hideIt=true; getMyPortfolios(e)">({{ e.date.chwk3() }})</div>
+          <div v-if="isDesk" class="q-pl-md cursor-pointer" @click="e.hideIt=true; getMyPortfolios(e)">({{ e.date.chwk2() }})</div>
           <div v-if="isDesk && e.dowjones>0" class="q-px-md text-right" @click="showIt(i)"> {{ formatCurrency(e.dowjones) }}
             <q-tooltip class="text-h6 bg-accent">Dow Jones on {{ e.date }}</q-tooltip>
           </div>
           <!-- <div v-if="isDesk" class="q-pl-xs text-right" style="width:77px" @click="showIt(i)">{{ ((e.portfolio/invested(e) - 1) * 100).toFixed(2) }}%</div> -->
           <!-- <div v-if="isDesk" class="q-pl-md text-right" style="width:135px" @click="showDar(e, 'upd')">{{ getWeight(e) }} / {{ getBMI(e) }}</div> -->
           <div v-if="isDesk" class="q-px-xs text-right" @click="showIt(i)">{{ ((e.portfolio/invested(e) - 1) * 100).toFixed(2) }}%</div>
-          <div v-if="isDesk" class="text-right" style="width:16%" @click="showDar(e, 'upd')">{{ getWeight(e) }} / {{ getBMI(e) }}</div>
+          <div v-if="isDesk" class="text-right" style="width:15%" @click="showDar(e, 'upd')">{{ getWeight(e) }} / {{ getBMI(e) }}</div>
           <div v-else class="text-left" style="width:111px" @click="showDar(e, 'upd')">{{ e.date }}</div>
-          <div v-if="isDesk" class="q-px-sm text-right" :class="{ 'text-green-3':e.dif>0, 'text-pink-2':e.dif<0 }" style="width:16%" @click="showDar(e, 'upd')"> {{ e.difs }} </div>
+          <div v-if="isDesk" class="q-px-sm text-right" :class="{ 'text-green-3':e.dif>0, 'text-pink-2':e.dif<0 }" style="width:14%" @click="showDar(e, 'upd')"> {{ e.difs }} </div>
           <div v-else class="q-px-sm text-right" :class="{ 'text-green-3':e.dif>0, 'text-pink-2':e.dif<0 }" style="width:110px" @click="showDar(e, 'upd')"> {{ e.difs }} </div>
           <div v-if="isDesk" class="q-px-sm text-center cursor-pointer" @click="showDar(e, 'add')">{{ formatCurrency(e.portfolio) }}</div>
           <div v-else class="q-pl-sm text-right cursor-pointer" style="width:130px" @click="showDar(e, 'add')">{{ formatCurrency(e.portfolio) }}</div>
