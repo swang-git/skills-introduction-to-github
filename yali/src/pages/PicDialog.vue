@@ -1,9 +1,5 @@
 <template>
-  <q-dialog
-    v-model="opened"
-    maximized
-    :transition-show="compPidx % 2 == 0 ? 'rotate' : 'slide-left'"
-  >
+  <q-dialog v-model="opened" maximized :transition-show="compPidx % 2 == 0 ? 'rotate' : 'slide-left'" >
     <q-card class="bg-red-4 overflow-hidden" style="height: 45px; z-index: 10">
       <q-card-actions align="between" style="margin-top: -8px">
         <q-btn-group glossy rounded>
@@ -113,7 +109,7 @@ emitter.on('pix-pidx', (idx) => {
   getPic()
 })
 
-const showOrigin = ref(false)
+const showOrigin = ref(true)
 const removedPidx = ref(-1)
 const opened = ref(false)
 const slideshowing = ref(false)
@@ -255,7 +251,8 @@ function getStyle() {
   } else {
     stystr = imgAspectRatio >= 1 ? 'width:' + viewW + 'px' : 'height:' + viewH + 'px'
   }
-  return stystr + ';' + trans //+ ';' + bgimg
+  // return stystr + ';' + trans //+ ';' + bgimg
+  return stystr + ';' + trans + ';' + 'border-radius:50%'
 }
 
 const compIntervalDelay = computed(() => {
@@ -366,6 +363,12 @@ function openIt(idx, imgdata) {
 </script>
 
 <style scoped>
+.Xcircle-frame {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  overflow: hidden; /* critical: hide everything outside circle */
+}
 .Xcircle-img {
   width: 100%;
   height: 100%;
