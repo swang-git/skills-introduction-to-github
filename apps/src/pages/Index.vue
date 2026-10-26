@@ -40,15 +40,15 @@
         <RoundButton size="33px" icon="文" clas="q-ma-xs q-pb-md" colr="purple-10" iclr="yellow" ttip="网 上 阅 读" @click="openApp('../arts')" />
       </div>
       <div class="q-pb-xl row justify-center" :style="getSty()">
-        <q-avatar :size="getAvatarSZ()"><img :src="piclnk" class="circle-img" /></q-avatar>
+        <!-- <q-avatar :size="getAvatarSZ()"><img :src="piclnk" class="circle-img" /></q-avatar> -->
+      <!-- <div class="q-pb-xl row justify-center"> -->
+        <img class="fixed" :src="piclnk" :style="getStyle()" />
       </div>
       <div class="corner-btn bottom-left">
         <RoundButton size="33px" icon="golf_course" clas="q-ma-xs" colr="teal-10" iclr="yellow" ttip="高  尔  夫" @click="openApp('../golf')" />
       </div>
       <div class="corner-btn bottom-right">
         <RoundButton size="33px" icon="schedule" clas="q-ma-xs" colr="teal-10" iclr="amber" ttip="温 馨 提 示" @click="openApp('reminder')" />
-        <!-- <RoundButton size="33px" icon="logout" clas="q-ma-xs" colr="amber-10" iclr="grey-10" ttip="系 统 Logout" @click="logout()" v-show="AppAdmin" />
-        <RoundButton size="33px" icon="login" clas="q-ma-xs" colr="grey-10" iclr="amber" ttip="系 统 管 理" @click="login()" v-if="!AppAdmin" /> -->
       </div>
     </div>
     <q-footer v-if="isDesk" elevated class="bg-teal-10">
@@ -107,6 +107,9 @@ const compVer = computed(() => { return import.meta.env.VITE_BUILD_TAG == null ?
 const picurl = computed(() => { return piclnk.value })
 const picIdx = computed(() => { return parseInt(picidx.value) })
 const isApps = computed(() => { return /apps/.test(import.meta.env.BASE_URL) })
+const winW = $q.screen.width
+const winH = $q.screen.height
+const showOrigin = ref(true)
 
 console.log(`-ST-Index BASE_URL=${import.meta.env.BASE_URL} isApps=${isApps.value}`)
 // logout()
@@ -130,10 +133,38 @@ function getAvatarSZ () {
 }
 function getSty () {
   const leftpx = 130/2 + 'px'
-  const sty = "margin: 200px 0 0 " + leftpx
+  const sty = "margin: 999px 0 0 " + leftpx
   console.log(`-fn-getSty`)
   return sty
 }
+function getStyle() {
+  let trans = 'left: 53%; top: 58%; transform: translate(-50%, -50%)'
+  if (!isDesk) return trans // + ';' + bgimg
+
+  let idx = picidx.value
+  console.log(`-fn-getStyle idx=${idx}`)
+  let imgAspectRatio = rat.value
+  let viewW = winW - 40
+  let viewH = winH - 310 // top bar + bottom bar = 60 + 60 = 100px
+  let viewAspectRatio = viewW / viewH
+  let stystr = ''
+  // console.log(`-CK- viewAspectRatio=${viewAspectRatio} imgAspectRatio=${imgAspectRatio} imgW=${imgW} viewW=${viewW} imgH=${imgH} viewH=${viewH}`)
+  // console.log(`-CK- viewAspectRatio=${viewAspectRatio} imgAspectRatio=${imgAspectRatio} 1/imgAspectRation=${1/imgAspectRatio}`)
+  if (viewAspectRatio > 1) {
+    stystr = 'width:' + viewW / 1.2 + 'px'
+    if (imgAspectRatio < 1) stystr = 'height:' + viewH + 'px'
+  } else if (viewAspectRatio < 1) {
+    stystr = 'height:' + viewH + 'px'
+    if (imgAspectRatio > 1) stystr = 'width:' + viewW + 'px'
+  } else {
+    stystr = imgAspectRatio >= 1 ? 'width:' + viewW + 'px' : 'height:' + viewH + 'px'
+  }
+  // return stystr + ';' + trans //+ ';' + bgimg
+  let radi = showOrigin.value ? 'border-radius:50%' :null
+  // return stystr + ';' + trans + ';' + 'border-radius:50%'
+  return stystr + ';' + trans + ';' + radi
+}
+
 function slideShow () {
   console.log(`-fn-slideShow isApps=${isApps.value} BASE_URL=${import.meta.env.BASE_URL}`)
   setInterval(() => {
@@ -154,7 +185,7 @@ function getNextPic () {
 }
 
 function setRandomPic (da) {
-  // console.log(`-fn-setRandomFile rat=${da.rat} picidx=${da.picidx} totalp=${da.totalp} randomFile=${da.randomFile}`)
+  console.log(`-fn-setRandomFile rat=${da.rat} picidx=${da.picidx} totalp=${da.totalp} randomFile=${da.randomFile}`)
   piclnk.value = ENV_DEV + da.randomFile
   rat.value = da.rat
   picidx.value = da.picidx

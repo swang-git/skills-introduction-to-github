@@ -149,24 +149,16 @@ function checkingRemovedFile(da) {
     return
   }
 }
-
 function confirmedAction(act) {
   if (act == 'delete') removeDupFile()
   else if (act == 'undo') undoRemovedDupFile()
 }
-
 function askUndoRemoveDupFile() {
   // removedPidx.value = pidx.value
   let fnm = piclst.value[pidx.value]
   console.log(`-fn-askUndoRemoveDupFile removeePidx=${removedPidx.value} fnm=${fnm}`)
-  emitter.emit(
-    'open-ConfirmDialog',
-    'Undo Removed Dup file',
-    'Already Removed File: ' + fnm,
-    'undo',
-  )
+  emitter.emit('open-ConfirmDialog', 'Undo Removed Dup file', 'Already Removed File: ' + fnm, 'undo')
 }
-
 function undoRemovedDupFile() {
   let idx = pidx.value
   let fnm = piclst.value[idx]
@@ -204,19 +196,7 @@ function getBGimg() {
   let istr4 = 'bg-img-pink.png' + ')'
   let istr5 = 'bg-img-grey.png' + ')'
   let istr6 = 'bg-img-gold.png' + ')'
-  return idx == 0
-    ? istr0
-    : idx == 1
-      ? istr1
-      : idx == 2
-        ? istr2
-        : idx == 3
-          ? istr3
-          : idx == 4
-            ? istr4
-            : idx == 5
-              ? istr5
-              : istr6
+  return idx == 0 ? istr0 : idx == 1 ? istr1 : idx == 2 ? istr2 : idx == 3 ? istr3 : idx == 4 ? istr4 : idx == 5 ? istr5 : istr6
 }
 const pageBackground = computed(() => {
   return {
