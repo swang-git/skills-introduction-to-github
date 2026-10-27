@@ -3,7 +3,7 @@
     <q-card class="bg-red-4 overflow-hidden" style="height: 45px; z-index: 10">
       <q-card-actions align="between" style="margin-top: -8px">
         <q-btn-group glossy rounded>
-          <q-btn round color="teal-8" icon="radio_button_checked" @click="toogleOrigin" />
+          <q-btn round color="teal-8" icon="radio_button_checked" @click="setFrame()" />
           <q-btn round color="teal-9" icon="cancel" v-close-popup />
         </q-btn-group>
         <div class="text-h5 cursor-pointer" @click="openTxtPad">{{ datetms[pidx] }}</div>
@@ -23,16 +23,16 @@
     </q-card>
     <div :style="pageBackground">
       <div v-if="isDesk">
-        <div v-if="showOrigin" class="row justify-between">
-          <q-btn flat icon="" size="lg" @click="--pidx < 0 ? (pidx = piclst.length - 1) : pidx" style="height: 95vh; z-index: 1" />
-          <img class="fixed" :src="getPic()" :style="getStyle()" @click="stopSlideshow()" />
-          <q-btn flat icon="" size="lg" @click="++pidx >= piclst.length ? (pidx = 0) : pidx" />
-        </div>
-        <div v-else class="q-pt-sm row justify-center">
+        <div v-if="frame==0" class="q-pt-sm row justify-center">
           <q-avatar :size="screenwidth - 30 + 'px'">
             <!-- <img :src="getPic()" :style="pidx%2==0 ? 'border:solid 3px cyan' : 'border:solid 3px pink'" class="circle-img" @click="stopSlideshow()" /> -->
             <img :src="getPic()" :style="getBorderColor()" class="circle-img" @click="stopSlideshow()" />
           </q-avatar>
+        </div>
+        <div v-else class="row justify-between">
+          <q-btn flat icon="" size="lg" @click="--pidx < 0 ? (pidx = piclst.length - 1) : pidx" style="height: 95vh; z-index: 1" />
+          <img class="fixed" :src="getPic()" :style="getStyle()" @click="stopSlideshow()" />
+          <q-btn flat icon="" size="lg" @click="++pidx >= piclst.length ? (pidx = 0) : pidx" />
         </div>
       </div>
       <div v-else-if="isIM">
@@ -109,7 +109,7 @@ emitter.on('pix-pidx', (idx) => {
   getPic()
 })
 
-const showOrigin = ref(true)
+const frame = ref(1)
 const removedPidx = ref(-1)
 const opened = ref(false)
 const slideshowing = ref(false)
@@ -137,10 +137,10 @@ function getBorderColor () {
   const colr = recd==0 ? 'red' : recd==1 ? 'purple' : 'cyan'
   return "border: solid 3px " + colr
 }
-function toogleOrigin () {
-console.log(`-fh-A-toogleOrigin showOrigin=${showOrigin.value}`)
-  showOrigin.value = !showOrigin.value
-  console.log(`-fh-B-toogleOrigin showOrigin=${showOrigin.value}`)
+function setFrame () {
+console.log(`-fh-A-setFrame frame=${frame.value}`)
+  frame.value = (frame.value + 1) % 3
+  console.log(`-fh-B-setFrame frame=${frame.value}`)
 }
 function checkingRemovedFile(da) {
   if (da.status != 'OK') {
@@ -232,7 +232,8 @@ function getStyle() {
     stystr = imgAspectRatio >= 1 ? 'width:' + viewW + 'px' : 'height:' + viewH + 'px'
   }
   // return stystr + ';' + trans //+ ';' + bgimg
-  return stystr + ';' + trans + ';' + 'border-radius:50%'
+  let radi = frame.value == 1 ? 'border-radius:50%' : null 
+  return stystr + ';' + trans + ';' + radi
 }
 
 const compIntervalDelay = computed(() => {

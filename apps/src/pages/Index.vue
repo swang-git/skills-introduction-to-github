@@ -39,9 +39,10 @@
       <div class="corner-btn top-right">
         <RoundButton size="33px" icon="文" clas="q-ma-xs q-pb-md" colr="purple-10" iclr="yellow" ttip="网 上 阅 读" @click="openApp('../arts')" />
       </div>
-      <div class="q-pb-xl row justify-center" :style="getSty()">
-        <!-- <q-avatar :size="getAvatarSZ()"><img :src="piclnk" class="circle-img" /></q-avatar> -->
-      <!-- <div class="q-pb-xl row justify-center"> -->
+      <div v-if="frame==0" class="q-pb-xl row justify-center" :style="getSty()">
+        <q-avatar :size="getAvatarSZ()"><img :src="piclnk" class="circle-img" /></q-avatar>
+      </div>
+      <div v-else class="q-pb-xl row justify-center" :style="getSty()">
         <img class="fixed" :src="piclnk" :style="getStyle()" />
       </div>
       <div class="corner-btn bottom-left">
@@ -66,6 +67,8 @@
             <span class="text-bold text-cyan-2 text-body1" style="margin: 0 4px 0 4px">幻灯</span>
             <q-icon name="play_circle" size="md" color="lime" />
           </q-btn>
+          <q-space /> <!-- this pushes next button all the way right -->
+          <q-btn glossy round class="bg-cyan-9" icon="radio_button_checked" @click="setFrame()" />
           <q-space /> <!-- this pushes next button all the way right -->
           <q-btn glossy rounded class="bg-teal-9" @click="getRandomPic(-1)">
             <q-icon name="slow_motion_video" size="md" color="lime" />
@@ -109,7 +112,7 @@ const picIdx = computed(() => { return parseInt(picidx.value) })
 const isApps = computed(() => { return /apps/.test(import.meta.env.BASE_URL) })
 const winW = $q.screen.width
 const winH = $q.screen.height
-const showOrigin = ref(true)
+const frame = ref(0)
 
 console.log(`-ST-Index BASE_URL=${import.meta.env.BASE_URL} isApps=${isApps.value}`)
 // logout()
@@ -126,6 +129,10 @@ onMounted(() => {
 getRandomPic(-1)
 slideShow()
 
+function setFrame () {
+  frame.value = (frame.value + 1) % 3
+  console.log(`-fn-setFrame frame=${frame.value}`)
+}
 function getAvatarSZ () {
   const offsz = 190
   const sz = (screenwidth - offsz) + 'px'
@@ -133,7 +140,9 @@ function getAvatarSZ () {
 }
 function getSty () {
   const leftpx = 130/2 + 'px'
-  const sty = "margin: 999px 0 0 " + leftpx
+  let sty = "margin: 999px 0 0 " + leftpx
+  if (frame.value == 0) sty = "margin: 199px 0 0 " + leftpx
+
   console.log(`-fn-getSty`)
   return sty
 }
@@ -160,7 +169,8 @@ function getStyle() {
     stystr = imgAspectRatio >= 1 ? 'width:' + viewW + 'px' : 'height:' + viewH + 'px'
   }
   // return stystr + ';' + trans //+ ';' + bgimg
-  let radi = showOrigin.value ? 'border-radius:50%' :null
+  let radi = frame.value == 1 ? 'border-radius:50%' :null
+  // let radi = 'border-radius:50%'
   // return stystr + ';' + trans + ';' + 'border-radius:50%'
   return stystr + ';' + trans + ';' + radi
 }
