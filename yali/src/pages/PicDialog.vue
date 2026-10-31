@@ -77,11 +77,16 @@
             <span class="text-cyan-2 text-h6" style="margin: 4px 4px 0 -10px">确定</span>
           </q-btn>
         </div>
-        <q-btn glossy rounded class="bg-teal-9" @click="slideshow()">
+        <!-- <q-btn glossy rounded class="bg-teal-9" @click="slideshow()">
           <q-icon name="motion_photos_auto" size="md" color="yellow-9" />
           <span class="text-bold text-cyan-1 text-body1" style="margin: 0 4px 0 4px">幻灯片</span>
           <q-icon name="slow_motion_video" size="md" color="yellow-9" />
-        </q-btn>
+        </q-btn> -->
+        <q-btn-group glossy rounded>
+          <q-btn round color="teal-8" icon="radio_button_checked" @click="setFrame()" />
+          <q-btn round color="teal-9" label="幻灯" @click="slideshow" />
+          <q-btn round color="teal-8" icon="stop" @click="stopSlideshow" />
+        </q-btn-group>
         <q-btn glossy rounded class="bg-teal-9" @click="++pidx >= piclst.length ? (pidx = 0) : pidx" >
           <span class="text-bold text-cyan-2 text-body1" style="margin: 0 4px 0 4px">下一幅</span>
           <q-icon name="arrow_circle_right" size="md" color="lime" />
