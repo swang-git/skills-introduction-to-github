@@ -130,7 +130,7 @@ getRandomPic(-1)
 slideShow()
 
 function setFrame () {
-  frame.value = (frame.value + 1) % 3
+  frame.value = (frame.value + 1) % 5
   console.log(`-fn-setFrame frame=${frame.value}`)
 }
 function getAvatarSZ () {
@@ -169,7 +169,7 @@ function getStyle() {
     stystr = imgAspectRatio >= 1 ? 'width:' + viewW + 'px' : 'height:' + viewH + 'px'
   }
   // return stystr + ';' + trans //+ ';' + bgimg
-  let radi = frame.value == 1 ? 'border-radius:50%' :null
+  let radi = frame.value == 1 ? 'border-radius:50%' : frame.value == 2 ? 'border-radius:25%' : frame.value == 3 ? 'border-radius:5%' : null
   // let radi = 'border-radius:50%'
   // return stystr + ';' + trans + ';' + 'border-radius:50%'
   return stystr + ';' + trans + ';' + radi

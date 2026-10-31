@@ -23,7 +23,7 @@
     </q-card>
     <div :style="pageBackground">
       <div v-if="isDesk">
-        <div v-if="frame==0" class="q-pt-sm row justify-center">
+        <div v-if="frame==0" class="row justify-center" style="margin-top:30px">
           <q-avatar :size="screenwidth - 30 + 'px'">
             <!-- <img :src="getPic()" :style="pidx%2==0 ? 'border:solid 3px cyan' : 'border:solid 3px pink'" class="circle-img" @click="stopSlideshow()" /> -->
             <img :src="getPic()" :style="getBorderColor()" class="circle-img" @click="stopSlideshow()" />
@@ -139,7 +139,7 @@ function getBorderColor () {
 }
 function setFrame () {
 console.log(`-fh-A-setFrame frame=${frame.value}`)
-  frame.value = (frame.value + 1) % 3
+  frame.value = (frame.value + 1) % 5
   console.log(`-fh-B-setFrame frame=${frame.value}`)
 }
 function checkingRemovedFile(da) {
@@ -210,7 +210,7 @@ const pageBackground = computed(() => {
 })
 
 function getStyle() {
-  let trans = 'left: 50%; top: 50%; transform: translate(-50%, -50%)'
+  let trans = 'left: 50%; top: 49.5%; transform: translate(-50%, -50%)'
   if (!isDesk) return trans // + ';' + bgimg
 
   let idx = pidx.value
@@ -232,7 +232,8 @@ function getStyle() {
     stystr = imgAspectRatio >= 1 ? 'width:' + viewW + 'px' : 'height:' + viewH + 'px'
   }
   // return stystr + ';' + trans //+ ';' + bgimg
-  let radi = frame.value == 1 ? 'border-radius:50%' : null 
+  // let radi = frame.value == 1 ? 'border-radius:50%' : null 
+  let radi = frame.value == 1 ? 'border-radius:50%' : frame.value == 2 ? 'border-radius:25%' : frame.value == 3 ? 'border-radius:5%' : null
   return stystr + ';' + trans + ';' + radi
 }
 
