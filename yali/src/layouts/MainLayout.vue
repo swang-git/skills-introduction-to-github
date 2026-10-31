@@ -50,9 +50,14 @@
           <div v-for="(p, idx) in data" :key="p" class="q-px-xs">
             <!-- <img v-if="isIM" :src="getThumbnailURL(p.fnm)" :height=IMiconSZ :width=IMiconSZ class="q-pt-xs cursor-pointer" @click="showFullImage(idx)" loading="lazy" />
             <img v-else      :src="getThumbnailURL(p.fnm)" :height=DKiconSZ :width=DKiconSZ class="cursor-pointer" @click="showFullImage(idx)" loading="lazy" /> -->
-            <q-avatar :size="isDesk ? DKiconSZ: IMiconSZ">
-            <img :src="getThumbnailURL(p.fnm)" class="circle-img q-pt-xs" @click="showFullImage(idx)" />
-            </q-avatar>
+            <div v-if="frame==0">
+              <q-avatar :size="isDesk ? DKiconSZ: IMiconSZ">
+                <img :src="getThumbnailURL(p.fnm)" class="circle-img q-pt-xs" @click="showFullImage(idx)" />
+              </q-avatar>
+            </div>
+            <div v-else>
+              <img :src="getThumbnailURL(p.fnm)" style="width:140px;height:140px;border-radius:20%" @click="showFullImage(idx)" />
+            </div>
           </div>
         </q-card-actions>
       </q-card>
@@ -123,7 +128,7 @@ const admin = useAdminStore()
 
 const data = ref([])
 const hasMore = ref(true)
-const perPage = ref(isIM ? 20 : 30)
+const perPage = ref(isIM ? 20 : 36)
 const total = ref(0)
 const lastPage = ref(total.value / perPage.value)
 // const IMiconSZ = 177.8 // Mate60 Good for 2 columns
@@ -139,6 +144,7 @@ const yex = ref(true)
 const yue = ref(false)
 const numPages = ref(1)
 const ym = ref(null)
+const frame = ref(1)
 var years = []
 var yms = []
 
@@ -155,6 +161,35 @@ console.log(`-CK-isCleanup=${admin.isCleanup} isLinux=${isLinux} sreenw=${$q.scr
 emitter.on('yali-getPixByYM', (x) => setPixByYM(x))
 
 // ---- function section -----
+
+function XgetStyle() {
+  let trans = 'left: 50%; top: 49.5%; transform: translate(-50%, -50%)'
+  if (!isDesk) return trans // + ';' + bgimg
+
+  let idx = pidx.value
+  console.log(`-fn-getStyle idx=${idx}`)
+  let imgAspectRatio = ratlst.value[idx]
+  let viewW = winW - 40
+  let viewH = winH - 140 // top bar + bottom bar = 60 + 60 = 100px
+  let viewAspectRatio = viewW / viewH
+  let stystr = ''
+  // console.log(`-CK- viewAspectRatio=${viewAspectRatio} imgAspectRatio=${imgAspectRatio} imgW=${imgW} viewW=${viewW} imgH=${imgH} viewH=${viewH}`)
+  // console.log(`-CK- viewAspectRatio=${viewAspectRatio} imgAspectRatio=${imgAspectRatio} 1/imgAspectRation=${1/imgAspectRatio}`)
+  if (viewAspectRatio > 1) {
+    stystr = 'width:' + viewW / 1.2 + 'px'
+    if (imgAspectRatio < 1) stystr = 'height:' + viewH + 'px'
+  } else if (viewAspectRatio < 1) {
+    stystr = 'height:' + viewH + 'px'
+    if (imgAspectRatio > 1) stystr = 'width:' + viewW + 'px'
+  } else {
+    stystr = imgAspectRatio >= 1 ? 'width:' + viewW + 'px' : 'height:' + viewH + 'px'
+  }
+  // return stystr + ';' + trans //+ ';' + bgimg
+  // let radi = frame.value == 1 ? 'border-radius:50%' : null 
+  let radi = frame.value == 1 ? 'border-radius:50%' : frame.value == 2 ? 'border-radius:25%' : frame.value == 3 ? 'border-radius:5%' : null
+  return stystr + ';' + trans + ';' + radi
+}
+
 function setPidx (idx) {
   console.log(`-fn-setPidx idx=${idx}`)
   emitter.emit('pix-pidx', idx - 1)
