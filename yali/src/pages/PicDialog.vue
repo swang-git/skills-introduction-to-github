@@ -26,36 +26,36 @@
         <div v-if="frame==0" class="row justify-center" style="margin-top:30px">
           <q-avatar :size="screenwidth - 30 + 'px'">
             <!-- <img :src="getPic()" :style="pidx%2==0 ? 'border:solid 3px cyan' : 'border:solid 3px pink'" class="circle-img" @click="stopSlideshow()" /> -->
-            <img :src="getPic()" :style="getBorderColor()" class="circle-img" @click="stopSlideshow()" />
+            <img :src="getPic()" :style="getBorderColor()" class="circle-img" @click="setFrame" />
           </q-avatar>
         </div>
         <div v-else class="row justify-between">
           <q-btn flat icon="" size="lg" @click="--pidx < 0 ? (pidx = piclst.length - 1) : pidx" style="height: 95vh; z-index: 1" />
-          <img class="fixed" :src="getPic()" :style="getStyle()" @click="stopSlideshow()" />
+          <img class="fixed" :src="getPic()" :style="getStyle()" @click="setFrame" />
           <q-btn flat icon="" size="lg" @click="++pidx >= piclst.length ? (pidx = 0) : pidx" />
         </div>
       </div>
       <div v-else-if="isIM">
         <div v-if="showOrigin" class="row justify-between">
           <q-btn flat icon="" size="lg" @click="--pidx < 0 ? (pidx = piclst.length - 1) : pidx" style="height: 95vh; z-index: 1" />
-          <img class="fixed" :src="getPic()" :style="getStyle()" @click="stopSlideshow()" />
+          <img class="fixed" :src="getPic()" :style="getStyle()" @click="setFrame" />
           <q-btn flat icon="" size="lg" @click="++pidx >= piclst.length ? (pidx = 0) : pidx" />
         </div>
         <div v-else class="q-pt-xl row justify-center">
-          <q-avatar :size="screenwidth - 10 + 'px'"><img :src="getPic()" class="circle-img" @click="stopSlideshow()" /></q-avatar>
+          <q-avatar :size="screenwidth - 10 + 'px'"><img :src="getPic()" class="circle-img" @click="setFrame" /></q-avatar>
         </div>
       </div>
       <div v-else-if="isDeskX">
         <div class="row justify-between">
           <q-btn flat icon="" size="lg" @click="--pidx < 0 ? (pidx = piclst.length - 1) : pidx" style="height: 95vh; z-index: 1" />
-          <img class="fixed" :src="getPic()" :style="getStyle()" @click="stopSlideshow()" />
+          <img class="fixed" :src="getPic()" :style="getStyle()" @click="setFrame" />
           <q-btn flat icon="" size="lg" @click="++pidx >= piclst.length ? (pidx = 0) : pidx" />
         </div>
       </div>
       <div v-else>
         <div class="row justify-between">
           <q-btn flat icon="" size="lg" @click="--pidx < 0 ? (pidx = piclst.length - 1) : pidx" style="height: 95vh; z-index: 1" />
-          <img id="imgId" class="q-pa-xs fixed" :src="getPic()" width="98%" :style="getStyle()" @click="stopSlideshow()" />
+          <img id="imgId" class="q-pa-xs fixed" :src="getPic()" width="98%" :style="getStyle()" @click="setFrame" />
           <q-btn flat icon="" size="lg" @click="++pidx >= piclst.length ? (pidx = 0) : pidx" />
         </div>
       </div>
@@ -77,16 +77,19 @@
             <span class="text-cyan-2 text-h6" style="margin: 4px 4px 0 -10px">确定</span>
           </q-btn>
         </div>
-        <!-- <q-btn glossy rounded class="bg-teal-9" @click="slideshow()">
-          <q-icon name="motion_photos_auto" size="md" color="yellow-9" />
-          <span class="text-bold text-cyan-1 text-body1" style="margin: 0 4px 0 4px">幻灯片</span>
-          <q-icon name="slow_motion_video" size="md" color="yellow-9" />
-        </q-btn> -->
-        <q-btn-group glossy rounded>
+        <!-- <q-btn-group glossy rounded>
           <q-btn round color="teal-8" icon="radio_button_checked" @click="setFrame()" />
           <q-btn round color="teal-9" label="幻灯" @click="slideshow" />
           <q-btn round color="teal-8" icon="stop" @click="stopSlideshow" />
-        </q-btn-group>
+        </q-btn-group> -->
+          <q-btn v-if="isSlideShow" glossy rounded class="bg-lime-9" @click="stopSlideShow">
+            <span class="text-bold text-cyan-2 text-body1" style="margin: 0 4px 0 4px">停止</span>
+            <q-icon name="pause" size="md" color="lime" />
+          </q-btn>
+          <q-btn v-else glossy rounded class="bg-teal-9" @click="slideShow">
+            <span class="text-bold text-cyan-2 text-body1" style="margin: 0 4px 0 4px">幻灯</span>
+            <q-icon name="play_circle" size="md" color="lime" />
+          </q-btn>
         <q-btn glossy rounded class="bg-teal-9" @click="++pidx >= piclst.length ? (pidx = 0) : pidx" >
           <span class="text-bold text-cyan-2 text-body1" style="margin: 0 4px 0 4px">下一幅</span>
           <q-icon name="arrow_circle_right" size="md" color="lime" />
@@ -117,7 +120,7 @@ emitter.on('pix-pidx', (idx) => {
 const frame = ref(1)
 const removedPidx = ref(-1)
 const opened = ref(false)
-const slideshowing = ref(false)
+const isSlideShow = ref(false)
 const intervalId = ref(-1)
 const intervalDelay = ref(1500)
 const pidx = ref(-1)
@@ -267,15 +270,15 @@ function openTxtPad() {
   )
 }
 
-function stopSlideshow() {
-  console.log(`-fn-stopSlideshow`)
-  slideshowing.value = false
+function stopSlideShow () {
+  console.log(`-fn-stopSlideShow`)
+  isSlideShow.value = false
   clearInterval(intervalId.value)
 }
 
-function slideshow() {
-  if (slideshowing.value) return
-  slideshowing.value = true
+function slideShow () {
+  if (isSlideShow.value) return
+  isSlideShow.value = true
   console.log(`-fn-slidshow() pidx=${pidx.value} totalPix=${piclst.value.length}`)
   intervalId.value = setInterval(() => {
     if (pidx.value > piclst.value.length - 1) {
