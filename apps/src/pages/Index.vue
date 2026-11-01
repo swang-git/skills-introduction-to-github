@@ -40,10 +40,10 @@
         <RoundButton size="33px" icon="文" clas="q-ma-xs q-pb-md" colr="purple-10" iclr="yellow" ttip="网 上 阅 读" @click="openApp('../arts')" />
       </div>
       <div v-if="frame==0" class="q-pb-xl row justify-center" :style="getSty()">
-        <q-avatar :size="getAvatarSZ()"><img :src="piclnk" class="circle-img" /></q-avatar>
+        <q-avatar :size="getAvatarSZ()"><img :src="piclnk" class="circle-img" @click="setFrame" /></q-avatar>
       </div>
       <div v-else class="q-pb-xl row justify-center" :style="getSty()">
-        <img class="fixed" :src="piclnk" :style="getStyle()" />
+        <img class="fixed" :src="piclnk" :style="getStyle()" @click="setFrame" />
       </div>
       <div class="corner-btn bottom-left">
         <RoundButton size="33px" icon="golf_course" clas="q-ma-xs" colr="teal-10" iclr="yellow" ttip="高  尔  夫" @click="openApp('../golf')" />
@@ -67,8 +67,8 @@
             <span class="text-bold text-cyan-2 text-body1" style="margin: 0 4px 0 4px">幻灯</span>
             <q-icon name="play_circle" size="md" color="lime" />
           </q-btn>
-          <q-space /> <!-- this pushes next button all the way right -->
-          <q-btn glossy round class="bg-cyan-9" icon="radio_button_checked" @click="setFrame()" />
+          <!-- <q-space /> 
+          <q-btn glossy round class="bg-cyan-9" icon="radio_button_checked" @click="setFrame()" /> -->
           <q-space /> <!-- this pushes next button all the way right -->
           <q-btn glossy rounded class="bg-teal-9" @click="getRandomPic(-1)">
             <q-icon name="slow_motion_video" size="md" color="lime" />
