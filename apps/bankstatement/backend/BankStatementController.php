@@ -22,6 +22,7 @@ class BankStatementController extends Controller
 {
 	public function __construct() {
 		$this->middleware('auth');
+		$today = Date('Y-m-d', time());
 	}
 	/**
 	 * [index description]
@@ -142,17 +143,15 @@ class BankStatementController extends Controller
 
 	private function getChaseBkgAssets() { Log::info("-fn-getChaseBkgAssets");
         $last_bkg_pdf = $this->getLastMatchingFile(config('constants.DOC_DIR') . '/Chase/', '202*_bkg.pdf');
+		// $today = Date('Y-m-d', time());
         Log::info("last_bkg_pdf=$last_bkg_pdf");
 
 		$loadTime = substr(StockQuote::where('status', 'A')->max('asof_time'), 0, 10);
 		$da = DB::table('stock_quotes as s')
 			->where('asof_time', 'like', "%$loadTime%")
 			->where('m.symbol', '<>', 'BEKE')
-			// ->where('m.symbol', '<>', 'WBD')
-			// ->join('security_metas as m', 'm.symbol', 's.symbol')
-			->join('security_metas as m', function ($join) {
-				$join->on('m.symbol', '=', 's.symbol')->where('m.status', 'A');
-			})
+			->where(function ($q) { $q->where('m.symbol', '<>', 'WBD')->where('asof_time', '<', '2026-10-07'); })
+			->join('security_metas as m', function ($join) { $join->on('m.symbol', '=', 's.symbol')->where('m.status', 'A'); })
 			->select('s.symbol', 's.price', 's.price_change', 'm.quantity')
             ->orderBy('asof_time', 'desc')
             ->limit(6)->get();

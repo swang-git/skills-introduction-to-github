@@ -1,6 +1,7 @@
 from datetime import date, datetime, timedelta
 from sty import ef, rs, FgRegister
 ##from mysql.connector import Error
+from decimal import Decimal
 import time, sys
 from constants import spx
 
@@ -374,6 +375,7 @@ def get_meta(cursor):
 
 def get_quantity(meta_dict, symb):
     quantity = meta_dict[symb]['quantity']
+    if date.today() >= date(2026, 10, 7) and symb == 'WBD': quantity = Decimal("0.0")
     # print("quantity=[%s]"%quantity)
     return quantity
 
