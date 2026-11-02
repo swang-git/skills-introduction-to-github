@@ -3,7 +3,7 @@
     <q-card class="bg-red-4 overflow-hidden" style="height: 45px; z-index: 10">
       <q-card-actions align="between" style="margin-top: -8px">
         <q-btn-group glossy rounded>
-          <q-btn round color="teal-8" icon="radio_button_checked" @click="setFrame()" />
+          <q-btn round color="teal-8" icon="radio_button_checked" @click="bgidx++" />
           <q-btn round color="teal-9" icon="cancel" v-close-popup />
         </q-btn-group>
         <div class="text-h5 cursor-pointer" @click="openTxtPad">{{ datetms[pidx] }}</div>
@@ -124,6 +124,7 @@ const isSlideShow = ref(false)
 const intervalId = ref(-1)
 const intervalDelay = ref(1500)
 const pidx = ref(-1)
+const bgidx = ref(0)
 const piclst = ref([])
 const datetms = ref([])
 const fileszs = ref([])
@@ -140,10 +141,11 @@ const compRemovedPidx = computed(() => {
 })
 
 function getBorderColor () {
-  const recd = pidx.value % 3
-  console.log(`-fh-getBorderColor pidx=${pidx.value} recd=${recd}`)
-  const colr = recd==0 ? 'red' : recd==1 ? 'purple' : 'cyan'
-  return "border: solid 3px " + colr
+  const cidx = (bgidx.value + pidx.value) % 5
+  // console.log(`-fh-getBorderColor pidx=${pidx.value} recd=${recd}`)
+  const colrs = ['red', 'pink', 'purple', 'indigo', 'lime']
+  const border_styles = ['solid', 'dotted', 'dashed', 'groove', 'double']
+  return "border: " + border_styles[cidx] + " 10px " + colrs[cidx]
 }
 function setFrame () {
 console.log(`-fh-A-setFrame frame=${frame.value}`)
@@ -197,19 +199,27 @@ function removeDupFile() {
 
 function getBGimg() {
   let idx = pidx.value % 7
-  let istr0 = 'bg-img-purple.png' + ')'
-  let istr1 = 'bg-img-black.png' + ')'
-  let istr2 = 'bg-img-beige.png' + ')'
-  let istr3 = 'bg-img-white.png' + ')'
-  let istr4 = 'bg-img-pink.png' + ')'
-  let istr5 = 'bg-img-grey.png' + ')'
-  let istr6 = 'bg-img-gold.png' + ')'
+  let istr0 = 'bg-img-purple.png'
+  let istr1 = 'bg-img-black.png'
+  let istr2 = 'bg-img-beige.png'
+  let istr3 = 'bg-img-white.png'
+  let istr4 = 'bg-img-pink.png'
+  let istr5 = 'bg-img-grey.png'
+  let istr6 = 'bg-img-gold.png'
   return idx == 0 ? istr0 : idx == 1 ? istr1 : idx == 2 ? istr2 : idx == 3 ? istr3 : idx == 4 ? istr4 : idx == 5 ? istr5 : istr6
 }
+const arBGimg = [
+  'bg-img-purple.png',
+  'bg-img-black.png',
+  'bg-img-beige.png',
+  'bg-img-white.png',
+  'bg-img-pink.png',
+  'bg-img-grey.png',
+  'bg-img-gold.png'
+]
 const pageBackground = computed(() => {
   return {
-    // backgroundImage: 'url(' + process.env.API + "/yali/icons/" +  getBGimg(),
-    backgroundImage: 'url(' + DEV_API + '/yali/assets/' + getBGimg(),
+    backgroundImage: 'url(' + DEV_API + '/yali/assets/' + arBGimg[(bgidx.value + pidx.value) % 7] + ')',
     backgroundSize: 'cover',
     backgroundPosition: 'center',
     backgroundRepeat: 'no-repeat',
@@ -242,7 +252,7 @@ function getStyle() {
   // return stystr + ';' + trans //+ ';' + bgimg
   // let radi = frame.value == 1 ? 'border-radius:50%' : null 
   let radi = frame.value == 1 ? 'border-radius:50%' : frame.value == 2 ? 'border-radius:25%' : frame.value == 3 ? 'border-radius:5%' : null
-  return stystr + ';' + trans + ';' + radi
+  return stystr + ';' + trans + ';' + radi + ';' + getBorderColor()
 }
 
 const compIntervalDelay = computed(() => {
