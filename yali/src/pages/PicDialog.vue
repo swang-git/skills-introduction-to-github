@@ -146,8 +146,8 @@ function getBorderColor () {
   const cidx = (bgidx.value + pidx.value) % 5
   // console.log(`-fh-getBorderColor pidx=${pidx.value} recd=${recd}`)
   const colrs = ['red', 'pink', 'purple', 'indigo', 'lime']
-  const border_styles = ['solid', 'dotted', 'dashed', 'groove', 'double']
-  return "border: " + border_styles[bidx.value % 5] + " 6px " + colrs[cidx]
+  const border_styles = ['solid', 'dotted', 'dashed', 'groove', 'double', 'hidden']
+  return "border: " + border_styles[bidx.value % 6] + " 6px " + colrs[cidx]
 }
 function setFrame () {
 console.log(`-fh-A-setFrame frame=${frame.value}`)

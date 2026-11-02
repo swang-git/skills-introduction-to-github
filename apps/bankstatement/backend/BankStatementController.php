@@ -148,7 +148,11 @@ class BankStatementController extends Controller
 		$da = DB::table('stock_quotes as s')
 			->where('asof_time', 'like', "%$loadTime%")
 			->where('m.symbol', '<>', 'BEKE')
-			->join('security_metas as m', 'm.symbol', 's.symbol')
+			// ->where('m.symbol', '<>', 'WBD')
+			// ->join('security_metas as m', 'm.symbol', 's.symbol')
+			->join('security_metas as m', function ($join) {
+				$join->on('m.symbol', '=', 's.symbol')->where('m.status', 'A');
+			})
 			->select('s.symbol', 's.price', 's.price_change', 'm.quantity')
             ->orderBy('asof_time', 'desc')
             ->limit(6)->get();
