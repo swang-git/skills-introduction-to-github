@@ -8,7 +8,8 @@
         </q-btn-group>
         <div class="text-h5 cursor-pointer" @click="openTxtPad">{{ datetms[pidx] }}</div>
         <q-btn-group glossy rounded>
-          <q-btn round color="teal-8" text-color="lime" @click="openNumPad">
+          <!-- <q-btn round color="teal-8" text-color="lime" @click="openNumPad"> -->
+          <q-btn round color="teal-8" text-color="lime" @click="bidx++">
             <span class="text-bold text-cyan-2 text-body1" style="margin: 0 4px 0 4px">
               <span v-if="pidx == 0">第一</span>
               <span v-else-if="pidx == piclst.length - 1">最后</span>
@@ -123,6 +124,7 @@ const opened = ref(false)
 const isSlideShow = ref(false)
 const intervalId = ref(-1)
 const intervalDelay = ref(1500)
+const bidx = ref(0)
 const pidx = ref(-1)
 const bgidx = ref(0)
 const piclst = ref([])
@@ -145,7 +147,7 @@ function getBorderColor () {
   // console.log(`-fh-getBorderColor pidx=${pidx.value} recd=${recd}`)
   const colrs = ['red', 'pink', 'purple', 'indigo', 'lime']
   const border_styles = ['solid', 'dotted', 'dashed', 'groove', 'double']
-  return "border: " + border_styles[cidx] + " 10px " + colrs[cidx]
+  return "border: " + border_styles[bidx.value % 5] + " 6px " + colrs[cidx]
 }
 function setFrame () {
 console.log(`-fh-A-setFrame frame=${frame.value}`)
