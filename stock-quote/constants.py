@@ -1,6 +1,8 @@
 from typing import Final
+from datetime import date
 COMPAN_LEN: Final[int] = 28
-NUM_PORTFOLIO_SEC: Final[int] = 17
+today = date.today()
+NUM_PORTFOLIO_SEC: Final[int] =  17 if today < date(2026, 10, 7) else 16
 spx = ""
 
 # class Constants:

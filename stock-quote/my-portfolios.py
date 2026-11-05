@@ -1,7 +1,7 @@
 #!/Users/swang/myenv/bin/python
 import sys
 import argparse
-
+from datetime import date
 from Utils import boldIt, redIt, greenIt, yellowIt, drawTopHeader, showHeaderCxt, drawBotHeader, dispRow, drawBotLine, drawBotLineDownTick, drawBotLineUpTick
 from Models import dbsession, MyPortfolio
 from constants import NUM_PORTFOLIO_SEC, headers, tabw
@@ -20,6 +20,8 @@ if sub_days > 0:
 database = args.db
 # print("sub_days=%d db=%s"%(sub_days, database))
 
+today = date.today()
+
 def get_formated_data(diff):
     sdiff = f"{diff:,.2f}"  #currency format like 2,550.45
     difflen = len(sdiff)
@@ -34,7 +36,8 @@ if __name__=="__main__":
     lmt = 2 * NUM_PORTFOLIO_SEC
     sub = -sub_days * NUM_PORTFOLIO_SEC
     tab = MyPortfolio
-    rows = db.query(tab).order_by((tab.asof_time).desc(), tab.account.desc()).limit(lmt).offset(sub).all()
+    if today >= date(2026, 10, 7): rows = db.query(tab).filter(tab.symbol != 'WBD').order_by((tab.asof_time).desc(), tab.account.desc()).limit(lmt).offset(sub).all()
+    else: rows = db.query(tab).order_by((tab.asof_time).desc(), tab.account.desc()).limit(lmt).offset(sub).all()
     
     rowst = rows[0:NUM_PORTFOLIO_SEC]
     rowsy = rows[NUM_PORTFOLIO_SEC:]
