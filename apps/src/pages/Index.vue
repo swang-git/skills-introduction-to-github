@@ -60,7 +60,7 @@
           </q-btn>
           <q-space /> <!-- this pushes next button all the way right -->
           <q-btn-group glossy rounded>
-            <q-btn round color="blue-9" icon="wallpaper" @click="bgidx++" />
+            <q-btn round color="blue-9" icon="change_circle" @click="bgidx++" />
             <q-btn v-if="showSlide" glossy rounded class="bg-lime-9" @click="showSlide=!showSlide">
               <span class="text-bold text-cyan-2 text-body1" style="margin: 0 4px 0 4px">停止</span>
               <q-icon name="pause" size="md" color="lime" />
