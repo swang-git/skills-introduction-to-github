@@ -4,7 +4,7 @@ import argparse
 from datetime import date
 from Utils import boldIt, redIt, greenIt, yellowIt, drawTopHeader, showHeaderCxt, drawBotHeader, dispRow, drawBotLine, drawBotLineDownTick, drawBotLineUpTick
 from Models import dbsession, MyPortfolio
-from constants import NUM_PORTFOLIO_SEC, headers, tabw
+from constants import NUM_PORTFOLIO_SEC, headers, tabw, WBD_CUT_DAY
 from sty import FgRegister
 fg = FgRegister()
 
@@ -36,7 +36,7 @@ if __name__=="__main__":
     lmt = 2 * NUM_PORTFOLIO_SEC
     sub = -sub_days * NUM_PORTFOLIO_SEC
     tab = MyPortfolio
-    if today >= date(2026, 10, 7): rows = db.query(tab).filter(tab.symbol != 'WBD').order_by((tab.asof_time).desc(), tab.account.desc()).limit(lmt).offset(sub).all()
+    if today >= WBD_CUT_DAY: rows = db.query(tab).filter(tab.symbol != 'WBD').order_by((tab.asof_time).desc(), tab.account.desc()).limit(lmt).offset(sub).all()
     else: rows = db.query(tab).order_by((tab.asof_time).desc(), tab.account.desc()).limit(lmt).offset(sub).all()
     
     rowst = rows[0:NUM_PORTFOLIO_SEC]
