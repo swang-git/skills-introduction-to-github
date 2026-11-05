@@ -40,7 +40,7 @@
         <RoundButton size="33px" icon="文" clas="q-ma-xs q-pb-md" colr="purple-10" iclr="yellow" ttip="网 上 阅 读" @click="openApp('../arts')" />
       </div>
       <div v-if="frame==0" class="q-pb-xl row justify-center" :style="getSty()">
-        <q-avatar :size="getAvatarSZ()"><img :src="piclnk" class="circle-img" @click="setFrame" /></q-avatar>
+        <q-avatar :size="getAvatarSZ()"><img :src="piclnk" class="circle-img" @click="setFrame" :style="getBorderColor()" /></q-avatar>
       </div>
       <div v-else class="q-pb-xl row justify-center" :style="getSty()">
         <img class="fixed" :src="piclnk" :style="getStyle()" @click="setFrame" />
@@ -59,21 +59,30 @@
             <span class="text-bold text-cyan-2 text-body1" style="margin: 0 4px 0 -10px">上一幅</span>
           </q-btn>
           <q-space /> <!-- this pushes next button all the way right -->
-          <q-btn v-if="showSlide" glossy rounded class="bg-lime-9" @click="showSlide=!showSlide">
-            <span class="text-bold text-cyan-2 text-body1" style="margin: 0 4px 0 4px">停止</span>
-            <q-icon name="pause" size="md" color="lime" />
-          </q-btn>
-          <q-btn v-else glossy rounded class="bg-teal-9" @click="showSlide=!showSlide">
-            <span class="text-bold text-cyan-2 text-body1" style="margin: 0 4px 0 4px">幻灯</span>
-            <q-icon name="play_circle" size="md" color="lime" />
-          </q-btn>
+          <q-btn-group glossy rounded>
+            <q-btn round color="blue-9" icon="wallpaper" @click="bgidx++" />
+            <q-btn v-if="showSlide" glossy rounded class="bg-lime-9" @click="showSlide=!showSlide">
+              <span class="text-bold text-cyan-2 text-body1" style="margin: 0 4px 0 4px">停止</span>
+              <q-icon name="pause" size="md" color="lime" />
+            </q-btn>
+            <q-btn v-else glossy rounded class="bg-teal-9" @click="showSlide=!showSlide">
+              <span class="text-bold text-cyan-2 text-body1" style="margin: 0 4px 0 4px">幻灯</span>
+              <q-icon name="play_circle" size="md" color="lime" />
+            </q-btn>
+          </q-btn-group>
           <!-- <q-space /> 
           <q-btn glossy round class="bg-cyan-9" icon="radio_button_checked" @click="setFrame()" /> -->
           <q-space /> <!-- this pushes next button all the way right -->
-          <q-btn glossy rounded class="bg-teal-9" @click="getRandomPic(-1)">
+          <!-- <q-btn glossy rounded class="bg-teal-9" @click="getRandomPic(-1)">
             <q-icon name="slow_motion_video" size="md" color="lime" />
             <span class="text-bold text-cyan-2 text-body1" style="margin: 0 4px 0 4px">随机</span>
-          </q-btn>
+          </q-btn> -->
+
+          <q-btn-group glossy rounded>
+            <q-btn round color="teal-9" icon="radio_button_checked" @click="bidx++" />
+            <q-btn color="teal-8" label="随机" @click="getRandomPic(-1)" />
+            <q-btn round color="teal-9" icon="slow_motion_video" @click="cidx++" />
+          </q-btn-group>
           <q-space /> <!-- this pushes next button all the way right -->
           <q-btn glossy rounded class="bg-teal-9" @click="getNextPic">
             <span class="text-bold text-cyan-2 text-body1" style="margin: 0 4px 0 4px">下一幅</span>
@@ -100,6 +109,9 @@ import PlatformDataPad from '../components/PlatformDataPad.vue'
 
 const refPlatformDataPad = ref(null)
 const picidx = ref(-1)
+const cidx = ref(0)
+const bidx = ref(0)
+const bgidx = ref(0)
 const totalp = ref(0)
 const piclnk = ref(null)
 const rat = ref(null)
@@ -146,6 +158,12 @@ function getSty () {
   console.log(`-fn-getSty`)
   return sty
 }
+function getBorderColor () {
+  // console.log(`-fh-getBorderColor pidx=${pidx.value} recd=${recd}`)
+  const colrs = ['red', 'pink', 'purple', 'indigo', 'lime']
+  const border_styles = ['solid', 'dotted', 'dashed', 'groove', 'double', 'hidden']
+  return "border: " + border_styles[bidx.value % 6] + " 6px " + colrs[cidx.value % 5]
+}
 function getStyle() {
   let trans = 'left: 53%; top: 58%; transform: translate(-50%, -50%)'
   if (!isDesk) return trans // + ';' + bgimg
@@ -170,9 +188,7 @@ function getStyle() {
   }
   // return stystr + ';' + trans //+ ';' + bgimg
   let radi = frame.value == 1 ? 'border-radius:50%' : frame.value == 2 ? 'border-radius:25%' : frame.value == 3 ? 'border-radius:5%' : null
-  // let radi = 'border-radius:50%'
-  // return stystr + ';' + trans + ';' + 'border-radius:50%'
-  return stystr + ';' + trans + ';' + radi
+  return stystr + ';' + trans + ';' + radi + ';' + getBorderColor()
 }
 
 function slideShow () {
@@ -206,10 +222,19 @@ function getRandomPic (pidx) {
   const path = ENV_DEV + '/yali/getRandomPic/' + pidx
   gaxios(path)
 }
+const bgs = [
+  'url("' + ENV_DEV + '/apps/assets/bg-img-purple.png"' + ')',
+  'url("' + ENV_DEV + '/apps/assets/bg-img-beige.png"' + ')',
+  'url("' + ENV_DEV + '/apps/assets/bg-img-gold.png"' + ')',
+  'url("' + ENV_DEV + '/apps/assets/bg-img-grey.png"' + ')',
+  'url("' + ENV_DEV + '/apps/assets/bg-img-pink.png"' + ')',
+  'url("' + ENV_DEV + '/apps/assets/bg-img-white.png"' + ')',
+]
 function getBackgroundImg() {
   return {
     // backgroundImage: 'url("' + picurl.value + '")',
-    backgroundImage: 'url("' + ENV_DEV + '/apps/assets/bg-img-purple.png"' + ')',
+    // backgroundImage: 'url("' + ENV_DEV + '/apps/assets/bg-img-purple.png"' + ')',
+    backgroundImage: bgs[bgidx.value % 6],
     // backgroundImage: 'url("' + ENV_DEV + '/apps/assets/material.svg"' + ')',
     backgroundSize : 'cover',
     backgroundPosition: 'center',
