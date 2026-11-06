@@ -46,17 +46,16 @@
 
     <div class="q-pt-md"> <!-- prevent from moving up for first time reloading-->
       <q-card class="flex flex-center bg-cyan-10" :style="{marginTop: isDesk ? '106px' : '56px'}">
-        <q-card-actions align="between">
+        <q-card-actions align="between" :style="compTopBackground">
           <div v-for="(p, idx) in data" :key="p" class="q-px-xs">
-            <!-- <img v-if="isIM" :src="getThumbnailURL(p.fnm)" :height=IMiconSZ :width=IMiconSZ class="q-pt-xs cursor-pointer" @click="showFullImage(idx)" loading="lazy" />
-            <img v-else      :src="getThumbnailURL(p.fnm)" :height=DKiconSZ :width=DKiconSZ class="cursor-pointer" @click="showFullImage(idx)" loading="lazy" /> -->
-            <div v-if="frame==0">
+            <div v-if="frame%2==0">
               <q-avatar :size="isDesk ? DKiconSZ: IMiconSZ">
-                <img :src="getThumbnailURL(p.fnm)" class="circle-img q-pt-xs" @click="showFullImage(idx)" />
+                <img :src="getThumbnailURL(p.fnm)" :style="compBorderStyle" @click="showFullImage(idx)" />
               </q-avatar>
             </div>
             <div v-else>
-              <img :src="getThumbnailURL(p.fnm)" style="width:140px;height:140px;border-radius:20%" @click="showFullImage(idx)" />
+              <!-- <img :src="getThumbnailURL(p.fnm)" style="width:140px;height:140px;border-radius:20%" @click="showFullImage(idx)" /> -->
+              <img :src="getThumbnailURL(p.fnm)" :style="compBorderStyle" @click="showFullImage(idx)" />
             </div>
           </div>
         </q-card-actions>
@@ -79,8 +78,6 @@
           <q-card class="bg-teal-10" style="margin-top:10px">
             <q-card-actions align="between">
               <RoundButton v-if="isDesk" size="16px" icon="头" clas="q-pb-sm" colr="red-10" iclr="yellow" ttip="just show the first page" @click="getFirstPage" />
-              <!-- <RoundButton :dsbl="pageBegin<=1" size="16px" icon="first_page" colr="brown-9" iclr="yellow" ttip="show previous page" @click="getPrevPage" /> -->
-              <!-- <RoundButton size="16px" icon="chevron_left"  colr="indigo-10" iclr="yellow" ttip="show previous month" @click="getPrevYM" /> -->
               <q-btn glossy rounded class="bg-teal-9" @click="getPrevPage">
                 <q-icon left name="arrow_circle_left" size="md" color="lime" />
                 <span class="text-bold text-cyan-2 text-body1" style="margin: 0 4px 0 -10px">上一页</span>
@@ -90,7 +87,7 @@
                 <q-icon name="arrow_circle_right" size="md" color="lime" />
               </q-btn>
               <q-btn v-if="ym!=null" size="24px" :label="total"  colr="teal-10" />
-              <!-- <RoundButton size="16px" icon="chevron_right" colr="indigo-10" iclr="yellow" ttip="show next mouth" @click="getNextYM" /> -->
+              <q-btn round glossy icon="radio_button_checked"  colr="teal-10" @click="frame++"/>
               <q-btn glossy rounded class="bg-teal-9" @click="getNextYM">
                 <q-icon name="arrow_circle_right" size="md" color="lime" />
                 <span class="text-bold text-cyan-2 text-body1" style="margin: 0 4px 0 4px">下个月</span>
@@ -99,7 +96,6 @@
                 <span class="text-bold text-cyan-2 text-body1" style="margin: 0 4px 0 4px">下一页</span>
                 <q-icon name="arrow_circle_right" size="md" color="lime" />
               </q-btn>
-              <!-- <RoundButton :dsbl="pageBegin>=lastPage" size="16px" icon="last_page" colr="brown-9" iclr="yellow" ttip="show next page" @click="getNextPage" /> -->
               <RoundButton v-if="isDesk" size="16px" icon="尾" clas="q-pb-sm" colr="red-10" iclr="yellow" ttip="just the last page" @click="getLastPage" />
             </q-card-actions>
           </q-card>
@@ -145,8 +141,33 @@ const yue = ref(false)
 const numPages = ref(1)
 const ym = ref(null)
 const frame = ref(1)
+const bgidx = ref(0)
 var years = []
 var yms = []
+
+const compBorderStyle = computed(() => {
+  let sty1 = "width:140px;height:140px;border-radius:20%;"
+  let sty2 = "border:solid purple 2px;"
+  return frame.value %2 == 1 ? sty1 + sty2: sty2
+})
+const arBGimg = [
+  'bg-img-purple.png',
+  'bg-img-black.png',
+  'bg-img-beige.png',
+  'bg-img-white.png',
+  'bg-img-pink.png',
+  'bg-img-grey.png',
+  'bg-img-gold.png'
+]
+const compTopBackground = computed(() => {
+  return {
+    backgroundImage: 'url(' + DEV_API + '/yali/assets/' + arBGimg[bgidx.value % 7] + ')',
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+    backgroundRepeat: 'no-repeat',
+    backgroundColor: 'darkGreen',
+  }
+})
 
 // ---- main starts ----------
 let wloc = window.location

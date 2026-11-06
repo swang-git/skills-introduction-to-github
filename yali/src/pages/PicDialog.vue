@@ -199,7 +199,7 @@ function removeDupFile() {
   gaxios(path)
 }
 
-function getBGimg() {
+function XXX_getBGimg() {
   let idx = pidx.value % 7
   let istr0 = 'bg-img-purple.png'
   let istr1 = 'bg-img-black.png'
