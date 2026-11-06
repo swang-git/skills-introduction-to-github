@@ -270,15 +270,15 @@ function getList () {
 }
 emitter.on('reminder-getList', (x) => setList(x))
 function setList(da) {
+  da.lst.forEach(p => p.due_date = p.due_date + ' (' + p.due_date.chwk1() + ')')
   const todayIdx = da.lst.findIndex(p => p.due_date == today() && /PX|(QG|WW|WX)/.test(p.tag))
   let top = da.lst.slice(0, todayIdx)
   top.sort((a, b) => a.due_date < b.due_date ? 1 : -1)
-  console.log(`-CK-fn-setList todayIdx=${todayIdx}`, today(), top)
   let end = da.lst.slice(todayIdx)
+  console.log(`-CK-fn-setList todayIdx=${todayIdx}`, today(), da.lst, top, end)
   dats.value = top
   dats.value = dats.value.concat(end)
-  da.lst.forEach(p => p.due_date = p.due_date + ' (' + p.due_date.chwk1() + ')')
-  dats.value = da.lst
+  // dats.value = da.lst
   emitter.emit('dats', dats.value)
 }
 </script>
