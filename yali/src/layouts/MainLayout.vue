@@ -25,14 +25,12 @@
           <q-card v-else class="bg-teal-10">
             <q-card-actions align="between">
               <RoundButton size="16px" icon="头" clas="q-pb-sm" :colr="pageBegin==1 && numPages==1 ? 'pink-3' : 'red-10'" iclr="yellow" ttip="just show the first page" @click="getFirstPage" />
-              <!-- <RoundButton size="16px" icon="upload" :colr="pageBegin+numPages>lastPage ? 'pink-3' : 'red-10'" iclr="yellow" ttip="appending next page(on end)" @click="appnNextPage" /> -->
               <q-btn glossy rounded class="bg-teal-9" @click="appnNextPage">
                 <span class="text-bold text-cyan-2 text-body1" style="margin: 0 4px 0 4px">下加载</span>
                 <q-icon name="upload" size="md" color="lime" />
               </q-btn>
               <RoundButton v-if="pageBegin==1 && numPages==1" size="16px" :icon="compVer" clas="q-pb-sm" colr="indigo-10" iclr="yellow" ttip="跳转到某页" @click="openNumPad('jump-page')" />
               <q-btn v-else flat round  dense size="22px" style="width:80px; justify-content:center" :label=getLabel() color="cyan-3" @click="openNumPad('jump-page')"/>
-              <!-- <RoundButton size="16px" icon="download" :colr="pageBegin>1 ? 'red-10' : 'pink-3'" iclr="yellow" ttip="preppend the prev page(on top)" @click="prepnPrevPage" /> -->
               <q-btn glossy rounded class="bg-teal-9" @click="prepnPrevPage" :disable="pageBegin<=1">
                 <q-icon left name="download" size="md" color="lime" />
                 <span class="text-bold text-cyan-2 text-body1" style="margin: 0 4px 0 -10px">上加载</span>
@@ -54,7 +52,6 @@
               </q-avatar>
             </div>
             <div v-else>
-              <!-- <img :src="getThumbnailURL(p.fnm)" style="width:140px;height:140px;border-radius:20%" @click="showFullImage(idx)" /> -->
               <img :src="getThumbnailURL(p.fnm)" :style="compBorderStyle" @click="showFullImage(idx)" />
             </div>
           </div>
@@ -87,7 +84,10 @@
                 <q-icon name="arrow_circle_right" size="md" color="lime" />
               </q-btn>
               <q-btn v-if="ym!=null" size="24px" :label="total"  colr="teal-10" />
-              <q-btn round glossy icon="radio_button_checked"  colr="teal-10" @click="frame++"/>
+              <q-btn-group rounded>
+                <q-btn round glossy icon="change_circle"  colr="teal-10" @click="bgidx++"/>
+                <q-btn round glossy icon="radio_button_checked"  colr="teal-10" @click="frame++"/>
+              </q-btn-group>
               <q-btn glossy rounded class="bg-teal-9" @click="getNextYM">
                 <q-icon name="arrow_circle_right" size="md" color="lime" />
                 <span class="text-bold text-cyan-2 text-body1" style="margin: 0 4px 0 4px">下个月</span>
@@ -140,7 +140,7 @@ const yex = ref(true)
 const yue = ref(false)
 const numPages = ref(1)
 const ym = ref(null)
-const frame = ref(1)
+const frame = ref(0)
 const bgidx = ref(0)
 var years = []
 var yms = []
