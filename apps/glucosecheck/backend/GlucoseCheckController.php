@@ -47,6 +47,8 @@ class GlucoseCheckController extends Controller {
     	// Log::info("luOpt", $luOpt);
     	$ex = GlucoseCheck::where([ ['status', 'A'], ['user_id', $user->id], ['dinner', '<>', null] ])->distinct()->pluck('dinner');
     	foreach($ex as $i => $e) $diOpt[] = ['value' => $i + 1, 'label' => $e];
+    	$ex = GlucoseCheck::where([ ['status', 'A'], ['user_id', $user->id], ['note', '<>', null] ])->distinct()->pluck('note');
+    	foreach($ex as $i => $e) $ntOpt[] = ['value' => $i + 1, 'label' => $e];
     	$ex = GlucoseCheck::where([ ['status', 'A'], ['user_id', $user->id], ['drink', '<>', null] ])->distinct()->pluck('drink');
     	foreach($ex as $i => $e) $drOpt[] = ['value' => $i + 1, 'label' => $e];
     	// Log::info("drOpt", $drOpt);
@@ -57,7 +59,7 @@ class GlucoseCheckController extends Controller {
 		foreach($ex as $i => $e) $foOpt[] = ['value' => $i + 1, 'label' => $e];
 		// Log::info("foOpt", $foOpt);
 
-		return ['lst' => $dats, 'exOpt' => $exOpt, 'brOpt' => $brOpt, 'luOpt' => $luOpt, 'diOpt' => $diOpt, 'drOpt' => $drOpt, 'frOpt' => $frOpt, 'foOpt' => $foOpt, 'status' => "OK"];
+		return ['lst' => $dats, 'exOpt' => $exOpt, 'brOpt' => $brOpt, 'luOpt' => $luOpt, 'diOpt' => $diOpt, 'ntOpt' => $ntOpt, 'drOpt' => $drOpt, 'frOpt' => $frOpt, 'foOpt' => $foOpt, 'status' => "OK"];
 	}
 	public function add(Request $da) { // Log::info('adding da', $da->toArray());
 		$user = Auth::user();

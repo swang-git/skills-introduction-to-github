@@ -22,7 +22,7 @@
         <TxtInput class="col-12" :obj="row" label="Breakfast" icon="egg" iColor="brown-6" :rightIcon="true" @click="openSelection('egg', 'Breakfast', brOpt)" />
         <TxtInput class="col-12" :obj="row" label="Lunch" icon="lunch_dining" iColor="yellow-9" :rightIcon="true" @click="openSelection('lunch_dining', 'Lunch', luOpt)" />
         <TxtInput class="col-12" :obj="row" label="Dinner" icon="dinner_dining" iColor="indigo-3" :rightIcon="true" @click="openSelection('dinner_dining', 'Dinner', diOpt)" />
-        <TxtInput class="col-12" :obj="row" label="Note" icon="note" iColor="cyan-3" :rightIcon="true" @click="openSelection('note', 'Note', diOpt)" />
+        <TxtInput class="col-12" :obj="row" label="Note" icon="note" iColor="cyan-3" :rightIcon="true" @click="openSelection('note', 'Note', ntOpt)" />
         <div class="row">
           <TxtInput class="col-6" :obj="row" label="Drink" icon="local_bar" iColor="green" :rightIcon="true" @click="openSelection('local_bar', 'Drink', drOpt)" />
           <TxtInput class="col-6" :obj="row" label="Fruit" icon="apple" iColor="green-3" :rightIcon="true" @click="openSelection('apple', 'Fruit', frOpt)" />
@@ -96,6 +96,7 @@ const exOpt = ref([])
 const brOpt = ref([])
 const luOpt = ref([])
 const diOpt = ref([])
+const ntOpt = ref([])
 const drOpt = ref([])
 const frOpt = ref([])
 const foOpt = ref([])
@@ -103,7 +104,7 @@ const tyOpt = [{value: 1, label: '空腹'}, {value: 2, label: '餐一'} , {value
 
 
 console.log('-ST-gludar')
-emitter.on('open-gludar', (rw, act, exOpt, brOpt, luOpt, diOpt, drOpt, frOpt, foOpt) => openIt(rw, act, exOpt, brOpt, luOpt, diOpt, drOpt, frOpt, foOpt))
+emitter.on('open-gludar', (rw, act, exOpt, brOpt, luOpt, diOpt, ntOpt, drOpt, frOpt, foOpt) => openIt(rw, act, exOpt, brOpt, luOpt, diOpt, ntOpt, drOpt, frOpt, foOpt))
 
 //== function section
 function setDateTime (dt) {
@@ -171,13 +172,14 @@ function openNumPad (flag) {
   if (flag == 'BP') return emitter.emit('open-num-pad-auto', '输入血压', flag, null)
   else return emitter.emit('open-num-pad-auto', '血糖测试', 60, 300)
 }
-function openIt (rw, act, exop, brop, luop, diop, drop, frop, foop) {
-  console.log(`-fn-gludar.openIt act=${act}`, rw)
+function openIt (rw, act, exop, brop, luop, diop, ntop, drop, frop, foop) {
+  console.log(`-fn-gludar.openIt act=${act}`, ntop, diop)
   action.value = act
   exOpt.value = exop
   brOpt.value = brop
   luOpt.value = luop
   diOpt.value = diop
+  ntOpt.value = ntop
   drOpt.value = drop
   frOpt.value = frop
   foOpt.value = foop

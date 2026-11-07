@@ -151,6 +151,7 @@ const exOpt = ref([])
 const brOpt = ref([])
 const luOpt = ref([])
 const diOpt = ref([])
+const ntOpt = ref([])
 const drOpt = ref([])
 const frOpt = ref([])
 const foOpt = ref([])
@@ -459,7 +460,7 @@ function showDar (row, act) {
   // clone.datetime = row.datetimeOrig
   // this.$refs.gludar.openIt(clone)
   if (clone.note != null) clone.note = clone.note.replace(/<br \/>/g, '\n')
-  emitter.emit('open-gludar', clone, act, exOpt.value, brOpt.value, luOpt.value, diOpt.value, drOpt.value, frOpt.value, foOpt.value)
+  emitter.emit('open-gludar', clone, act, exOpt.value, brOpt.value, luOpt.value, diOpt.value, ntOpt.value, drOpt.value, frOpt.value, foOpt.value)
 }
 function getList () {
   const path = ENV_DEV + "/glucosecheck/getList"
@@ -487,6 +488,7 @@ function setList (da) {
   brOpt.value = da.brOpt.reverse()
   luOpt.value = da.luOpt.reverse()
   diOpt.value = da.diOpt.reverse()
+  ntOpt.value = da.ntOpt.reverse()
   drOpt.value = da.drOpt.reverse()
   frOpt.value = da.frOpt.reverse()
   foOpt.value = da.foOpt.reverse()
