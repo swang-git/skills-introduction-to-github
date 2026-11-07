@@ -121,7 +121,7 @@ const picIdx = computed(() => { return parseInt(picidx.value) })
 const isApps = computed(() => { return /apps/.test(import.meta.env.BASE_URL) })
 const winW = $q.screen.width
 const winH = $q.screen.height
-const bgidx = ref(Math.floor(Math.random() * 6)) // inclusive [0, 5]
+const bgidx = ref(Math.floor(Math.random() * 7)) // inclusive [0, 5]
 const bidx  = ref(Math.floor(Math.random() * 6))
 const frame = ref(Math.floor(Math.random() * 5))
 const cidx  = ref(Math.floor(Math.random() * 5))
@@ -224,6 +224,7 @@ function getRandomPic (pidx) {
 }
 const bgs = [
   'url("' + ENV_DEV + '/apps/assets/bg-img-purple.png"' + ')',
+  'url("' + ENV_DEV + '/apps/assets/bg-img-black.png"' + ')',
   'url("' + ENV_DEV + '/apps/assets/bg-img-beige.png"' + ')',
   'url("' + ENV_DEV + '/apps/assets/bg-img-gold.png"' + ')',
   'url("' + ENV_DEV + '/apps/assets/bg-img-grey.png"' + ')',
@@ -234,7 +235,7 @@ function getBackgroundImg() {
   return {
     // backgroundImage: 'url("' + picurl.value + '")',
     // backgroundImage: 'url("' + ENV_DEV + '/apps/assets/bg-img-purple.png"' + ')',
-    backgroundImage: bgs[bgidx.value % 6],
+    backgroundImage: bgs[bgidx.value % 7],
     // backgroundImage: 'url("' + ENV_DEV + '/apps/assets/material.svg"' + ')',
     backgroundSize : 'cover',
     backgroundPosition: 'center',

@@ -140,8 +140,8 @@ const yex = ref(true)
 const yue = ref(false)
 const numPages = ref(1)
 const ym = ref(null)
-const frame = ref(0)
-const bgidx = ref(0)
+const frame = ref(Math.floor(Math.random() * 2))
+const bgidx = ref(Math.floor(Math.random() * 7))
 var years = []
 var yms = []
 

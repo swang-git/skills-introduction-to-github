@@ -112,21 +112,13 @@ import TxtPad from '../components/TxtPad.vue'
 import ConfirmDialog from '../components/ConfirmDialog.vue'
 import { useAdminStore } from '../stores/adminStore.js'
 const admin = useAdminStore()
-emitter.on('pix-pidx', (idx) => {
-  pidx.value = idx % piclst.value.length
-  console.log(`pidx=${pidx.value}`)
-  getPic()
-})
+emitter.on('pix-pidx', (idx) => { pidx.value = idx % piclst.value.length; console.log(`pidx=${pidx.value}`); getPic() })
 
-const frame = ref(1)
 const removedPidx = ref(-1)
 const opened = ref(false)
 const isSlideShow = ref(false)
 const intervalId = ref(-1)
 const intervalDelay = ref(1500)
-const bidx = ref(0)
-const pidx = ref(-1)
-const bgidx = ref(0)
 const piclst = ref([])
 const datetms = ref([])
 const fileszs = ref([])
@@ -135,6 +127,13 @@ const winW = $q.screen.width
 const winH = $q.screen.height
 const imgWs = ref([])
 const imgHs = ref([])
+const pidx = ref(-1)
+// const cidx = ref(Math.floor(Math.random() + 5))
+const bidx = ref(Math.floor(Math.random() + 6))
+const bgidx = ref(Math.floor(Math.random() + 7))
+// const frame = ref(Math.floor(Math.random() + 5))
+const frame = ref(1)
+
 defineExpose({ openIt })
 emitter.on('yali-undoRemovedDupFile', (x) => checkingRemovedFile(x))
 
@@ -211,17 +210,18 @@ function XXX_getBGimg() {
   return idx == 0 ? istr0 : idx == 1 ? istr1 : idx == 2 ? istr2 : idx == 3 ? istr3 : idx == 4 ? istr4 : idx == 5 ? istr5 : istr6
 }
 const arBGimg = [
+  'bg-img-gold.png',
+  'bg-img-beige.png',
   'bg-img-purple.png',
   'bg-img-black.png',
-  'bg-img-beige.png',
   'bg-img-white.png',
   'bg-img-pink.png',
   'bg-img-grey.png',
-  'bg-img-gold.png'
 ]
 const pageBackground = computed(() => {
   return {
     backgroundImage: 'url(' + DEV_API + '/yali/assets/' + arBGimg[(bgidx.value + pidx.value) % 7] + ')',
+    // backgroundImage: 'url(' + DEV_API + '/yali/assets/' + arBGimg[bgidx.value % 7] + ')',
     backgroundSize: 'cover',
     backgroundPosition: 'center',
     backgroundRepeat: 'no-repeat',
