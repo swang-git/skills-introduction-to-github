@@ -109,9 +109,6 @@ import PlatformDataPad from '../components/PlatformDataPad.vue'
 
 const refPlatformDataPad = ref(null)
 const picidx = ref(-1)
-const cidx = ref(0)
-const bidx = ref(0)
-const bgidx = ref(0)
 const totalp = ref(0)
 const piclnk = ref(null)
 const rat = ref(null)
@@ -124,7 +121,10 @@ const picIdx = computed(() => { return parseInt(picidx.value) })
 const isApps = computed(() => { return /apps/.test(import.meta.env.BASE_URL) })
 const winW = $q.screen.width
 const winH = $q.screen.height
-const frame = ref(0)
+const bgidx = ref(Math.floor(Math.random() * 6)) // inclusive [0, 5]
+const bidx  = ref(Math.floor(Math.random() * 6))
+const frame = ref(Math.floor(Math.random() * 5))
+const cidx  = ref(Math.floor(Math.random() * 5))
 
 console.log(`-ST-Index BASE_URL=${import.meta.env.BASE_URL} isApps=${isApps.value}`)
 // logout()
