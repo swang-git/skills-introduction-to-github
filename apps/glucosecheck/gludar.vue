@@ -145,13 +145,14 @@ function setSelectedOpt (model, opt) {
   else if (model == 'Breakfast') row.value.breakfast = opt.label
   else if (model == 'Lunch') row.value.lunch = opt.label
   else if (model == 'Dinner') row.value.dinner = opt.label
+  else if (model == 'Note') row.value.note = opt.label
   else if (model == 'Drink') row.value.drink = opt.label
   else if (model == 'Fruit') row.value.fruit = opt.label
   else if (model == 'Check Type') {
     row.value.type = opt.label
     showNumPad('WT', '当日体重')
   } else if (model == 'Food') row.value.food = opt.label
-  else if (model == 'Notes') row.value.note = opt.label
+  // else if (model == 'Notes') row.value.note = opt.label
 }
 function openSelection (icon, model, opts) {
   console.log(`-fn-openSelection`, opts)
