@@ -54,40 +54,27 @@
     </div>
     <q-footer v-if="isDesk" elevated class="bg-teal-10">
       <q-toolbar>
-          <q-btn glossy rounded class="bg-teal-9" @click="getPrevPic">
-            <q-icon left name="arrow_circle_left" size="md" color="lime" />
-            <span class="text-bold text-cyan-2 text-body1" style="margin: 0 4px 0 -10px">上一幅</span>
-          </q-btn>
-          <q-space /> <!-- this pushes next button all the way right -->
-          <q-btn-group glossy rounded>
-            <q-btn round color="blue-9" icon="change_circle" @click="bgidx++" />
-            <q-btn v-if="showSlide" glossy rounded class="bg-lime-9" @click="showSlide=!showSlide">
-              <span class="text-bold text-cyan-2 text-body1" style="margin: 0 4px 0 4px">停止</span>
-              <q-icon name="pause" size="md" color="lime" />
-            </q-btn>
-            <q-btn v-else glossy rounded class="bg-teal-9" @click="showSlide=!showSlide">
-              <span class="text-bold text-cyan-2 text-body1" style="margin: 0 4px 0 4px">幻灯</span>
-              <q-icon name="play_circle" size="md" color="lime" />
-            </q-btn>
-          </q-btn-group>
-          <!-- <q-space /> 
-          <q-btn glossy round class="bg-cyan-9" icon="radio_button_checked" @click="setFrame()" /> -->
-          <q-space /> <!-- this pushes next button all the way right -->
-          <!-- <q-btn glossy rounded class="bg-teal-9" @click="getRandomPic(-1)">
-            <q-icon name="slow_motion_video" size="md" color="lime" />
-            <span class="text-bold text-cyan-2 text-body1" style="margin: 0 4px 0 4px">随机</span>
-          </q-btn> -->
-
-          <q-btn-group glossy rounded>
-            <q-btn round color="teal-9" icon="radio_button_checked" @click="bidx++" />
-            <q-btn color="teal-8" label="随机" @click="getRandomPic(-1)" />
-            <q-btn round color="teal-9" icon="slow_motion_video" @click="cidx++" />
+          <q-btn-group rounded glossy>
+            <q-btn round @click="getPrevPic"><q-icon name="arrow_circle_left" color="lime" /></q-btn>
+            <q-btn class="text-bold text-cyan-2 text-body1" label="上一幅" @click="getPrevPic" />
           </q-btn-group>
           <q-space /> <!-- this pushes next button all the way right -->
-          <q-btn glossy rounded class="bg-teal-9" @click="getNextPic">
-            <span class="text-bold text-cyan-2 text-body1" style="margin: 0 4px 0 4px">下一幅</span>
-            <q-icon name="arrow_circle_right" size="md" color="lime" />
-          </q-btn>
+          <q-btn-group glossy rounded>
+            <q-btn round @click="bgidx++"><q-icon name="change_circle" color="blue" /></q-btn>
+            <q-btn class="text-bold text-body1" :label="showSlide ? '停止' : '幻灯'" @click="showSlide=!showSlide" />
+            <q-btn round @click="showSlide=!showSlide"><q-icon :name="showSlide ? 'pause' : 'play_circle'" :color="showSlide ? 'pink' : 'green'"/></q-btn>
+          </q-btn-group>
+          <q-space /> <!-- this pushes next button all the way right -->
+          <q-btn-group glossy rounded>
+            <q-btn round @click="bidx++"><q-icon name="radio_button_checked" color="lime" /></q-btn>
+            <q-btn class="text-bold text-body1" label="随机" @click="getRandomPic(-1)" />
+            <q-btn round @click="cidx++"><q-icon name="slow_motion_video" color="lime" /></q-btn>
+          </q-btn-group>
+          <q-space /> <!-- this pushes next button all the way right -->
+          <q-btn-group rounded glossy>
+            <q-btn class="text-bold text-body1" label="下一幅" @click="getNextPic" />
+            <q-btn round @click="getNextPic"><q-icon name="arrow_circle_right" color="lime" /></q-btn>
+          </q-btn-group>
       </q-toolbar>
     </q-footer>
   </q-layout>
