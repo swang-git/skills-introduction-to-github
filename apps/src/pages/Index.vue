@@ -40,10 +40,12 @@
         <RoundButton size="33px" icon="文" clas="q-ma-xs q-pb-md" colr="purple-10" iclr="yellow" ttip="网 上 阅 读" @click="openApp('../arts')" />
       </div>
       <div v-if="frame==0" class="q-pb-xl row justify-center" :style="getSty()">
-        <q-avatar :size="getAvatarSZ()"><img :src="piclnk" class="circle-img" @click="setFrame" :style="getBorderColor()" /></q-avatar>
+        <!-- <q-avatar :size="getAvatarSZ()"><img :src="piclnk" class="circle-img" @click="setFrame" :style="getBorderColor()" /></q-avatar> -->
+        <q-avatar :size="getAvatarSZ()"><img ref="imgRef" :src="piclnk" class="circle-img" @click="onImageClick" :style="getBorderColor()" /></q-avatar>
       </div>
       <div v-else class="q-pb-xl row justify-center" :style="getSty()">
-        <img class="fixed" :src="piclnk" :style="getStyle()" @click="setFrame" />
+        <!-- <img class="fixed" :src="piclnk" :style="getStyle()" @click="setFrame" /> -->
+        <img ref="imgRef" class="fixed" :src="piclnk" :style="getStyle()" @click="onImageClick" />
       </div>
       <div class="corner-btn bottom-left">
         <RoundButton size="33px" icon="golf_course" clas="q-ma-xs" colr="teal-10" iclr="yellow" ttip="高  尔  夫" @click="openApp('../golf')" />
@@ -112,6 +114,8 @@ const bgidx = ref(Math.floor(Math.random() * 7)) // inclusive [0, 5]
 const bidx  = ref(Math.floor(Math.random() * 6))
 const frame = ref(Math.floor(Math.random() * 5))
 const cidx  = ref(Math.floor(Math.random() * 5))
+
+const imgRef = ref(null)
 
 console.log(`-ST-Index BASE_URL=${import.meta.env.BASE_URL} isApps=${isApps.value}`)
 // logout()
@@ -292,6 +296,40 @@ function logout() {
   window.location.href = ENV_DEV + '/apps'
   gaxios(path)
 }
+
+function onTop () { console.log('top clicked'); getRandomPic(-1) }
+function onBottom () { console.log('bottom clicked'); showSlide.value = !showSlide.value }
+function onLeft () { console.log('left clicked'); getPrevPic() }
+function onRight () { console.log('right clicked'); getNextPic() }
+
+function onImageClick (e) {
+  const rect = e.target.getBoundingClientRect()
+  // offsetX / offsetY is relative to element
+  const x = e.offsetX
+  const y = e.offsetY
+  const w = rect.width
+  const h = rect.height
+
+  // tune this threshold: fraction of width/height counted as edge
+  const edgeFrac = 0.25
+
+  if (y < h * edgeFrac) {
+    return onTop()
+  }
+  if (y > h * (1 - edgeFrac)) {
+    return onBottom()
+  }
+  if (x < w * edgeFrac) {
+    return onLeft()
+  }
+  if (x > w * (1 - edgeFrac)) {
+    return onRight()
+  }
+  // middle area: ignore or add your own handler
+  setFrame()
+}
+
+
 </script>
 <style>
 .corner-btn {

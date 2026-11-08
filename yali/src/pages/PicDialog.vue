@@ -27,12 +27,14 @@
         <div v-if="frame==0" class="row justify-center" style="margin-top:30px">
           <q-avatar :size="screenwidth - 30 + 'px'">
             <!-- <img :src="getPic()" :style="pidx%2==0 ? 'border:solid 3px cyan' : 'border:solid 3px pink'" class="circle-img" @click="stopSlideshow()" /> -->
-            <img :src="getPic()" :style="getBorderColor()" class="circle-img" @click="setFrame" />
+            <!-- <img :src="getPic()" :style="getBorderColor()" class="circle-img" @click="setFrame" /> -->
+            <img ref="imgRef" :src="getPic()" :style="getBorderColor()" class="circle-img" @click="onImageClick" />
           </q-avatar>
         </div>
         <div v-else class="row justify-between">
           <q-btn flat icon="" size="lg" @click="--pidx < 0 ? (pidx = piclst.length - 1) : pidx" style="height: 95vh; z-index: 1" />
-          <img class="fixed" :src="getPic()" :style="getStyle()" @click="setFrame" />
+          <!-- <img class="fixed" :src="getPic()" :style="getStyle()" @click="setFrame" /> -->
+          <img ref="imgRef" class="fixed" :src="getPic()" :style="getStyle()" @click="onImageClick" />
           <q-btn flat icon="" size="lg" @click="++pidx >= piclst.length ? (pidx = 0) : pidx" />
         </div>
       </div>
@@ -133,6 +135,7 @@ const bidx = ref(Math.floor(Math.random() + 6))
 const bgidx = ref(Math.floor(Math.random() + 7))
 // const frame = ref(Math.floor(Math.random() + 5))
 const frame = ref(1)
+const imgRef = ref(null)
 
 defineExpose({ openIt })
 emitter.on('yali-undoRemovedDupFile', (x) => checkingRemovedFile(x))
@@ -361,6 +364,38 @@ function openIt(idx, imgdata) {
   // console.log(`${idx}:imgH=${imgHs.value[idx]} winH=${winH}`)
   pidx.value = idx
   opened.value = true
+}
+
+function onTop () { console.log('top clicked'); bidx.value++ }
+function onBottom () { console.log('bottom clicked'); bgidx.value++ }
+function onLeft () { console.log('left clicked'); --pidx.value < 0 ? (pidx.value = piclst.value.length - 1) : pidx.value }
+function onRight () { console.log('right clicked'); ++pidx.value >= piclst.value.length ? 0 : pidx.value  }
+
+function onImageClick (e) {
+  const rect = e.target.getBoundingClientRect()
+  // offsetX / offsetY is relative to element
+  const x = e.offsetX
+  const y = e.offsetY
+  const w = rect.width
+  const h = rect.height
+
+  // tune this threshold: fraction of width/height counted as edge
+  const edgeFrac = 0.25
+
+  if (y < h * edgeFrac) {
+    return onTop()
+  }
+  if (y > h * (1 - edgeFrac)) {
+    return onBottom()
+  }
+  if (x < w * edgeFrac) {
+    return onLeft()
+  }
+  if (x > w * (1 - edgeFrac)) {
+    return onRight()
+  }
+  // middle area: ignore or add your own handler
+  setFrame()
 }
 </script>
 
