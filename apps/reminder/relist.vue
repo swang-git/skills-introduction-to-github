@@ -23,15 +23,16 @@
       <q-td class="bg-cyan-8" :colspan="isDesk ? 4 : 3">
         <table style="margin:-7px 0 -6px -16px;width:105%">
           <q-tr><td style="min-width:52px">{{ cols[2].label }}</td>
-            <td v-if="/今/.test(getVal(p.row,2)) && !/PXW/.test(p.row.tag)" class="bg-teal-10">
+            <td v-if="/今|明/.test(getVal(p.row,3)) && !/PXW/.test(p.row.tag)" class="bg-teal-10">
+              <b class="vertical-center text-h5 q-px-xs text-bold">{{ getVal(p.row,2) }}</b>
               <b v-if="isDesk" class="vertical-center text-h5 q-px-xs text-bold">就 是</b>
-              <b class="text-red text-h4 text-bold">{{getVal(p.row,2)}}</b>
-              <b class="vertical-top q-pl-sm text-bold text-h5"> ~ 马 上 到 期</b>
+              <b class="text-red text-h4 text-bold">{{getVal(p.row,3)}}</b>
+              <b class="vertical-center q-pl-sm text-bold text-h5"> ~ 马 上 到 期</b>
             </td>
             <td v-else-if="/过/.test(getVal(p.row,2))" class="bg-teal-10">
+              <b class="vertical-center text-h5 q-px-xs text-bold">{{ getVal(p.row,2) }}</b>
               <b class="vertical-top text-h5 q-px-xs text-bold">已 经</b>
               <b class="text-grey text-h4 tet-bold">{{getVal(p.row,3)}}</b>
-              <!-- <q-btn round glossy icon="edit" @click="showDar(p.row)" class="float-right" /> -->
               <q-fab  v-model="fabOpen" flat hide-icon direction="right" color="cyan-2">
                 <q-btn round glossy icon="delete"     size="16px" color="red-10"    @click="delRow(p.row)" class="q-mx-md" />
                 <q-btn round glossy icon="update"     size="16px" color="indigo-10" @click="showDar(p.row, 'upd')" class="q-mr-md" />
@@ -39,6 +40,7 @@
               </q-fab>
             </td>
             <td v-else class="bg-teal-10">
+              <b class="vertical-center text-h5 q-px-xs text-bold">{{ getVal(p.row,2) }}</b>
               <b v-show="!/^PX/.test(p.row.tag)" class="vertical-center text-h5 q-px-xs text-bold">还 有</b>
               <b class="text-amber text-h4 text-bold">{{getVal(p.row,3).replace(/^0/,'')}}</b>
               <b v-show="!/^PX/.test(p.row.tag)" class="vertical-center q-pl-xs text-bold text-h5">到 期</b>
