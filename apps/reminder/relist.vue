@@ -7,17 +7,6 @@
   row-key="id" :separator="separator" :showCol="showCol" wrap-cells hide-pagination 
   dark
 >
-  <!-- <template v-slot:top="props">
-    <q-select v-if="isIM"
-      v-model="visibleColumnsDesk" multiple borderless dense options-dense
-      emit-value map-options
-      option-value="name" style="min-width: 60px"
-      :display-value="$q.lang.table.columns"
-      :options="columns"
-    />
-    <q-btn v-if="isIM" flat round dense color="accent" :icon="props.inFullscreen ? 'fullscreen_exit' : 'fullscreen'" @click="props.toggleFullscreen" class="q-pr-xs" />
-  </template> -->
-
   <template v-slot:header="props">
     <q-tr :props="props">
       <q-th v-for="col in props.cols" :key="col.name" :props="props" class="text-yellow text-center">{{ col.label }}</q-th>
@@ -34,7 +23,6 @@
       <q-td class="bg-cyan-8" :colspan="isDesk ? 4 : 3">
         <table style="margin:-7px 0 -6px -16px;width:105%">
           <q-tr><td style="min-width:52px">{{ cols[2].label }}</td>
-            <!-- <td v-if="/今|明|后/.test(getVal(p.row,2)) && !/PXW/.test(p.row.tag)" class="bg-teal-10"> -->
             <td v-if="/今/.test(getVal(p.row,2)) && !/PXW/.test(p.row.tag)" class="bg-teal-10">
               <b v-if="isDesk" class="vertical-center text-h5 q-px-xs text-bold">就 是</b>
               <b class="text-red text-h4 text-bold">{{getVal(p.row,2)}}</b>
@@ -42,7 +30,7 @@
             </td>
             <td v-else-if="/过/.test(getVal(p.row,2))" class="bg-teal-10">
               <b class="vertical-top text-h5 q-px-xs text-bold">已 经</b>
-              <b class="text-grey text-h4 tet-bold">{{getVal(p.row,2)}}</b>
+              <b class="text-grey text-h4 tet-bold">{{getVal(p.row,3)}}</b>
               <!-- <q-btn round glossy icon="edit" @click="showDar(p.row)" class="float-right" /> -->
               <q-fab  v-model="fabOpen" flat hide-icon direction="right" color="cyan-2">
                 <q-btn round glossy icon="delete"     size="16px" color="red-10"    @click="delRow(p.row)" class="q-mx-md" />
@@ -52,7 +40,7 @@
             </td>
             <td v-else class="bg-teal-10">
               <b v-show="!/^PX/.test(p.row.tag)" class="vertical-center text-h5 q-px-xs text-bold">还 有</b>
-              <b class="text-amber text-h4 text-bold">{{getVal(p.row,2).replace(/^0/,'')}}</b>
+              <b class="text-amber text-h4 text-bold">{{getVal(p.row,3).replace(/^0/,'')}}</b>
               <b v-show="!/^PX/.test(p.row.tag)" class="vertical-center q-pl-xs text-bold text-h5">到 期</b>
               <div v-if="p.row.memo==null && p.row.golf==null && !/^PX/.test(p.row.tag)" class="float-right">
                 <q-fab  v-model="fabOpen" flat hide-icon direction="left" color="cyan-2">
@@ -63,24 +51,24 @@
               </div>
             </td>
           </q-tr>
-          <q-tr v-if="ishow(p.row,3)"><td style="min-width:52px">{{ cols[3].label }}</td>
-            <td class="bg-teal-9">{{ getVal(p.row,3) }}</td>
+          <q-tr v-if="ishow(p.row,3)"><td style="min-width:52px">{{ cols[4].label }}</td>
+            <td class="bg-teal-9">{{ getVal(p.row,4) }}</td>
           </q-tr>
-          <q-tr v-if="ishow(p.row,4)"><td style="min-width:52px">{{ cols[4].label }}</td>
-            <td class="bg-teal-10" :style="{ minWidth:isDesk ? '730px' : '318px' }">{{getVal(p.row,4)}}<b v-if="getVal(p.row,4)==='Golf'">Game</b>
+          <q-tr v-if="ishow(p.row,4)"><td style="min-width:52px">{{ cols[5].label }}</td>
+            <td class="bg-teal-10" :style="{ minWidth:isDesk ? '730px' : '318px' }">{{getVal(p.row,5)}}<b v-if="getVal(p.row,4)==='Golf'">Game</b>
               <q-btn v-if="/PX|(QG|WX|WW)/.test(p.row.tag)" round glossy icon="list" color="indigo-10" class="float-right" @click="showArt" />
             </td>
           </q-tr>
-          <q-tr v-if="ishow(p.row,5)"><td style="min-width:52px">{{ cols[5].label }}</td>
-            <td class="bg-teal-9" v-html="getVal(p.row,5)" />
+          <q-tr v-if="ishow(p.row,6)"><td style="min-width:52px">{{ cols[6].label }}</td>
+            <td class="bg-teal-9" v-html="getVal(p.row,6)" />
           </q-tr>
-          <q-tr v-if="ishow(p.row,6) && getVal(p.row,4) === 'Golf'"><td style="min-width:52px">开球</td>
-            <td><b class="text-amber text-h4 text-bold">Tee Time: {{ getVal(p.row,6) }}</b></td>
+          <q-tr v-if="ishow(p.row,7) && getVal(p.row,4) === 'Golf'"><td style="min-width:52px">开球</td>
+            <td><b class="text-amber text-h4 text-bold">Tee Time: {{ getVal(p.row,7) }}</b></td>
           </q-tr>
-          <q-tr v-else-if="ishow(p.row,6)"><td style="min-width:52px">{{ cols[6].label }}</td>
-            <td class="bg-teal-10">下一次是 <b class="text-yellow text-h4 text-bold">{{ parseInt(getVal(p.row,6)) }}</b> 天以后</td>
+          <q-tr v-else-if="ishow(p.row,7)"><td style="min-width:52px">{{ cols[7].label }}</td>
+            <td class="bg-teal-10">下一次是 <b class="text-yellow text-h4 text-bold">{{ parseInt(getVal(p.row,7)) }}</b> 天以后</td>
           </q-tr>
-          <q-tr v-if="ishow(p.row,7) && isDesk"><td style="min-width:52px">{{ cols[7].label }}</td><td class="bg-teal-9" v-html="getVal(p.row,7)" /></q-tr>
+          <q-tr v-if="ishow(p.row,8) && isDesk"><td style="min-width:52px">{{ cols[8].label }}</td><td class="bg-teal-9" v-html="getVal(p.row,8)" /></q-tr>
         </table>
       </q-td>
     </q-tr>
@@ -119,7 +107,7 @@ import redar from './redar.vue'
 import InfoDisplay from '../src/components/InfoDisplay.vue'
 
 const rowsPerPageDesk = 23
-const rowsPerPageIM = 13
+const rowsPerPageIM = 130
 
 var lastClickedP = { key:0, pageIndex: 0 }
 var clickedRow = { id:0 }
@@ -130,17 +118,18 @@ const showCol = ref(null)
 const fabOpen = ref(true)
 const cols = [
   { required: false, label: '身份', align: 'left', name: 'id', field: 'id', sortable: true, headerClasses: 'text-white text-no-wrap' },
-  { required: true,  label: '时间', align: 'right', name: 'due_date', field: 'due_date', sortable: true, headerStyle: 'max-width:50px', headerClasses: 'text-no-wrap' },
+  { required: true,  label: '日期', align: 'right', name: 'due_date', field: 'due_date', sortable: true, headerStyle: 'max-width:50px', headerClasses: 'text-no-wrap' },
+  { required: false,  label: '周',   align: 'right', name: 'wkday', field: 'wkday', sortable: true, headerStyle: 'max-width:50px', headerClasses: 'text-no-wrap' },
   { required: false, label: '期限', align: 'left', name: 'due_in', field: 'due_in', sortable: true, headerStyle:'max-width:50px', headerClasses:'text-no-wrap text-center' },
-  { required: false, label: '内容', align: 'left', name: 'tag', field: 'tag', sortable: true, headerClasses: 'text-no-wrap ellipsis' },
+  { required: true, label: '内容', align: 'left', name: 'tag', field: 'tag', sortable: true, headerClasses: 'text-no-wrap ellipsis' },
   { required: false, label: '信息', align: 'left', name: 'message',  field: row => row.message, sortable: false },
   { required: false, label: '详情', align: 'left', name: 'details', field: 'details', sortable: true, },
   { required: false, label: '重复', align: 'left', name: 'recursive', field: 'recursive', sortable: true },
   { required: false, label: '链接', align: 'left', name: 'lnk', field: 'lnk', sortable: true }
 ]
 const visibleColumnsDesk = [cols[1].name, cols[2].name, cols[3].name, cols[4].name]
-const visibleColumnsFone = [cols[1].name, cols[3].name]
-const columns = [cols[0], cols[1], cols[2], cols[3], cols[4], cols[5], cols[6], cols[7]]
+const visibleColumnsFone = [cols[1].name, cols[4].name]
+const columns = [cols[0], cols[1], cols[2], cols[3], cols[4], cols[5], cols[6], cols[7], , cols[8]]
 
 console.log('-ST-relist')
 buildApp('温馨提示', 'reminder')
@@ -188,39 +177,39 @@ function deledRow () {
   dats.value.splice(getRowIdx(), 1)
 }
 function getStyle (col) {
-  if (col === cols[1].name)      return isDesk ? 'min-width:150px;max-width:150px' : 'min-width:30px;max-width:30px'
-  else if (col === cols[2].name) return isDesk ? 'min-width:72px;max-width:72px'   : 'min-width:105x;max-width:105px'
-  else if (col === cols[3].name) return isDesk ? 'min-width:283px;max-width:283px;font-size:16px' : 'min-width:113px;max-width:113px'
-  else if (col === cols[4].name) return 'cursor:grab;' + (isDesk ? 'max-width:285px;min-width:285px;font-size:18px' : 'max-width:160px;min-width:160px')
+  if (col === cols[1].name)      return isDesk ? 'min-width:110px;max-width:110px' : 'min-width:60px;max-width:70px'
+  else if (col === cols[2].name) return isDesk ? 'min-width:1px;max-width:1px'   : 'min-width:105x;max-width:105px'
+  else if (col === cols[3].name) return isDesk ? 'min-width:58px;max-width:55px;font-size:20px' : 'min-width:113px;max-width:113px'
+  else if (col === cols[4].name) return 'cursor:grab;' + (isDesk ? 'max-width:474px;min-width:474px;font-size:20px' : 'max-width:160px;min-width:160px')
+  // else if (col === cols[5].name) return 'cursor:grab;' + (isDesk ? 'max-width:285px;min-width:285px;font-size:18px' : 'max-width:160px;min-width:160px')
 }
 function getClickedBG (row) {
   return (row.id === clickedRow.id ? ' bg-purple text-yellow-2' : '')
 }
 function getClass (col, row) {
   // console.log('-fn-getClass, row value', row.tag)
-  const col2val = row[cols[2].name]
+  const col2val = row[cols[3].name]
   let rowColor = getClickedBG(row)
   if (col2val === '今 天' && /PX|(PXQG|PXWW|PXWX)/.test(row.tag)) rowColor = 'bg-indigo-10 text-cyan-1'
   else if (col2val === '今 天') rowColor = 'bg-red-10 text-yellow-2'
   else if (col2val === '明 天') rowColor = 'bg-amber-9 text-black'
   else if (col2val === '后 天') rowColor = 'bg-amber-6 text-grey-10'
   if (col.name === cols[1].name) {
-    return 'cursor-pointer text-no-wrap text-center ' + rowColor
+    return 'cursor-pointer text-no-wrap text-center ' + rowColor + ' text-h6'
   } else if (col.name === cols[2].name) {
-    return 'cursor-pointer text-no-wrap text-center ' + rowColor
+    return 'cursor-pointer text-no-wrap text-center ' + rowColor + ' text-h6'
   } else if (col.name === cols[3].name) {
-    return 'cursor-pointer text-no-wrap ellipsis ' + rowColor
+    return 'cursor-pointer text-no-wrap ellipsis ' + rowColor + ' text-h6'
   } else if (col.name === cols[4].name) {
-    return 'text-no-wrap ellipsis ' + rowColor
+    return 'text-no-wrap ellipsis ' + rowColor + ' text-h6'
   }
 }
 function expandRow (p, col) {
-  console.log(`-fn-expendRow col=${col}`, p.row)
+  console.log(`-fn-expendRow col=${col} expand=${p.expand}`, p.row)
   // if (isIM && !/^PX/.test(p.row.tag)) {
-  if (isIM && !/^PX/.test(p.row.tag) && !p.row.memo) {
-  // if (isIM && !/^PX/.test(p.row.tag)) {
-  // if (isIM) {
-    console.log(`-fn-expendRow col=${col}`, p.row.memo)
+  // if (isIM && !/^PX/.test(p.row.tag) && !p.row.memo) {
+  if (isIM && !/^PX/.test(p.row.tag) && !p.row.memo && !p.row.golf) {
+    console.log(`-fn-expendRow col=${col}`, p.row)
     if (col === 'tag') {
       showDar(p.row, 'add')
     } else {
@@ -247,8 +236,9 @@ function expandRow (p, col) {
   console.log(`-CK-fn-expandRow clickedIdx=${clickedIdx.value}`, lastClickedP)
 }
 function showDar (row, act) {
-  console.log(`-fn-showDar act=${act}`, row.memo)
-  if (getVal(row, 4) === 'Golf') {
+  console.log(`-fn-showDar act=${act}`, row)
+  // if (getVal(row, 4) === 'Golf') {
+  if (row.golf === 1) {
     const tit = 'Can Not Change Golf Play'
     const msg = "Please reevise it in expense app"
     emitter.emit('open-InfoDisplay', tit, msg)
@@ -270,11 +260,15 @@ function getList () {
 }
 emitter.on('reminder-getList', (x) => setList(x))
 function setList(da) {
-  const cutIdx = da.lst.findIndex(p => p.due_date == today() && /PX|(QG|WW|WX)/.test(p.tag))
+  // const cutIdx = da.lst.findIndex(p => p.due_date == today() && /PX|(QG|WW|WX)/.test(p.tag))
+  const cutIdx = da.lst.findLastIndex(p => p.due_date >= today())
+  console.log(`-CK-fn-setList today=${today()} cutIdx=${cutIdx} cutDate=${da.lst[cutIdx].due_date}`)
   let top = da.lst.slice(0, cutIdx)
   top.sort((a, b) => a.due_date > b.due_date ? 1 : -1)
   // da.lst.sort((a, b) => a.due_date < b.due_date ? 1 : -1)
-  da.lst.forEach(p => p.due_date = p.due_date + ' (' + p.due_date.chwk1() + ')')
+  // da.lst.forEach(p => p.due_date = p.due_date + ' (' + p.due_date.chwk1() + ')')
+  da.lst.forEach(p => p.wkday = ' (' + p.due_date.chwk1() + ')')
+  // da.lst.forEach(p => p.wkday = p.due_date.chwk1())
   let end = da.lst.slice(cutIdx)
   console.log(`-CK-fn-setList cutIdx=${cutIdx}`, today(), da.lst, top, end)
   dats.value = top
