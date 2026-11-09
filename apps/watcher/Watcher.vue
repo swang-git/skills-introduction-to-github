@@ -13,8 +13,8 @@
           </div>
           <!-- <div v-if="isDesk" class="q-pl-xs text-right" style="width:77px" @click="showIt(i)">{{ ((e.portfolio/invested(e) - 1) * 100).toFixed(2) }}%</div> -->
           <!-- <div v-if="isDesk" class="q-pl-md text-right" style="width:135px" @click="showDar(e, 'upd')">{{ getWeight(e) }} / {{ getBMI(e) }}</div> -->
-          <div v-if="isDesk" class="q-px-xs text-right" @click="showIt(i)">{{ ((e.portfolio/invested(e) - 1) * 100).toFixed(2) }}%</div>
-          <div v-if="isDesk" class="text-right" style="width:15%" @click="showDar(e, 'upd')">{{ getWeight(e) }} / {{ getBMI(e) }}</div>
+          <div v-if="isDesk" class="text-right" style="width:77px" @click="showIt(i)">{{ ((e.portfolio/invested(e) - 1) * 100).toFixed(2) }}%</div>
+          <div v-if="isDesk" class="q-pl-sm text-right" style="width:120px" @click="showDar(e, 'upd')">{{ getWeight(e) }} / {{ getBMI(e) }}</div>
           <div v-else class="text-left" style="width:111px" @click="showDar(e, 'upd')">{{ e.date }}</div>
           <div v-if="isDesk" class="q-px-sm text-right" :class="{ 'text-green-3':e.dif>0, 'text-pink-2':e.dif<0 }" style="width:14%" @click="showDar(e, 'upd')"> {{ e.difs }} </div>
           <div v-else class="q-px-sm text-right" :class="{ 'text-green-3':e.dif>0, 'text-pink-2':e.dif<0 }" style="width:110px" @click="showDar(e, 'upd')"> {{ e.difs }} </div>
