@@ -32,12 +32,14 @@
         </q-card>
       </q-toolbar>
     </q-header>
-    <div v-if="isDesk" class="row" :style="getBackgroundImg()">
-      <div class="corner-btn top-left">
-        <RoundButton size="33px" icon="画" clas="q-ma-xs q-pb-md" colr="purple-10" iclr="yellow" ttip="娅 莉 画 展" @click="openApp('../yali')" />
-      </div>
-      <div class="corner-btn top-right">
-        <RoundButton size="33px" icon="文" clas="q-ma-xs q-pb-md" colr="purple-10" iclr="yellow" ttip="网 上 阅 读" @click="openApp('../arts')" />
+    <div class="row" :style="getBackgroundImg()">
+      <div v-if="isDesk">
+        <div class="corner-btn top-left">
+          <RoundButton size="33px" icon="画" clas="q-ma-xs q-pb-md" colr="purple-10" iclr="yellow" ttip="娅 莉 画 展" @click="openApp('../yali')" />
+        </div>
+        <div class="corner-btn top-right">
+          <RoundButton size="33px" icon="文" clas="q-ma-xs q-pb-md" colr="purple-10" iclr="yellow" ttip="网 上 阅 读" @click="openApp('../arts')" />
+        </div>
       </div>
       <div v-if="frame==0" class="q-pb-xl row justify-center" :style="getSty()">
         <!-- <q-avatar :size="getAvatarSZ()"><img :src="piclnk" class="circle-img" @click="setFrame" :style="getBorderColor()" /></q-avatar> -->
@@ -47,11 +49,13 @@
         <!-- <img class="fixed" :src="piclnk" :style="getStyle()" @click="setFrame" /> -->
         <img ref="imgRef" class="fixed" :src="piclnk" :style="getStyle()" @click="onImageClick" />
       </div>
-      <div class="corner-btn bottom-left">
-        <RoundButton size="33px" icon="golf_course" clas="q-ma-xs" colr="teal-10" iclr="yellow" ttip="高  尔  夫" @click="openApp('../golf')" />
-      </div>
-      <div class="corner-btn bottom-right">
-        <RoundButton size="33px" icon="schedule" clas="q-ma-xs" colr="teal-10" iclr="amber" ttip="温 馨 提 示" @click="openApp('reminder')" />
+      <div v-if="isDesk">
+        <div class="corner-btn bottom-left">
+          <RoundButton size="33px" icon="golf_course" clas="q-ma-xs" colr="teal-10" iclr="yellow" ttip="高  尔  夫" @click="openApp('../golf')" />
+        </div>
+        <div class="corner-btn bottom-right">
+          <RoundButton size="33px" icon="schedule" clas="q-ma-xs" colr="teal-10" iclr="amber" ttip="温 馨 提 示" @click="openApp('reminder')" />
+        </div>
       </div>
     </div>
     <q-footer v-if="isDesk" elevated class="bg-teal-10">
@@ -101,7 +105,7 @@ const picidx = ref(-1)
 const totalp = ref(0)
 const piclnk = ref(null)
 const rat = ref(null)
-const showSlide = ref(true)
+const showSlide = ref(false)
 
 const refUserList = ref(null)
 const compVer = computed(() => { return import.meta.env.VITE_BUILD_TAG == null ? '测' : import.meta.env.VITE_BUILD_TAG })
