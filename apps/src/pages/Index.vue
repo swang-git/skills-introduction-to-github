@@ -67,7 +67,7 @@
           <q-space /> <!-- this pushes next button all the way right -->
           <q-btn-group glossy rounded>
             <q-btn round @click="bgidx++"><q-icon name="change_circle" color="blue" /></q-btn>
-            <q-btn class="text-bold text-body1" :label="showSlide ? '停止' : '幻灯'" @click="showSlide=!showSlide" />
+            <q-btn class="text-bold text-body1" :class="showSlide ? 'bg-red-9' : ''" :label="showSlide ? '停止' : '幻灯'" @click="showSlide=!showSlide" />
             <q-btn round @click="showSlide=!showSlide"><q-icon :name="showSlide ? 'pause' : 'play_circle'" :color="showSlide ? 'pink' : 'green'"/></q-btn>
           </q-btn-group>
           <q-space /> <!-- this pushes next button all the way right -->
