@@ -521,9 +521,9 @@ def my_argparse():
         description='load online public posted articles by scraping webpage')
     # parser.add_argument('tag', metavar='str', nargs=1, type=str, help = 'tag=QG|HY|JL|WW|WX')
     # parser.add_argument('tag', metavar='str', type=str, help = 'tag=QG|HY|JL|WW|WX')
-    parser.add_argument("dyx", metavar='int', type=int,
+    parser.add_argument("dyx", metavar='int', type=int, nargs="?", const=0, default=0,
                         help='for dyx, 0 for today or -1 for yesterday or -2 for the day before yesterday, etc.')
-    parser.add_argument("max", metavar='int', type=int,
+    parser.add_argument("max", metavar='int', type=int, nargs="?", const=9, default=9,
                         help='for MAX_PAGES at most 3|4|5|etc to be processed - until hit the prev day')
     return parser.parse_args()
 

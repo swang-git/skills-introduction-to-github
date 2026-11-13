@@ -36,7 +36,8 @@ dyx = args.dyx
 MAX_PAGES = args.max
 # logFile = '/home/swang/tmp/logs/px/load' + tag + '_' + str(abs(dyx)) + '_' + wkdayname() + '.log' 
 logFile = getLogFile(tag, dyx)
-print('the log file is', logFile)
+print("the log file is:%s, dyx=%d maxpage=%d"%(logFile, dyx, MAX_PAGES))
+###sys.exit(0)
 [ymd, theday, prvday] = get_dates(dyx)
 tee = TeeToFileAndScreen(logFile, 'w')
 print('\n >>> Loading %s for %s with ymd: %s and at most %s top web pages to be processed %s' %(tag, theday, ymd, MAX_PAGES, '\n'))
