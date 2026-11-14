@@ -12,7 +12,7 @@
             <RoundButton size="22px" icon="account_balance" clas="q-ma-xs" colr="indigo-10" iclr="amber" ttip="银 行 月 报" @click="openApp('bankstatement')" />
             <RoundButton size="22px" icon="析" clas="q-ma-xs q-pb-sm" colr="brown-10" ttip="月 报 分 析" @click="openApp('holdings')" />
             <RoundButton size="22px" icon="bloodtype" clas="q-ma-xs" colr="pink-10" iclr="lime" ttip="血 糖 控 制" @click="openApp('glucosecheck')" />
-            <!-- <RoundButton size="22px" icon="文" clas="q-ma-xs q-pb-sm" colr="indigo-10" ttip="网 上 阅 读" @click="openApp('../arts')" /> -->
+            <RoundButton size="22px" icon="文" clas="q-ma-xs q-pb-sm" colr="indigo-10" ttip="网 上 阅 读" @click="openApp('../arts')" />
             <RoundButton size="22px" icon="画" clas="q-ma-xs q-pb-sm" colr="purple-10" iclr="yellow" ttip="娅 莉 画 展" @click="openApp('../yali')" />
             <RoundButton size="22px" icon="golf_course" clas="q-ma-xs" colr="teal-10" iclr="yellow" ttip="高  尔  夫" @click="openApp('../golf')" />
             <RoundButton size="22px" icon="translate" clas="q-ma-xs" colr="brown-10" ttip="英 汉 字 典" @click="openApp('dictionary')" />
